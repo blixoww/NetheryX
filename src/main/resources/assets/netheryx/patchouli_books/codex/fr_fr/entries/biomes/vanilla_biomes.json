@@ -1,0 +1,12 @@
+{
+  "name": "Biomes vanilla",
+  "icon": "minecraft:netherrack",
+  "category": "netheryx:biomes",
+  "sortnum": 18,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "NetheryX décore aussi le Nether vanilla :$(li)$(l)Désolation du Nether$() : arbustes calcinés$(li)$(l)Forêt carmin$() : baies de feu, traqueurs$(li)$(l)Forêt biscornue$() : lys et phalènes des âmes$(li)$(l)Vallée des âmes$() : lys, tubercules, chevaliers$(li)$(l)Deltas de basalte$() : soufre, crabes$(li)Minerai d'onyx partout"
+    }
+  ]
+}

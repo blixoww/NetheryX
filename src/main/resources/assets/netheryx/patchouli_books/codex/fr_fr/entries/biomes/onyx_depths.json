@@ -1,0 +1,12 @@
+{
+  "name": "Profondeurs d'onyx",
+  "icon": "netheryx:onyx_cluster",
+  "category": "netheryx:biomes",
+  "sortnum": 12,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Biome sombre de blackstone et de basalte, $(item)amas d'onyx$() lumineux et beaucoup de $(item)minerai d'onyx$().$(br2)Donjon : la $(l)Citadelle d'onyx$() et son boss."
+    }
+  ]
+}

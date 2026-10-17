@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:onyx"
+    }
+  },
+  "result": {
+    "item": "netheryx:onyx_block",
+    "count": 1
+  }
+}

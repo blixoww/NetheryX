@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:magma_rift",
+    "netheryx:ember_grove",
+    "netheryx:sulfur_springs",
+    "minecraft:crimson_forest",
+    "minecraft:nether_wastes",
+    "netheryx:ember_meadow"
+  ]
+}

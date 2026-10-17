@@ -1,0 +1,14 @@
+{
+  "name": "Infernal Heart",
+  "icon": "netheryx:infernal_heart",
+  "category": "netheryx:utility",
+  "sortnum": 47,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:infernal_heart",
+      "text": "While in your inventory, grants $(item)Fire Resistance$() in the Nether. Needs the boss' $(item)Sentinel Core$().",
+      "link_recipe": true
+    }
+  ]
+}

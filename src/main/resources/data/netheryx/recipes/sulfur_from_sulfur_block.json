@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "netheryx:sulfur_block"
+    }
+  ],
+  "result": {
+    "item": "netheryx:sulfur",
+    "count": 9
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:seeds/blaze_pepper",
+    "#forge:seeds/cinder_wheat"
+  ]
+}

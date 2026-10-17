@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:infernal_heart"
+    },
+    "title": {
+      "translate": "advancements.netheryx.infernal_heart.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.infernal_heart.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "heart": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "netheryx:infernal_heart"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:kill_sentinel"
+}

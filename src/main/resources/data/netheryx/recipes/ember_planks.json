@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "netheryx:ember_stems"
+    }
+  ],
+  "result": {
+    "item": "netheryx:ember_planks",
+    "count": 4
+  }
+}

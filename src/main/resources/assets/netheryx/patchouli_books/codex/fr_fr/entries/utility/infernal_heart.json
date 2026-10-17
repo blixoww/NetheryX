@@ -1,0 +1,14 @@
+{
+  "name": "Cœur infernal",
+  "icon": "netheryx:infernal_heart",
+  "category": "netheryx:utility",
+  "sortnum": 47,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:infernal_heart",
+      "text": "Tant qu'il est dans l'inventaire, donne la $(item)Résistance au feu$() dans le Nether. Demande le $(item)Cœur de sentinelle$() du boss.",
+      "link_recipe": true
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:nether_forest_vegetation",
+  "config": {
+    "state_provider": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 85,
+          "data": {
+            "Name": "netheryx:ember_roots"
+          }
+        },
+        {
+          "weight": 11,
+          "data": {
+            "Name": "netheryx:ember_fungus"
+          }
+        },
+        {
+          "weight": 4,
+          "data": {
+            "Name": "netheryx:fire_berry_bush",
+            "Properties": {
+              "age": "3"
+            }
+          }
+        }
+      ]
+    },
+    "spread_width": 3,
+    "spread_height": 1
+  }
+}

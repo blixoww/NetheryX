@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:onyx"
+    },
+    "title": {
+      "translate": "advancements.netheryx.obtain_onyx.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.obtain_onyx.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "onyx": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "netheryx:onyx"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:root"
+}

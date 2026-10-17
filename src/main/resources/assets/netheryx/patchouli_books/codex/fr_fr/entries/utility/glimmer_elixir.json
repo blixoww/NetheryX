@@ -1,0 +1,14 @@
+{
+  "name": "Élixir de lueur",
+  "icon": "netheryx:glimmer_elixir",
+  "category": "netheryx:utility",
+  "sortnum": 48,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:glimmer_elixir",
+      "text": "À boire : $(item)Vision nocturne$() (3 min) et $(item)Résistance au feu$() (30 s).",
+      "link_recipe": true
+    }
+  ]
+}

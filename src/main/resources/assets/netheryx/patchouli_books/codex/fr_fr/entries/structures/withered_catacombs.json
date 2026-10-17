@@ -1,0 +1,16 @@
+{
+  "name": "Catacombes flétries",
+  "icon": "minecraft:wither_skeleton_skull",
+  "category": "netheryx:structures",
+  "sortnum": 35,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Forêt flétrie, Terres cendrées, Marais des âmes, Vallée des âmes, Forêt biscornue, Désolation du Nether. Seul un $(l)mausolée$() est visible en surface : son escalier descend de 12 blocs dans les catacombes."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Une galerie circulaire bordée de crânes et gardée par des chevaliers mène à quatre cryptes (générateurs + coffres). Le tombeau central abrite le $(l)Champion flétri$() ; son trésor est au nord, derrière les sceaux."
+    }
+  ]
+}

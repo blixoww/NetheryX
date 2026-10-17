@@ -1,0 +1,14 @@
+{
+  "name": "Bombe de soufre",
+  "icon": "netheryx:sulfur_bomb",
+  "category": "netheryx:utility",
+  "sortnum": 50,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:sulfur_bomb",
+      "text": "Explosif à lancer, idéal pour creuser la netherrack. Fonctionne aussi dans les distributeurs.",
+      "link_recipe": true
+    }
+  ]
+}

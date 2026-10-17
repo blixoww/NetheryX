@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "netheryx:block/cinder_wheat_stage1"
+  },
+  "render_type": "minecraft:cutout"
+}

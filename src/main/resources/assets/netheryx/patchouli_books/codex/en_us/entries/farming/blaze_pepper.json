@@ -1,0 +1,18 @@
+{
+  "name": "Blaze Pepper",
+  "icon": "netheryx:blaze_pepper",
+  "category": "netheryx:farming",
+  "sortnum": 52,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:blaze_pepper",
+      "text": "Grows on $(item)Ember Nylium$() or $(item)Soul Soil$(), no light needed. Eating it gives $(item)Fire Resistance$() (30 s).",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:blaze_pepper_seeds"
+    }
+  ]
+}

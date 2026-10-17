@@ -1,0 +1,18 @@
+{
+  "name": "Luminelle",
+  "icon": "netheryx:glowcap",
+  "category": "netheryx:farming",
+  "sortnum": 56,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:glowcap",
+      "text": "Un champignon lumineux présent dans tout le Nether. À manger pour une courte vision nocturne, ou en ragoût.",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:glowcap_stew"
+    }
+  ]
+}

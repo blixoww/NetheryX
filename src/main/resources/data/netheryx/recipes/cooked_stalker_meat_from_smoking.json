@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "ingredient": {
+    "item": "netheryx:stalker_meat"
+  },
+  "result": "netheryx:cooked_stalker_meat",
+  "experience": 0.35,
+  "cookingtime": 100
+}

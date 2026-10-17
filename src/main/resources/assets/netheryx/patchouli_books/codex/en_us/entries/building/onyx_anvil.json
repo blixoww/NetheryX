@@ -1,0 +1,14 @@
+{
+  "name": "Onyx Anvil",
+  "icon": "netheryx:onyx_anvil",
+  "category": "netheryx:building",
+  "sortnum": 63,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_anvil",
+      "text": "Works like an anvil but $(l)never wears out$() and every operation costs $(l)half the experience$(). Cheaper to craft: 3 Onyx and 4 iron ingots.",
+      "link_recipe": true
+    }
+  ]
+}

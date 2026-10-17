@@ -1,0 +1,18 @@
+{
+  "name": "Soul Tuber",
+  "icon": "netheryx:soul_tuber",
+  "category": "netheryx:farming",
+  "sortnum": 53,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:soul_tuber",
+      "text": "Plant on $(item)Soul Sand$() or $(item)Soul Soil$(). Found wild in the Soul Sand Valley. Bake it!",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:baked_soul_tuber_from_smelting"
+    }
+  ]
+}

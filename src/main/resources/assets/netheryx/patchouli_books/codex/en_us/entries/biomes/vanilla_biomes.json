@@ -1,0 +1,12 @@
+{
+  "name": "Vanilla Biomes",
+  "icon": "minecraft:netherrack",
+  "category": "netheryx:biomes",
+  "sortnum": 18,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "NetheryX also decorates the vanilla Nether:$(li)$(l)Nether Wastes$(): charred shrubs$(li)$(l)Crimson Forest$(): fire berries, ember stalkers$(li)$(l)Warped Forest$(): soul lilies, soul moths$(li)$(l)Soul Sand Valley$(): lilies, soul tubers, knights$(li)$(l)Basalt Deltas$(): sulfur, crabs$(li)Onyx ore everywhere"
+    }
+  ]
+}

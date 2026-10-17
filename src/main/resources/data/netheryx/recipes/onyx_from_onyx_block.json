@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "netheryx:onyx_block"
+    }
+  ],
+  "result": {
+    "item": "netheryx:onyx",
+    "count": 9
+  }
+}

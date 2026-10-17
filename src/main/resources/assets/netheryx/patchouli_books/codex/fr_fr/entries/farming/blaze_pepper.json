@@ -1,0 +1,18 @@
+{
+  "name": "Piment de blaze",
+  "icon": "netheryx:blaze_pepper",
+  "category": "netheryx:farming",
+  "sortnum": 52,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:blaze_pepper",
+      "text": "Pousse sur le $(item)nylium de braise$() ou la $(item)terre des âmes$(), sans lumière. Le manger donne la $(item)Résistance au feu$() (30 s).",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:blaze_pepper_seeds"
+    }
+  ]
+}

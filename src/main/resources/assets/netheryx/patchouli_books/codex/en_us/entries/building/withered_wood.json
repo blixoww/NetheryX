@@ -1,0 +1,27 @@
+{
+  "name": "Withered Wood",
+  "icon": "netheryx:withered_planks",
+  "category": "netheryx:building",
+  "sortnum": 61,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "From $(item)Withered Fungi$() grown on $(item)Withered Soil$(). Grey, eerie and fireproof."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:withered_planks",
+      "recipe2": "netheryx:withered_stairs"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:withered_door",
+      "recipe2": "netheryx:withered_trapdoor"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:withered_fence",
+      "recipe2": "netheryx:withered_fence_gate"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "netheryx:ash_daisy"
+    }
+  ],
+  "result": {
+    "item": "minecraft:light_gray_dye",
+    "count": 2
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Pierre de rappel",
+  "icon": "netheryx:recall_stone",
+  "category": "netheryx:utility",
+  "sortnum": 46,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:recall_stone",
+      "text": "Maintenez l'utilisation $(l)3 secondes$() pour rejoindre votre lit, ancre de réapparition ou le point d'apparition. Réutilisable, avec un temps de recharge.",
+      "link_recipe": true
+    }
+  ]
+}

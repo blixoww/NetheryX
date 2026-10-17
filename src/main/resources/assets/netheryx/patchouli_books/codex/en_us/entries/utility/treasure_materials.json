@@ -1,0 +1,17 @@
+{
+  "name": "Treasure Materials",
+  "icon": "netheryx:wraith_essence",
+  "category": "netheryx:utility",
+  "sortnum": 51,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Wraith Essence$(): Soul Compass.$(br)$(item)Magma Shell$(): Magma Treads.$(br)$(item)Basalt Carapace$(): Carapace Chestplate.$(br)$(item)Soul Dust$(): Recall Stone, Glimmer Elixir.$(br)$(item)Withered Bone$(): bone meal, black dye.$(br)$(item)Sentinel Core$(): Infernal Heart."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:bone_meal_from_withered_bone",
+      "recipe2": "netheryx:black_dye_from_withered_bone"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Lame flétrie",
+  "icon": "netheryx:withered_blade",
+  "category": "netheryx:equipment",
+  "sortnum": 41,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:withered_blade",
+      "text": "Lâchée par les Chevaliers flétris. Inflige $(item)Flétrissement II$() pendant 5 secondes.",
+      "link_recipe": false
+    }
+  ]
+}

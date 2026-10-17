@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "ingredient": {
+    "item": "netheryx:infernal_beef"
+  },
+  "result": "netheryx:cooked_infernal_beef",
+  "experience": 0.35,
+  "cookingtime": 100
+}

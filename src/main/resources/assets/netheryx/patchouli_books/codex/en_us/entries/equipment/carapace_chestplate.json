@@ -1,0 +1,14 @@
+{
+  "name": "Carapace Chestplate",
+  "icon": "netheryx:carapace_chestplate",
+  "category": "netheryx:equipment",
+  "sortnum": 44,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:carapace_chestplate",
+      "text": "Made from Basalt Beetle carapaces: 7 armor, toughness 3 and $(l)20% knockback resistance$().",
+      "link_recipe": true
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " D ",
+    "DOD",
+    " D "
+  ],
+  "key": {
+    "D": {
+      "item": "netheryx:soul_dust"
+    },
+    "O": {
+      "item": "minecraft:crying_obsidian"
+    }
+  },
+  "result": {
+    "item": "netheryx:recall_stone",
+    "count": 1
+  }
+}

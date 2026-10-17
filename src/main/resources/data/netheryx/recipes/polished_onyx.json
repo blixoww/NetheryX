@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " B ",
+    "BSB",
+    " B "
+  ],
+  "key": {
+    "B": {
+      "item": "minecraft:polished_blackstone"
+    },
+    "S": {
+      "item": "netheryx:onyx_shard"
+    }
+  },
+  "result": {
+    "item": "netheryx:polished_onyx",
+    "count": 4
+  }
+}

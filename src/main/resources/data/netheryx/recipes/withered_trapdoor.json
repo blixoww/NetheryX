@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:withered_planks"
+    }
+  },
+  "result": {
+    "item": "netheryx:withered_trapdoor",
+    "count": 2
+  }
+}

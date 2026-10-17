@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:soul_sand_valley",
+  "features": [
+    "netheryx:wild_soul_tuber",
+    "netheryx:soul_lily_patch",
+    "netheryx:glowcap_patch"
+  ],
+  "step": "vegetal_decoration"
+}

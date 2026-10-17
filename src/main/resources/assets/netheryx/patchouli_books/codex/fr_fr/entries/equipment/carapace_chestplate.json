@@ -1,0 +1,14 @@
+{
+  "name": "Plastron de carapace",
+  "icon": "netheryx:carapace_chestplate",
+  "category": "netheryx:equipment",
+  "sortnum": 44,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:carapace_chestplate",
+      "text": "Fait de carapaces de scarabée : 7 d'armure, robustesse 3 et $(l)20 % de résistance au recul$().",
+      "link_recipe": true
+    }
+  ]
+}

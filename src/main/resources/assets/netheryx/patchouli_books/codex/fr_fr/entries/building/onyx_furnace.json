@@ -1,0 +1,14 @@
+{
+  "name": "Four en onyx",
+  "icon": "netheryx:onyx_furnace",
+  "category": "netheryx:building",
+  "sortnum": 64,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_furnace",
+      "text": "Cuit $(l)deux fois plus vite$() qu'un four, pour toutes les recettes (contrairement au haut fourneau ou au fumoir). Compatible avec les entonnoirs.",
+      "link_recipe": true
+    }
+  ]
+}

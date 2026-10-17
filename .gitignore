@@ -1,0 +1,23 @@
+# Gradle / ForgeGradle
+.gradle/
+build/
+out/
+run/
+run-data/
+mcmodsrepo/
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+bin/
+# Python
+__pycache__/
+*.pyc
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:onyx_ore",
+    "netheryx:onyx_cluster",
+    "netheryx:sulfur_rock",
+    "netheryx:sulfur_ore",
+    "netheryx:sulfur_block",
+    "netheryx:sulfur_cluster",
+    "netheryx:crusted_lava",
+    "netheryx:ember_nylium",
+    "netheryx:onyx_block",
+    "netheryx:polished_onyx",
+    "netheryx:onyx_bricks",
+    "netheryx:onyx_brick_stairs",
+    "netheryx:onyx_brick_slab",
+    "netheryx:onyx_brick_wall",
+    "netheryx:magma_bricks",
+    "netheryx:magma_brick_stairs",
+    "netheryx:magma_brick_slab",
+    "netheryx:magma_brick_wall",
+    "netheryx:onyx_lantern",
+    "netheryx:onyx_anvil",
+    "netheryx:onyx_furnace"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "netheryx:cinder_wheat"
+    }
+  ],
+  "result": {
+    "item": "netheryx:cinder_wheat_seeds",
+    "count": 2
+  }
+}

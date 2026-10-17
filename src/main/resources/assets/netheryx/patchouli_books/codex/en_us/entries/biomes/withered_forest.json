@@ -1,0 +1,12 @@
+{
+  "name": "Withered Forest",
+  "icon": "netheryx:withered_stem",
+  "category": "netheryx:biomes",
+  "sortnum": 16,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Grey giant fungi with bone decorations on $(item)Withered Soil$().$(br2)Creatures: $(l)Withered Knights$(), wither skeletons. Dungeon: $(l)Withered Catacombs$()."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:soulfire_marsh",
+    "netheryx:withered_forest",
+    "netheryx:magma_rift",
+    "netheryx:ember_meadow",
+    "netheryx:ember_grove",
+    "netheryx:ashen_wastes",
+    "netheryx:onyx_depths",
+    "netheryx:sulfur_springs"
+  ]
+}

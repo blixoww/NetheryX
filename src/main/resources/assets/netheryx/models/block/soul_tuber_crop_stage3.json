@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "netheryx:block/soul_tuber_stage3"
+  },
+  "render_type": "minecraft:cutout"
+}

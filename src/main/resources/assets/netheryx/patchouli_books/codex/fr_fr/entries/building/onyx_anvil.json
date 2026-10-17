@@ -1,0 +1,14 @@
+{
+  "name": "Enclume en onyx",
+  "icon": "netheryx:onyx_anvil",
+  "category": "netheryx:building",
+  "sortnum": 63,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_anvil",
+      "text": "Fonctionne comme une enclume mais $(l)ne s'abîme jamais$() et chaque opération coûte $(l)deux fois moins d'expérience$(). Moins chère : 3 onyx et 4 lingots de fer.",
+      "link_recipe": true
+    }
+  ]
+}

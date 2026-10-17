@@ -1,0 +1,12 @@
+{
+  "name": "Magma Rift",
+  "icon": "minecraft:magma_block",
+  "category": "netheryx:biomes",
+  "sortnum": 17,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Lava deltas and magma floors. Watch your step!$(br2)Creatures: $(l)Basalt Beetles$(), blazes, magma cubes. Dungeon: the $(l)Infernal Sanctum$()."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_anvil",
+  "textures": {
+    "particle": "netheryx:block/onyx_anvil",
+    "body": "netheryx:block/onyx_anvil",
+    "top": "netheryx:block/onyx_anvil_top"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Faux des âmes",
+  "icon": "netheryx:soul_scythe",
+  "category": "netheryx:equipment",
+  "sortnum": 40,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:soul_scythe",
+      "text": "Trésor uniquement (Citadelle d'onyx, Catacombes flétries). Chaque coup vous $(l)soigne$() d'un cœur.",
+      "link_recipe": false
+    }
+  ]
+}

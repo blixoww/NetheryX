@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "netheryx:sulfur"
+    },
+    {
+      "item": "netheryx:sulfur"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:string"
+    }
+  ],
+  "result": {
+    "item": "netheryx:sulfur_bomb",
+    "count": 2
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Meals",
+  "icon": "netheryx:infernal_stew",
+  "category": "netheryx:farming",
+  "sortnum": 59,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:infernal_stew",
+      "text": "Infernal Stew: 10 hunger, Fire Resistance (1 min) and Regeneration."
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:cooked_stalker_meat_from_smelting",
+      "recipe2": "netheryx:cooked_crab_leg_from_smelting"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Cooked Stalker Meat$() restores 8 hunger and may grant $(item)Strength$()."
+    }
+  ]
+}

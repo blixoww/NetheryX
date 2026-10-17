@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:nether_forest_vegetation",
+  "config": {
+    "state_provider": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 60,
+          "data": {
+            "Name": "netheryx:nether_grass"
+          }
+        },
+        {
+          "weight": 8,
+          "data": {
+            "Name": "netheryx:ember_bloom"
+          }
+        },
+        {
+          "weight": 8,
+          "data": {
+            "Name": "netheryx:ash_daisy"
+          }
+        },
+        {
+          "weight": 8,
+          "data": {
+            "Name": "netheryx:crimson_bellflower"
+          }
+        },
+        {
+          "weight": 8,
+          "data": {
+            "Name": "netheryx:sulfur_tulip"
+          }
+        },
+        {
+          "weight": 4,
+          "data": {
+            "Name": "netheryx:glowcap"
+          }
+        },
+        {
+          "weight": 4,
+          "data": {
+            "Name": "netheryx:fire_berry_bush",
+            "Properties": {
+              "age": "3"
+            }
+          }
+        }
+      ]
+    },
+    "spread_width": 8,
+    "spread_height": 4
+  }
+}

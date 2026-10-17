@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "ingredient": {
+    "item": "netheryx:infernal_chicken"
+  },
+  "result": "netheryx:cooked_infernal_chicken",
+  "experience": 0.35,
+  "cookingtime": 200
+}

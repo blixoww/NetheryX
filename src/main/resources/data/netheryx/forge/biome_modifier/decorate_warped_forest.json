@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:warped_forest",
+  "features": [
+    "netheryx:soul_lily_patch",
+    "netheryx:nether_flora",
+    "netheryx:glowcap_patch"
+  ],
+  "step": "vegetal_decoration"
+}

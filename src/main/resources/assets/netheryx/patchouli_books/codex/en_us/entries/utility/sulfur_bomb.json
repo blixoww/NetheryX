@@ -1,0 +1,14 @@
+{
+  "name": "Sulfur Bomb",
+  "icon": "netheryx:sulfur_bomb",
+  "category": "netheryx:utility",
+  "sortnum": 50,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:sulfur_bomb",
+      "text": "Throwable explosive, great for digging through netherrack. Also works in dispensers.",
+      "link_recipe": true
+    }
+  ]
+}

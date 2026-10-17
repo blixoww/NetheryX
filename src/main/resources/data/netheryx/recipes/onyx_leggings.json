@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "OOO",
+    "O O",
+    "O O"
+  ],
+  "key": {
+    "O": {
+      "item": "netheryx:onyx"
+    }
+  },
+  "result": {
+    "item": "netheryx:onyx_leggings",
+    "count": 1
+  }
+}

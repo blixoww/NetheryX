@@ -1,0 +1,12 @@
+{
+  "name": "Onyx Depths",
+  "icon": "netheryx:onyx_cluster",
+  "category": "netheryx:biomes",
+  "sortnum": 12,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A dark biome of blackstone and basalt with glowing $(item)Onyx Clusters$() and plenty of $(item)Onyx Ore$().$(br2)Dungeon: the $(l)Onyx Citadel$() and its boss."
+    }
+  ]
+}

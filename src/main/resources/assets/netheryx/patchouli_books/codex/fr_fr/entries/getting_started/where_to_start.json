@@ -1,0 +1,17 @@
+{
+  "name": "Par où commencer",
+  "icon": "minecraft:flint_and_steel",
+  "category": "netheryx:getting_started",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "1. Entrez dans le Nether et cherchez les $(l)biomes colorés$() : bosquets orange, cendres grises, marais bleus...$(br)2. Minez du $(item)Soufre$() et de l'$(item)Onyx$() (pioche en diamant).$(br)3. Pillez une $(item)Forteresse du Nether$() pour les bâtons de blaze : ils servent de manche aux outils en onyx.$(br)4. Fabriquez une $(item)Boussole des âmes$() pour trouver les structures."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Trois donjons, trois boss, du plus facile au plus difficile :$(li)$(l)Sanctuaire infernal$() : Sorcier infernal$(li)$(l)Catacombes flétries$() : Champion flétri$(li)$(l)Citadelle d'onyx$() : Sentinelle d'onyx (donne le $(item)Cœur de sentinelle$() du $(item)Cœur infernal$())",
+      "title": "Progression"
+    }
+  ]
+}

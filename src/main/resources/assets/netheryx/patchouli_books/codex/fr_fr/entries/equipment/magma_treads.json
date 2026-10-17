@@ -1,0 +1,14 @@
+{
+  "name": "Semelles de magma",
+  "icon": "netheryx:magma_treads",
+  "category": "netheryx:equipment",
+  "sortnum": 43,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:magma_treads",
+      "text": "Bottes qui changent la lave sous vos pieds en $(item)croûte$() pendant quelques secondes : traversez les lacs de lave !",
+      "link_recipe": true
+    }
+  ]
+}

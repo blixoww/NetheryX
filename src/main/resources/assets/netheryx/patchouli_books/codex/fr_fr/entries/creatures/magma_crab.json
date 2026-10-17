@@ -1,0 +1,15 @@
+{
+  "name": "Crabe de magma",
+  "icon": "netheryx:magma_crab_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 21,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:magma_crab",
+      "scale": 1.0,
+      "offset": 0.0,
+      "text": "Paisible. S'élève avec des $(item)baies de feu$(). Lâche des $(item)pattes de crabe$() et parfois une $(item)carapace de magma$()."
+    }
+  ]
+}

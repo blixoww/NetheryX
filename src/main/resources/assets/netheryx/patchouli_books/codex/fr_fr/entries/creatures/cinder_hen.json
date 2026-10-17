@@ -1,0 +1,15 @@
+{
+  "name": "Poule de cendre",
+  "icon": "netheryx:cinder_hen_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 27,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:cinder_hen",
+      "scale": 1.4,
+      "offset": 0.0,
+      "text": "Paisible. Pond un $(item)œuf de braise$() toutes les 5 à 10 minutes, plane en tombant. S'élève avec des graines du Nether."
+    }
+  ]
+}

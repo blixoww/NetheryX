@@ -1,0 +1,15 @@
+{
+  "name": "Ash Wraith",
+  "icon": "netheryx:ash_wraith_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 20,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:ash_wraith",
+      "scale": 0.8,
+      "offset": 0.0,
+      "text": "Flying spirit (22 HP). Its touch causes $(item)Blindness$() and $(item)Weakness$(). Drops $(item)Wraith Essence$()."
+    }
+  ]
+}

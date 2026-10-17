@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:onyx_bricks"
+    }
+  },
+  "result": {
+    "item": "netheryx:onyx_brick_wall",
+    "count": 6
+  }
+}

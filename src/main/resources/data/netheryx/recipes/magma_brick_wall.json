@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:magma_bricks"
+    }
+  },
+  "result": {
+    "item": "netheryx:magma_brick_wall",
+    "count": 6
+  }
+}

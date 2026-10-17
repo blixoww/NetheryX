@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:nether_forest_vegetation",
+  "config": {
+    "state_provider": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 70,
+          "data": {
+            "Name": "netheryx:charred_shrub"
+          }
+        },
+        {
+          "weight": 20,
+          "data": {
+            "Name": "netheryx:withered_fungus"
+          }
+        },
+        {
+          "weight": 10,
+          "data": {
+            "Name": "netheryx:soul_lily"
+          }
+        }
+      ]
+    },
+    "spread_width": 8,
+    "spread_height": 4
+  }
+}

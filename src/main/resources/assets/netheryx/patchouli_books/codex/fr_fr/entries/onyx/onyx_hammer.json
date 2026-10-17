@@ -1,0 +1,18 @@
+{
+  "name": "Marteau en onyx",
+  "icon": "netheryx:onyx_hammer",
+  "category": "netheryx:onyx",
+  "sortnum": 7,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_hammer",
+      "text": "Mine une zone de $(l)3x3$() face à vous. Accroupissez-vous pour un seul bloc. Respecte les mods de protection.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_hammer"
+    }
+  ]
+}

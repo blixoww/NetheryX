@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:ember_meadow",
+    "netheryx:ember_grove",
+    "netheryx:sulfur_springs",
+    "minecraft:crimson_forest",
+    "minecraft:nether_wastes",
+    "minecraft:warped_forest"
+  ]
+}

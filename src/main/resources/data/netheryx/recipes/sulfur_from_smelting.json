@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "ingredient": {
+    "item": "netheryx:sulfur_ore"
+  },
+  "result": "netheryx:sulfur",
+  "experience": 0.5,
+  "cookingtime": 200
+}

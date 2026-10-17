@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "netheryx:sulfur_tulip"
+    }
+  ],
+  "result": {
+    "item": "minecraft:yellow_dye",
+    "count": 2
+  }
+}

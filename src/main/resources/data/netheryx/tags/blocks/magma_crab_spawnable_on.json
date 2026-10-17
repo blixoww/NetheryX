@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#netheryx:nether_animals_spawnable_on",
+    "netheryx:sulfur_rock",
+    "minecraft:netherrack",
+    "minecraft:basalt",
+    "minecraft:magma_block",
+    "minecraft:blackstone"
+  ]
+}

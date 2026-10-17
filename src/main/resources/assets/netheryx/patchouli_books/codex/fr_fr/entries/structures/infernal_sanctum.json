@@ -1,0 +1,16 @@
+{
+  "name": "Sanctuaire infernal",
+  "icon": "netheryx:magma_bricks",
+  "category": "netheryx:structures",
+  "sortnum": 34,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Faille de magma, Bosquet de braise, Sources sulfureuses, Prairie de braise, Forêt carmin, Désolation du Nether. Un temple entouré de $(l)douves de lave$() : traversez le pont, survivez aux autels à Blazes et aux Traqueurs de la cour."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "L'antichambre a des canaux de lave et deux salles rituelles (générateurs de cubes de magma et de Traqueurs, coffres). Ensuite l'arène du $(l)Sorcier infernal$() et le trésor scellé (Bâton du sorcier, Semelles de magma, netherite...)."
+    }
+  ]
+}

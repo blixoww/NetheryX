@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:withered_stem"
+    }
+  },
+  "result": {
+    "item": "netheryx:withered_hyphae",
+    "count": 3
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Fleurs",
+  "icon": "netheryx:ember_bloom",
+  "category": "netheryx:farming",
+  "sortnum": 57,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Quatre fleurs du Nether poussent dans la prairie et dans les biomes vanilla : $(item)fleur de braise$(), $(item)marguerite de cendre$(), $(item)campanule carmin$() et $(item)tulipe de soufre$(). Elles donnent des teintures et vont en pot (comme les lys des âmes, luminelles et champignons)."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:orange_dye_from_ember_bloom",
+      "recipe2": "netheryx:light_gray_dye_from_ash_daisy"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:red_dye_from_crimson_bellflower",
+      "recipe2": "netheryx:yellow_dye_from_sulfur_tulip"
+    }
+  ]
+}

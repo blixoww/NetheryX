@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:nylium",
+    "#minecraft:base_stone_nether",
+    "minecraft:soul_soil",
+    "minecraft:soul_sand",
+    "minecraft:magma_block",
+    "netheryx:ash_block",
+    "minecraft:gravel"
+  ]
+}

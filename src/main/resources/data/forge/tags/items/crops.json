@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#forge:crops/blaze_pepper",
+    "#forge:crops/soul_tuber",
+    "#forge:crops/cinder_wheat"
+  ]
+}

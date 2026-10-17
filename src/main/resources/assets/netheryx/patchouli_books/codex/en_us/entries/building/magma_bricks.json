@@ -1,0 +1,22 @@
+{
+  "name": "Magma Bricks",
+  "icon": "netheryx:magma_bricks",
+  "category": "netheryx:building",
+  "sortnum": 65,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Glowing bricks made from magma blocks. Unlike magma, they do not burn your feet."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:magma_bricks",
+      "recipe2": "netheryx:magma_brick_stairs"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:magma_brick_slab",
+      "recipe2": "netheryx:magma_brick_wall"
+    }
+  ]
+}

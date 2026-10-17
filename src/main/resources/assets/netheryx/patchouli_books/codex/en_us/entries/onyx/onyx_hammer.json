@@ -1,0 +1,18 @@
+{
+  "name": "Onyx Hammer",
+  "icon": "netheryx:onyx_hammer",
+  "category": "netheryx:onyx",
+  "sortnum": 7,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_hammer",
+      "text": "Mines a $(l)3x3$() area facing you. Sneak to mine a single block. Respects claim and protection mods.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_hammer"
+    }
+  ]
+}

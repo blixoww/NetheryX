@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "netheryx:block/onyx_cluster"
+  },
+  "render_type": "minecraft:cutout"
+}

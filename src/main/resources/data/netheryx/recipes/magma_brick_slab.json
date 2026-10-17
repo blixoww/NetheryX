@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:magma_bricks"
+    }
+  },
+  "result": {
+    "item": "netheryx:magma_brick_slab",
+    "count": 6
+  }
+}

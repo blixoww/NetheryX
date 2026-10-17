@@ -1,0 +1,12 @@
+{
+  "name": "Faille de magma",
+  "icon": "minecraft:magma_block",
+  "category": "netheryx:biomes",
+  "sortnum": 17,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Deltas de lave et sols de magma. Attention où vous marchez !$(br2)Créatures : $(l)Scarabées de basalte$(), blazes, cubes de magma. Structure : le $(l)Sanctuaire infernal$()."
+    }
+  ]
+}

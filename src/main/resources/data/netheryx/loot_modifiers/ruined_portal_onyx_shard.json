@@ -1,0 +1,16 @@
+{
+  "type": "netheryx:add_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/ruined_portal"
+    },
+    {
+      "condition": "minecraft:random_chance",
+      "chance": 0.25
+    }
+  ],
+  "item": "netheryx:onyx_shard",
+  "min_count": 1,
+  "max_count": 3
+}

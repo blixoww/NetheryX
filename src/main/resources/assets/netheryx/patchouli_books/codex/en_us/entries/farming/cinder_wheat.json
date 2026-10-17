@@ -1,0 +1,19 @@
+{
+  "name": "Cinder Wheat",
+  "icon": "netheryx:cinder_wheat",
+  "category": "netheryx:farming",
+  "sortnum": 55,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:cinder_wheat",
+      "text": "Seeds come from breaking $(item)Nether Grass$() (or wild wheat in the Ember Meadow). Grows on nylium, Nether grass or soul soil without light. Makes bread and feeds Ember Cows.",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:cinder_bread",
+      "recipe2": "netheryx:cinder_wheat_seeds"
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Briques de magma",
+  "icon": "netheryx:magma_bricks",
+  "category": "netheryx:building",
+  "sortnum": 65,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Briques lumineuses faites de blocs de magma. Contrairement au magma, elles ne brûlent pas les pieds."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:magma_bricks",
+      "recipe2": "netheryx:magma_brick_stairs"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:magma_brick_slab",
+      "recipe2": "netheryx:magma_brick_wall"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "type": "netheryx:nether_floor",
+  "biomes": "#netheryx:has_structure/hidden_cache",
+  "step": "top_layer_modification",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "netheryx:hidden_cache/start",
+  "size": 1,
+  "max_y": 100,
+  "min_y": 40,
+  "sink": 6,
+  "footprint": 6,
+  "required_air": 4,
+  "max_distance_from_center": 80
+}

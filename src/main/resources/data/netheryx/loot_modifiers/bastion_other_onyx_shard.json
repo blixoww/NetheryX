@@ -1,0 +1,16 @@
+{
+  "type": "netheryx:add_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/bastion_other"
+    },
+    {
+      "condition": "minecraft:random_chance",
+      "chance": 0.5
+    }
+  ],
+  "item": "netheryx:onyx_shard",
+  "min_count": 2,
+  "max_count": 5
+}

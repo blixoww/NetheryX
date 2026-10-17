@@ -1,0 +1,26 @@
+{
+  "name": "Outils en onyx",
+  "icon": "netheryx:onyx_pickaxe",
+  "category": "netheryx:onyx",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Durabilité $(l)4500$() (diamant 1561, netherite 2031), vitesse $(l)9,5$(), bonus de dégâts $(l)3,5$(). Le marteau : 7000. Les manches sont des $(item)bâtons de blaze$(). Les objets en onyx ne brûlent pas dans la lave."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_sword",
+      "recipe2": "netheryx:onyx_pickaxe"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_axe",
+      "recipe2": "netheryx:onyx_shovel"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_hoe"
+    }
+  ]
+}

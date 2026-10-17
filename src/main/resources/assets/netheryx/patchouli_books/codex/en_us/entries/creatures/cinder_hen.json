@@ -1,0 +1,15 @@
+{
+  "name": "Cinder Hen",
+  "icon": "netheryx:cinder_hen_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 27,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:cinder_hen",
+      "scale": 1.4,
+      "offset": 0.0,
+      "text": "Peaceful. Lays an $(item)Ember Egg$() every 5-10 minutes, glides when falling. Breed it with Nether seeds."
+    }
+  ]
+}

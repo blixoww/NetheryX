@@ -1,0 +1,27 @@
+{
+  "name": "Blocs d'onyx",
+  "icon": "netheryx:onyx_bricks",
+  "category": "netheryx:onyx",
+  "sortnum": 9,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:polished_onyx",
+      "recipe2": "netheryx:onyx_bricks"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_brick_stairs",
+      "recipe2": "netheryx:onyx_brick_slab"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_brick_wall"
+    },
+    {
+      "type": "patchouli:stonecutting",
+      "recipe": "netheryx:onyx_brick_stairs_from_onyx_bricks_stonecutting",
+      "recipe2": "netheryx:onyx_brick_slab_from_onyx_bricks_stonecutting"
+    }
+  ]
+}

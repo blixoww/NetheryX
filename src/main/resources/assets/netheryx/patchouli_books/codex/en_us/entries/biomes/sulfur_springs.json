@@ -1,0 +1,12 @@
+{
+  "name": "Sulfur Springs",
+  "icon": "netheryx:sulfur_rock",
+  "category": "netheryx:biomes",
+  "sortnum": 14,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Yellow sulfur rock, $(item)Sulfur Ore$() and crystal clusters.$(br2)Creatures: peaceful $(l)Magma Crabs$(). Dungeon: $(l)Infernal Sanctum$()."
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:onyx_depths",
+    "netheryx:withered_forest",
+    "netheryx:ashen_wastes",
+    "minecraft:basalt_deltas",
+    "minecraft:nether_wastes",
+    "minecraft:soul_sand_valley"
+  ]
+}

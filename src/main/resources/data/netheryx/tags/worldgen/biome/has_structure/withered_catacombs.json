@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:withered_forest",
+    "netheryx:ashen_wastes",
+    "netheryx:soulfire_marsh",
+    "minecraft:soul_sand_valley",
+    "minecraft:warped_forest",
+    "minecraft:nether_wastes"
+  ]
+}

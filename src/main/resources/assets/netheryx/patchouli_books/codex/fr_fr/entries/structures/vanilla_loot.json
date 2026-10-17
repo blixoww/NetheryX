@@ -1,0 +1,12 @@
+{
+  "name": "Butin vanilla",
+  "icon": "minecraft:chest",
+  "category": "netheryx:structures",
+  "sortnum": 39,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Les bastions, forteresses et portails en ruine contiennent aussi du butin NetheryX : onyx, éclats, boussoles des âmes, Pierres de rappel, élixirs, carapaces de magma, bombes de soufre et graines."
+    }
+  ]
+}

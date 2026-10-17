@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "netheryx:block/ember_stem",
+    "side": "netheryx:block/ember_stem"
+  }
+}

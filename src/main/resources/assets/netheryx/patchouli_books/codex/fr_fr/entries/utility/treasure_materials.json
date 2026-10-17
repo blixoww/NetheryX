@@ -1,0 +1,17 @@
+{
+  "name": "Matériaux de trésor",
+  "icon": "netheryx:wraith_essence",
+  "category": "netheryx:utility",
+  "sortnum": 51,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Essence de spectre$() : Boussole des âmes.$(br)$(item)Carapace de magma$() : Semelles de magma.$(br)$(item)Carapace de basalte$() : Plastron de carapace.$(br)$(item)Poussière d'âme$() : Pierre de rappel, Élixir de lueur.$(br)$(item)Os flétri$() : poudre d'os, teinture noire.$(br)$(item)Cœur de sentinelle$() : Cœur infernal."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:bone_meal_from_withered_bone",
+      "recipe2": "netheryx:black_dye_from_withered_bone"
+    }
+  ]
+}

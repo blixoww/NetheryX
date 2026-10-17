@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "OOO",
+    " I ",
+    "III"
+  ],
+  "key": {
+    "O": {
+      "item": "netheryx:onyx"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "netheryx:onyx_anvil",
+    "count": 1
+  }
+}

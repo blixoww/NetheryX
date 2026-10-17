@@ -1,0 +1,18 @@
+{
+  "name": "Arc en onyx",
+  "icon": "netheryx:onyx_bow",
+  "category": "netheryx:onyx",
+  "sortnum": 6,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_bow",
+      "text": "Les flèches infligent $(l)50 % de dégâts en plus +1$() et sont enflammées. 2400 de durabilité, enchantable comme l'onyx, se répare avec de l'onyx.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_bow"
+    }
+  ]
+}

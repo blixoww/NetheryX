@@ -1,0 +1,18 @@
+{
+  "name": "Boussole des âmes",
+  "icon": "netheryx:soul_compass",
+  "category": "netheryx:utility",
+  "sortnum": 45,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:soul_compass",
+      "text": "Clic droit pour ouvrir son $(l)menu$() : il liste toutes les structures (vanilla et moddées) qui peuvent exister dans votre dimension, avec une barre de recherche. Choisissez-en une et la boussole trouve la plus proche.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "En main, une flèche et la distance indiquent le chemin. La structure choisie est inscrite dans l'infobulle. Fonctionne dans toutes les dimensions !"
+    }
+  ]
+}

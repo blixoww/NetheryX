@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:withered_stem",
+    "netheryx:stripped_withered_stem",
+    "netheryx:withered_hyphae",
+    "netheryx:stripped_withered_hyphae"
+  ]
+}

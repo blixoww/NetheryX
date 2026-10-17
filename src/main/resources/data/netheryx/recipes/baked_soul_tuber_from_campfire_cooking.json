@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "ingredient": {
+    "item": "netheryx:soul_tuber"
+  },
+  "result": "netheryx:baked_soul_tuber",
+  "experience": 0.35,
+  "cookingtime": 600
+}

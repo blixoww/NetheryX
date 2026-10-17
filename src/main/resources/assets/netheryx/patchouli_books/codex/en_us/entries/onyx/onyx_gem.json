@@ -1,0 +1,26 @@
+{
+  "name": "Onyx Gem",
+  "icon": "netheryx:onyx",
+  "category": "netheryx:onyx",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx",
+      "text": "Black gem between diamond and netherite. Used for tools, armor, the $(item)Onyx Lantern$() and the $(item)Infernal Heart$(). Accepted by beacons.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_from_shards",
+      "recipe2": "netheryx:onyx_block",
+      "text": "9 Onyx Shards (from Onyx Clusters) also make a gem."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_cluster",
+      "text": "Glowing crystals of the Onyx Depths. Mine them for $(item)Onyx Shards$() (Silk Touch keeps the cluster).",
+      "link_recipe": false
+    }
+  ]
+}

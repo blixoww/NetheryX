@@ -1,0 +1,27 @@
+{
+  "name": "Ember Wood",
+  "icon": "netheryx:ember_planks",
+  "category": "netheryx:building",
+  "sortnum": 60,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "From $(item)Ember Fungi$() (grow them with bone meal on Ember Nylium). Does not burn."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:ember_planks",
+      "recipe2": "netheryx:ember_stairs"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:ember_door",
+      "recipe2": "netheryx:ember_trapdoor"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:ember_fence",
+      "recipe2": "netheryx:ember_fence_gate"
+    }
+  ]
+}

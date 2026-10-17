@@ -1,0 +1,22 @@
+{
+  "name": "Flowers",
+  "icon": "netheryx:ember_bloom",
+  "category": "netheryx:farming",
+  "sortnum": 57,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Four Nether flowers grow in the meadow and across the vanilla biomes: $(item)Ember Bloom$(), $(item)Ash Daisy$(), $(item)Crimson Bellflower$() and $(item)Sulfur Tulip$(). They give dyes and fit in flower pots (like Soul Lilies, Glowcaps and fungi)."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:orange_dye_from_ember_bloom",
+      "recipe2": "netheryx:light_gray_dye_from_ash_daisy"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:red_dye_from_crimson_bellflower",
+      "recipe2": "netheryx:yellow_dye_from_sulfur_tulip"
+    }
+  ]
+}

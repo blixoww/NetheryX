@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "netheryx:block/withered_slab"
+    },
+    "type=top": {
+      "model": "netheryx:block/withered_slab_top"
+    },
+    "type=double": {
+      "model": "netheryx:block/withered_planks"
+    }
+  }
+}

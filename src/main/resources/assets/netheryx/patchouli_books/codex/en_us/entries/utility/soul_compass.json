@@ -1,0 +1,18 @@
+{
+  "name": "Soul Compass",
+  "icon": "netheryx:soul_compass",
+  "category": "netheryx:utility",
+  "sortnum": 45,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:soul_compass",
+      "text": "Right-click to open its $(l)menu$(): it lists every structure (vanilla and modded) that can exist in your current dimension, with a search bar. Pick one and the compass finds the nearest.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "While held, an arrow and the distance show the way in the action bar. The chosen structure is written in the tooltip. Works in every dimension!"
+    }
+  ]
+}

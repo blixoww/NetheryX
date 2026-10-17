@@ -1,0 +1,15 @@
+{
+  "name": "Magma Crab",
+  "icon": "netheryx:magma_crab_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 21,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:magma_crab",
+      "scale": 1.0,
+      "offset": 0.0,
+      "text": "Peaceful. Breed with $(item)Fire Berries$(). Drops $(item)Crab Legs$() and sometimes a $(item)Magma Shell$()."
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:cinder_wheat_crop",
+    "netheryx:nether_grass_block",
+    "netheryx:blaze_pepper_crop",
+    "netheryx:soul_tuber_crop",
+    "netheryx:fire_berry_bush",
+    "netheryx:ember_fungus",
+    "netheryx:ember_nylium",
+    "minecraft:nether_wart",
+    "minecraft:crimson_fungus",
+    "minecraft:warped_fungus",
+    "minecraft:crimson_nylium",
+    "minecraft:warped_nylium"
+  ]
+}

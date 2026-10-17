@@ -1,0 +1,16 @@
+{
+  "name": "Herbe du Nether",
+  "icon": "netheryx:nether_grass_block",
+  "category": "netheryx:building",
+  "sortnum": 62,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Une herbe dorée qui rend le Nether accueillant. La poudre d'os y fait pousser herbe et fleurs ; on peut y planter cultures et champignons. 4 touffes d'herbe du Nether donnent un bloc."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:nether_grass_block"
+    }
+  ]
+}

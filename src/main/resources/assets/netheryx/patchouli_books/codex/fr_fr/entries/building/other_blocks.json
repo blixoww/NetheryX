@@ -1,0 +1,17 @@
+{
+  "name": "Autres blocs",
+  "icon": "netheryx:sulfur_block",
+  "category": "netheryx:building",
+  "sortnum": 67,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:sulfur_block",
+      "recipe2": "netheryx:onyx_block"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Le $(item)bloc de cendre$() tombe comme le sable. La $(item)lave croûtée$() est créée par les Semelles de magma et redevient de la lave."
+    }
+  ]
+}

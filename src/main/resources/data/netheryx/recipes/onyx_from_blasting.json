@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "ingredient": {
+    "item": "netheryx:onyx_ore"
+  },
+  "result": "netheryx:onyx",
+  "experience": 1.0,
+  "cookingtime": 100
+}

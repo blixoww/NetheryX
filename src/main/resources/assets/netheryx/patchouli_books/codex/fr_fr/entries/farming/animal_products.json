@@ -1,0 +1,21 @@
+{
+  "name": "Produits animaux",
+  "icon": "netheryx:cooked_infernal_beef",
+  "category": "netheryx:farming",
+  "sortnum": 58,
+  "pages": [
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:cooked_infernal_beef_from_smelting",
+      "recipe2": "netheryx:cooked_infernal_chicken_from_smelting"
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:fried_ember_egg_from_smelting"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Steak infernal$() : 10 de faim + résistance au feu.$(br)$(item)Œuf de braise au plat$() : peut donner Résistance.$(br)Les vaches de braise donnent aussi du $(item)lait$()."
+    }
+  ]
+}

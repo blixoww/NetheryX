@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "ingredient": {
+    "item": "netheryx:ember_egg"
+  },
+  "result": "netheryx:fried_ember_egg",
+  "experience": 0.35,
+  "cookingtime": 600
+}

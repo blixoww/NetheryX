@@ -1,0 +1,12 @@
+{
+  "name": "Jardin du Nether",
+  "icon": "netheryx:cinder_wheat",
+  "category": "netheryx:structures",
+  "sortnum": 37,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Prairies, bosquets et forêts. Un potager clôturé avec une cabane : graines, nourriture, pommes d'or et houe en onyx."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "netheryx:block/ember_slab"
+    },
+    "type=top": {
+      "model": "netheryx:block/ember_slab_top"
+    },
+    "type=double": {
+      "model": "netheryx:block/ember_planks"
+    }
+  }
+}

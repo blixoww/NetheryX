@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:withered_planks"
+    }
+  },
+  "result": {
+    "item": "netheryx:withered_slab",
+    "count": 6
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Repas",
+  "icon": "netheryx:infernal_stew",
+  "category": "netheryx:farming",
+  "sortnum": 59,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:infernal_stew",
+      "text": "Ragoût infernal : 10 de faim, Résistance au feu (1 min) et Régénération."
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:cooked_stalker_meat_from_smelting",
+      "recipe2": "netheryx:cooked_crab_leg_from_smelting"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "La $(item)viande de traqueur cuite$() rend 8 de faim et peut donner $(item)Force$()."
+    }
+  ]
+}

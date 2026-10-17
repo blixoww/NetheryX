@@ -1,0 +1,14 @@
+{
+  "name": "Warlock Staff",
+  "icon": "netheryx:warlock_staff",
+  "category": "netheryx:equipment",
+  "sortnum": 42,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:warlock_staff",
+      "text": "Dropped by the Infernal Warlock. Shoots a $(item)fireball$() (256 uses).",
+      "link_recipe": false
+    }
+  ]
+}

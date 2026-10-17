@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "netheryx:nether_garden",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 10,
+    "separation": 4,
+    "salt": 192837465,
+    "exclusion_zone": {
+      "other_set": "minecraft:nether_complexes",
+      "chunk_count": 2
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Minerai d'onyx",
+  "icon": "netheryx:onyx_ore",
+  "category": "netheryx:onyx",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_ore",
+      "text": "Aussi fréquent que le diamant, partout dans le Nether entre Y=5 et Y=56, et plus encore dans les $(l)Profondeurs d'onyx$(). Nécessite une $(item)pioche en diamant$(). Fortune fonctionne.",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:onyx_from_smelting",
+      "recipe2": "netheryx:onyx_from_blasting"
+    }
+  ],
+  "priority": true
+}

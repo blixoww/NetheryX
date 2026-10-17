@@ -1,0 +1,15 @@
+{
+  "name": "Withered Champion (boss)",
+  "icon": "netheryx:withered_champion_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 30,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:withered_champion",
+      "scale": 0.45,
+      "offset": 0.0,
+      "text": "200 HP, 12 armor. A giant knight whose blade withers. It $(l)dashes$() at distant targets and calls two Withered Knights at 66% and 33% health. Guards the Withered Catacombs."
+    }
+  ]
+}

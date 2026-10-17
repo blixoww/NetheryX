@@ -1,0 +1,14 @@
+{
+  "name": "Withered Blade",
+  "icon": "netheryx:withered_blade",
+  "category": "netheryx:equipment",
+  "sortnum": 41,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:withered_blade",
+      "text": "Dropped by Withered Knights. Inflicts $(item)Wither II$() for 5 seconds.",
+      "link_recipe": false
+    }
+  ]
+}

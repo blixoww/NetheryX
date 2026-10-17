@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=south": {
+      "model": "netheryx:block/onyx_anvil"
+    },
+    "facing=west": {
+      "model": "netheryx:block/onyx_anvil",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "netheryx:block/onyx_anvil",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "netheryx:block/onyx_anvil",
+      "y": 270
+    }
+  }
+}

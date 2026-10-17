@@ -1,0 +1,14 @@
+{
+  "name": "Baies de feu",
+  "icon": "netheryx:fire_berries",
+  "category": "netheryx:farming",
+  "sortnum": 54,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:fire_berries",
+      "text": "Buisson qui pousse sur la plupart des sols du Nether. Récolte au clic droit. Nourrit et fait se reproduire les crabes de magma.",
+      "link_recipe": false
+    }
+  ]
+}

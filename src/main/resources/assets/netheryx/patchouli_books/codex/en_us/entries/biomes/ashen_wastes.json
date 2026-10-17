@@ -1,0 +1,12 @@
+{
+  "name": "Ashen Wastes",
+  "icon": "netheryx:ash_block",
+  "category": "netheryx:biomes",
+  "sortnum": 11,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Grey ash dunes over basalt, charred shrubs and a constant fall of ash.$(br2)Creatures: $(l)Ash Wraiths$(), ghasts. Dungeon: $(l)Withered Catacombs$()."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Terres cendrées",
+  "icon": "netheryx:ash_block",
+  "category": "netheryx:biomes",
+  "sortnum": 11,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Dunes de cendre grise sur du basalte, arbustes calcinés et pluie de cendres.$(br2)Créatures : $(l)Spectres de cendre$(), ghasts. Donjon : $(l)Catacombes flétries$()."
+    }
+  ]
+}

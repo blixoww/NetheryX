@@ -1,0 +1,14 @@
+{
+  "name": "Onyx Furnace",
+  "icon": "netheryx:onyx_furnace",
+  "category": "netheryx:building",
+  "sortnum": 64,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_furnace",
+      "text": "Smelts $(l)twice as fast$() as a furnace, for every smelting recipe (unlike the blast furnace or the smoker). Works with hoppers.",
+      "link_recipe": true
+    }
+  ]
+}

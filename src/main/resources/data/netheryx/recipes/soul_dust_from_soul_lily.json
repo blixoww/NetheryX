@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "netheryx:soul_lily"
+    }
+  ],
+  "result": {
+    "item": "netheryx:soul_dust",
+    "count": 1
+  }
+}

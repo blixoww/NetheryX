@@ -1,0 +1,16 @@
+{
+  "type": "netheryx:add_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/bastion_hoglin_stable"
+    },
+    {
+      "condition": "minecraft:random_chance",
+      "chance": 0.4
+    }
+  ],
+  "item": "netheryx:magma_shell",
+  "min_count": 1,
+  "max_count": 2
+}

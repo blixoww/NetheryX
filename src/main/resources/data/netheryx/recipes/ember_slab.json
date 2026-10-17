@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:ember_planks"
+    }
+  },
+  "result": {
+    "item": "netheryx:ember_slab",
+    "count": 6
+  }
+}

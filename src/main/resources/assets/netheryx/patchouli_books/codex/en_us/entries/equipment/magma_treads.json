@@ -1,0 +1,14 @@
+{
+  "name": "Magma Treads",
+  "icon": "netheryx:magma_treads",
+  "category": "netheryx:equipment",
+  "sortnum": 43,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:magma_treads",
+      "text": "Boots that turn lava under your feet into a $(item)crust$() for a few seconds: walk across lava lakes!",
+      "link_recipe": true
+    }
+  ]
+}

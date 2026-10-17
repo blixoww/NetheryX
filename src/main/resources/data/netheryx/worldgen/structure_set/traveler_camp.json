@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "netheryx:traveler_camp",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 9,
+    "separation": 3,
+    "salt": 734029118,
+    "exclusion_zone": {
+      "other_set": "minecraft:nether_complexes",
+      "chunk_count": 2
+    }
+  }
+}

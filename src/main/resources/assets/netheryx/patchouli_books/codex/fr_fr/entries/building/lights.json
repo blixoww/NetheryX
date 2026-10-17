@@ -1,0 +1,17 @@
+{
+  "name": "Éclairages",
+  "icon": "netheryx:onyx_lantern",
+  "category": "netheryx:building",
+  "sortnum": 66,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_lantern",
+      "recipe2": "netheryx:ember_lamp"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Le $(item)nylium de braise$(), les $(item)amas d'onyx$(), les $(item)lys des âmes$() et les $(item)amas de soufre$() éclairent aussi."
+    }
+  ]
+}

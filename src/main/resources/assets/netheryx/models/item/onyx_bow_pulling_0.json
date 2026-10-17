@@ -1,0 +1,6 @@
+{
+  "parent": "netheryx:item/onyx_bow",
+  "textures": {
+    "layer0": "netheryx:item/onyx_bow_pulling_0"
+  }
+}

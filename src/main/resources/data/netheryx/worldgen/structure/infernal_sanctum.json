@@ -1,0 +1,15 @@
+{
+  "type": "netheryx:nether_floor",
+  "biomes": "#netheryx:has_structure/infernal_sanctum",
+  "step": "top_layer_modification",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_box",
+  "start_pool": "netheryx:infernal_sanctum/start",
+  "size": 1,
+  "max_y": 100,
+  "min_y": 33,
+  "sink": 0,
+  "footprint": 40,
+  "required_air": 10,
+  "max_distance_from_center": 80
+}

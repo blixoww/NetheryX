@@ -1,0 +1,16 @@
+{
+  "type": "netheryx:add_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/bastion_treasure"
+    },
+    {
+      "condition": "minecraft:random_chance",
+      "chance": 0.2
+    }
+  ],
+  "item": "netheryx:recall_stone",
+  "min_count": 1,
+  "max_count": 1
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Ember Stalker",
+  "icon": "netheryx:ember_stalker_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 19,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:ember_stalker",
+      "scale": 1.0,
+      "offset": 0.0,
+      "text": "Hostile feline (30 HP). Pounces and sets you on fire; when hit it may vanish in a $(l)cloud of smoke$(). Drops $(item)Stalker Meat$()."
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Gemme d'onyx",
+  "icon": "netheryx:onyx",
+  "category": "netheryx:onyx",
+  "sortnum": 4,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx",
+      "text": "Gemme noire entre le diamant et la netherite. Sert aux outils, armures, à la $(item)Lanterne d'onyx$() et au $(item)Cœur infernal$(). Acceptée par les balises.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_from_shards",
+      "recipe2": "netheryx:onyx_block",
+      "text": "9 éclats d'onyx (des amas d'onyx) donnent aussi une gemme."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:onyx_cluster",
+      "text": "Cristaux lumineux des Profondeurs d'onyx. Ils donnent des $(item)éclats d'onyx$() (Toucher de soie garde l'amas).",
+      "link_recipe": false
+    }
+  ]
+}

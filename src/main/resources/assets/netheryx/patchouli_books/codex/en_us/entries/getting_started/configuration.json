@@ -1,0 +1,12 @@
+{
+  "name": "Configuration",
+  "icon": "minecraft:comparator",
+  "category": "netheryx:getting_started",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "File $(l)config/netheryx-common.toml$():$(li)biome region weight$(li)Onyx set bonus$(li)hammer 3x3 mining$(li)compass search radius$(li)bombs breaking blocks$(li)boss health$(li)Recall Stone cooldown$(li)giving this codex"
+    }
+  ]
+}

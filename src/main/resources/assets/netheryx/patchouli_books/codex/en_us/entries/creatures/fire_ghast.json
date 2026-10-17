@@ -1,0 +1,15 @@
+{
+  "name": "Fire Ghast",
+  "icon": "netheryx:fire_ghast_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 28,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:fire_ghast",
+      "scale": 0.25,
+      "offset": 0.0,
+      "text": "A burning ghast with 30 HP whose fireballs explode harder. Drops fire charges, ghast tears and Onyx shards."
+    }
+  ]
+}

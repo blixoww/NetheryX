@@ -1,0 +1,12 @@
+{
+  "name": "Forêt flétrie",
+  "icon": "netheryx:withered_stem",
+  "category": "netheryx:biomes",
+  "sortnum": 16,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Champignons géants gris ornés d'os sur la $(item)terre flétrie$().$(br2)Créatures : $(l)Chevaliers flétris$(), squelettes wither. Donjon : $(l)Catacombes flétries$()."
+    }
+  ]
+}

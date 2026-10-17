@@ -1,0 +1,16 @@
+{
+  "type": "netheryx:add_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:gameplay/piglin_bartering"
+    },
+    {
+      "condition": "minecraft:random_chance",
+      "chance": 0.04
+    }
+  ],
+  "item": "netheryx:fire_berries",
+  "min_count": 2,
+  "max_count": 4
+}

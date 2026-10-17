@@ -1,0 +1,16 @@
+{
+  "name": "Citadelle d'onyx",
+  "icon": "netheryx:onyx_bricks",
+  "category": "netheryx:structures",
+  "sortnum": 33,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Profondeurs d'onyx, Forêt flétrie, Terres cendrées, Deltas de basalte, Désolation du Nether, Vallée des âmes. Forteresse de 45x45. $(l)1.$() La porte est gardée par des Chevaliers flétris. $(l)2.$() Quatre tours abritent un générateur de Spectres au rez-de-chaussée et un coffre à l'étage (échelle)."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)3.$() Le grand hall du donjon : générateurs de Traqueurs et deux chevaliers. $(l)4.$() L'arène de la $(l)Sentinelle d'onyx$(). $(l)5.$() Derrière les sceaux : trois coffres au trésor (équipement en onyx enchanté, netherite, Faux des âmes, totem...)."
+    }
+  ]
+}

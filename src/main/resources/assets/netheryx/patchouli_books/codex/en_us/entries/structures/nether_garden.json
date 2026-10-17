@@ -1,0 +1,12 @@
+{
+  "name": "Nether Garden",
+  "icon": "netheryx:cinder_wheat",
+  "category": "netheryx:structures",
+  "sortnum": 37,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Meadows, groves and forests. A fenced vegetable garden with a hut: seeds, food, golden apples and an Onyx hoe."
+    }
+  ]
+}

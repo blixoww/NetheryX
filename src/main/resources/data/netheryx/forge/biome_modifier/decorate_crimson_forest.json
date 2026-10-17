@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:crimson_forest",
+  "features": [
+    "netheryx:fire_berry_patch",
+    "netheryx:nether_flora",
+    "netheryx:glowcap_patch"
+  ],
+  "step": "vegetal_decoration"
+}

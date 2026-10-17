@@ -1,0 +1,12 @@
+{
+  "name": "Soulfire Marsh",
+  "icon": "netheryx:soul_lily",
+  "category": "netheryx:biomes",
+  "sortnum": 15,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Soul soil plains lit by blue fire and glowing $(item)Soul Lilies$().$(br2)Creatures: $(l)Soul Moths$(), skeletons. Dungeon: $(l)Withered Catacombs$()."
+    }
+  ]
+}

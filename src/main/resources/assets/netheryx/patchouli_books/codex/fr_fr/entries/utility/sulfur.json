@@ -1,0 +1,23 @@
+{
+  "name": "Soufre",
+  "icon": "netheryx:sulfur",
+  "category": "netheryx:utility",
+  "sortnum": 49,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:sulfur",
+      "text": "S'utilise comme engrais sur les cultures du Nether (y compris la $(item)verrue du Nether$()). Donne aussi de la poudre à canon et des boules de feu.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:gunpowder_from_sulfur",
+      "recipe2": "netheryx:fire_charge_from_sulfur"
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:sulfur_from_smelting"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:polished_onyx",
+    "netheryx:onyx_bricks",
+    "netheryx:onyx_brick_stairs",
+    "netheryx:onyx_brick_slab",
+    "netheryx:onyx_brick_wall",
+    "netheryx:onyx_anvil"
+  ]
+}

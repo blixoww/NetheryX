@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:onyx"
+    },
+    "title": {
+      "translate": "advancements.netheryx.root.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.root.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false,
+    "background": "minecraft:textures/block/blackstone.png"
+  },
+  "criteria": {
+    "entered_nether": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "minecraft:the_nether"
+      }
+    }
+  }
+}

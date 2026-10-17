@@ -1,0 +1,12 @@
+{
+  "name": "Campement de voyageur",
+  "icon": "minecraft:campfire",
+  "category": "netheryx:structures",
+  "sortnum": 36,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Partout dans le Nether. Une tente, un feu de camp, un coffre et un tonneau : onyx, outils, diamants, nourriture et pommes d'or."
+    }
+  ]
+}

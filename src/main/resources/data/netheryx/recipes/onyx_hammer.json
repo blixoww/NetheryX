@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "OBO",
+    " R ",
+    " R "
+  ],
+  "key": {
+    "O": {
+      "item": "netheryx:onyx"
+    },
+    "B": {
+      "item": "netheryx:onyx_block"
+    },
+    "R": {
+      "item": "minecraft:blaze_rod"
+    }
+  },
+  "result": {
+    "item": "netheryx:onyx_hammer",
+    "count": 1
+  }
+}

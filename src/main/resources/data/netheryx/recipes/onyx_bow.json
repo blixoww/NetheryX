@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " OS",
+    "R S",
+    " OS"
+  ],
+  "key": {
+    "O": {
+      "item": "netheryx:onyx"
+    },
+    "R": {
+      "item": "minecraft:blaze_rod"
+    },
+    "S": {
+      "item": "minecraft:string"
+    }
+  },
+  "result": {
+    "item": "netheryx:onyx_bow",
+    "count": 1
+  }
+}

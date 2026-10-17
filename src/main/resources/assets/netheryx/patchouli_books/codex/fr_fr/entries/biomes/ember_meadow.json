@@ -1,0 +1,12 @@
+{
+  "name": "Prairie de braise",
+  "icon": "netheryx:nether_grass_block",
+  "category": "netheryx:biomes",
+  "sortnum": 13,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "L'endroit le plus accueillant du Nether : $(item)herbe du Nether$() dorée, fleurs, luminelles et blé de cendre sauvage.$(br2)Créatures : $(l)Vaches de braise$() et $(l)Poules de cendre$() paisibles. Idéal pour installer une ferme !"
+    }
+  ]
+}

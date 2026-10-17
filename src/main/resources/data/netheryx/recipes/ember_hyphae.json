@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:ember_stem"
+    }
+  },
+  "result": {
+    "item": "netheryx:ember_hyphae",
+    "count": 3
+  }
+}

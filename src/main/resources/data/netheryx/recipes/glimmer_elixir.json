@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:glass_bottle"
+    },
+    {
+      "item": "netheryx:soul_dust"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "netheryx:fire_berries"
+    }
+  ],
+  "result": {
+    "item": "netheryx:glimmer_elixir",
+    "count": 1
+  }
+}

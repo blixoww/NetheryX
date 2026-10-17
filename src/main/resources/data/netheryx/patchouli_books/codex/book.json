@@ -1,0 +1,13 @@
+{
+  "name": "book.netheryx.codex.name",
+  "landing_text": "book.netheryx.codex.landing",
+  "subtitle": "book.netheryx.codex.subtitle",
+  "version": "2",
+  "model": "patchouli:book_red",
+  "book_texture": "patchouli:textures/gui/book_red.png",
+  "creative_tab": "netheryx:netheryx",
+  "advancements_tab": "netheryx:root",
+  "use_resource_pack": true,
+  "show_progress": false,
+  "text_overflow_mode": "resize"
+}

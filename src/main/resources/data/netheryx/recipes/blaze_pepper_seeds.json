@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "netheryx:blaze_pepper"
+    }
+  ],
+  "result": {
+    "item": "netheryx:blaze_pepper_seeds",
+    "count": 2
+  }
+}

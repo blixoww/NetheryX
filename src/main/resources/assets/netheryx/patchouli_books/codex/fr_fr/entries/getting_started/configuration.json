@@ -1,0 +1,12 @@
+{
+  "name": "Configuration",
+  "icon": "minecraft:comparator",
+  "category": "netheryx:getting_started",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Fichier $(l)config/netheryx-common.toml$() :$(li)poids de la région de biomes$(li)bonus d'armure en onyx$(li)minage 3x3 du marteau$(li)rayon de la boussole$(li)destruction de blocs par les bombes$(li)points de vie des boss$(li)recharge de la Pierre de rappel$(li)remise de ce codex"
+    }
+  ]
+}

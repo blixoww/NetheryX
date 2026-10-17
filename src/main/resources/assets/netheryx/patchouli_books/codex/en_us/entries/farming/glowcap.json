@@ -1,0 +1,18 @@
+{
+  "name": "Glowcap",
+  "icon": "netheryx:glowcap",
+  "category": "netheryx:farming",
+  "sortnum": 56,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:glowcap",
+      "text": "A glowing mushroom found all over the Nether. Eat it for a short Night Vision, or cook a stew.",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:glowcap_stew"
+    }
+  ]
+}

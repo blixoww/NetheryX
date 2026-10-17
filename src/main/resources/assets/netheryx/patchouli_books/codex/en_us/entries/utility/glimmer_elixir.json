@@ -1,0 +1,14 @@
+{
+  "name": "Glimmer Elixir",
+  "icon": "netheryx:glimmer_elixir",
+  "category": "netheryx:utility",
+  "sortnum": 48,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:glimmer_elixir",
+      "text": "Drink for $(item)Night Vision$() (3 min) and $(item)Fire Resistance$() (30 s).",
+      "link_recipe": true
+    }
+  ]
+}

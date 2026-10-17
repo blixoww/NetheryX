@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "minecraft:basalt_deltas",
+  "features": [
+    "netheryx:sulfur_cluster_patch",
+    "netheryx:glowcap_patch"
+  ],
+  "step": "vegetal_decoration"
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Lights",
+  "icon": "netheryx:onyx_lantern",
+  "category": "netheryx:building",
+  "sortnum": 66,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_lantern",
+      "recipe2": "netheryx:ember_lamp"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Ember Nylium$(), $(item)Onyx Clusters$(), $(item)Soul Lilies$() and $(item)Sulfur Clusters$() also emit light."
+    }
+  ]
+}

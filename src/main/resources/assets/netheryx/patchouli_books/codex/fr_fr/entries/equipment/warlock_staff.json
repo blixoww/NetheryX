@@ -1,0 +1,14 @@
+{
+  "name": "Bâton du sorcier",
+  "icon": "netheryx:warlock_staff",
+  "category": "netheryx:equipment",
+  "sortnum": 42,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:warlock_staff",
+      "text": "Lâché par le Sorcier infernal. Lance une $(item)boule de feu$() (256 utilisations).",
+      "link_recipe": false
+    }
+  ]
+}

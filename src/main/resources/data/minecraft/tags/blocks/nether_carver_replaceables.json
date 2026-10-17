@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:ash_block",
+    "netheryx:sulfur_rock",
+    "netheryx:withered_soil",
+    "netheryx:nether_grass_block"
+  ]
+}

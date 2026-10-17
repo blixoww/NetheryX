@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:onyx_helmet",
+    "netheryx:onyx_chestplate",
+    "netheryx:onyx_leggings",
+    "netheryx:onyx_boots",
+    "netheryx:magma_treads",
+    "netheryx:carapace_chestplate"
+  ]
+}

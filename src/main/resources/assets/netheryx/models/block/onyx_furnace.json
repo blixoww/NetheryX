@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "netheryx:block/onyx_furnace_top",
+    "side": "netheryx:block/onyx_furnace_side",
+    "front": "netheryx:block/onyx_furnace_front"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Recall Stone",
+  "icon": "netheryx:recall_stone",
+  "category": "netheryx:utility",
+  "sortnum": 46,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:recall_stone",
+      "text": "Hold use for $(l)3 seconds$() to teleport to your bed, respawn anchor or world spawn. Reusable, with a cooldown.",
+      "link_recipe": true
+    }
+  ]
+}

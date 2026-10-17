@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "ingredient": {
+    "item": "netheryx:crab_leg"
+  },
+  "result": "netheryx:cooked_crab_leg",
+  "experience": 0.35,
+  "cookingtime": 600
+}

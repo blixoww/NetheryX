@@ -1,0 +1,24 @@
+{
+  "name": "Welcome to NetheryX",
+  "icon": "minecraft:book",
+  "category": "netheryx:getting_started",
+  "sortnum": 0,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "NetheryX overhauls the Nether: $(l)8 new biomes$(), $(l)13 creatures$() including three bosses, $(l)3 great dungeons$() and small camps, the $(item)Onyx$() material, new crops, foods, tools and many useful items.$(br2)The vanilla biomes change too: new plants and creatures appear everywhere.",
+      "title": "NetheryX"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "This codex is given once to every player. Lost it? Craft a new one with a $(item)Book$() and a $(item)Netherrack$() block.$(br2)It follows your game language (English or French).",
+      "title": "Le Codex"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:codex",
+      "text": "Book + Netherrack."
+    }
+  ],
+  "priority": true
+}

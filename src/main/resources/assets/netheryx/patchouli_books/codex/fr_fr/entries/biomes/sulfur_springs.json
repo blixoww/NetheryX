@@ -1,0 +1,12 @@
+{
+  "name": "Sources sulfureuses",
+  "icon": "netheryx:sulfur_rock",
+  "category": "netheryx:biomes",
+  "sortnum": 14,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Roche sulfureuse jaune, $(item)minerai de soufre$() et amas de cristaux.$(br2)Créatures : $(l)Crabes de magma$() paisibles. Donjon : $(l)Sanctuaire infernal$()."
+    }
+  ]
+}

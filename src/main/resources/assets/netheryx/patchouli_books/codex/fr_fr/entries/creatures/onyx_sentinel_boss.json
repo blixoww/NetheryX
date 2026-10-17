@@ -1,0 +1,15 @@
+{
+  "name": "Sentinelle d'onyx (boss)",
+  "icon": "netheryx:onyx_sentinel_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 31,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:onyx_sentinel",
+      "scale": 0.35,
+      "offset": 0.0,
+      "text": "250 PV, insensible au recul. Coups, $(l)onde de choc$() et, sous la moitié de sa vie, une $(l)rage$() : plus rapide, elle fait jaillir des crocs de cristal vers vous. Lâche le $(item)Cœur de sentinelle$() et beaucoup d'onyx."
+    }
+  ]
+}

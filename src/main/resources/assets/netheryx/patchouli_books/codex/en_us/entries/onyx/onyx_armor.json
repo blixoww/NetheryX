@@ -1,0 +1,22 @@
+{
+  "name": "Onyx Armor",
+  "icon": "netheryx:onyx_chestplate",
+  "category": "netheryx:onyx",
+  "sortnum": 8,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Same protection as diamond, toughness $(l)2.5$(), very high durability (55x, netherite 37x). $(l)Full set bonus$(): permanent $(item)Resistance I$(). Works with armor trims."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_helmet",
+      "recipe2": "netheryx:onyx_chestplate"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_leggings",
+      "recipe2": "netheryx:onyx_boots"
+    }
+  ]
+}

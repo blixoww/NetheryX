@@ -1,0 +1,12 @@
+{
+  "name": "Hidden Cache",
+  "icon": "minecraft:soul_lantern",
+  "category": "netheryx:structures",
+  "sortnum": 38,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A small cairn with a soul lantern marks a trapdoor: below, a buried room with two treasure chests."
+    }
+  ]
+}

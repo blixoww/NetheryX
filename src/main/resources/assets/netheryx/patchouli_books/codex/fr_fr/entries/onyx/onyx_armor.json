@@ -1,0 +1,22 @@
+{
+  "name": "Armure en onyx",
+  "icon": "netheryx:onyx_chestplate",
+  "category": "netheryx:onyx",
+  "sortnum": 8,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Même protection que le diamant, robustesse $(l)2,5$(), très grande durabilité (55x, netherite 37x). $(l)Bonus d'ensemble$() : $(item)Résistance I$() permanente. Compatible avec les garnitures d'armure."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_helmet",
+      "recipe2": "netheryx:onyx_chestplate"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_leggings",
+      "recipe2": "netheryx:onyx_boots"
+    }
+  ]
+}

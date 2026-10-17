@@ -1,0 +1,12 @@
+{
+  "name": "Bosquet de braise",
+  "icon": "netheryx:ember_nylium",
+  "category": "netheryx:biomes",
+  "sortnum": 10,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Nylium orange, $(item)champignons de braise$() géants, racines lumineuses, $(item)piments de blaze$() et $(item)baies de feu$() sauvages.$(br2)Créatures : $(l)Traqueurs de braise$(). Donjon : $(l)Sanctuaire infernal$()."
+    }
+  ]
+}

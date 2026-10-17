@@ -1,0 +1,12 @@
+{
+  "name": "Traveler's Camp",
+  "icon": "minecraft:campfire",
+  "category": "netheryx:structures",
+  "sortnum": 36,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Anywhere in the Nether. A tent, a campfire, a chest and a barrel: Onyx, tools, diamonds, food and golden apples."
+    }
+  ]
+}

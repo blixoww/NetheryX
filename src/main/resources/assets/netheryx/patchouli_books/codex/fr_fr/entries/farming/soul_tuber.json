@@ -1,0 +1,18 @@
+{
+  "name": "Tubercule d'âme",
+  "icon": "netheryx:soul_tuber",
+  "category": "netheryx:farming",
+  "sortnum": 53,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:soul_tuber",
+      "text": "Se plante sur le $(item)sable$() ou la $(item)terre des âmes$(). Pousse à l'état sauvage dans la Vallée des âmes. À cuire !",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:baked_soul_tuber_from_smelting"
+    }
+  ]
+}

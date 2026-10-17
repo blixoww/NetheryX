@@ -1,0 +1,12 @@
+{
+  "name": "Ember Meadow",
+  "icon": "netheryx:nether_grass_block",
+  "category": "netheryx:biomes",
+  "sortnum": 13,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The most welcoming place of the Nether: golden $(item)Nether Grass$(), flowers, glowcaps and wild cinder wheat.$(br2)Creatures: peaceful $(l)Ember Cows$() and $(l)Cinder Hens$(). Ideal to settle a farm!"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Onyx Tools",
+  "icon": "netheryx:onyx_pickaxe",
+  "category": "netheryx:onyx",
+  "sortnum": 5,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Durability $(l)4500$() (diamond 1561, netherite 2031), speed $(l)9.5$(), damage bonus $(l)3.5$(). The hammer has 7000. Handles are $(item)Blaze Rods$(). Onyx items do not burn in lava."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_sword",
+      "recipe2": "netheryx:onyx_pickaxe"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_axe",
+      "recipe2": "netheryx:onyx_shovel"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_hoe"
+    }
+  ]
+}

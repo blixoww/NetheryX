@@ -1,0 +1,16 @@
+{
+  "name": "Nether Grass",
+  "icon": "netheryx:nether_grass_block",
+  "category": "netheryx:building",
+  "sortnum": 62,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A golden grass that makes the Nether feel like home. Bone meal grows grass and flowers on it; crops and fungi can be planted on it. 4 tufts of Nether Grass craft a block."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:nether_grass_block"
+    }
+  ]
+}

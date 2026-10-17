@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "food",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:cinder_wheat"
+    }
+  },
+  "result": {
+    "item": "netheryx:cinder_bread",
+    "count": 1
+  }
+}

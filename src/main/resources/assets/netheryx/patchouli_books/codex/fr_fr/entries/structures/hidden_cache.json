@@ -1,0 +1,12 @@
+{
+  "name": "Cache secrète",
+  "icon": "minecraft:soul_lantern",
+  "category": "netheryx:structures",
+  "sortnum": 38,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Un petit cairn avec une lanterne des âmes signale une trappe : en dessous, une salle enterrée avec deux coffres au trésor."
+    }
+  ]
+}

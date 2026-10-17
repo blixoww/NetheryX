@@ -1,0 +1,19 @@
+{
+  "name": "Blé de cendre",
+  "icon": "netheryx:cinder_wheat",
+  "category": "netheryx:farming",
+  "sortnum": 55,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:cinder_wheat",
+      "text": "Les graines s'obtiennent en cassant de l'$(item)herbe du Nether$() (ou du blé sauvage de la Prairie de braise). Pousse sur le nylium, l'herbe du Nether ou la terre des âmes sans lumière. Donne du pain et nourrit les vaches de braise.",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:cinder_bread",
+      "recipe2": "netheryx:cinder_wheat_seeds"
+    }
+  ]
+}

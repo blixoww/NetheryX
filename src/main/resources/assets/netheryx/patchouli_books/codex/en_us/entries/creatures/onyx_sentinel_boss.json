@@ -1,0 +1,15 @@
+{
+  "name": "Onyx Sentinel (boss)",
+  "icon": "netheryx:onyx_sentinel_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 31,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:onyx_sentinel",
+      "scale": 0.35,
+      "offset": 0.0,
+      "text": "250 HP, immune to knockback. Punches, a $(l)shockwave$(), and below half health a $(l)rage$(): faster, it makes crystal fangs erupt toward you. Drops the $(item)Sentinel Core$() and lots of Onyx."
+    }
+  ]
+}

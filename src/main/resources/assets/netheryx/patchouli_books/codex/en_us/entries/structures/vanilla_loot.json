@@ -1,0 +1,12 @@
+{
+  "name": "Vanilla Loot",
+  "icon": "minecraft:chest",
+  "category": "netheryx:structures",
+  "sortnum": 39,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Bastions, fortresses and ruined portals also contain NetheryX loot: Onyx, shards, Soul Compasses, Recall Stones, Glimmer Elixirs, Magma Shells, Sulfur Bombs and seeds."
+    }
+  ]
+}

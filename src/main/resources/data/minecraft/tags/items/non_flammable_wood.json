@@ -1,0 +1,31 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:ember_stem",
+    "netheryx:stripped_ember_stem",
+    "netheryx:ember_hyphae",
+    "netheryx:stripped_ember_hyphae",
+    "netheryx:ember_planks",
+    "netheryx:ember_stairs",
+    "netheryx:ember_slab",
+    "netheryx:ember_fence",
+    "netheryx:ember_fence_gate",
+    "netheryx:ember_door",
+    "netheryx:ember_trapdoor",
+    "netheryx:ember_button",
+    "netheryx:ember_pressure_plate",
+    "netheryx:withered_stem",
+    "netheryx:stripped_withered_stem",
+    "netheryx:withered_hyphae",
+    "netheryx:stripped_withered_hyphae",
+    "netheryx:withered_planks",
+    "netheryx:withered_stairs",
+    "netheryx:withered_slab",
+    "netheryx:withered_fence",
+    "netheryx:withered_fence_gate",
+    "netheryx:withered_door",
+    "netheryx:withered_trapdoor",
+    "netheryx:withered_button",
+    "netheryx:withered_pressure_plate"
+  ]
+}

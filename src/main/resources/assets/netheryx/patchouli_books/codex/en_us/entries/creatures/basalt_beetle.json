@@ -1,0 +1,15 @@
+{
+  "name": "Basalt Beetle",
+  "icon": "netheryx:basalt_beetle_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 23,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:basalt_beetle",
+      "scale": 0.7,
+      "offset": 0.0,
+      "text": "Neutral, heavily armored (30 HP, 10 armor). The whole herd charges if one is hit. Breed with $(item)Magma Cream$(). Drops $(item)Basalt Carapace$()."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Ember Grove",
+  "icon": "netheryx:ember_nylium",
+  "category": "netheryx:biomes",
+  "sortnum": 10,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Orange nylium, giant $(item)Ember Fungi$(), glowing roots, wild $(item)Blaze Peppers$() and $(item)Fire Berries$().$(br2)Creatures: $(l)Ember Stalkers$(). Dungeon: $(l)Infernal Sanctum$()."
+    }
+  ]
+}

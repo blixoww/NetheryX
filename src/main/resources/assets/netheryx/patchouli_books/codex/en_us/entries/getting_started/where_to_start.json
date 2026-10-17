@@ -1,0 +1,17 @@
+{
+  "name": "Where to Start",
+  "icon": "minecraft:flint_and_steel",
+  "category": "netheryx:getting_started",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "1. Enter the Nether and look for the $(l)coloured biomes$(): orange groves, grey ash, blue marshes...$(br)2. Mine $(item)Sulfur$() and $(item)Onyx$() (diamond pickaxe).$(br)3. Raid a $(item)Nether Fortress$() for blaze rods: Onyx tools use them as handles.$(br)4. Craft a $(item)Soul Compass$() to find structures."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Three dungeons, three bosses, from easiest to hardest:$(li)$(l)Infernal Sanctum$(): Infernal Warlock$(li)$(l)Withered Catacombs$(): Withered Champion$(li)$(l)Onyx Citadel$(): Onyx Sentinel (drops the $(item)Sentinel Core$() for the $(item)Infernal Heart$())",
+      "title": "Progression"
+    }
+  ]
+}

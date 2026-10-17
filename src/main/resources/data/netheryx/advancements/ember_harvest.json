@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:blaze_pepper"
+    },
+    "title": {
+      "translate": "advancements.netheryx.ember_harvest.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.ember_harvest.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "eat": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "netheryx:blaze_pepper"
+          ]
+        }
+      }
+    }
+  },
+  "parent": "netheryx:root"
+}
