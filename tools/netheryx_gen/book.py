@@ -383,9 +383,29 @@ entry("utility", "Soul Compass", "Boussole des âmes", "netheryx:soul_compass", 
          "Fonctionne dans toutes les dimensions !"),
 ])
 entry("utility", "Recall Stone", "Pierre de rappel", "netheryx:recall_stone", [
-    spot("recall_stone", "Hold use for $(l)3 seconds$() to teleport to your bed, respawn anchor or world spawn. Reusable, with a cooldown.",
-         "Maintenez l'utilisation $(l)3 secondes$() pour rejoindre votre lit, ancre de réapparition ou le point d'apparition. "
-         "Réutilisable, avec un temps de recharge."),
+    spot("recall_stone", "Hold use for $(l)3 seconds$() to return to a $(l)Nether portal$() you went through. "
+         "With several portals, a menu lets you pick one, or your spawn point. Reusable, with a cooldown.",
+         "Maintenez l'utilisation $(l)3 secondes$() pour rejoindre un $(l)portail du Nether$() que vous avez emprunté. "
+         "Avec plusieurs portails, un menu vous laisse choisir, ou votre point de réapparition. Réutilisable, avec un temps de recharge."),
+    text("The stone remembers the last $(l)8 portals$() you arrived through, in every dimension. Use the $(l)x$() button to forget one. "
+         "A destroyed portal is forgotten automatically. Without any portal, the stone brings you back to your bed or anchor.",
+         "La pierre retient les $(l)8 derniers portails$() par lesquels vous êtes arrivé, dans toutes les dimensions. Le bouton $(l)x$() "
+         "en oublie un. Un portail détruit est oublié automatiquement. Sans portail, la pierre vous ramène à votre lit ou ancre."),
+    craft("recall_stone"),
+])
+entry("utility", "Obsidian Boat", "Bateau d'obsidienne", "netheryx:obsidian_boat", [
+    spot("obsidian_boat", "A boat that sails on $(l)lava$() as well as water. It never breaks, even after a fall, and goes "
+         "$(l)straight back to your inventory$() when you punch it. Passengers are protected from the heat.",
+         "Un bateau qui navigue sur la $(l)lave$() comme sur l'eau. Il ne se brise jamais, même après une chute, et revient "
+         "$(l)directement dans l'inventaire$() quand on le frappe. Ses passagers sont protégés de la chaleur."),
+    craft("obsidian_boat"),
+])
+entry("utility", "Obsidian Bucket", "Seau d'obsidienne", "netheryx:obsidian_bucket", [
+    spot("obsidian_bucket", "Removes a source block of $(l)any fluid$() (lava, water, modded fluids, waterlogged blocks) "
+         "and never fills up. Perfect to dry a lava lake before building.",
+         "Supprime une source de $(l)n'importe quel fluide$() (lave, eau, fluides d'autres mods, blocs inondés) "
+         "sans jamais se remplir. Parfait pour assécher un lac de lave avant de construire."),
+    craft("obsidian_bucket"),
 ])
 entry("utility", "Infernal Heart", "Cœur infernal", "netheryx:infernal_heart", [
     spot("infernal_heart", "While in your inventory, grants $(item)Fire Resistance$() in the Nether. Needs the boss' $(item)Sentinel Core$().",

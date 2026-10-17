@@ -1,6 +1,6 @@
 # NetheryX
 
-**NetheryX** (anciennement NetherX) est une grosse mise a jour du Nether pour **Minecraft 1.20.1 (Forge)**.
+**NetheryX** est une grosse mise a jour du Nether pour **Minecraft 1.20.1 (Forge)**.
 
 | | |
 |---|---|
@@ -16,8 +16,8 @@ Un livre Patchouli **en anglais ou en français selon la langue du jeu** décrit
 grille), objets, blocs, créatures (modèle 3D animé), biomes, structures, outils et configuration. Il est offert à la
 première connexion et se fabrique avec **un livre + un bloc de netherrack**.
 
-### En chiffres (v1.1)
-8 biomes · 13 créatures (dont 3 boss) · 3 grands donjons + 3 petites structures · 2 bois complets · ~50 blocs · ~50 objets · 86 recettes.
+### En chiffres
+8 biomes · 13 créatures (dont 3 boss) · 3 grands donjons + 3 petites structures · 2 bois complets · ~50 blocs · ~50 objets · ~110 recettes.
 Les 5 biomes vanilla sont aussi décorés (plantes, créatures) : le Nether a un aspect différent partout.
 
 ### L'Onyx
@@ -83,10 +83,17 @@ Les bastions et forteresses contiennent aussi du butin NetheryX (Global Loot Mod
 - **Coeur infernal** (fabrique avec le coeur du boss) : resistance au feu permanente dans le Nether.
 - **Bombe de soufre** : explosif lancable (aussi via distributeur).
 - **Faux des ames** : vol de vie a chaque coup (tresor uniquement).
-- **Pierre de rappel** : 3 secondes de concentration pour rentrer à son lit / point d'apparition.
+- **Pierre de rappel** : 3 secondes de concentration pour rejoindre un portail du Nether emprunté ; avec plusieurs portails, une interface demande lequel (ou le point de réapparition).
+- **Bateau d'obsidienne** : navigue sur la lave, ne se casse jamais et revient directement dans l'inventaire quand on le frappe.
+- **Seau d'obsidienne** : fait disparaître n'importe quelle source de fluide sans jamais se remplir.
 - **Élixir de lueur** : vision nocturne et résistance au feu.
 - **Lame flétrie**, **Bâton du sorcier** (boules de feu), **Plastron de carapace** (résistance au recul).
 - **Soufre** : engrais pour les cultures du Nether, y compris les verrues ; donne aussi de la poudre a canon.
+
+### Particules
+7 particules animées propres au mod (étincelles de braise, flocons de cendre, feux follets d'âme, reflets d'onyx,
+bouffées de soufre, pollen de braise, spores flétries) utilisées par l'ambiance des biomes, les minerais, plantes et
+cultures mûres, et toutes les créatures.
 
 ### Ateliers en onyx
 - **Enclume en onyx** : ne s'abime jamais et chaque operation coute deux fois moins d'experience.
@@ -141,6 +148,15 @@ com.netheryx
 ├── loot/                   Global Loot Modifier generique
 ├── event/                  evenements (attributs, apparitions, marteau, bonus d'armure)
 └── client/                 rendus GeckoLib (couche emissive *_glowmask)
+```
+
+### Publier une version
+Chaque tag Git déclenche la CI (`.github/workflows/release.yml`) : elle compile le mod avec la version du tag et
+publie le `.jar` dans une Release GitHub, avec les notes extraites du `CHANGELOG.md`.
+
+```bash
+git tag 1.0.0
+git push origin 1.0.0
 ```
 
 ### Monter de version

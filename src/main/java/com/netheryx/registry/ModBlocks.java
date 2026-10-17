@@ -1,6 +1,12 @@
 package com.netheryx.registry;
 
 import com.netheryx.NetheryX;
+import com.netheryx.block.AmbientBlock;
+import com.netheryx.block.AmbientClusterBlock;
+import com.netheryx.block.AmbientFungusBlock;
+import com.netheryx.block.AmbientLanternBlock;
+import com.netheryx.block.AmbientOreBlock;
+import com.netheryx.block.AmbientParticles;
 import com.netheryx.block.BlazePepperCropBlock;
 import com.netheryx.block.CinderWheatCropBlock;
 import com.netheryx.block.CrustedLavaBlock;
@@ -14,21 +20,18 @@ import com.netheryx.block.SoulLilyBlock;
 import com.netheryx.block.SoulTuberCropBlock;
 import com.netheryx.block.StrippableLogBlock;
 import com.netheryx.worldgen.ModFeatureKeys;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.AmethystClusterBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
-import net.minecraft.world.level.block.FungusBlock;
-import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SandBlock;
@@ -55,9 +58,9 @@ public final class ModBlocks {
 
     // --- Onyx -------------------------------------------------------------------------------
     public static final RegistryObject<Block> ONYX_ORE = register("onyx_ore",
-            () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.NETHER_QUARTZ_ORE)
+            () -> new AmbientOreBlock(BlockBehaviour.Properties.copy(Blocks.NETHER_QUARTZ_ORE)
                     .mapColor(MapColor.COLOR_BLACK).strength(4.5F, 9.0F).requiresCorrectToolForDrops(),
-                    UniformInt.of(4, 9)));
+                    UniformInt.of(4, 9), particles(ModParticles.ONYX_GLINT, 6, AmbientParticles.Mode.FACES)));
     public static final RegistryObject<Block> ONYX_BLOCK = register("onyx_block",
             () -> new Block(onyxStone().strength(6.0F, 12.0F).sound(SoundType.NETHERITE_BLOCK)));
     public static final RegistryObject<Block> POLISHED_ONYX = register("polished_onyx",
@@ -71,21 +74,23 @@ public final class ModBlocks {
     public static final RegistryObject<Block> ONYX_BRICK_WALL = register("onyx_brick_wall",
             () -> new WallBlock(onyxStone().forceSolidOn()));
     public static final RegistryObject<Block> ONYX_CLUSTER = register("onyx_cluster",
-            () -> new AmethystClusterBlock(7, 3, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE)
+            () -> new AmbientClusterBlock(7, 3, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE)
                     .forceSolidOn().noOcclusion().sound(SoundType.AMETHYST_CLUSTER).strength(1.5F)
-                    .lightLevel(state -> 6).pushReaction(PushReaction.DESTROY)));
+                    .lightLevel(state -> 6).pushReaction(PushReaction.DESTROY),
+                    particles(ModParticles.ONYX_GLINT, 3, AmbientParticles.Mode.INSIDE)));
 
     // --- Ash Wastes -------------------------------------------------------------------------
     public static final RegistryObject<Block> ASH_BLOCK = register("ash_block",
             () -> new SandBlock(0x5E5A57, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY)
                     .instrument(NoteBlockInstrument.SNARE).strength(0.5F).sound(SoundType.SAND)));
     public static final RegistryObject<Block> CHARRED_SHRUB = register("charred_shrub",
-            () -> new NetherPlantBlock(plant(MapColor.COLOR_BLACK)));
+            () -> new NetherPlantBlock(plant(MapColor.COLOR_BLACK), particles(ModParticles.ASH_FLAKE, 25, AmbientParticles.Mode.INSIDE)));
 
     // --- Ember Grove ------------------------------------------------------------------------
     public static final RegistryObject<Block> EMBER_NYLIUM = register("ember_nylium",
             () -> new EmberNyliumBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_NYLIUM)
-                    .mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 3)));
+                    .mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 3),
+                    particles(ModParticles.EMBER_SPARK, 40, AmbientParticles.Mode.ABOVE)));
     public static final RegistryObject<Block> STRIPPED_EMBER_STEM = register("stripped_ember_stem",
             () -> new RotatedPillarBlock(emberWood()));
     public static final RegistryObject<Block> EMBER_STEM = register("ember_stem",
@@ -117,16 +122,20 @@ public final class ModBlocks {
                     emberWood().forceSolidOn().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY),
                     BlockSetType.CRIMSON));
     public static final RegistryObject<Block> EMBER_WART_BLOCK = register("ember_wart_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.NETHER_WART_BLOCK).mapColor(MapColor.COLOR_ORANGE)));
+            () -> new AmbientBlock(BlockBehaviour.Properties.copy(Blocks.NETHER_WART_BLOCK).mapColor(MapColor.COLOR_ORANGE),
+                    particles(ModParticles.EMBER_SPARK, 20, AmbientParticles.Mode.BELOW)));
     public static final RegistryObject<Block> EMBER_FUNGUS = register("ember_fungus",
-            () -> new FungusBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS).mapColor(MapColor.COLOR_ORANGE)
-                    .lightLevel(state -> 7), ModFeatureKeys.EMBER_FUNGUS_PLANTED, ModBlocks.EMBER_NYLIUM.get()));
+            () -> new AmbientFungusBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_FUNGUS).mapColor(MapColor.COLOR_ORANGE)
+                    .lightLevel(state -> 7), ModFeatureKeys.EMBER_FUNGUS_PLANTED, ModBlocks.EMBER_NYLIUM.get(),
+                    particles(ModParticles.EMBER_SPARK, 8, AmbientParticles.Mode.INSIDE)));
     public static final RegistryObject<Block> EMBER_ROOTS = register("ember_roots",
-            () -> new NetherPlantBlock(plant(MapColor.COLOR_ORANGE).sound(SoundType.ROOTS)));
+            () -> new NetherPlantBlock(plant(MapColor.COLOR_ORANGE).sound(SoundType.ROOTS),
+                    particles(ModParticles.EMBER_SPARK, 30, AmbientParticles.Mode.INSIDE)));
 
     // --- Foret fletrie ------------------------------------------------------------------------
     public static final RegistryObject<Block> WITHERED_SOIL = register("withered_soil",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.SOUL_SOIL).mapColor(MapColor.COLOR_LIGHT_GRAY)));
+            () -> new AmbientBlock(BlockBehaviour.Properties.copy(Blocks.SOUL_SOIL).mapColor(MapColor.COLOR_LIGHT_GRAY),
+                    particles(ModParticles.WITHER_SPORE, 60, AmbientParticles.Mode.ABOVE)));
     public static final RegistryObject<Block> STRIPPED_WITHERED_STEM = register("stripped_withered_stem",
             () -> new RotatedPillarBlock(witheredWood()));
     public static final RegistryObject<Block> WITHERED_STEM = register("withered_stem",
@@ -158,16 +167,18 @@ public final class ModBlocks {
                     witheredWood().forceSolidOn().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY),
                     BlockSetType.WARPED));
     public static final RegistryObject<Block> WITHERED_WART_BLOCK = register("withered_wart_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_WART_BLOCK).mapColor(MapColor.COLOR_GRAY)));
+            () -> new AmbientBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_WART_BLOCK).mapColor(MapColor.COLOR_GRAY),
+                    particles(ModParticles.WITHER_SPORE, 10, AmbientParticles.Mode.BELOW)));
     public static final RegistryObject<Block> WITHERED_FUNGUS = register("withered_fungus",
-            () -> new FungusBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_FUNGUS).mapColor(MapColor.COLOR_GRAY),
-                    ModFeatureKeys.WITHERED_FUNGUS_PLANTED, ModBlocks.WITHERED_SOIL.get()));
+            () -> new AmbientFungusBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_FUNGUS).mapColor(MapColor.COLOR_GRAY),
+                    ModFeatureKeys.WITHERED_FUNGUS_PLANTED, ModBlocks.WITHERED_SOIL.get(),
+                    particles(ModParticles.WITHER_SPORE, 8, AmbientParticles.Mode.INSIDE)));
 
     // --- Marais des ames et Faille de magma --------------------------------------------------
     public static final RegistryObject<Block> SOUL_LILY = register("soul_lily",
             () -> new SoulLilyBlock(plant(MapColor.COLOR_LIGHT_BLUE).lightLevel(state -> 10)));
     public static final RegistryObject<Block> MAGMA_BRICKS = register("magma_bricks",
-            () -> new Block(magmaBricks()));
+            () -> new AmbientBlock(magmaBricks(), particles(ModParticles.EMBER_SPARK, 30, AmbientParticles.Mode.FACES)));
     public static final RegistryObject<Block> MAGMA_BRICK_STAIRS = register("magma_brick_stairs",
             () -> new StairBlock(() -> ModBlocks.MAGMA_BRICKS.get().defaultBlockState(), magmaBricks()));
     public static final RegistryObject<Block> MAGMA_BRICK_SLAB = register("magma_brick_slab",
@@ -177,25 +188,28 @@ public final class ModBlocks {
 
     // --- Eclairage -----------------------------------------------------------------------------
     public static final RegistryObject<Block> ONYX_LANTERN = register("onyx_lantern",
-            () -> new LanternBlock(BlockBehaviour.Properties.copy(Blocks.SOUL_LANTERN).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 13)));
+            () -> new AmbientLanternBlock(BlockBehaviour.Properties.copy(Blocks.SOUL_LANTERN).mapColor(MapColor.COLOR_PURPLE).lightLevel(state -> 13),
+                    particles(ModParticles.ONYX_GLINT, 4, AmbientParticles.Mode.INSIDE)));
     public static final RegistryObject<Block> EMBER_LAMP = register("ember_lamp",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.SHROOMLIGHT).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 15)));
+            () -> new AmbientBlock(BlockBehaviour.Properties.copy(Blocks.SHROOMLIGHT).mapColor(MapColor.COLOR_ORANGE).lightLevel(state -> 15),
+                    particles(ModParticles.EMBER_SPARK, 10, AmbientParticles.Mode.FACES)));
 
     // --- Sulfur Springs ---------------------------------------------------------------------
     public static final RegistryObject<Block> SULFUR_ROCK = register("sulfur_rock",
-            () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW)
+            () -> new AmbientBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW)
                     .instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(1.2F, 4.0F)
-                    .sound(SoundType.NETHERRACK)));
+                    .sound(SoundType.NETHERRACK), particles(ModParticles.SULFUR_PUFF, 50, AmbientParticles.Mode.ABOVE)));
     public static final RegistryObject<Block> SULFUR_ORE = register("sulfur_ore",
-            () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.NETHER_GOLD_ORE)
-                    .mapColor(MapColor.COLOR_YELLOW), UniformInt.of(1, 3)));
+            () -> new AmbientOreBlock(BlockBehaviour.Properties.copy(Blocks.NETHER_GOLD_ORE)
+                    .mapColor(MapColor.COLOR_YELLOW), UniformInt.of(1, 3), particles(ModParticles.SULFUR_PUFF, 25, AmbientParticles.Mode.FACES)));
     public static final RegistryObject<Block> SULFUR_BLOCK = register("sulfur_block",
             () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW)
                     .requiresCorrectToolForDrops().strength(1.5F, 3.0F).sound(SoundType.CALCITE)));
     public static final RegistryObject<Block> SULFUR_CLUSTER = register("sulfur_cluster",
-            () -> new AmethystClusterBlock(5, 3, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW)
+            () -> new AmbientClusterBlock(5, 3, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_YELLOW)
                     .forceSolidOn().noOcclusion().sound(SoundType.AMETHYST_CLUSTER).strength(1.0F)
-                    .lightLevel(state -> 3).pushReaction(PushReaction.DESTROY)));
+                    .lightLevel(state -> 3).pushReaction(PushReaction.DESTROY),
+                    particles(ModParticles.SULFUR_PUFF, 12, AmbientParticles.Mode.INSIDE)));
 
     // --- Cultures (sans objet direct : la graine/le fruit place le bloc) ---------------------
     public static final RegistryObject<Block> BLAZE_PEPPER_CROP = BLOCKS.register("blaze_pepper_crop",
@@ -209,19 +223,25 @@ public final class ModBlocks {
     // --- Prairie de braise : herbe, fleurs, cultures --------------------------------------------
     public static final RegistryObject<Block> NETHER_GRASS_BLOCK = register("nether_grass_block",
             () -> new EmberNyliumBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_NYLIUM).mapColor(MapColor.COLOR_ORANGE)
-                    .sound(SoundType.GRASS), ModFeatureKeys.MEADOW_VEGETATION_BONEMEAL));
+                    .sound(SoundType.GRASS), ModFeatureKeys.MEADOW_VEGETATION_BONEMEAL,
+                    particles(ModParticles.EMBER_POLLEN, 80, AmbientParticles.Mode.ABOVE)));
     public static final RegistryObject<Block> NETHER_GRASS = register("nether_grass",
             () -> new NetherPlantBlock(plant(MapColor.COLOR_ORANGE).sound(SoundType.GRASS)));
     public static final RegistryObject<Block> EMBER_BLOOM = register("ember_bloom",
-            () -> new NetherPlantBlock(plant(MapColor.COLOR_ORANGE).sound(SoundType.GRASS).lightLevel(state -> 5)));
+            () -> new NetherPlantBlock(plant(MapColor.COLOR_ORANGE).sound(SoundType.GRASS).lightLevel(state -> 5),
+                    particles(ModParticles.EMBER_SPARK, 10, AmbientParticles.Mode.INSIDE)));
     public static final RegistryObject<Block> ASH_DAISY = register("ash_daisy",
-            () -> new NetherPlantBlock(plant(MapColor.SNOW).sound(SoundType.GRASS)));
+            () -> new NetherPlantBlock(plant(MapColor.SNOW).sound(SoundType.GRASS),
+                    particles(ModParticles.ASH_FLAKE, 18, AmbientParticles.Mode.INSIDE)));
     public static final RegistryObject<Block> CRIMSON_BELLFLOWER = register("crimson_bellflower",
-            () -> new NetherPlantBlock(plant(MapColor.COLOR_RED).sound(SoundType.GRASS)));
+            () -> new NetherPlantBlock(plant(MapColor.COLOR_RED).sound(SoundType.GRASS),
+                    particles(ModParticles.EMBER_POLLEN, 8, AmbientParticles.Mode.INSIDE)));
     public static final RegistryObject<Block> SULFUR_TULIP = register("sulfur_tulip",
-            () -> new NetherPlantBlock(plant(MapColor.COLOR_YELLOW).sound(SoundType.GRASS).lightLevel(state -> 3)));
+            () -> new NetherPlantBlock(plant(MapColor.COLOR_YELLOW).sound(SoundType.GRASS).lightLevel(state -> 3),
+                    particles(ModParticles.SULFUR_PUFF, 20, AmbientParticles.Mode.INSIDE)));
     public static final RegistryObject<Block> GLOWCAP = BLOCKS.register("glowcap",
-            () -> new NetherPlantBlock(plant(MapColor.COLOR_CYAN).sound(SoundType.FUNGUS).lightLevel(state -> 9)));
+            () -> new NetherPlantBlock(plant(MapColor.COLOR_CYAN).sound(SoundType.FUNGUS).lightLevel(state -> 9),
+                    particles(ModParticles.SOUL_WISP, 10, AmbientParticles.Mode.INSIDE)));
     public static final RegistryObject<Block> CINDER_WHEAT_CROP = BLOCKS.register("cinder_wheat_crop",
             () -> new CinderWheatCropBlock(crop()));
 
@@ -255,6 +275,10 @@ public final class ModBlocks {
                     .isValidSpawn((state, level, pos, type) -> false).noLootTable()));
 
     private ModBlocks() {
+    }
+
+    private static AmbientParticles particles(Supplier<? extends ParticleOptions> particle, int chance, AmbientParticles.Mode mode) {
+        return AmbientParticles.of(particle, chance, mode);
     }
 
     private static BlockBehaviour.Properties onyxStone() {

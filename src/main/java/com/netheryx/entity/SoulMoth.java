@@ -1,7 +1,8 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -65,9 +66,7 @@ public class SoulMoth extends PathfinderMob implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.level().isClientSide && this.random.nextInt(6) == 0) {
-            this.level().addParticle(ParticleTypes.SOUL, this.getRandomX(0.4D), this.getY(0.5D), this.getRandomZ(0.4D), 0.0D, 0.01D, 0.0D);
-        }
+        MobParticles.ambient(this, ModParticles.SOUL_WISP.get(), 3, 0.5D, 0.0D);
     }
 
     @Override

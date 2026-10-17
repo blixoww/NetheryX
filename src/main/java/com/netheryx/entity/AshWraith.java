@@ -1,7 +1,8 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -94,9 +95,8 @@ public class AshWraith extends Monster implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
-        if (this.level().isClientSide && this.random.nextInt(3) == 0) {
-            this.level().addParticle(ParticleTypes.WHITE_ASH, this.getRandomX(0.6D), this.getRandomY(), this.getRandomZ(0.6D), 0.0D, -0.02D, 0.0D);
-        }
+        MobParticles.ambient(this, ModParticles.ASH_FLAKE.get(), 2, 0.7D, -0.01D);
+        MobParticles.ambient(this, ModParticles.SOUL_WISP.get(), 12, 0.6D, 0.01D);
     }
 
     @Override

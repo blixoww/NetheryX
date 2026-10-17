@@ -2,7 +2,7 @@
   "name": "Luminelle",
   "icon": "netheryx:glowcap",
   "category": "netheryx:farming",
-  "sortnum": 56,
+  "sortnum": 58,
   "pages": [
     {
       "type": "patchouli:spotlight",

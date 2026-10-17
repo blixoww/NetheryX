@@ -9,9 +9,9 @@
     "water_fog_color": 329011,
     "particle": {
       "options": {
-        "type": "minecraft:falling_lava"
+        "type": "netheryx:sulfur_puff"
       },
-      "probability": 0.004
+      "probability": 0.008
     },
     "ambient_sound": "minecraft:ambient.nether_wastes.loop",
     "mood_sound": {

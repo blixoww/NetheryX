@@ -1,5 +1,7 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.util.ModTags;
 import net.minecraft.core.BlockPos;
@@ -140,5 +142,11 @@ public class EmberCow extends Animal implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        MobParticles.ambient(this, ModParticles.EMBER_SPARK.get(), 14, 0.7D, 0.01D);
     }
 }

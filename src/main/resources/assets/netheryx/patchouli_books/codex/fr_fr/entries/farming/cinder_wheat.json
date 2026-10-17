@@ -2,7 +2,7 @@
   "name": "Blé de cendre",
   "icon": "netheryx:cinder_wheat",
   "category": "netheryx:farming",
-  "sortnum": 55,
+  "sortnum": 57,
   "pages": [
     {
       "type": "patchouli:spotlight",

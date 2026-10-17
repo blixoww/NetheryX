@@ -2,7 +2,7 @@
   "name": "Bombe de soufre",
   "icon": "netheryx:sulfur_bomb",
   "category": "netheryx:utility",
-  "sortnum": 50,
+  "sortnum": 52,
   "pages": [
     {
       "type": "patchouli:spotlight",

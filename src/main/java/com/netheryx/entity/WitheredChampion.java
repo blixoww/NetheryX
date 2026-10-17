@@ -1,5 +1,7 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
 import com.netheryx.config.NetheryXConfig;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.util.GuardianSeals;
@@ -163,5 +165,12 @@ public class WitheredChampion extends WitheredKnight {
     @Override
     public float getVoicePitch() {
         return 0.6F;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        MobParticles.ambient(this, ModParticles.WITHER_SPORE.get(), 2, 1.0D, -0.01D);
+        MobParticles.ambient(this, ModParticles.SOUL_WISP.get(), 6, 0.8D, 0.02D);
     }
 }

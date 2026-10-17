@@ -1,0 +1,18 @@
+{
+  "name": "Seau d'obsidienne",
+  "icon": "netheryx:obsidian_bucket",
+  "category": "netheryx:utility",
+  "sortnum": 48,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:obsidian_bucket",
+      "text": "Supprime une source de $(l)n'importe quel fluide$() (lave, eau, fluides d'autres mods, blocs inondés) sans jamais se remplir. Parfait pour assécher un lac de lave avant de construire.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:obsidian_bucket"
+    }
+  ]
+}

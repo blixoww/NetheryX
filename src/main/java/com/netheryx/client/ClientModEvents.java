@@ -1,7 +1,9 @@
 package com.netheryx.client;
 
 import com.netheryx.NetheryX;
+import com.netheryx.client.particle.NetheryXParticle;
 import com.netheryx.client.renderer.FireGhastRenderer;
+import com.netheryx.client.renderer.ObsidianBoatRenderer;
 import com.netheryx.client.renderer.NetheryXGeoRenderer;
 import com.netheryx.client.renderer.OnyxCubeRenderer;
 import com.netheryx.entity.AshWraith;
@@ -18,6 +20,10 @@ import com.netheryx.entity.OnyxSentinel;
 import com.netheryx.registry.ModEntities;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import com.netheryx.registry.ModItems;
+import com.netheryx.registry.ModParticles;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
@@ -71,5 +77,22 @@ public final class ClientModEvents {
         event.registerEntityRenderer(ModEntities.FIRE_GHAST.get(), FireGhastRenderer::new);
         event.registerEntityRenderer(ModEntities.ONYX_CUBE.get(), OnyxCubeRenderer::new);
         event.registerEntityRenderer(ModEntities.SULFUR_BOMB.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.OBSIDIAN_BOAT.get(), ObsidianBoatRenderer::new);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterParticles(RegisterParticleProvidersEvent event) {
+        particle(event, ModParticles.EMBER_SPARK, NetheryXParticle.Style.EMBER);
+        particle(event, ModParticles.ASH_FLAKE, NetheryXParticle.Style.ASH);
+        particle(event, ModParticles.SOUL_WISP, NetheryXParticle.Style.SOUL);
+        particle(event, ModParticles.ONYX_GLINT, NetheryXParticle.Style.GLINT);
+        particle(event, ModParticles.SULFUR_PUFF, NetheryXParticle.Style.PUFF);
+        particle(event, ModParticles.EMBER_POLLEN, NetheryXParticle.Style.POLLEN);
+        particle(event, ModParticles.WITHER_SPORE, NetheryXParticle.Style.SPORE);
+    }
+
+    private static void particle(RegisterParticleProvidersEvent event, RegistryObject<SimpleParticleType> type,
+                                 NetheryXParticle.Style style) {
+        event.registerSpriteSet(type.get(), sprites -> new NetheryXParticle.Provider(sprites, style));
     }
 }

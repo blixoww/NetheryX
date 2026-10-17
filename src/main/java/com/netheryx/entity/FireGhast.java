@@ -1,5 +1,7 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -28,6 +30,7 @@ public class FireGhast extends Ghast {
     @Override
     public void aiStep() {
         super.aiStep();
+        MobParticles.ambient(this, ModParticles.EMBER_SPARK.get(), 1, 1.4D, 0.03D);
         if (this.level().isClientSide && this.random.nextInt(2) == 0) {
             this.level().addParticle(ParticleTypes.FLAME, this.getRandomX(1.0D), this.getRandomY(), this.getRandomZ(1.0D), 0.0D, 0.02D, 0.0D);
         }

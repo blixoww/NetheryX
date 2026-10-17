@@ -1,5 +1,6 @@
 package com.netheryx.block;
 
+import com.netheryx.registry.ModParticles;
 import com.netheryx.registry.ModItems;
 import com.netheryx.util.ModTags;
 import net.minecraft.core.BlockPos;
@@ -9,6 +10,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 /** Ble de cendre : cereale du Nether (pain de cendre, nourriture des vaches de braise). */
 public class CinderWheatCropBlock extends NetherCropBlock {
+    private static final AmbientParticles MATURE_PARTICLES = AmbientParticles.of(ModParticles.EMBER_POLLEN, 5, AmbientParticles.Mode.INSIDE);
+
     public CinderWheatCropBlock(Properties properties) {
         super(properties);
     }
@@ -21,5 +24,10 @@ public class CinderWheatCropBlock extends NetherCropBlock {
     @Override
     protected ItemLike getBaseSeedId() {
         return ModItems.CINDER_WHEAT_SEEDS.get();
+    }
+
+    @Override
+    protected AmbientParticles matureParticles() {
+        return MATURE_PARTICLES;
     }
 }

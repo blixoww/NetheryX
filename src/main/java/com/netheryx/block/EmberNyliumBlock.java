@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Sol vegetal du Nether (nylium de braise, herbe du Nether) : redevient de la netherrack s'il est recouvert
@@ -20,14 +21,25 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public class EmberNyliumBlock extends Block implements BonemealableBlock {
     private final ResourceKey<ConfiguredFeature<?, ?>> bonemealFeature;
+    @Nullable
+    private final AmbientParticles particles;
 
-    public EmberNyliumBlock(Properties properties) {
-        this(properties, ModFeatureKeys.EMBER_VEGETATION_BONEMEAL);
+    public EmberNyliumBlock(Properties properties, @Nullable AmbientParticles particles) {
+        this(properties, ModFeatureKeys.EMBER_VEGETATION_BONEMEAL, particles);
     }
 
-    public EmberNyliumBlock(Properties properties, ResourceKey<ConfiguredFeature<?, ?>> bonemealFeature) {
+    public EmberNyliumBlock(Properties properties, ResourceKey<ConfiguredFeature<?, ?>> bonemealFeature,
+                            @Nullable AmbientParticles particles) {
         super(properties);
         this.bonemealFeature = bonemealFeature;
+        this.particles = particles;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (this.particles != null) {
+            this.particles.tick(state, level, pos, random);
+        }
     }
 
     private static boolean canStayNylium(LevelReader level, BlockPos pos) {

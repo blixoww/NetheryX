@@ -1,5 +1,6 @@
 package com.netheryx.block;
 
+import com.netheryx.registry.ModParticles;
 import com.netheryx.registry.ModItems;
 import com.netheryx.util.ModTags;
 import net.minecraft.core.BlockPos;
@@ -139,5 +140,13 @@ public class FireBerryBushBlock extends BushBlock implements BonemealableBlock {
     @Override
     public PlantType getPlantType(BlockGetter level, BlockPos pos) {
         return PlantType.NETHER;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        if (state.getValue(AGE) >= 2) {
+            AmbientParticles.of(ModParticles.EMBER_SPARK, state.getValue(AGE) == MAX_AGE ? 5 : 12, AmbientParticles.Mode.INSIDE)
+                    .tick(state, level, pos, random);
+        }
     }
 }

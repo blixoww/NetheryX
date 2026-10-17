@@ -9,9 +9,9 @@
     "water_fog_color": 329011,
     "particle": {
       "options": {
-        "type": "minecraft:crimson_spore"
+        "type": "netheryx:ember_spark"
       },
-      "probability": 0.025
+      "probability": 0.02
     },
     "ambient_sound": "minecraft:ambient.crimson_forest.loop",
     "mood_sound": {

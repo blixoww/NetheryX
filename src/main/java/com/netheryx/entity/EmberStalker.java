@@ -1,5 +1,7 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -139,5 +141,11 @@ public class EmberStalker extends Monster implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        MobParticles.ambient(this, ModParticles.EMBER_SPARK.get(), 3, 0.7D, 0.02D);
     }
 }

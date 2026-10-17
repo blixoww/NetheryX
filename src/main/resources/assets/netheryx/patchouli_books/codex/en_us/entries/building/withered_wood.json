@@ -2,7 +2,7 @@
   "name": "Withered Wood",
   "icon": "netheryx:withered_planks",
   "category": "netheryx:building",
-  "sortnum": 61,
+  "sortnum": 63,
   "pages": [
     {
       "type": "patchouli:text",

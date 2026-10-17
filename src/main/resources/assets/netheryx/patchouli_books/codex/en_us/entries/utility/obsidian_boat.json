@@ -1,0 +1,18 @@
+{
+  "name": "Obsidian Boat",
+  "icon": "netheryx:obsidian_boat",
+  "category": "netheryx:utility",
+  "sortnum": 47,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:obsidian_boat",
+      "text": "A boat that sails on $(l)lava$() as well as water. It never breaks, even after a fall, and goes $(l)straight back to your inventory$() when you punch it. Passengers are protected from the heat.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:obsidian_boat"
+    }
+  ]
+}

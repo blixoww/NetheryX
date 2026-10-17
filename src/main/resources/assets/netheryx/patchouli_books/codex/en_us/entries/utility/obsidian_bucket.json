@@ -1,0 +1,18 @@
+{
+  "name": "Obsidian Bucket",
+  "icon": "netheryx:obsidian_bucket",
+  "category": "netheryx:utility",
+  "sortnum": 48,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:obsidian_bucket",
+      "text": "Removes a source block of $(l)any fluid$() (lava, water, modded fluids, waterlogged blocks) and never fills up. Perfect to dry a lava lake before building.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:obsidian_bucket"
+    }
+  ]
+}

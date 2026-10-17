@@ -92,7 +92,7 @@ GENERATED_ITEMS = [
     "stalker_meat", "cooked_stalker_meat", "crab_leg", "cooked_crab_leg", "infernal_stew",
     "soul_dust", "withered_bone", "basalt_carapace", "carapace_chestplate", "recall_stone", "glimmer_elixir",
     "cinder_wheat_seeds", "cinder_wheat", "cinder_bread", "glowcap_stew", "infernal_beef", "cooked_infernal_beef",
-    "infernal_chicken", "cooked_infernal_chicken", "ember_egg", "fried_ember_egg",
+    "infernal_chicken", "cooked_infernal_chicken", "ember_egg", "fried_ember_egg", "obsidian_boat", "obsidian_bucket",
 ]
 SPAWN_EGGS = ["ember_stalker_spawn_egg", "ash_wraith_spawn_egg", "onyx_sentinel_spawn_egg", "magma_crab_spawn_egg",
               "soul_moth_spawn_egg", "withered_knight_spawn_egg", "basalt_beetle_spawn_egg", "infernal_warlock_spawn_egg",
@@ -100,7 +100,7 @@ SPAWN_EGGS = ["ember_stalker_spawn_egg", "ash_wraith_spawn_egg", "onyx_sentinel_
               "onyx_cube_spawn_egg"]
 ENTITIES = ["ember_stalker", "ash_wraith", "onyx_sentinel", "magma_crab", "sulfur_bomb",
             "soul_moth", "withered_knight", "basalt_beetle", "infernal_warlock", "withered_champion",
-            "ember_cow", "cinder_hen", "fire_ghast", "onyx_cube"]
+            "ember_cow", "cinder_hen", "fire_ghast", "onyx_cube", "obsidian_boat"]
 BIOMES = ["ember_meadow", "ember_grove", "ashen_wastes", "onyx_depths", "sulfur_springs", "soulfire_marsh", "withered_forest", "magma_rift"]
 
 # Traductions : identifiant -> (anglais, francais)
@@ -232,6 +232,9 @@ NAMES = {
     "potted_ember_fungus": ("Potted Ember Fungus", "Champignon de braise en pot"),
     "potted_withered_fungus": ("Potted Withered Fungus", "Champignon fletri en pot"),
     "onyx_bow": ("Onyx Bow", "Arc en onyx"),
+    "obsidian_boat": ("Obsidian Boat", "Bateau d'obsidienne"),
+    "obsidian_bucket": ("Obsidian Bucket", "Seau d'obsidienne"),
+    "entity.obsidian_boat": ("Obsidian Boat", "Bateau d'obsidienne"),
     "cinder_wheat_seeds": ("Cinder Wheat Seeds", "Graines de ble de cendre"),
     "cinder_wheat": ("Cinder Wheat", "Ble de cendre"),
     "cinder_bread": ("Cinder Bread", "Pain de cendre"),
@@ -291,8 +294,22 @@ EXTRA_LANG = {
                                     "Fertilise les cultures du Nether, y compris les verrues du Nether"),
     "item.netheryx.withered_blade.tooltip": ("Inflicts Wither", "Inflige le Fletrissement"),
     "item.netheryx.warlock_staff.tooltip": ("Shoots fireballs", "Lance des boules de feu"),
-    "item.netheryx.recall_stone.tooltip": ("Hold use for 3 seconds to return to your spawn point",
-                                          "Maintenez 3 secondes pour retourner a votre point de reapparition"),
+    "item.netheryx.recall_stone.tooltip": ("Hold use for 3 seconds to return to a Nether portal you went through (or to your spawn point)",
+                                          "Maintenez 3 secondes pour rejoindre un portail du Nether emprunté (ou votre point de réapparition)"),
+    "item.netheryx.recall_stone.portal_lost": ("This portal no longer exists: it has been forgotten",
+                                              "Ce portail n'existe plus : il a été oublié"),
+    "screen.netheryx.recall_stone.title": ("Recall Stone - where do you want to go?", "Pierre de rappel - où voulez-vous aller ?"),
+    "screen.netheryx.recall_stone.portal": ("Portal - %s (%s)", "Portail - %s (%s)"),
+    "screen.netheryx.recall_stone.portal_near": ("Portal - %s (%s) - %s m", "Portail - %s (%s) - %s m"),
+    "screen.netheryx.recall_stone.respawn": ("Spawn point (bed, anchor or world spawn)", "Point de réapparition (lit, ancre ou monde)"),
+    "screen.netheryx.recall_stone.forget": ("Forget this portal", "Oublier ce portail"),
+    "dimension.minecraft.overworld": ("Overworld", "Surface"),
+    "dimension.minecraft.the_nether": ("Nether", "Nether"),
+    "dimension.minecraft.the_end": ("The End", "L'End"),
+    "item.netheryx.obsidian_boat.tooltip": ("Floats on lava and water, never breaks; punch it to pick it up",
+                                           "Flotte sur la lave et l'eau, incassable ; frappez-le pour le récupérer"),
+    "item.netheryx.obsidian_bucket.tooltip": ("Voids any fluid source without ever filling up",
+                                             "Fait disparaître n'importe quelle source de fluide sans jamais se remplir"),
     "item.netheryx.glimmer_elixir.tooltip": ("Night Vision (3:00) and Fire Resistance (0:30)",
                                             "Vision nocturne (3:00) et resistance au feu (0:30)"),
     "book.netheryx.codex.name": ("NetheryX Codex", "Codex NetheryX"),
@@ -305,6 +322,8 @@ EXTRA_LANG = {
     "advancements.netheryx.kill_warlock.description": ("Defeat the Infernal Warlock", "Vaincre le Sorcier infernal"),
     "advancements.netheryx.recall_stone.title": ("There and Back Again", "Un aller et retour"),
     "advancements.netheryx.recall_stone.description": ("Craft a Recall Stone", "Fabriquer une Pierre de rappel"),
+    "advancements.netheryx.obsidian_boat.title": ("Hot Waters", "Eaux brûlantes"),
+    "advancements.netheryx.obsidian_boat.description": ("Craft an Obsidian Boat to sail on lava", "Fabriquer un bateau d'obsidienne pour naviguer sur la lave"),
     "item.netheryx.glowcap": ("Glowcap", "Luminelle"),
     "container.netheryx.onyx_anvil": ("Onyx Anvil", "Enclume en onyx"),
     "container.netheryx.onyx_furnace": ("Onyx Furnace", "Four en onyx"),

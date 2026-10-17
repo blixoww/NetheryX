@@ -915,6 +915,7 @@ def generate():
     generate_v11()
     generate_v13()
     generate_v14()
+    generate_v110()
 
 
 # ------------------------------------------------------------------------------------------------
@@ -1447,3 +1448,76 @@ def generate_v14():
     save(bevel(noise_fill(new(), ["#1a1424", "#221a2e", "#2a2038"], "onyx_furnace_side", blur=1, jitter=0.1), 1.6, 0.5),
          "block", "onyx_furnace_side.png")
     save(onyx_block_v2(), "block", "onyx_furnace_top.png")
+
+
+# ------------------------------------------------------------------------------------------------
+# Contenu 1.1.0 : bateau et seau d'obsidienne
+# ------------------------------------------------------------------------------------------------
+
+OBSIDIAN = {"o": "#050208", "h": "#7a4fc0", "l": "#3b2a5e", "m": "#1f1430", "d": "#120a1c", "p": "#a86cf0",
+            "r": "#e0a030", "R": "#9a6418"}
+
+
+def obsidian_boat_item():
+    rows = ["", "", "",
+            "......rR........",
+            ".......rR.......",
+            "........rR......",
+            "oo.......rR...oo",
+            "ohoooooooorooolo",
+            "ohhmmmmpmmmmmlmo",
+            ".ommmmmmmmmpmmo.",
+            ".odmmpmmmmmmmdo.",
+            "..oddddddddddo..",
+            "...oooooooooo..."]
+    return char_art(rows, OBSIDIAN)
+
+
+def obsidian_bucket_item():
+    rows = ["", "",
+            "......oooo......",
+            ".....o....o.....",
+            "....o......o....",
+            "...oooooooooo...",
+            "..ohdddddddddo..",
+            "..ohllllllllmo..",
+            "..ohmmpmmmmmdo..",
+            "...ohmmmmmmdo...",
+            "...ohmmmmpmdo...",
+            "...ohmmmmmmdo...",
+            "....ohmmmmdo....",
+            "....oddddddo....",
+            ".....oooooo....."]
+    return char_art(rows, OBSIDIAN)
+
+
+def obsidian_boat_entity():
+    """Texture 128x64 au format du modele de bateau vanilla : coque en obsidienne veinee, pagaies dorees."""
+    img = Image.new("RGBA", (128, 64), (0, 0, 0, 0))
+    hull = ["#07040c", "#0d0716", "#140c22", "#1c1230", "#26193e"]
+    field = value_noise(64, "obsidian_boat", 1)
+    r = rng("obsidian_boat_veins")
+    for y in range(64):
+        for x in range(128):
+            v = min(0.999, field[y % 64][x % 64] + (r.random() - 0.5) * 0.15)
+            img.putpixel((x, y), hexc(hull[int(v * len(hull))]))
+    for _ in range(70):
+        x, y = r.randrange(0, 62), r.randrange(0, 51)
+        for k in range(r.randint(2, 5)):
+            if x + k < 62:
+                img.putpixel((x + k, y), hexc("#4a3478" if k % 2 else "#6a4cb0"))
+    for _ in range(18):
+        img.putpixel((r.randrange(0, 62), r.randrange(0, 51)), hexc("#b07cff"))
+    shaft = ["#6a4214", "#8a5a20", "#b07a2a", "#d09a3a"]
+    field2 = value_noise(64, "obsidian_boat_paddle", 1)
+    for y in range(0, 40):
+        for x in range(62, 128):
+            v = min(0.999, field2[y % 64][x % 64])
+            img.putpixel((x, y), hexc(shaft[int(v * len(shaft))]))
+    return img
+
+
+def generate_v110():
+    save(obsidian_boat_item(), "item", "obsidian_boat.png")
+    save(obsidian_bucket_item(), "item", "obsidian_bucket.png")
+    save(obsidian_boat_entity(), "entity", "obsidian_boat.png")

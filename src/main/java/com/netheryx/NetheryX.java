@@ -9,6 +9,7 @@ import com.netheryx.registry.ModCreativeTabs;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.registry.ModItems;
 import com.netheryx.registry.ModLootModifiers;
+import com.netheryx.registry.ModParticles;
 import com.netheryx.registry.ModStructureTypes;
 import com.netheryx.registry.ModTiers;
 import com.netheryx.util.CompatSetup;
@@ -46,6 +47,7 @@ public final class NetheryX {
         ModCreativeTabs.TABS.register(modBus);
         ModStructureTypes.STRUCTURE_TYPES.register(modBus);
         ModLootModifiers.LOOT_MODIFIERS.register(modBus);
+        ModParticles.PARTICLES.register(modBus);
 
         NetheryXNetwork.register();
         modBus.addListener(this::commonSetup);

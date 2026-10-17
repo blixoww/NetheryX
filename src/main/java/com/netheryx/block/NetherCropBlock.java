@@ -16,6 +16,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.PlantType;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Culture du Nether a 4 stades. Contrairement aux cultures vanilla, elle ne depend pas de la
@@ -70,6 +71,20 @@ public abstract class NetherCropBlock extends CropBlock {
         if (age < this.getMaxAge() && ForgeHooks.onCropsGrowPre(level, pos, state, random.nextInt(6) == 0)) {
             level.setBlock(pos, this.getStateForAge(age + 1), Block.UPDATE_CLIENTS);
             ForgeHooks.onCropsGrowPost(level, pos, state);
+        }
+    }
+
+    /** Particules emises par la culture arrivee a maturite (signal visuel : prete a etre recoltee). */
+    @Nullable
+    protected AmbientParticles matureParticles() {
+        return null;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        AmbientParticles particles = this.matureParticles();
+        if (particles != null && this.isMaxAge(state)) {
+            particles.tick(state, level, pos, random);
         }
     }
 

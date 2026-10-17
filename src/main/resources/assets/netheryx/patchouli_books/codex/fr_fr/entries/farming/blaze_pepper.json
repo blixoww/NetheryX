@@ -2,7 +2,7 @@
   "name": "Piment de blaze",
   "icon": "netheryx:blaze_pepper",
   "category": "netheryx:farming",
-  "sortnum": 52,
+  "sortnum": 54,
   "pages": [
     {
       "type": "patchouli:spotlight",

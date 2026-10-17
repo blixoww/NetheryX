@@ -2,7 +2,7 @@
   "name": "Bois de braise",
   "icon": "netheryx:ember_planks",
   "category": "netheryx:building",
-  "sortnum": 60,
+  "sortnum": 62,
   "pages": [
     {
       "type": "patchouli:text",

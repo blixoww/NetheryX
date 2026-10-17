@@ -2,7 +2,7 @@
   "name": "Flowers",
   "icon": "netheryx:ember_bloom",
   "category": "netheryx:farming",
-  "sortnum": 57,
+  "sortnum": 59,
   "pages": [
     {
       "type": "patchouli:text",

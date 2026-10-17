@@ -1,5 +1,7 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
 import com.netheryx.config.NetheryXConfig;
 import com.netheryx.util.GuardianSeals;
 import com.netheryx.registry.ModEntities;
@@ -230,6 +232,7 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
     @Override
     public void aiStep() {
         super.aiStep();
+        MobParticles.ambient(this, ModParticles.EMBER_SPARK.get(), 2, 0.8D, 0.03D);
         if (this.level().isClientSide && this.random.nextInt(2) == 0) {
             this.level().addParticle(ParticleTypes.FLAME, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), 0.0D, 0.02D, 0.0D);
         }

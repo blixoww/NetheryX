@@ -2,7 +2,7 @@
   "name": "Cœur infernal",
   "icon": "netheryx:infernal_heart",
   "category": "netheryx:utility",
-  "sortnum": 47,
+  "sortnum": 49,
   "pages": [
     {
       "type": "patchouli:spotlight",

@@ -9,9 +9,9 @@
     "water_fog_color": 329011,
     "particle": {
       "options": {
-        "type": "minecraft:white_ash"
+        "type": "netheryx:ash_flake"
       },
-      "probability": 0.12
+      "probability": 0.06
     },
     "ambient_sound": "minecraft:ambient.basalt_deltas.loop",
     "mood_sound": {

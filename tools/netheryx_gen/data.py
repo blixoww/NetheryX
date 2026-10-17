@@ -513,6 +513,8 @@ def generate_recipes():
     shaped("ember_lamp", [" W ", "WGW", " W "], {"W": "ember_wart_block", "G": "minecraft:glowstone"}, "ember_lamp", 2, b)
     shaped("carapace_chestplate", ["C C", "CCC", "CCC"], {"C": "basalt_carapace"}, "carapace_chestplate", category=e)
     shaped("recall_stone", [" D ", "DOD", " D "], {"D": "soul_dust", "O": "minecraft:crying_obsidian"}, "recall_stone", category=e)
+    shaped("obsidian_boat", ["O O", "OOO"], {"O": "minecraft:obsidian"}, "obsidian_boat", category="misc")
+    shaped("obsidian_bucket", ["O O", " C "], {"O": "minecraft:obsidian", "C": "minecraft:crying_obsidian"}, "obsidian_bucket", category="misc")
     shapeless("glimmer_elixir", ["minecraft:glass_bottle", "soul_dust", "minecraft:glowstone_dust", "fire_berries"], "glimmer_elixir", 1)
     shapeless("bone_meal_from_withered_bone", ["withered_bone"], "minecraft:bone_meal", 3)
     shapeless("soul_dust_from_soul_lily", ["soul_lily"], "soul_dust", 1)
@@ -790,6 +792,7 @@ def generate_advancements():
                     {"condition": "minecraft:entity_properties", "entity": "this",
                      "predicate": {"type": mid("infernal_warlock")}}]}}})
     advancement("recall_stone", "recall_stone", "task", "root", {"stone": has_items("recall_stone")})
+    advancement("obsidian_boat", "obsidian_boat", "task", "root", {"boat": has_items("obsidian_boat")})
     advancement("kill_champion", "withered_blade", "challenge", "root",
                 {"kill": {"trigger": "minecraft:player_killed_entity", "conditions": {"entity": [
                     {"condition": "minecraft:entity_properties", "entity": "this",

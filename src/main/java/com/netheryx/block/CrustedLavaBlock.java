@@ -1,7 +1,9 @@
 package com.netheryx.block;
 
 import com.netheryx.registry.ModItems;
+import com.netheryx.registry.ModParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.block.state.properties.IntegerProperty;
 public class CrustedLavaBlock extends Block {
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
+    private static final AmbientParticles CRACKLE = AmbientParticles.of(ModParticles.EMBER_SPARK, 4, AmbientParticles.Mode.ABOVE);
 
     public CrustedLavaBlock(Properties properties) {
         super(properties);
@@ -79,5 +82,14 @@ public class CrustedLavaBlock extends Block {
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE);
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        CRACKLE.tick(state, level, pos, random);
+        if (random.nextInt(30) == 0) {
+            level.addParticle(ParticleTypes.LAVA, pos.getX() + random.nextDouble(), pos.getY() + 1.0D, pos.getZ() + random.nextDouble(),
+                    0.0D, 0.0D, 0.0D);
+        }
     }
 }

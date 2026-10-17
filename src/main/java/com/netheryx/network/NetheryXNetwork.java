@@ -5,9 +5,9 @@ import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
-/** Canal reseau du mod (boussole des ames : liste des structures et choix du joueur). */
+/** Canal reseau du mod (boussole des ames et pierre de rappel : listes envoyees au client et choix du joueur). */
 public final class NetheryXNetwork {
-    private static final String PROTOCOL = "1";
+    private static final String PROTOCOL = "2";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(NetheryX.id("main"),
             () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 
@@ -25,6 +25,16 @@ public final class NetheryXNetwork {
                 .encoder(SelectStructurePacket::encode)
                 .decoder(SelectStructurePacket::new)
                 .consumerMainThread(SelectStructurePacket::handle)
+                .add();
+        CHANNEL.messageBuilder(OpenRecallSelectionPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(OpenRecallSelectionPacket::encode)
+                .decoder(OpenRecallSelectionPacket::new)
+                .consumerMainThread(OpenRecallSelectionPacket::handle)
+                .add();
+        CHANNEL.messageBuilder(SelectRecallPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(SelectRecallPacket::encode)
+                .decoder(SelectRecallPacket::new)
+                .consumerMainThread(SelectRecallPacket::handle)
                 .add();
     }
 }

@@ -1,7 +1,7 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -20,6 +20,6 @@ public class OnyxCube extends MagmaCube {
 
     @Override
     protected ParticleOptions getParticleType() {
-        return ParticleTypes.REVERSE_PORTAL;
+        return ModParticles.ONYX_GLINT.get();
     }
 }

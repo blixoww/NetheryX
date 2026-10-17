@@ -4,6 +4,8 @@ import com.netheryx.NetheryX;
 import com.netheryx.item.GlimmerElixirItem;
 import com.netheryx.item.InfernalHeartItem;
 import com.netheryx.item.MagmaTreadsItem;
+import com.netheryx.item.ObsidianBoatItem;
+import com.netheryx.item.ObsidianBucketItem;
 import com.netheryx.item.OnyxArmorItem;
 import com.netheryx.item.OnyxBowItem;
 import com.netheryx.item.OnyxHammerItem;
@@ -98,6 +100,10 @@ public final class ModItems {
             () -> new RecallStoneItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> GLIMMER_ELIXIR = register("glimmer_elixir",
             () -> new GlimmerElixirItem(new Item.Properties().stacksTo(16)));
+    public static final RegistryObject<Item> OBSIDIAN_BOAT = register("obsidian_boat",
+            () -> new ObsidianBoatItem(new Item.Properties().stacksTo(1).fireResistant()));
+    public static final RegistryObject<Item> OBSIDIAN_BUCKET = register("obsidian_bucket",
+            () -> new ObsidianBucketItem(new Item.Properties().stacksTo(1).fireResistant()));
 
     // --- Cultures et nourriture --------------------------------------------------------------
     public static final RegistryObject<Item> FIRE_BERRIES = register("fire_berries",

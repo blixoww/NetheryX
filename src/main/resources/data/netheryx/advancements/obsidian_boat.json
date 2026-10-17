@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:obsidian_boat"
+    },
+    "title": {
+      "translate": "advancements.netheryx.obsidian_boat.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.obsidian_boat.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "boat": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "netheryx:obsidian_boat"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:root"
+}

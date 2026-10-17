@@ -1,5 +1,8 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
+import net.minecraft.core.particles.ParticleTypes;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.util.ModTags;
 import net.minecraft.core.BlockPos;
@@ -126,5 +129,12 @@ public class MagmaCrab extends Animal implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        MobParticles.ambient(this, ModParticles.EMBER_SPARK.get(), 6, 0.8D, 0.02D);
+        MobParticles.ambient(this, ParticleTypes.DRIPPING_LAVA, 25, 0.6D, 0.0D);
     }
 }

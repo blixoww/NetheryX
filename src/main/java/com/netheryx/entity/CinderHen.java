@@ -1,5 +1,7 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.registry.ModItems;
 import com.netheryx.util.ModTags;
@@ -75,6 +77,7 @@ public class CinderHen extends Animal implements GeoEntity {
     @Override
     public void aiStep() {
         super.aiStep();
+        MobParticles.ambient(this, ModParticles.ASH_FLAKE.get(), 18, 0.6D, 0.0D);
         Vec3 motion = this.getDeltaMovement();
         if (!this.onGround() && motion.y < 0.0D) {
             this.setDeltaMovement(motion.multiply(1.0D, 0.6D, 1.0D));

@@ -1,5 +1,7 @@
 package com.netheryx.entity;
 
+import com.netheryx.registry.ModParticles;
+import com.netheryx.util.MobParticles;
 import com.netheryx.config.NetheryXConfig;
 import com.netheryx.util.GuardianSeals;
 import com.netheryx.entity.ai.SentinelSlamGoal;
@@ -290,5 +292,11 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        MobParticles.ambient(this, ModParticles.ONYX_GLINT.get(), 2, 1.0D, 0.0D);
     }
 }

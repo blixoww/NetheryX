@@ -2,7 +2,7 @@
   "name": "Enclume en onyx",
   "icon": "netheryx:onyx_anvil",
   "category": "netheryx:building",
-  "sortnum": 63,
+  "sortnum": 65,
   "pages": [
     {
       "type": "patchouli:spotlight",

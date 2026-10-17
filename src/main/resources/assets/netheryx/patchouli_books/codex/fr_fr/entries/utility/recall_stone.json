@@ -7,8 +7,16 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:recall_stone",
-      "text": "Maintenez l'utilisation $(l)3 secondes$() pour rejoindre votre lit, ancre de réapparition ou le point d'apparition. Réutilisable, avec un temps de recharge.",
+      "text": "Maintenez l'utilisation $(l)3 secondes$() pour rejoindre un $(l)portail du Nether$() que vous avez emprunté. Avec plusieurs portails, un menu vous laisse choisir, ou votre point de réapparition. Réutilisable, avec un temps de recharge.",
       "link_recipe": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "La pierre retient les $(l)8 derniers portails$() par lesquels vous êtes arrivé, dans toutes les dimensions. Le bouton $(l)x$() en oublie un. Un portail détruit est oublié automatiquement. Sans portail, la pierre vous ramène à votre lit ou ancre."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:recall_stone"
     }
   ]
 }

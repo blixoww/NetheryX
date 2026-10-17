@@ -48,6 +48,8 @@ public final class ModCreativeTabs {
                 event.accept(ModItems.ONYX_HAMMER);
                 event.accept(ModItems.SOUL_COMPASS);
                 event.accept(ModItems.RECALL_STONE);
+                event.accept(ModItems.OBSIDIAN_BOAT);
+                event.accept(ModItems.OBSIDIAN_BUCKET);
             }
         }
     }

@@ -9,9 +9,9 @@
     "water_fog_color": 329011,
     "particle": {
       "options": {
-        "type": "minecraft:soul"
+        "type": "netheryx:soul_wisp"
       },
-      "probability": 0.004
+      "probability": 0.008
     },
     "ambient_sound": "minecraft:ambient.soul_sand_valley.loop",
     "mood_sound": {

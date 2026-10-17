@@ -7,8 +7,16 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:recall_stone",
-      "text": "Hold use for $(l)3 seconds$() to teleport to your bed, respawn anchor or world spawn. Reusable, with a cooldown.",
+      "text": "Hold use for $(l)3 seconds$() to return to a $(l)Nether portal$() you went through. With several portals, a menu lets you pick one, or your spawn point. Reusable, with a cooldown.",
       "link_recipe": true
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The stone remembers the last $(l)8 portals$() you arrived through, in every dimension. Use the $(l)x$() button to forget one. A destroyed portal is forgotten automatically. Without any portal, the stone brings you back to your bed or anchor."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:recall_stone"
     }
   ]
 }

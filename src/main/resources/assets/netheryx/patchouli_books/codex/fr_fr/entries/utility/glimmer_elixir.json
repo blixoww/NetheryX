@@ -2,7 +2,7 @@
   "name": "Élixir de lueur",
   "icon": "netheryx:glimmer_elixir",
   "category": "netheryx:utility",
-  "sortnum": 48,
+  "sortnum": 50,
   "pages": [
     {
       "type": "patchouli:spotlight",
