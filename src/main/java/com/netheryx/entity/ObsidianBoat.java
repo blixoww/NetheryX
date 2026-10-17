@@ -63,6 +63,7 @@ public class ObsidianBoat extends Boat {
         this.lavaLift = Mth.approach(this.lavaLift, onLava ? MAX_LAVA_LIFT : 0.0F, 0.04F);
         if (!this.level().isClientSide && onLava) {
             for (Entity passenger : this.getPassengers()) {
+                passenger.setRemainingFireTicks(0);
                 if (passenger instanceof LivingEntity living) {
                     MobEffectInstance current = living.getEffect(MobEffects.FIRE_RESISTANCE);
                     if (current == null || current.getDuration() < 30) {

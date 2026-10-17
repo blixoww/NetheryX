@@ -1,8 +1,80 @@
 {
-  "parent": "minecraft:block/cube_bottom_top",
+  "parent": "minecraft:block/block",
+  "render_type": "minecraft:cutout",
   "textures": {
-    "bottom": "minecraft:block/netherrack",
+    "base": "minecraft:block/netherrack",
     "top": "netheryx:block/ossified_nylium",
-    "side": "netheryx:block/ossified_nylium_side"
-  }
+    "overlay": "netheryx:block/ossified_nylium_side_overlay",
+    "particle": "minecraft:block/netherrack"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#base",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#base",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#base",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#base",
+          "cullface": "west"
+        },
+        "up": {
+          "texture": "#top",
+          "cullface": "up"
+        },
+        "down": {
+          "texture": "#base",
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        16,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#overlay",
+          "cullface": "north"
+        },
+        "south": {
+          "texture": "#overlay",
+          "cullface": "south"
+        },
+        "east": {
+          "texture": "#overlay",
+          "cullface": "east"
+        },
+        "west": {
+          "texture": "#overlay",
+          "cullface": "west"
+        }
+      }
+    }
+  ]
 }

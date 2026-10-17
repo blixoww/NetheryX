@@ -1,6 +1,7 @@
 package com.netheryx.event;
 
 import com.netheryx.NetheryX;
+import com.netheryx.entity.ObsidianBoat;
 import com.netheryx.item.SetBonusArmorItem;
 import com.netheryx.registry.ModArmorMaterials;
 import com.netheryx.registry.ModEffects;
@@ -56,7 +57,14 @@ public final class GameplayEvents {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
-        if (event.phase != TickEvent.Phase.END || player.level().isClientSide) {
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
+        // En fin de tick (apres que la lave a mis le feu) : un passager du bateau d'obsidienne ne brule jamais
+        if (player.getVehicle() instanceof ObsidianBoat) {
+            player.clearFire();
+        }
+        if (player.level().isClientSide) {
             return;
         }
         if (player.tickCount % 10 == 0) {
@@ -115,6 +123,12 @@ public final class GameplayEvents {
     public static void onLivingAttack(LivingAttackEvent event) {
         LivingEntity entity = event.getEntity();
         DamageSource source = event.getSource();
+        // Passagers du bateau d'obsidienne : la lave et le feu ne les touchent pas
+        if (entity.getVehicle() instanceof ObsidianBoat && (source.is(DamageTypeTags.IS_FIRE) || source.is(DamageTypes.LAVA))) {
+            entity.clearFire();
+            event.setCanceled(true);
+            return;
+        }
         boolean hotFloor = source.is(DamageTypes.HOT_FLOOR);
         if (hotFloor && EnchantmentHelper.getEnchantmentLevel(ModEnchantments.EMBER_STRIDE.get(), entity) > 0) {
             event.setCanceled(true);

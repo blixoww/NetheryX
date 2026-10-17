@@ -19,12 +19,7 @@ public final class ModCreativeTabs {
     public static final RegistryObject<CreativeModeTab> NETHERYX = TABS.register("netheryx", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.netheryx"))
             .icon(() -> new ItemStack(ModItems.ONYX.get()))
-            .displayItems((parameters, output) -> ModItems.ITEMS.getEntries().forEach(item -> {
-                // La Boussole du createur n'apparait que pour les joueurs ayant les droits d'operateur
-                if (item != ModItems.ADMIN_COMPASS || parameters.hasPermissions()) {
-                    output.accept(item.get());
-                }
-            }))
+            .displayItems((parameters, output) -> orderedItems().forEach(item -> output.accept(item.get())))
             .build());
 
     /** Les oeufs et l'equipement apparaissent aussi dans les onglets vanilla correspondants. */
@@ -65,6 +60,17 @@ public final class ModCreativeTabs {
                 event.accept(ModItems.ONYX_INFUSION_TEMPLATE);
             }
         }
+    }
+
+    /**
+     * Tous les objets et blocs du mod, dans l'ordre d'inscription, sauf que chaque ensemble d'armure reste groupe
+     * (le plastron de carapace, plus ancien, est replace avec les autres pieces).
+     */
+    private static java.util.List<RegistryObject<net.minecraft.world.item.Item>> orderedItems() {
+        java.util.List<RegistryObject<net.minecraft.world.item.Item>> items = new java.util.ArrayList<>(ModItems.ITEMS.getEntries());
+        items.remove(ModItems.CARAPACE_CHESTPLATE);
+        items.add(items.indexOf(ModItems.CARAPACE_HELMET) + 1, ModItems.CARAPACE_CHESTPLATE);
+        return items;
     }
 
     private ModCreativeTabs() {

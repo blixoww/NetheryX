@@ -90,8 +90,8 @@ public final class ModItems {
     public static final RegistryObject<Item> MAGMA_TREADS = register("magma_treads",
             () -> new MagmaTreadsItem(new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON)));
 
-    public static final RegistryObject<Item> CARAPACE_CHESTPLATE = register("carapace_chestplate",
-            () -> new ArmorItem(ModArmorMaterials.CARAPACE, ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> CARAPACE_CHESTPLATE = armor("carapace_chestplate", ModArmorMaterials.CARAPACE,
+            ArmorItem.Type.CHESTPLATE, "carapace");
 
     // --- Objets utilitaires -----------------------------------------------------------------
     public static final RegistryObject<Item> SOUL_COMPASS = register("soul_compass",
