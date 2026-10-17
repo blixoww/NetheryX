@@ -2,7 +2,7 @@
 
 # (nom, type de modele, texture/parent optionnel)
 BLOCKS = [
-    ("onyx_ore", "cube", None),
+    ("onyx_ore", "nether_ore", None),
     ("onyx_block", "cube", None),
     ("polished_onyx", "cube", None),
     ("onyx_bricks", "cube", None),
@@ -30,7 +30,7 @@ BLOCKS = [
     ("ember_fungus", "cross", None),
     ("ember_roots", "cross", None),
     ("sulfur_rock", "cube", None),
-    ("sulfur_ore", "cube", None),
+    ("sulfur_ore", "nether_ore", None),
     ("sulfur_block", "cube", None),
     ("sulfur_cluster", "cluster", None),
     ("blaze_pepper_crop", "crop", "blaze_pepper_stage"),
@@ -120,7 +120,7 @@ BLOCKS = [
     ("wartstalk_button", "button", "wartstalk_planks"),
     ("wartstalk_pressure_plate", "pressure_plate", "wartstalk_planks"),
     # 1.2.0 : Recifs de quartz
-    ("rich_quartz_ore", "cube", None),
+    ("rich_quartz_ore", "nether_ore", None),
     ("quartz_glass", "translucent_cube", None),
     ("quartz_glass_pane", "pane", "quartz_glass"),
     ("quartz_lamp", "cube", None),

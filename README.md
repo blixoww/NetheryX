@@ -17,7 +17,7 @@ grille), objets, blocs, créatures (modèle 3D animé), biomes, structures, outi
 première connexion et se fabrique avec **un livre + un bloc de netherrack**.
 
 ### En chiffres
-8 biomes · 13 créatures (dont 3 boss) · 3 grands donjons + 3 petites structures · 2 bois complets · ~50 blocs · ~50 objets · ~110 recettes.
+12 biomes · 19 créatures (dont 3 boss) · 3 grands donjons + 4 petites structures · 4 bois complets · ~50 blocs · ~50 objets · ~110 recettes.
 Les 5 biomes vanilla sont aussi décorés (plantes, créatures) : le Nether a un aspect différent partout.
 
 ### L'Onyx
@@ -33,7 +33,7 @@ diamant et la netherite (via `TierSortingRegistry`) :
 | Armure (total) | 20 | **20** | 20 |
 | Robustesse | 2.0 | **2.5** | 3.0 |
 
-Bonus d'ensemble : l'armure complete donne **Resistance I**. Les manches des outils sont en **baton de blaze**.
+Plus forte que la netherite. Bonus d'ensemble : l'armure complete donne **Resistance I** et **resistance au feu**. Les manches des outils sont en **baton de blaze**.
 
 ### Biomes (TerraBlender)
 - **Prairie de braise** : herbe du Nether dorée, fleurs, luminelles, blé de cendre. *Vaches de braise, poules de cendre.*
@@ -89,6 +89,14 @@ Les bastions et forteresses contiennent aussi du butin NetheryX (Global Loot Mod
 - **Élixir de lueur** : vision nocturne et résistance au feu.
 - **Lame flétrie**, **Bâton du sorcier** (boules de feu), **Plastron de carapace** (résistance au recul).
 - **Soufre** : engrais pour les cultures du Nether, y compris les verrues ; donne aussi de la poudre a canon.
+
+### Nouveautés 1.2.0
+- **Biomes** : Fourré de moelle, Gouffre de givre (l'eau du Nether), Enchevêtrement de verrues (fruits renouvelables), Récifs de quartz.
+- **Créatures** : poisson de magme, lézard de cendre (monture), porteur de lanterne (lumière dynamique), fouisseur de basalte,
+  marchand piglin (caravanes nomades), coffre mimique.
+- **Ateliers** : nasse à magma, chaudron infernal, autel des âmes (enchantements du Nether), lanterne de garde.
+- **Équipement** : armures de braise, spectrale et de carapace (bonus d'ensemble), infusions d'onyx à la table de forgeron.
+- **Événements du Nether** : pluie de cendres, tempête de soufre, éruption.
 
 ### Particules
 7 particules animées propres au mod (étincelles de braise, flocons de cendre, feux follets d'âme, reflets d'onyx,

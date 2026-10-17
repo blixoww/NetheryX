@@ -370,6 +370,38 @@ def gen_altar(name):
     return m
 
 
+# --- 1.2.0 : blocs poses sur la netherrack vanilla (minerais, nylium, herbe) ----------------------------
+
+NETHERRACK = "minecraft:block/netherrack"
+SIDES = ("north", "south", "east", "west")
+
+
+def layered(name, base_faces, overlay_faces, textures):
+    """Modele a deux couches : la netherrack vanilla dessous, la texture du mod (avec transparence) par-dessus."""
+    def element(faces):
+        return {"from": [0, 0, 0], "to": [16, 16, 16],
+                "faces": {d: {"texture": tex, "cullface": d} for d, tex in faces.items()}}
+    data = {"parent": "minecraft:block/block", "render_type": CUTOUT, "textures": dict(textures, particle=NETHERRACK),
+            "elements": [element(base_faces), element(overlay_faces)]}
+    write_json(asset_path("models", "block", f"{name}.json"), data)
+    m = f"{MOD_ID}:block/{name}"
+    blockstate(name, {"": v(m)})
+    return m
+
+
+def gen_nether_ore(name):
+    all_faces = ("north", "south", "east", "west", "up", "down")
+    return layered(name, {d: "#base" for d in all_faces}, {d: "#overlay" for d in all_faces},
+                   {"base": NETHERRACK, "overlay": block_tex(f"{name}_overlay")})
+
+
+def gen_soil(name):
+    base = {d: "#base" for d in SIDES}
+    base.update({"up": "#top", "down": "#base"})
+    return layered(name, base, {d: "#overlay" for d in SIDES},
+                   {"base": NETHERRACK, "top": block_tex(name), "overlay": block_tex(f"{name}_side_overlay")})
+
+
 def generate_blocks():
     for name, kind, extra in BLOCKS:
         item_parent = None
@@ -401,7 +433,9 @@ def generate_blocks():
         elif kind == "wood":
             item_parent = gen_log(name, extra, wood=True)
         elif kind == "nylium":
-            item_parent = gen_nylium(name)
+            item_parent = gen_soil(name)
+        elif kind == "nether_ore":
+            item_parent = gen_nether_ore(name)
         elif kind == "cross":
             gen_cross(name)
         elif kind == "cluster":
@@ -411,7 +445,7 @@ def generate_blocks():
         elif kind == "furnace":
             item_parent = gen_furnace(name)
         elif kind == "grass_block":
-            item_parent = gen_grass_block(name)
+            item_parent = gen_soil(name)
         elif kind == "pot":
             gen_pot(name, extra)
         elif kind == "lantern":
