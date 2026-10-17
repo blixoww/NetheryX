@@ -1,0 +1,11 @@
+{
+  "type": "netheryx:fallen_log",
+  "config": {
+    "state": {
+      "Name": "netheryx:ember_stem",
+      "Properties": {
+        "axis": "x"
+      }
+    }
+  }
+}

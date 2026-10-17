@@ -1,0 +1,51 @@
+{
+  "type": "minecraft:nether_forest_vegetation",
+  "config": {
+    "state_provider": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 60,
+          "data": {
+            "Name": "netheryx:blazing_grass"
+          }
+        },
+        {
+          "weight": 18,
+          "data": {
+            "Name": "netheryx:nether_grass"
+          }
+        },
+        {
+          "weight": 8,
+          "data": {
+            "Name": "netheryx:ember_bloom"
+          }
+        },
+        {
+          "weight": 6,
+          "data": {
+            "Name": "netheryx:crimson_bellflower"
+          }
+        },
+        {
+          "weight": 5,
+          "data": {
+            "Name": "netheryx:ember_roots"
+          }
+        },
+        {
+          "weight": 3,
+          "data": {
+            "Name": "netheryx:fire_berry_bush",
+            "Properties": {
+              "age": "3"
+            }
+          }
+        }
+      ]
+    },
+    "spread_width": 3,
+    "spread_height": 1
+  }
+}

@@ -124,6 +124,25 @@ public class WitheredChampion extends WitheredKnight {
         }
     }
 
+    /** Chaque coup du Champion affaiblit : lenteur, faiblesse et cecite. */
+    @Override
+    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+        boolean hit = super.doHurtTarget(target);
+        if (hit && target instanceof net.minecraft.world.entity.LivingEntity living) {
+            applyCurses(living, 1.0F);
+        }
+        return hit;
+    }
+
+    private void applyCurses(net.minecraft.world.entity.LivingEntity victim, float strength) {
+        victim.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN,
+                (int) (80 * strength), 1), this);
+        victim.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WEAKNESS,
+                (int) (100 * strength), 0), this);
+        victim.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.BLINDNESS,
+                (int) (40 * strength), 0), this);
+    }
+
     // --- Balayage spectral : arc devant le Champion, fletrissement ----------------------------------
 
     private void tickSweep() {
@@ -142,6 +161,7 @@ public class WitheredChampion extends WitheredKnight {
             }
             victim.hurt(this.damageSources().mobAttack(this), 10.0F);
             victim.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WITHER, 100, 1));
+            this.applyCurses(victim, 1.5F);
             victim.push(toVictim.x * 0.8D, 0.3D, toVictim.z * 0.8D);
             victim.hurtMarked = true;
         }

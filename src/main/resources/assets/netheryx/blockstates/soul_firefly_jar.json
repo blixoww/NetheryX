@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "netheryx:block/soul_firefly_jar"
+    },
+    "hanging=true": {
+      "model": "netheryx:block/soul_firefly_jar_hanging"
+    }
+  }
+}

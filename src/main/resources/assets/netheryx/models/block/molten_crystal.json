@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "netheryx:block/molten_crystal"
+  },
+  "render_type": "minecraft:cutout"
+}

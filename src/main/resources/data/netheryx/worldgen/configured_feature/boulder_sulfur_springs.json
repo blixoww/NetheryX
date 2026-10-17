@@ -1,0 +1,8 @@
+{
+  "type": "netheryx:boulder",
+  "config": {
+    "state": {
+      "Name": "netheryx:sulfur_rock"
+    }
+  }
+}

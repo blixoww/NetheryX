@@ -716,6 +716,8 @@ def generate():
     ash_wraith()
     onyx_sentinel()
     magma_crab()
+    nether_heart()
+    generate_v124()
 
 
 # ------------------------------------------------------------------------------------------------
@@ -990,3 +992,272 @@ EXTRA_ANIMS["withered_champion"] = {
                  "position": ekeys((0, [0, 0, 0], None), (0.6, [0, -3, 0], "easeInExpo"), (1.3, [0, 0, 0], "easeOutQuad"))},
     }, loop=False),
 }
+
+
+# ------------------------------------------------------------------------------------------------
+# Boss final : le Coeur du Nether, un coeur de magma enchaine dans une cage d'os, entoure de cristaux
+# d'onyx en orbite.
+# ------------------------------------------------------------------------------------------------
+
+def nether_heart():
+    m = Model("nether_heart", 128, 128, (6, 6))
+    m.bone("root", [0, 0, 0])
+    m.bone("heart", [0, 24, 0], "root", cubes=[
+        Cube([-7, 15, -6], [14, 17, 12], "flesh"),
+        Cube([-10, 24, -4], [5, 7, 8], "flesh"),
+        Cube([5, 25, -3], [5, 6, 6], "flesh"),
+        Cube([-3, 19, -7], [6, 7, 1], "core", detail=core_face("#ffb020")),
+        Cube([-2, 32, -2], [4, 7, 4], "vessel"),
+        Cube([2, 33, -1], [3, 5, 3], "vessel"),
+        Cube([-6, 31, 0], [3, 4, 3], "vessel"),
+    ])
+    m.bone("cage", [0, 24, 0], "root", cubes=[
+        Cube([-9, 12, -8], [18, 2, 16], "bone"),
+        Cube([-9, 36, -8], [18, 2, 16], "bone"),
+        Cube([-9, 14, -8], [2, 22, 2], "bone"),
+        Cube([7, 14, -8], [2, 22, 2], "bone"),
+        Cube([-9, 14, 6], [2, 22, 2], "bone"),
+        Cube([7, 14, 6], [2, 22, 2], "bone"),
+    ])
+    m.bone("orbit", [0, 24, 0], "root")
+    for i, (x, z) in enumerate(((15, 0), (-15, 0), (0, 15), (0, -15))):
+        m.bone(f"crystal_{i}", [x, 24, z], "orbit", cubes=[
+            Cube([x - 1.5, 21, z - 1.5], [3, 7, 3], "crystal"),
+            Cube([x - 1, 28, z - 1], [2, 2, 2], "crystal"),
+            Cube([x - 1, 19, z - 1], [2, 2, 2], "crystal"),
+        ])
+    save_model(m, {
+        "flesh": {"colors": ["#3a0606", "#5a0a08", "#7a140c", "#9a2010", "#b83018"], "pattern": "cracks", "crack": "#ff8a1a"},
+        "vessel": {"colors": ["#2a0404", "#4a0808", "#6a100a"], "pattern": "stripes"},
+        "core": {"colors": ["#ff6a1a", "#ffb020"], "glow": True},
+        "bone": {"colors": ["#8a7e66", "#a89c80", "#c4b898", "#d8ccac"], "pattern": "plates", "trim": "#5a4a3a"},
+        "crystal": {"colors": ["#6a3fc0", "#8f62d6", "#c9a6ff"], "glow": True},
+    })
+    beat = ekeys((0, [1, 1, 1], None), (0.12, [1.12, 1.12, 1.12], "easeOutQuad"), (0.3, [1, 1, 1], "easeInQuad"),
+                 (0.42, [1.07, 1.07, 1.07], "easeOutQuad"), (0.6, [1, 1, 1], "easeInQuad"), (2.0, [1, 1, 1], None))
+    crystal_bob = {f"crystal_{i}": {"position": wave(2.0, 1.2, phase=i * math.pi / 2, axis=1)} for i in range(4)}
+    save_animations("nether_heart", {
+        "idle": anim(2.0, dict({
+            "heart": {"scale": beat},
+            "orbit": {"rotation": keys((0, [0, 0, 0]), (1.0, [0, 180, 0]), (2.0, [0, 360, 0]))},
+            "cage": {"rotation": wave(2.0, 4, axis=1)},
+            "root": {"position": wave(2.0, 1.0, axis=1)},
+        }, **crystal_bob)),
+        "pulse": anim(0.8, {
+            "heart": {"scale": ekeys((0, [1, 1, 1], None), (0.25, [0.85, 0.85, 0.85], "easeInQuad"),
+                                     (0.4, [1.45, 1.45, 1.45], "easeOutExpo"), (0.8, [1, 1, 1], "easeOutElastic"))},
+            "orbit": {"scale": ekeys((0, [1, 1, 1], None), (0.4, [1.6, 1, 1.6], "easeOutExpo"), (0.8, [1, 1, 1], "easeInOutSine"))},
+        }, loop=False),
+        "cast": anim(1.0, {
+            "orbit": {"rotation": ekeys((0, [0, 0, 0], None), (1.0, [0, 720, 0], "easeInOutCubic")),
+                      "position": ekeys((0, [0, 0, 0], None), (0.4, [0, 6, 0], "easeOutBack"), (1.0, [0, 0, 0], "easeInQuad"))},
+            "heart": {"rotation": wave(1.0, 6, axis=2, steps=10)},
+        }, loop=False),
+        "awaken": anim(6.0, {
+            "root": {"scale": ekeys((0, [0.2, 0.2, 0.2], None), (4.5, [0.8, 0.8, 0.8], "easeInQuad"),
+                                    (5.2, [1.2, 1.2, 1.2], "easeOutExpo"), (6.0, [1, 1, 1], "easeOutElastic"))},
+            "orbit": {"rotation": ekeys((0, [0, 0, 0], None), (5.2, [0, 1440, 0], "easeInCubic"), (6.0, [0, 1440, 0], None)),
+                      "scale": ekeys((0, [0.1, 0.1, 0.1], None), (5.2, [1, 1, 1], "easeInOutSine"))},
+            "cage": {"position": ekeys((0, [0, -8, 0], None), (4.5, [0, 0, 0], "easeOutBounce"))},
+        }, loop=False),
+    })
+
+
+# ------------------------------------------------------------------------------------------------
+# 1.2.0 (suite) : golem de basalte, wyverne de cendre, lucioles, cochon de blaze, escargot de cristal
+# ------------------------------------------------------------------------------------------------
+
+def basalt_golem():
+    m = Model("basalt_golem", 128, 128, (3, 4))
+    m.bone("root", [0, 0, 0])
+    m.bone("leg_left", [5, 16, 0], "root", cubes=[Cube([2, 0, -3.5], [7, 16, 7], "rock")])
+    m.bone("leg_right", [-5, 16, 0], "root", cubes=[Cube([-9, 0, -3.5], [7, 16, 7], "rock")])
+    m.bone("body", [0, 16, 0], "root", cubes=[
+        Cube([-8, 16, -5], [16, 10, 10], "rock"),
+        Cube([-11, 26, -7], [22, 12, 14], "columns"),
+        Cube([-3, 29, -8], [6, 6, 1], "core", detail=core_face("#ff7a1a")),
+        Cube([-9, 38, -4], [4, 4, 4], "columns"), Cube([5, 38, -3], [4, 6, 4], "columns"), Cube([-2, 38, 2], [4, 3, 4], "columns"),
+    ])
+    m.bone("head", [0, 38, -2], "body", cubes=[
+        Cube([-4, 36, -9], [8, 7, 7], "rock", detail=eyes("#ffb020", y_frac=0.35, spacing=0.26, size=1)),
+    ])
+    for side, sx in (("left", 1), ("right", -1)):
+        x0 = 11 if sx > 0 else -18
+        m.bone(f"arm_{side}", [14 * sx, 36, 0], "body", cubes=[
+            Cube([x0, 30, -4.5], [7, 8, 9], "columns"),
+            Cube([x0 + 0.5, 12, -3.5], [6, 18, 7], "rock"),
+            Cube([x0 - 0.5, 6, -4.5], [8, 7, 9], "magma"),
+        ])
+    save_model(m, {
+        "rock": {"colors": ["#1a1a1e", "#232328", "#2c2c32", "#36363c", "#40404a"], "pattern": "cracks", "crack": "#ff6a1a"},
+        "columns": {"colors": ["#26262c", "#303036", "#3a3a42", "#46464e"], "pattern": "stripes"},
+        "magma": {"colors": ["#5a1606", "#8a2a0a", "#c8460e", "#ff7a1a"], "pattern": "cracks", "crack": "#ffd36b", "glow": True},
+        "core": {"colors": ["#ff6a1a", "#ffb020"], "glow": True},
+    })
+    walk = {
+        "leg_left": {"rotation": wave(1.8, 20)}, "leg_right": {"rotation": wave(1.8, 20, math.pi)},
+        "arm_left": {"rotation": wave(1.8, 14, math.pi)}, "arm_right": {"rotation": wave(1.8, 14)},
+        "body": {"rotation": wave(1.8, 3, axis=2)},
+    }
+    save_animations("basalt_golem", {
+        "idle": anim(3.0, {"body": {"position": wave(3.0, 0.3, axis=1)}, "head": {"rotation": wave(3.0, 5, axis=1)},
+                           "arm_left": {"rotation": wave(3.0, 3, axis=2, offset=-4)},
+                           "arm_right": {"rotation": wave(3.0, 3, math.pi, axis=2, offset=4)}}),
+        "walk": anim(1.8, walk),
+        "slam": anim(1.2, {
+            "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.55, [-165, 0, -10], "easeOutBack"), (0.75, [-30, 0, 0], "easeInExpo"),
+                                           (1.2, [0, 0, 0], "easeInOutSine"))},
+            "arm_right": {"rotation": ekeys((0, [0, 0, 0], None), (0.55, [-165, 0, 10], "easeOutBack"), (0.75, [-30, 0, 0], "easeInExpo"),
+                                            (1.2, [0, 0, 0], "easeInOutSine"))},
+            "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.55, [-12, 0, 0], None), (0.75, [22, 0, 0], "easeInExpo"),
+                                       (1.2, [0, 0, 0], "easeInOutSine"))},
+        }, loop=False),
+        "throw": anim(0.9, {
+            "arm_right": {"rotation": ekeys((0, [0, 0, 0], None), (0.35, [-150, 20, 0], "easeOutQuad"), (0.5, [-40, -10, 0], "easeOutExpo"),
+                                            (0.9, [0, 0, 0], "easeInOutSine"))},
+            "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.35, [0, 20, 0], None), (0.5, [5, -15, 0], "easeOutExpo"),
+                                       (0.9, [0, 0, 0], None))},
+        }, loop=False),
+        "punch": anim(0.6, {
+            "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.2, [-90, -15, 0], "easeOutBack"), (0.6, [0, 0, 0], "easeInOutSine"))},
+        }, loop=False),
+    })
+
+
+def ash_wyvern():
+    m = Model("ash_wyvern", 128, 128, (3, 3))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 12, 0], "root", cubes=[
+        Cube([-5, 9, -8], [10, 9, 18], "scales"),
+        Cube([-4, 8.5, -6], [8, 1, 14], "belly"),
+        Cube([-0.5, 18, -6], [1, 2, 2], "spine"), Cube([-0.5, 18, -1], [1, 2, 2], "spine"), Cube([-0.5, 18, 4], [1, 2, 2], "spine"),
+    ])
+    m.bone("neck", [0, 15, -8], "body", rotation=[-25, 0, 0], cubes=[Cube([-2.5, 13, -15], [5, 5, 8], "scales")])
+    m.bone("head", [0, 17, -15], "neck", cubes=[
+        Cube([-3.5, 14, -22], [7, 6, 7], "scales", detail=eyes("#ff9a2a", y_frac=0.25, spacing=0.34)),
+        Cube([-2.5, 13, -26], [5, 3, 4], "belly"),
+        Cube([-3, 20, -19], [1, 2, 5], "horn"), Cube([2, 20, -19], [1, 2, 5], "horn"),
+    ])
+    for side, sx in (("left", 1), ("right", -1)):
+        x_inner = 5 if sx > 0 else -21
+        m.bone(f"wing_{side}", [5 * sx, 17, -4], "body", cubes=[
+            Cube([x_inner, 16, -6], [16, 1.5, 3], "scales"),
+            Cube([x_inner, 16.5, -3], [16, 0.5, 13], "membrane"),
+        ])
+        m.bone(f"leg_{side}", [3 * sx, 10, 4], "body", cubes=[Cube([3 * sx - 1.5, 0, 2.5], [3, 10, 3], "scales")])
+    m.bone("tail", [0, 13, 10], "body", cubes=[Cube([-2, 11, 10], [4, 4, 10], "scales")])
+    m.bone("tail_tip", [0, 13, 20], "tail", cubes=[Cube([-1, 12, 20], [2, 2, 9], "scales"), Cube([-3, 12.5, 27], [6, 1, 4], "membrane")])
+    save_model(m, {
+        "scales": {"colors": ["#2a2828", "#363434", "#44403e", "#524e4a", "#605a56"], "pattern": "scales",
+                   "speckle": ("#ff7a2a", 0.04), "speckle_glow": True},
+        "belly": {"colors": ["#8a8078", "#a09488", "#b4a898"], "pattern": "stripes"},
+        "membrane": {"colors": ["#5a3a30", "#6e4638", "#82523e"], "pattern": "plates", "trim": "#2a1a14"},
+        "spine": {"colors": ["#ff6a1a", "#ffa040"], "glow": True},
+        "horn": {"colors": ["#d8ccb4", "#ece2cc"]},
+    })
+    flap = {
+        "wing_left": {"rotation": wave(0.9, 40, axis=2, offset=-5)},
+        "wing_right": {"rotation": wave(0.9, 40, math.pi, axis=2, offset=5)},
+        "body": {"position": wave(0.9, 0.6, math.pi / 2, axis=1)},
+        "tail": {"rotation": wave(0.9, 6, 0.5, axis=0)},
+        "leg_left": {"rotation": keys((0, [60, 0, 0]))}, "leg_right": {"rotation": keys((0, [60, 0, 0]))},
+    }
+    folded = {"wing_left": {"rotation": keys((0, [0, -20, 60]))}, "wing_right": {"rotation": keys((0, [0, 20, -60]))}}
+    walk = dict(folded)
+    walk.update({"leg_left": {"rotation": wave(1.0, 30)}, "leg_right": {"rotation": wave(1.0, 30, math.pi)},
+                 "tail": {"rotation": wave(1.0, 10, axis=1)}, "neck": {"rotation": wave(1.0, 4, axis=0, base=[-25, 0, 0])}})
+    idle = dict(folded)
+    idle.update({"tail": {"rotation": wave(3.0, 8, axis=1)}, "tail_tip": {"rotation": wave(3.0, 12, 0.8, axis=1)},
+                 "neck": {"rotation": wave(3.0, 5, axis=0, base=[-25, 0, 0])}})
+    sit = dict(folded)
+    sit.update({"body": {"position": keys((0, [0, -5, 0]))}, "leg_left": {"rotation": keys((0, [-80, 0, 0]))},
+                "leg_right": {"rotation": keys((0, [-80, 0, 0]))}, "neck": {"rotation": keys((0, [-5, 0, 0]))}})
+    save_animations("ash_wyvern", {"idle": anim(3.0, idle), "walk": anim(1.0, walk), "fly": anim(0.9, flap), "sit": anim(1.0, sit)})
+
+
+def firefly(name, body, glow_colors, eye):
+    m = Model(name, 32, 16, (0.5, 0.5))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 2.5, 0], "root", cubes=[
+        Cube([-1, 2, -2], [2, 2, 2], "body", detail=eyes(eye, y_frac=0.0, spacing=0.3)),
+        Cube([-1, 1.5, 0], [2, 2, 3], "glow"),
+    ])
+    m.bone("wing_left", [1, 4, -1], "body", cubes=[Cube([1, 4, -1.5], [3, 0.5, 2], "wing")])
+    m.bone("wing_right", [-1, 4, -1], "body", cubes=[Cube([-4, 4, -1.5], [3, 0.5, 2], "wing")])
+    save_model(m, {
+        "body": {"colors": body},
+        "glow": {"colors": glow_colors, "glow": True},
+        "wing": {"colors": ["#d8d0c8", "#f0ece8"], "glow": True},
+    })
+    save_animations(name, {"fly": anim(0.2, {
+        "wing_left": {"rotation": wave(0.2, 50, axis=2)}, "wing_right": {"rotation": wave(0.2, 50, math.pi, axis=2)},
+        "body": {"position": wave(0.2, 0.3, axis=1)}})})
+
+
+def blaze_pig():
+    m = Model("blaze_pig", 64, 64, (1.5, 1.5))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 8, 0], "root", cubes=[Cube([-4, 5, -6], [8, 7, 12], "hide")])
+    for i, (x, z) in enumerate(((-2, -3), (2, -1), (-1, 2), (2, 4))):
+        m.bone(f"rod_{i}", [x, 12, z], "body", cubes=[Cube([x - 0.5, 12, z - 0.5], [1, 4, 1], "rod")])
+    m.bone("head", [0, 10, -6], "body", cubes=[
+        Cube([-3.5, 7, -12], [7, 6, 6], "hide", detail=eyes("#fff0a0", y_frac=0.2, spacing=0.3)),
+        Cube([-2, 7.5, -13], [4, 3, 1], "snout"),
+    ])
+    m.bone("tail", [0, 11, 6], "body", cubes=[Cube([-0.5, 10, 6], [1, 1, 2], "rod")])
+    for name, x, z in (("leg_front_left", 2.5, -4), ("leg_front_right", -2.5, -4), ("leg_back_left", 2.5, 4), ("leg_back_right", -2.5, 4)):
+        m.bone(name, [x, 5, z], "root", cubes=[Cube([x - 1.5, 0, z - 1.5], [3, 5, 3], "leg")])
+    save_model(m, {
+        "hide": {"colors": ["#a8481a", "#c05a20", "#d06a28", "#e07e30"], "pattern": "patches", "speckle": ("#ffd040", 0.05),
+                 "speckle_glow": True},
+        "snout": {"colors": ["#f0a060", "#ffb878"]},
+        "rod": {"colors": ["#ffb020", "#ffd040", "#fff0a0"], "glow": True},
+        "leg": {"colors": ["#6a2a0e", "#7a3212"]},
+    })
+    legs = {
+        "leg_front_left": {"rotation": wave(0.8, 30)}, "leg_back_right": {"rotation": wave(0.8, 30)},
+        "leg_front_right": {"rotation": wave(0.8, 30, math.pi)}, "leg_back_left": {"rotation": wave(0.8, 30, math.pi)},
+    }
+    rods = {f"rod_{i}": {"position": wave(1.0, 0.6, i * 1.4, axis=1)} for i in range(4)}
+    walk = dict(legs, **{"tail": {"rotation": wave(0.8, 20, axis=1)}})
+    walk.update(rods)
+    idle = {"head": {"rotation": keys((0, [0, 0, 0]), (1.2, [20, 0, 0]), (2.0, [20, 8, 0]), (3.0, [0, 0, 0]))},
+            "tail": {"rotation": wave(3.0, 25, axis=1)}}
+    idle.update(rods)
+    save_animations("blaze_pig", {"idle": anim(3.0, idle), "walk": anim(0.8, walk)})
+
+
+def crystal_snail():
+    m = Model("crystal_snail", 64, 64, (1.5, 1.5))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 2, 0], "root", cubes=[Cube([-2.5, 0, -7], [5, 3, 13], "slime")])
+    m.bone("head", [0, 3, -6], "body", cubes=[
+        Cube([-2, 2, -9], [4, 4, 3], "slime", detail=eyes("#c9a6ff", y_frac=0.3, spacing=0.3)),
+        Cube([-1.5, 6, -8.5], [1, 3, 1], "stalk"), Cube([0.5, 6, -8.5], [1, 3, 1], "stalk"),
+    ])
+    m.bone("shell", [0, 3, 1], "body", cubes=[Cube([-3.5, 3, -3], [7, 7, 8], "shell")])
+    m.bone("crystals", [0, 10, 1], "shell", cubes=[
+        Cube([-1, 10, -1], [2, 4, 2], "crystal"), Cube([-3, 9.5, 2], [2, 3, 2], "crystal"),
+        Cube([1.5, 9.5, 1], [2, 3, 2], "crystal"), Cube([-0.5, 9, 3], [1.5, 2, 1.5], "crystal"),
+    ])
+    save_model(m, {
+        "slime": {"colors": ["#3a3442", "#463e50", "#52485e"], "speckle": ("#b06cff", 0.05), "speckle_glow": True},
+        "stalk": {"colors": ["#c9a6ff"], "glow": True},
+        "shell": {"colors": ["#1a1622", "#241e2e", "#2e263b", "#3a3049"], "pattern": "plates", "trim": "#8f62d6"},
+        "crystal": {"colors": ["#6a3fc0", "#8f62d6", "#c9a6ff"], "glow": True},
+    })
+    save_animations("crystal_snail", {
+        "idle": anim(4.0, {"head": {"rotation": wave(4.0, 6, axis=1)}, "shell": {"position": wave(4.0, 0.2, axis=1)}}),
+        "walk": anim(2.0, {"body": {"scale": ekeys((0, [1, 1, 1], None), (1.0, [1, 0.9, 1.12], "easeInOutSine"),
+                                                    (2.0, [1, 1, 1], "easeInOutSine"))},
+                           "head": {"position": wave(2.0, 0.6, axis=2)}}),
+    })
+
+
+def generate_v124():
+    basalt_golem()
+    ash_wyvern()
+    firefly("ember_firefly", ["#3a1a0a", "#4a2410"], ["#ff9a2a", "#ffc040", "#fff0a0"], "#ffd040")
+    firefly("soul_firefly", ["#0e1e24", "#16303a"], ["#2aa8c0", "#6af0ff", "#d8ffff"], "#7fe8ff")
+    blaze_pig()
+    crystal_snail()

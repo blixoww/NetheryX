@@ -1,0 +1,14 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "netheryx:onyx_depths"
+  ],
+  "spawners": [
+    {
+      "type": "netheryx:crystal_snail",
+      "weight": 15,
+      "minCount": 1,
+      "maxCount": 3
+    }
+  ]
+}

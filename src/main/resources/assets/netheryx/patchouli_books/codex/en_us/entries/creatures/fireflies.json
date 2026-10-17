@@ -1,0 +1,21 @@
+{
+  "name": "Fireflies",
+  "icon": "netheryx:ember_firefly_jar",
+  "category": "netheryx:creatures",
+  "sortnum": 103,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:ember_firefly",
+      "scale": 2.0,
+      "offset": 0.0,
+      "text": "$(l)Ember Fireflies$() swarm in the Hellwood Jungle, Ember Grove and Meadow; $(l)Soul Fireflies$() in soul valleys and the Petrified Forest. Harmless."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:ember_firefly_jar",
+      "text": "Right-click a firefly with a $(item)Glass Bottle$() to catch it in a $(l)jar$(): a lantern that lights like a real one (ember: 15, soul: 12).",
+      "link_recipe": false
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "netheryx:block/onyx_crystal_leaves"
+  },
+  "render_type": "minecraft:translucent"
+}

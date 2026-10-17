@@ -55,9 +55,15 @@
     "creature": [
       {
         "type": "netheryx:magma_crab",
-        "weight": 35,
+        "weight": 50,
         "minCount": 2,
-        "maxCount": 4
+        "maxCount": 5
+      },
+      {
+        "type": "netheryx:ember_cow",
+        "weight": 15,
+        "minCount": 2,
+        "maxCount": 3
       },
       {
         "type": "minecraft:strider",
@@ -80,7 +86,9 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_sulfur_springs"
+    ],
     [],
     [],
     [],

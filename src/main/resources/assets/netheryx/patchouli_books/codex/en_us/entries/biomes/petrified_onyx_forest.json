@@ -1,0 +1,13 @@
+{
+  "name": "Petrified Onyx Forest",
+  "icon": "netheryx:onyx_crystal_leaves",
+  "category": "netheryx:biomes",
+  "sortnum": 100,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A silent forest turned to stone: twisted $(item)Petrified Logs$() crowned with $(item)Crystallized Foliage$() and Onyx Clusters, on calcite and smooth basalt. Rich in onyx ore.$(br2)Creatures: $(l)Crystal Snails$(), Soul Fireflies, Onyx Cubes, wraiths.",
+      "title": "Forêt pétrifiée"
+    }
+  ]
+}

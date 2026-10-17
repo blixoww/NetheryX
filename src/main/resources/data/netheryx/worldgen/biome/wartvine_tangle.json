@@ -61,9 +61,15 @@
       },
       {
         "type": "netheryx:ember_cow",
-        "weight": 10,
+        "weight": 25,
         "minCount": 2,
-        "maxCount": 3
+        "maxCount": 4
+      },
+      {
+        "type": "netheryx:cinder_hen",
+        "weight": 20,
+        "minCount": 2,
+        "maxCount": 4
       },
       {
         "type": "minecraft:strider",
@@ -86,7 +92,10 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_wartvine_tangle",
+      "netheryx:fallen_log_wartvine_tangle"
+    ],
     [],
     [],
     [],

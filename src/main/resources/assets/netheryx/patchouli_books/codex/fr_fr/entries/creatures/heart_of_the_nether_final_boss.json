@@ -1,0 +1,24 @@
+{
+  "name": "Cœur du Nether (boss final)",
+  "icon": "netheryx:sealed_heart",
+  "category": "netheryx:creatures",
+  "sortnum": 96,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Chacun des trois boss de donjon lâche un trophée unique : l'$(item)Œil de sentinelle$() (Sentinelle d'onyx), le $(item)Sceau du sorcier$() (Sorcier infernal) et la $(item)Couronne du champion$() (Champion flétri). Ensemble, ils forment le $(item)Cœur scellé$().$(br2)Clic droit avec, $(l)uniquement dans le Nether$() : le Cœur du Nether s'éveille au-dessus de vous.",
+      "title": "Boss final"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:sealed_heart"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:nether_heart",
+      "scale": 0.3,
+      "offset": 0.0,
+      "text": "600 PV, vole. Salves de boules de feu, une $(l)pulsation$() ardente qui repousse, des $(l)pluies de météores$() annoncées. À 66 % et 33 %, il invoque des gardes et s'abrite derrière un bouclier tant qu'ils vivent. Dernière phase : $(l)geysers de lave$()."
+    }
+  ]
+}

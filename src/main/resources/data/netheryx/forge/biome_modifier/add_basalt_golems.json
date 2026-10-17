@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "netheryx:magma_rift",
+    "minecraft:basalt_deltas"
+  ],
+  "spawners": [
+    {
+      "type": "netheryx:basalt_golem",
+      "weight": 4,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

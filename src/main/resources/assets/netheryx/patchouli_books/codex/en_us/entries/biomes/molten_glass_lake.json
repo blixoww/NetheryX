@@ -1,0 +1,13 @@
+{
+  "name": "Molten Glass Lake",
+  "icon": "netheryx:molten_glass",
+  "category": "netheryx:biomes",
+  "sortnum": 99,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A glowing lake region: lava pools rimmed with obsidian, $(l)obsidian islands$() floating on the lava sea, spires of obsidian and crying obsidian, and floors of $(item)Molten Glass$() (hot: it burns like magma).$(br2)$(item)Molten Crystals$() give $(item)Molten Glass Shards$(), used for the $(l)Nether Lantern$(). Watch out for $(l)Basalt Golems$().",
+      "title": "Lac de verre en fusion"
+    }
+  ]
+}

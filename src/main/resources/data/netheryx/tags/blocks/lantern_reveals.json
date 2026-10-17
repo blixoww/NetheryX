@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:ancient_debris",
+    "minecraft:gilded_blackstone",
+    "minecraft:nether_gold_ore",
+    "minecraft:nether_quartz_ore",
+    "netheryx:onyx_ore",
+    "netheryx:sulfur_ore",
+    "netheryx:rich_quartz_ore"
+  ]
+}

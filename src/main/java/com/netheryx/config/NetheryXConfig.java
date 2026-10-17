@@ -31,9 +31,10 @@ public final class NetheryXConfig {
 
         builder.comment("Generation du monde").push("worldgen");
         REGION_WEIGHT = builder
-                .comment("Poids de la region NetheryX dans le Nether (TerraBlender). 0 desactive les biomes NetheryX.")
+                .comment("Poids de la region NetheryX dans le Nether (TerraBlender, la region vanilla pese 10).",
+                        "0 desactive les biomes NetheryX. (Nouvelle cle en 1.2.0 : l'ancienne 'netherRegionWeight' est ignoree.)")
                 .worldRestart()
-                .defineInRange("netherRegionWeight", 25, 0, 100);
+                .defineInRange("netherRegionWeightV2", 33, 0, 100);
         builder.pop();
 
         builder.comment("Equipements et objets").push("items");

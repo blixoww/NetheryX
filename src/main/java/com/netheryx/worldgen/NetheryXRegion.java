@@ -62,6 +62,12 @@ public class NetheryXRegion extends Region {
         add(mapper, 0.45F, 0.9F, 0.05F, ModBiomes.WARTVINE_TANGLE);
         add(mapper, 0.1F, -0.95F, 0.15F, ModBiomes.QUARTZ_REEF);
         add(mapper, 0.35F, -0.3F, 0.1F, ModBiomes.QUARTZ_REEF);
+        add(mapper, 0.65F, 0.6F, 0.1F, ModBiomes.HELLWOOD_JUNGLE);
+        add(mapper, 0.3F, 0.75F, 0.05F, ModBiomes.HELLWOOD_JUNGLE);
+        add(mapper, 0.95F, 0.5F, 0.15F, ModBiomes.MOLTEN_GLASS_LAKE);
+        add(mapper, 0.75F, -0.85F, 0.1F, ModBiomes.MOLTEN_GLASS_LAKE);
+        add(mapper, -0.7F, 0.15F, 0.2F, ModBiomes.PETRIFIED_ONYX_FOREST);
+        add(mapper, -0.35F, -0.25F, 0.15F, ModBiomes.PETRIFIED_ONYX_FOREST);
     }
 
     private void add(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper,

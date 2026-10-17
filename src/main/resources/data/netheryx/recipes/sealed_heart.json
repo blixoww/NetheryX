@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "OCO",
+    "SXW",
+    "OCO"
+  ],
+  "key": {
+    "O": {
+      "item": "netheryx:onyx_block"
+    },
+    "C": {
+      "item": "minecraft:crying_obsidian"
+    },
+    "S": {
+      "item": "netheryx:sentinel_eye"
+    },
+    "X": {
+      "item": "netheryx:champion_crown"
+    },
+    "W": {
+      "item": "netheryx:warlock_sigil"
+    }
+  },
+  "result": {
+    "item": "netheryx:sealed_heart",
+    "count": 1
+  }
+}

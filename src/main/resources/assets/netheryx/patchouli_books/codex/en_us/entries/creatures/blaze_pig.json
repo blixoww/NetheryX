@@ -1,0 +1,15 @@
+{
+  "name": "Blaze Pig",
+  "icon": "netheryx:blaze_pig_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 104,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:blaze_pig",
+      "scale": 0.9,
+      "offset": 0.0,
+      "text": "A peaceful little pig bristling with blaze rods. Breed it with $(item)Blaze Peppers$() or Fire Berries. It drops a little $(l)Blaze Powder$() every 5-10 minutes, and $(item)Blaze Pork$() (grilled: Fire Resistance)."
+    }
+  ]
+}

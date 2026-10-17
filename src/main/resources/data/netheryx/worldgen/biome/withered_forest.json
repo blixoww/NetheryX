@@ -81,7 +81,10 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_withered_forest",
+      "netheryx:fallen_log_withered_forest"
+    ],
     [],
     [],
     [],

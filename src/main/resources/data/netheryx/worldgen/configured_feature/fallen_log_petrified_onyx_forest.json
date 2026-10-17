@@ -1,0 +1,11 @@
+{
+  "type": "netheryx:fallen_log",
+  "config": {
+    "state": {
+      "Name": "netheryx:petrified_log",
+      "Properties": {
+        "axis": "x"
+      }
+    }
+  }
+}

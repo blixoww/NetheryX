@@ -1,0 +1,21 @@
+{
+  "name": "Lucioles",
+  "icon": "netheryx:ember_firefly_jar",
+  "category": "netheryx:creatures",
+  "sortnum": 103,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:ember_firefly",
+      "scale": 2.0,
+      "offset": 0.0,
+      "text": "Les $(l)Lucioles de braise$() volent en essaims dans la Jungle infernale, le Bosquet et la Prairie de braise ; les $(l)Lucioles des âmes$() dans les vallées des âmes et la Forêt pétrifiée. Inoffensives."
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:ember_firefly_jar",
+      "text": "Clic droit sur une luciole avec une $(item)Fiole vide$() pour l'attraper dans un $(l)bocal$() : une lanterne qui éclaire vraiment (braise : 15, âmes : 12).",
+      "link_recipe": false
+    }
+  ]
+}

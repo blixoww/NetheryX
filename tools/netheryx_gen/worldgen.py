@@ -226,8 +226,106 @@ def spawner(entity, weight, lo, hi):
     return {"type": mid(entity), "weight": weight, "minCount": lo, "maxCount": hi}
 
 
+# Reliefs propres a chaque biome (rochers, troncs couches) : des features distinctes par biome, placees a l'etape
+# "local_modifications", pour casser les grandes etendues plates sans risque de cycle d'ordre des features.
+ORGANIC = {
+    # biome : (bloc des rochers, rarete des rochers, tronc couche ou None, rarete des troncs)
+    "ember_meadow": ("minecraft:blackstone", 5, None, 0),
+    "ember_grove": ("minecraft:netherrack", 4, "ember_stem", 2),
+    "ashen_wastes": ("minecraft:basalt", 2, None, 0),
+    "onyx_depths": ("minecraft:blackstone", 2, None, 0),
+    "sulfur_springs": ("sulfur_rock", 2, None, 0),
+    "soulfire_marsh": ("minecraft:basalt", 4, "withered_stem", 6),
+    "withered_forest": ("minecraft:blackstone", 4, "withered_stem", 2),
+    "magma_rift": ("minecraft:smooth_basalt", 3, None, 0),
+    "marrow_thicket": ("minecraft:bone_block", 3, "marrow_stem", 3),
+    "rimefrost_chasm": ("rimestone", 2, None, 0),
+    "wartvine_tangle": ("minecraft:netherrack", 5, "wartstalk_stem", 2),
+    "quartz_reef": ("minecraft:smooth_quartz", 4, None, 0),
+    "hellwood_jungle": ("minecraft:blackstone", 4, "ember_stem", 1),
+    "molten_glass_lake": ("minecraft:obsidian", 3, None, 0),
+    "petrified_onyx_forest": ("minecraft:smooth_basalt", 3, "petrified_log", 2),
+}
+
+
+def block_state(name, **props):
+    data = {"Name": name if ":" in name else mid(name)}
+    if props:
+        data["Properties"] = {k: str(v).lower() for k, v in props.items()}
+    return data
+
+
+def generate_organic_features():
+    for biome_name, (rock, rock_rarity, log, log_rarity) in ORGANIC.items():
+        props = {"axis": "y"} if rock in ("minecraft:basalt", "minecraft:bone_block") else {}
+        configured(f"boulder_{biome_name}", mid("boulder"), {"state": block_state(rock, **props)})
+        placed(f"boulder_{biome_name}", f"boulder_{biome_name}", [
+            every_layer(1), {"type": "minecraft:rarity_filter", "chance": rock_rarity}, BIOME_FILTER])
+        if log:
+            configured(f"fallen_log_{biome_name}", mid("fallen_log"), {"state": block_state(log, axis="x")})
+            placed(f"fallen_log_{biome_name}", f"fallen_log_{biome_name}", [
+                every_layer(1), {"type": "minecraft:rarity_filter", "chance": log_rarity}, BIOME_FILTER])
+
+
+def organic(name):
+    if name not in ORGANIC:
+        return []
+    features = [mid(f"boulder_{name}")]
+    if ORGANIC[name][2]:
+        features.append(mid(f"fallen_log_{name}"))
+    return features
+
+
+def generate_hellwood_features():
+    """Jungle infernale : grands arbres de braise, fougeres, herbe ardente et lianes de braise."""
+    configured("hell_tree", mid("hell_tree"), {})
+    placed("hell_tree", "hell_tree", [every_layer(4), BIOME_FILTER])
+    jungle = {"type": "minecraft:weighted_state_provider", "entries": [
+        {"weight": 60, "data": state("blazing_grass")}, {"weight": 18, "data": state("nether_grass")},
+        {"weight": 8, "data": state("ember_bloom")}, {"weight": 6, "data": state("crimson_bellflower")},
+        {"weight": 5, "data": state("ember_roots")}, {"weight": 3, "data": state("fire_berry_bush", age=3)}]}
+    configured("hellwood_vegetation", "minecraft:nether_forest_vegetation", {"state_provider": jungle, "spread_width": 8, "spread_height": 4})
+    placed("hellwood_vegetation", "hellwood_vegetation", [every_layer(10), BIOME_FILTER])
+    configured("hellwood_vegetation_bonemeal", "minecraft:nether_forest_vegetation",
+               {"state_provider": jungle, "spread_width": 3, "spread_height": 1})
+    patch("hellfern_patch", state("hellfern", half="lower"), 40, 7, 3, 3)
+    configured("ember_vines_ceiling", "minecraft:block_column", {
+        "direction": "down", "allowed_placement": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"},
+        "prioritize_tip": True,
+        "layers": [{"height": {"type": "minecraft:uniform", "value": {"min_inclusive": 3, "max_inclusive": 12}},
+                    "provider": {"type": "minecraft:simple_state_provider", "state": state("ember_vines_plant")}},
+                   {"height": 1, "provider": {"type": "minecraft:simple_state_provider", "state": state("ember_vines", age=20)}}]})
+    placed("ember_vines_ceiling", "ember_vines_ceiling", [
+        {"type": "minecraft:count", "count": 60}, {"type": "minecraft:in_square"},
+        {"type": "minecraft:height_range", "height": {"type": "minecraft:uniform", "min_inclusive": {"above_bottom": 0},
+                                                      "max_inclusive": {"below_top": 0}}},
+        {"type": "minecraft:environment_scan", "direction_of_search": "up", "max_steps": 14,
+         "target_condition": {"type": "minecraft:solid"}, "allowed_search_condition": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"}},
+        {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -1}, BIOME_FILTER])
+
+
+def generate_v124_features():
+    """Lac de verre en fusion (ilots, aiguilles d'obsidienne, cristaux) et Foret petrifiee d'onyx."""
+    configured("obsidian_delta", "minecraft:delta_feature", {
+        "contents": {"Name": "minecraft:lava", "Properties": {"level": "0"}},
+        "rim": {"Name": "minecraft:obsidian"},
+        "size": {"type": "minecraft:uniform", "value": {"min_inclusive": 3, "max_inclusive": 8}},
+        "rim_size": {"type": "minecraft:uniform", "value": {"min_inclusive": 1, "max_inclusive": 2}}})
+    placed("obsidian_delta", "obsidian_delta", [every_layer(25), BIOME_FILTER])
+    configured("lava_island", mid("lava_island"), {})
+    placed("lava_island", "lava_island", [{"type": "minecraft:count", "count": 5}, {"type": "minecraft:in_square"},
+                                          {"type": "minecraft:height_range", "height": {"type": "minecraft:constant", "value": {"absolute": 31}}},
+                                          BIOME_FILTER])
+    configured("obsidian_spire", mid("obsidian_spire"), {})
+    placed("obsidian_spire", "obsidian_spire", [every_layer(2), BIOME_FILTER])
+    patch("molten_crystal_patch", state("molten_crystal", facing="up"), 24, 6, 3, 2)
+    configured("petrified_tree", mid("petrified_tree"), {})
+    placed("petrified_tree", "petrified_tree", [every_layer(5), BIOME_FILTER])
+
+
 def biome(name, fog, particle, probability, ambient, music, monsters, creatures, underground, vegetal, ambient_mobs=()):
     features = [[] for _ in range(11)]
+    features[2] = organic(name)
     features[7] = underground
     features[9] = vegetal
     effects = {
@@ -252,13 +350,13 @@ def biome(name, fog, particle, probability, ambient, music, monsters, creatures,
 def generate_biomes():
     strider = spawner("minecraft:strider", 60, 1, 2)
     biome("ember_grove", "#5c1a08", "netheryx:ember_spark", 0.02, "crimson_forest", "crimson_forest",
-          [spawner("ember_stalker", 50, 1, 2), spawner("fire_ghast", 15, 1, 1), spawner("minecraft:zombified_piglin", 10, 2, 4),
+          [spawner("ember_stalker", 50, 1, 2), spawner("fire_ghast", 30, 1, 1), spawner("minecraft:zombified_piglin", 10, 2, 4),
            spawner("minecraft:magma_cube", 3, 1, 2)],
           [strider],
           vanilla("patch_soul_fire"),
           [mid("ember_fungus"), mid("ember_vegetation"), mid("wild_blaze_pepper")])
     biome("ashen_wastes", "#5a5654", "netheryx:ash_flake", 0.06, "basalt_deltas", "basalt_deltas",
-          [spawner("ash_wraith", 45, 1, 2), spawner("fire_ghast", 20, 1, 1), spawner("minecraft:ghast", 10, 1, 1), spawner("minecraft:skeleton", 15, 2, 3),
+          [spawner("ash_wraith", 45, 1, 2), spawner("fire_ghast", 30, 1, 1), spawner("minecraft:ghast", 10, 1, 1), spawner("minecraft:skeleton", 15, 2, 3),
            spawner("minecraft:enderman", 1, 2, 4)],
           [strider],
           vanilla("ore_gravel_nether", "ore_blackstone"),
@@ -272,12 +370,12 @@ def generate_biomes():
     biome("sulfur_springs", "#6b5a14", "netheryx:sulfur_puff", 0.008, "nether_wastes", "nether_wastes",
           [spawner("minecraft:magma_cube", 40, 2, 4), spawner("minecraft:ghast", 20, 1, 1),
            spawner("minecraft:zombified_piglin", 30, 2, 4)],
-          [spawner("magma_crab", 35, 2, 4), strider],
+          [spawner("magma_crab", 50, 2, 5), spawner("ember_cow", 15, 2, 3), strider],
           vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone") + [mid("ore_sulfur_rock"), mid("ore_sulfur")],
           [mid("sulfur_cluster_patch")])
     biome("ember_meadow", "#6a2e16", "netheryx:ember_pollen", 0.012, "crimson_forest", "crimson_forest",
           [spawner("minecraft:zombified_piglin", 10, 2, 3), spawner("minecraft:magma_cube", 3, 1, 2)],
-          [spawner("ember_cow", 40, 2, 4), spawner("cinder_hen", 35, 2, 4), strider],
+          [spawner("ember_cow", 60, 2, 5), spawner("cinder_hen", 50, 2, 5), strider],
           vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone"),
           [mid("meadow_ember_fungus"), mid("meadow_vegetation"), mid("wild_cinder_wheat")],
           ambient_mobs=[spawner("soul_moth", 6, 1, 2)])
@@ -296,10 +394,10 @@ def generate_biomes():
           [mid("withered_fungus"), mid("withered_vegetation"), mid("glowcap_patch")],
           ambient_mobs=[spawner("soul_moth", 8, 1, 2)])
     biome("magma_rift", "#7a1e06", "netheryx:ember_spark", 0.012, "basalt_deltas", "basalt_deltas",
-          [spawner("minecraft:magma_cube", 50, 2, 4), spawner("fire_ghast", 25, 1, 1), spawner("onyx_cube", 15, 1, 2),
+          [spawner("minecraft:magma_cube", 50, 2, 4), spawner("fire_ghast", 40, 1, 1), spawner("onyx_cube", 15, 1, 2),
            spawner("minecraft:blaze", 10, 1, 2),
            spawner("ember_stalker", 10, 1, 1), spawner("minecraft:ghast", 10, 1, 1)],
-          [spawner("basalt_beetle", 25, 1, 3), strider],
+          [spawner("basalt_beetle", 40, 2, 4), strider],
           ["minecraft:small_basalt_columns", "minecraft:large_basalt_columns"]
           + vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone") + [mid("magma_delta")],
           [])
@@ -320,7 +418,7 @@ def generate_biomes():
           [mid("rime_spike"), mid("rime_crystal_patch")])
     biome("wartvine_tangle", "#4a0e0c", "minecraft:crimson_spore", 0.03, "crimson_forest", "crimson_forest",
           [spawner("minecraft:hoglin", 30, 2, 4), spawner("minecraft:piglin", 20, 2, 4), spawner("minecraft:zombified_piglin", 10, 2, 3)],
-          [spawner("cinder_lizard", 20, 1, 3), spawner("ember_cow", 10, 2, 3), strider],
+          [spawner("cinder_lizard", 20, 1, 3), spawner("ember_cow", 25, 2, 4), spawner("cinder_hen", 20, 2, 4), strider],
           vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone"),
           [mid("wart_tree"), mid("wart_vegetation"), mid("wartvine_ceiling")])
     biome("quartz_reef", "#3a2a30", "netheryx:quartz_glint", 0.01, "nether_wastes", "nether_wastes",
@@ -329,6 +427,26 @@ def generate_biomes():
           [spawner("magmafish", 25, 3, 5), spawner("magma_crab", 15, 2, 3), strider],
           vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone") + [mid("ore_rich_quartz")],
           [mid("quartz_spire")])
+    biome("hellwood_jungle", "#6e1c0a", "netheryx:ember_pollen", 0.02, "crimson_forest", "crimson_forest",
+          [spawner("ember_stalker", 35, 1, 2), spawner("fire_ghast", 30, 1, 1), spawner("minecraft:zombified_piglin", 10, 2, 3)],
+          [spawner("cinder_hen", 35, 2, 4), spawner("ember_cow", 30, 2, 4), spawner("cinder_lizard", 15, 1, 2), strider],
+          vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone"),
+          [mid("hell_tree"), mid("hellfern_patch"), mid("hellwood_vegetation"), mid("ember_vines_ceiling")],
+          ambient_mobs=[spawner("soul_moth", 8, 1, 2), spawner("ember_firefly", 25, 3, 6)])
+    biome("molten_glass_lake", "#8a2c08", "netheryx:ember_spark", 0.02, "basalt_deltas", "basalt_deltas",
+          [spawner("minecraft:magma_cube", 40, 2, 4), spawner("fire_ghast", 25, 1, 1), spawner("minecraft:blaze", 10, 1, 2),
+           spawner("basalt_golem", 3, 1, 1)],
+          [spawner("blaze_pig", 25, 2, 4), spawner("magmafish", 40, 3, 5), strider],
+          vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone"),
+          [mid("obsidian_delta"), mid("lava_island"), mid("obsidian_spire"), mid("molten_crystal_patch")],
+          ambient_mobs=[spawner("ember_firefly", 10, 2, 4)])
+    biome("petrified_onyx_forest", "#241a30", "netheryx:onyx_glint", 0.015, "soul_sand_valley", "soul_sand_valley",
+          [spawner("onyx_cube", 30, 1, 3), spawner("ash_wraith", 20, 1, 2), spawner("minecraft:skeleton", 15, 2, 3),
+           spawner("minecraft:enderman", 5, 1, 2)],
+          [spawner("crystal_snail", 30, 2, 4), strider],
+          vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone") + [mid("ore_onyx_rich")],
+          [mid("petrified_tree"), mid("onyx_cluster_patch"), mid("glowcap_patch")],
+          ambient_mobs=[spawner("soul_firefly", 15, 3, 6)])
 
 
 def biome_modifier(name, data):
@@ -353,9 +471,9 @@ def generate_biome_modifiers():
     # Les creatures "standard" (pas les boss) apparaissent ici ou la dans tout le Nether, biomes moddes compris
     biome_modifier("add_netheryx_spawns_everywhere", {"type": "forge:add_spawns", "biomes": "#minecraft:is_nether", "spawners": [
         spawner("ember_stalker", 8, 1, 2), spawner("ash_wraith", 6, 1, 1), spawner("withered_knight", 6, 1, 2),
-        spawner("fire_ghast", 10, 1, 1), spawner("onyx_cube", 8, 1, 3),
-        spawner("magma_crab", 6, 1, 3), spawner("basalt_beetle", 4, 1, 2), spawner("ember_cow", 8, 2, 3),
-        spawner("cinder_hen", 8, 2, 3), spawner("soul_moth", 6, 1, 3), spawner("magmafish", 10, 2, 4)]})
+        spawner("fire_ghast", 22, 1, 1), spawner("onyx_cube", 8, 1, 3),
+        spawner("magma_crab", 16, 2, 3), spawner("basalt_beetle", 12, 1, 3), spawner("ember_cow", 22, 2, 4),
+        spawner("cinder_hen", 20, 2, 4), spawner("soul_moth", 6, 1, 3), spawner("magmafish", 10, 2, 4)]})
     biome_modifier("add_v120_vanilla_spawns_basalt", {"type": "forge:add_spawns", "biomes": "minecraft:basalt_deltas", "spawners": [
         spawner("basalt_burrower", 15, 1, 1), spawner("cinder_lizard", 6, 1, 2)]})
     biome_modifier("add_v120_vanilla_spawns_soul", {"type": "forge:add_spawns", "biomes": "minecraft:soul_sand_valley", "spawners": [
@@ -364,6 +482,19 @@ def generate_biome_modifiers():
                                               "spawners": [spawner("basalt_burrower", 12, 1, 1)]})
     biome_modifier("add_v120_lantern_bearers", {"type": "forge:add_spawns", "biomes": [mid(b) for b in ("soulfire_marsh", "withered_forest")],
                                                 "spawners": [spawner("lantern_bearer", 8, 1, 2)]})
+    biome_modifier("add_fireflies_ember", {"type": "forge:add_spawns", "biomes": [mid("ember_grove"), mid("ember_meadow"),
+                                                                                  "minecraft:crimson_forest"],
+                                           "spawners": [spawner("ember_firefly", 12, 3, 6)]})
+    biome_modifier("add_fireflies_soul", {"type": "forge:add_spawns", "biomes": [mid("soulfire_marsh"), "minecraft:soul_sand_valley",
+                                                                                 "minecraft:warped_forest"],
+                                          "spawners": [spawner("soul_firefly", 12, 3, 6)]})
+    biome_modifier("add_blaze_pigs", {"type": "forge:add_spawns", "biomes": [mid("magma_rift"), mid("ember_grove"), mid("hellwood_jungle"),
+                                                                             "minecraft:nether_wastes"],
+                                      "spawners": [spawner("blaze_pig", 20, 2, 4)]})
+    biome_modifier("add_crystal_snails", {"type": "forge:add_spawns", "biomes": [mid("onyx_depths")],
+                                          "spawners": [spawner("crystal_snail", 15, 1, 3)]})
+    biome_modifier("add_basalt_golems", {"type": "forge:add_spawns", "biomes": [mid("magma_rift"), "minecraft:basalt_deltas"],
+                                         "spawners": [spawner("basalt_golem", 4, 1, 1)]})
     biome_modifier("add_v120_lizards", {"type": "forge:add_spawns", "biomes": [mid(b) for b in ("magma_rift", "ember_meadow")],
                                         "spawners": [spawner("cinder_lizard", 8, 1, 2)]})
 
@@ -376,7 +507,7 @@ STRUCTURES = {
     "withered_catacombs": (18, 7, 518230457, 8, 45, 12, 38, "beard_box"),
     "traveler_camp": (9, 3, 734029118, 6, 33, 0, 12, "beard_thin"),
     "nether_garden": (10, 4, 192837465, 6, 33, 0, 14, "beard_thin"),
-    "hidden_cache": (8, 3, 556172839, 4, 40, 6, 6, "beard_thin"),
+    "hidden_cache": (5, 2, 556172839, 4, 40, 6, 6, "beard_thin"),
     "nomad_caravan": (14, 5, 902817364, 6, 33, 0, 20, "beard_thin"),
 }
 
@@ -426,6 +557,9 @@ def generate_structures():
 def generate():
     generate_features()
     generate_features_v120()
+    generate_organic_features()
+    generate_hellwood_features()
+    generate_v124_features()
     generate_biomes()
     generate_biome_modifiers()
     generate_structures()

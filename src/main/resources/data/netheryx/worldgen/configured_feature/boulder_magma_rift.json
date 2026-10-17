@@ -1,0 +1,8 @@
+{
+  "type": "netheryx:boulder",
+  "config": {
+    "state": {
+      "Name": "minecraft:smooth_basalt"
+    }
+  }
+}

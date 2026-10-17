@@ -15,6 +15,9 @@ import com.netheryx.item.OnyxArmorItem;
 import com.netheryx.item.OnyxBowItem;
 import com.netheryx.item.OnyxHammerItem;
 import com.netheryx.item.RecallStoneItem;
+import com.netheryx.item.SealedHeartItem;
+import com.netheryx.item.WyvernEggItem;
+import com.netheryx.item.NetherLanternItem;
 import com.netheryx.item.SoulCompassItem;
 import com.netheryx.item.SoulScytheItem;
 import com.netheryx.item.SulfurBombItem;
@@ -205,6 +208,33 @@ public final class ModItems {
     public static final RegistryObject<Item> ONYX_INFUSION_TEMPLATE = register("onyx_infusion_template",
             () -> new TooltipItem(new Item.Properties().rarity(Rarity.UNCOMMON).fireResistant()));
     /** Objet d'administration : non fabricable, reserve au mode creatif / aux operateurs. */
+    public static final RegistryObject<Item> ONYX_APPLE = register("onyx_apple",
+            () -> new TooltipItem(new Item.Properties().rarity(Rarity.RARE).fireResistant().food(ModFoods.ONYX_APPLE)) {
+                @Override
+                public boolean isFoil(net.minecraft.world.item.ItemStack stack) {
+                    return true;
+                }
+            });
+    // --- Boss final : trophees, invocation et armure abyssale ---------------------------------------
+    public static final RegistryObject<Item> SENTINEL_EYE = register("sentinel_eye",
+            () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> WARLOCK_SIGIL = register("warlock_sigil",
+            () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> CHAMPION_CROWN = register("champion_crown",
+            () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> SEALED_HEART = register("sealed_heart",
+            () -> new SealedHeartItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> ABYSSAL_SHARD = register("abyssal_shard",
+            () -> new Item(new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> ABYSSAL_UPGRADE_TEMPLATE = register("abyssal_upgrade_template",
+            () -> new TooltipItem(new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> ABYSSAL_HELMET = armor("abyssal_helmet", ModArmorMaterials.ABYSSAL, ArmorItem.Type.HELMET, "abyssal");
+    public static final RegistryObject<Item> ABYSSAL_CHESTPLATE = armor("abyssal_chestplate", ModArmorMaterials.ABYSSAL, ArmorItem.Type.CHESTPLATE, "abyssal");
+    public static final RegistryObject<Item> ABYSSAL_LEGGINGS = armor("abyssal_leggings", ModArmorMaterials.ABYSSAL, ArmorItem.Type.LEGGINGS, "abyssal");
+    public static final RegistryObject<Item> ABYSSAL_BOOTS = armor("abyssal_boots", ModArmorMaterials.ABYSSAL, ArmorItem.Type.BOOTS, "abyssal");
+    public static final RegistryObject<Item> NETHER_HEART_SPAWN_EGG = register("nether_heart_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.NETHER_HEART, 0x2A0606, 0xFF6A1A, new Item.Properties()));
+
     public static final RegistryObject<Item> ADMIN_COMPASS = register("admin_compass",
             () -> new AdminCompassItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
     public static final RegistryObject<Item> FIRE_VEIL = register("fire_veil",
@@ -242,6 +272,30 @@ public final class ModItems {
     private static RegistryObject<Item> armor(String name, ModArmorMaterials material, ArmorItem.Type type, String set) {
         return register(name, () -> new SetBonusArmorItem(material, type, new Item.Properties().fireResistant(), set));
     }
+
+    // --- Creatures, biomes et outils de la 1.2.0 (suite) ------------------------------------------
+    public static final RegistryObject<Item> BLAZE_PORK = register("blaze_pork",
+            () -> new Item(new Item.Properties().food(ModFoods.BLAZE_PORK)));
+    public static final RegistryObject<Item> COOKED_BLAZE_PORK = register("cooked_blaze_pork",
+            () -> new Item(new Item.Properties().food(ModFoods.COOKED_BLAZE_PORK)));
+    public static final RegistryObject<Item> MOLTEN_SHARD = register("molten_shard",
+            () -> new Item(new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> NETHER_LANTERN = register("nether_lantern",
+            () -> new NetherLanternItem(new Item.Properties().durability(64).rarity(Rarity.RARE).fireResistant()));
+    public static final RegistryObject<Item> ASH_WYVERN_EGG = register("ash_wyvern_egg",
+            () -> new WyvernEggItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> BASALT_GOLEM_SPAWN_EGG = register("basalt_golem_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.BASALT_GOLEM, 0x2E2C30, 0xFF7A1A, new Item.Properties()));
+    public static final RegistryObject<Item> ASH_WYVERN_SPAWN_EGG = register("ash_wyvern_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.ASH_WYVERN, 0x4A4646, 0xC8C0B8, new Item.Properties()));
+    public static final RegistryObject<Item> EMBER_FIREFLY_SPAWN_EGG = register("ember_firefly_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.EMBER_FIREFLY, 0x3A1A0A, 0xFFC040, new Item.Properties()));
+    public static final RegistryObject<Item> SOUL_FIREFLY_SPAWN_EGG = register("soul_firefly_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.SOUL_FIREFLY, 0x1A2A30, 0x6AF0FF, new Item.Properties()));
+    public static final RegistryObject<Item> BLAZE_PIG_SPAWN_EGG = register("blaze_pig_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.BLAZE_PIG, 0xC8601A, 0xFFD040, new Item.Properties()));
+    public static final RegistryObject<Item> CRYSTAL_SNAIL_SPAWN_EGG = register("crystal_snail_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.CRYSTAL_SNAIL, 0x3A3442, 0xB06CFF, new Item.Properties()));
 
     private static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {
         return ITEMS.register(name, item);

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "netheryx:block/petrified_log_top",
+    "side": "netheryx:block/petrified_log"
+  }
+}

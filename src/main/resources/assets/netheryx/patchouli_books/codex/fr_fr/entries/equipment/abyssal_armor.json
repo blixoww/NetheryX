@@ -1,0 +1,19 @@
+{
+  "name": "Armure abyssale",
+  "icon": "netheryx:abyssal_chestplate",
+  "category": "netheryx:equipment",
+  "sortnum": 97,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Le Cœur du Nether lâche des $(item)Éclats abyssaux$() et un $(item)Gabarit d'amélioration abyssale$(). À la Table de forgeron, gabarit + pièce d'armure en onyx + éclat = pièce abyssale, la meilleure armure du mod.$(br2)$(l)Ensemble complet$() : résistance au feu, Résistance, Force dans le Nether et immunité au Flétrissement.",
+      "title": "Armure abyssale"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:abyssal_upgrade_template",
+      "text": "Se duplique avec 7 éclats d'onyx et 1 éclat abyssal.",
+      "link_recipe": true
+    }
+  ]
+}

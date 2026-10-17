@@ -41,7 +41,7 @@
       },
       {
         "type": "netheryx:fire_ghast",
-        "weight": 20,
+        "weight": 30,
         "minCount": 1,
         "maxCount": 1
       },
@@ -86,7 +86,9 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_ashen_wastes"
+    ],
     [],
     [],
     [],

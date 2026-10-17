@@ -1,12 +1,13 @@
 {
   "name": "Cache secrète",
-  "icon": "minecraft:soul_lantern",
+  "icon": "minecraft:soul_campfire",
   "category": "netheryx:structures",
-  "sortnum": 38,
+  "sortnum": 95,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Un petit cairn avec une lanterne des âmes signale une trappe : en dessous, une salle enterrée avec deux coffres au trésor."
+      "text": "Petites salles au trésor enterrées, désormais fréquentes. Cherchez une $(l)colonne de fumée bleue$() qui s'élève d'un feu de camp des âmes, à côté d'un petit cairn surmonté d'une lanterne : la trappe est juste à côté. La $(item)Boussole des âmes$() peut aussi les pister.",
+      "title": "Cache secrète"
     }
   ]
 }

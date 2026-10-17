@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "netheryx:block/hellfern_bottom"
+    },
+    "half=upper": {
+      "model": "netheryx:block/hellfern_top"
+    }
+  }
+}

@@ -49,15 +49,15 @@
     "creature": [
       {
         "type": "netheryx:ember_cow",
-        "weight": 40,
+        "weight": 60,
         "minCount": 2,
-        "maxCount": 4
+        "maxCount": 5
       },
       {
         "type": "netheryx:cinder_hen",
-        "weight": 35,
+        "weight": 50,
         "minCount": 2,
-        "maxCount": 4
+        "maxCount": 5
       },
       {
         "type": "minecraft:strider",
@@ -87,7 +87,9 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_ember_meadow"
+    ],
     [],
     [],
     [],

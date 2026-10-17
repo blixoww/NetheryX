@@ -1,0 +1,15 @@
+{
+  "name": "Crystal Snail",
+  "icon": "netheryx:crystal_snail_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 105,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:crystal_snail",
+      "scale": 0.9,
+      "offset": 0.0,
+      "text": "Slow and armored. Onyx crystals grow on its shell: $(l)shear it$() for Onyx Shards, they grow back in a few minutes. Breed it with $(item)Glowcaps$()."
+    }
+  ]
+}

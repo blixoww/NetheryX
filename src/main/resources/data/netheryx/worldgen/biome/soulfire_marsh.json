@@ -87,7 +87,10 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_soulfire_marsh",
+      "netheryx:fallen_log_soulfire_marsh"
+    ],
     [],
     [],
     [],

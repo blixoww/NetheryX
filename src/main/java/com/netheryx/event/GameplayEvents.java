@@ -73,6 +73,22 @@ public final class GameplayEvents {
         if (player.tickCount % 100 == 0) {
             repairResilient(player);
         }
+        if (player.tickCount % 20 == 0 && SetBonusArmorItem.hasFullSet(player, ModArmorMaterials.ABYSSAL)) {
+            // Armure abyssale : resistance au feu, Resistance I, et Force I dans le Nether
+            keep(player, net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 0);
+            keep(player, net.minecraft.world.effect.MobEffects.DAMAGE_RESISTANCE, 0);
+            if (player.level().dimension() == net.minecraft.world.level.Level.NETHER) {
+                keep(player, net.minecraft.world.effect.MobEffects.DAMAGE_BOOST, 0);
+            }
+            player.removeEffect(net.minecraft.world.effect.MobEffects.WITHER);
+        }
+    }
+
+    private static void keep(Player player, net.minecraft.world.effect.MobEffect effect, int amplifier) {
+        net.minecraft.world.effect.MobEffectInstance current = player.getEffect(effect);
+        if (current == null || current.getDuration() < 60) {
+            player.addEffect(new net.minecraft.world.effect.MobEffectInstance(effect, 120, amplifier, true, false, true));
+        }
     }
 
     private static void updateGroundSpeed(Player player) {

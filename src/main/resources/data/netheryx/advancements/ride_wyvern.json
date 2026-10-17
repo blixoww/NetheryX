@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:ash_wyvern_egg"
+    },
+    "title": {
+      "translate": "advancements.netheryx.ride_wyvern.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.ride_wyvern.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "ride": {
+      "trigger": "minecraft:started_riding",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "vehicle": {
+                "type": "netheryx:ash_wyvern"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:nether_heart"
+}

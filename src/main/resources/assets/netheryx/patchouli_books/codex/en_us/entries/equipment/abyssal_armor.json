@@ -1,0 +1,19 @@
+{
+  "name": "Abyssal Armor",
+  "icon": "netheryx:abyssal_chestplate",
+  "category": "netheryx:equipment",
+  "sortnum": 97,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The Heart of the Nether drops $(item)Abyssal Shards$() and an $(item)Abyssal Upgrade Template$(). At a Smithing Table, template + Onyx armor piece + shard = Abyssal piece, the strongest armor of the mod.$(br2)$(l)Full set$(): permanent Fire Resistance, Resistance, Strength in the Nether and immunity to Wither.",
+      "title": "Armure abyssale"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:abyssal_upgrade_template",
+      "text": "Duplicate it with 7 Onyx Shards and 1 Abyssal Shard.",
+      "link_recipe": true
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Forêt pétrifiée d'onyx",
+  "icon": "netheryx:onyx_crystal_leaves",
+  "category": "netheryx:biomes",
+  "sortnum": 100,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Une forêt silencieuse changée en pierre : des $(item)Bûches pétrifiées$() tordues, couronnées de $(item)Feuillage cristallisé$() et d'amas d'onyx, sur de la calcite et du basalte lisse. Riche en minerai d'onyx.$(br2)Créatures : $(l)Escargots de cristal$(), lucioles des âmes, cubes d'onyx, spectres.",
+      "title": "Forêt pétrifiée"
+    }
+  ]
+}

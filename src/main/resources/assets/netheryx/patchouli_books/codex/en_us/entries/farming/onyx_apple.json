@@ -1,0 +1,13 @@
+{
+  "name": "Onyx Apple",
+  "icon": "netheryx:onyx_apple",
+  "category": "netheryx:farming",
+  "sortnum": 98,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_apple",
+      "text": "A golden apple wrapped in onyx: Regeneration II, Absorption II, Resistance and long Fire Resistance."
+    }
+  ]
+}

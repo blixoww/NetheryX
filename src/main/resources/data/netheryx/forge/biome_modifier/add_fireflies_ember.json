@@ -1,0 +1,16 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "netheryx:ember_grove",
+    "netheryx:ember_meadow",
+    "minecraft:crimson_forest"
+  ],
+  "spawners": [
+    {
+      "type": "netheryx:ember_firefly",
+      "weight": 12,
+      "minCount": 3,
+      "maxCount": 6
+    }
+  ]
+}

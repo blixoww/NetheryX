@@ -1,0 +1,15 @@
+{
+  "name": "Cochon de blaze",
+  "icon": "netheryx:blaze_pig_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 104,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:blaze_pig",
+      "scale": 0.9,
+      "offset": 0.0,
+      "text": "Un petit cochon paisible hérissé de bâtonnets de blaze. S'élève avec des $(item)Piments de blaze$() ou des baies de feu. Il perd un peu de $(l)poudre de blaze$() toutes les 5 à 10 minutes, et donne des $(item)Côtelettes de blaze$() (grillées : résistance au feu)."
+    }
+  ]
+}

@@ -41,7 +41,7 @@
       },
       {
         "type": "netheryx:fire_ghast",
-        "weight": 15,
+        "weight": 30,
         "minCount": 1,
         "maxCount": 1
       },
@@ -80,7 +80,10 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_ember_grove",
+      "netheryx:fallen_log_ember_grove"
+    ],
     [],
     [],
     [],

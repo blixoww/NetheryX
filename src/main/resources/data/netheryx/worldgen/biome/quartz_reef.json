@@ -92,7 +92,9 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_quartz_reef"
+    ],
     [],
     [],
     [],

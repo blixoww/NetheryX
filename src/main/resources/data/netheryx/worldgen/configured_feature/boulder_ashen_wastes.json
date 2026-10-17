@@ -1,0 +1,11 @@
+{
+  "type": "netheryx:boulder",
+  "config": {
+    "state": {
+      "Name": "minecraft:basalt",
+      "Properties": {
+        "axis": "y"
+      }
+    }
+  }
+}

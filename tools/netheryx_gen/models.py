@@ -305,6 +305,13 @@ def gen_vines(name, tex, item):
         item_model(name, layer0=block_tex(tex))
 
 
+def gen_double_plant(name):
+    lower = model(f"{name}_bottom", "minecraft:block/cross", {"cross": block_tex(f"{name}_bottom")}, CUTOUT)
+    upper = model(f"{name}_top", "minecraft:block/cross", {"cross": block_tex(f"{name}_top")}, CUTOUT)
+    blockstate(name, {"half=lower": v(lower), "half=upper": v(upper)})
+    item_model(name, layer0=block_tex(f"{name}_top"))
+
+
 def gen_fruit_vines(name, tex):
     plain = model(name, "minecraft:block/cross", {"cross": block_tex(tex)}, CUTOUT)
     lit = model(f"{name}_lit", "minecraft:block/cross", {"cross": block_tex(f"{tex}_lit")}, CUTOUT)
@@ -376,17 +383,31 @@ NETHERRACK = "minecraft:block/netherrack"
 SIDES = ("north", "south", "east", "west")
 
 
-def layered(name, base_faces, overlay_faces, textures):
+def layered(name, base_faces, overlay_faces, textures, with_state=True):
     """Modele a deux couches : la netherrack vanilla dessous, la texture du mod (avec transparence) par-dessus."""
     def element(faces):
         return {"from": [0, 0, 0], "to": [16, 16, 16],
                 "faces": {d: {"texture": tex, "cullface": d} for d, tex in faces.items()}}
-    data = {"parent": "minecraft:block/block", "render_type": CUTOUT, "textures": dict(textures, particle=NETHERRACK),
+    data = {"parent": "minecraft:block/block", "render_type": CUTOUT, "textures": dict(textures, particle=textures.get("base", NETHERRACK)),
             "elements": [element(base_faces), element(overlay_faces)]}
     write_json(asset_path("models", "block", f"{name}.json"), data)
     m = f"{MOD_ID}:block/{name}"
-    blockstate(name, {"": v(m)})
+    if with_state:
+        blockstate(name, {"": v(m)})
     return m
+
+
+def gen_warded(name):
+    bases = {"onyx": f"{MOD_ID}:block/onyx_bricks", "magma": f"{MOD_ID}:block/magma_bricks",
+             "blackstone": "minecraft:block/polished_blackstone_bricks"}
+    all_faces = ("north", "south", "east", "west", "up", "down")
+    variants = {}
+    for variant, base in bases.items():
+        model_name = f"{name}_{variant}"
+        layered(model_name, {d: "#base" for d in all_faces}, {d: "#overlay" for d in all_faces},
+                {"base": base, "overlay": block_tex("warded_runes")}, with_state=False)
+        variants[f"variant={variant}"] = v(f"{MOD_ID}:block/{model_name}")
+    blockstate(name, variants)
 
 
 def gen_nether_ore(name):
@@ -434,12 +455,16 @@ def generate_blocks():
             item_parent = gen_log(name, extra, wood=True)
         elif kind == "nylium":
             item_parent = gen_soil(name)
+        elif kind == "warded":
+            gen_warded(name)
         elif kind == "nether_ore":
             item_parent = gen_nether_ore(name)
         elif kind == "cross":
             gen_cross(name)
         elif kind == "cluster":
             gen_cluster(name)
+        elif kind == "double_plant":
+            gen_double_plant(name)
         elif kind == "anvil":
             item_parent = gen_anvil(name)
         elif kind == "furnace":

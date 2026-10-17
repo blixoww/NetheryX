@@ -44,11 +44,48 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - **Verticalité des donjons** : tour du trésor au sommet de la Citadelle d'onyx et balcons au-dessus de l'arène ;
   flèche du trésor sur le toit du Sanctuaire infernal.
 - 2 particules (poussière de givre, éclat de quartz), 5 progrès, nouvelles pages du Codex (tactiques des boss).
+- **Boss final : le Cœur du Nether** (600 PV, vole) : salves de boules de feu, pulsation qui repousse, pluies de météores
+  annoncées, vagues de gardes avec bouclier à 66 % et 33 %, geysers de lave en dernière phase.
+  Chaque boss de donjon lâche un **trophée unique** (Œil de sentinelle, Sceau du sorcier, Couronne du champion) ;
+  les trois forment le **Cœur scellé**, qui invoque le boss par clic droit (**uniquement dans le Nether**).
+- **Armure abyssale** (butin du boss final, amélioration de l'armure en onyx à la table de forgeron) : résistance au feu,
+  Résistance, Force dans le Nether et immunité au Flétrissement.
+- **Pomme d'onyx** : Régénération II, Absorption II, Résistance et longue résistance au feu.
+- **Jungle infernale** : nouveau biome forestier, arbres infernaux géants à contreforts et cimes embrasées,
+  **fougères infernales** (2 blocs), **herbe ardente** et **lianes de braise** lumineuses et grimpables.
+- **Maçonnerie scellée** : les salles au trésor sont entièrement entourées de briques runiques indestructibles
+  (impossible de contourner le boss en creusant) ; elles redeviennent des briques normales à la mort du boss.
+- **6 nouvelles créatures** (GeckoLib) :
+  - **Golem de basalte** (mini-boss, 160 PV, barre de boss) : frappe au sol annoncée, salves d'éclats de magma,
+    résiste aux projectiles, cœur en fusion sous 50 % (Failles de magma, deltas de basalte, Lac de verre en fusion).
+  - **Wyverne de cendre** : monture volante qui éclot de l'œuf lâché par le Cœur du Nether ; on la dirige du regard,
+    elle obéit à son propriétaire (attendre / suivre), chute lente si l'on descend en vol.
+  - **Lucioles de braise** et **lucioles des âmes** : essaims lumineux ; une fiole les capture dans un **bocal** qui
+    éclaire comme une lanterne.
+  - **Cochon de blaze** : animal paisible, poudre de blaze renouvelable, côtelettes (grillées : résistance au feu).
+  - **Escargot de cristal** : se tond aux cisailles pour des éclats d'onyx qui repoussent.
+- **2 nouveaux biomes** :
+  - **Lac de verre en fusion** : bassins de lave cerclés d'obsidienne, îlots d'obsidienne sur la mer de lave,
+    aiguilles d'obsidienne, sols de **verre en fusion** et **cristaux en fusion**.
+  - **Forêt pétrifiée d'onyx** : arbres en **bois pétrifié** couronnés de **feuillage cristallisé** et d'amas d'onyx.
+- **Lanterne du Nether** : révèle à travers les murs les minerais à 16 blocs pendant 10 s (contours colorés par type).
+- 3 progrès (wyverne, golem, bocal de lucioles) et pages du Codex.
+- **Coffres mimiques dans chaque donjon** (dont les balcons de la Citadelle, qui ont aussi chacun un coffre).
 
 ### Modifié
 - **Onyx plus fort que la netherite** : bonus de dégâts 5 (épée : 9), vitesse 10 ; armure 4/9/7/4, robustesse 4.
   L'armure complète donne aussi la **résistance au feu**.
-- **Biomes plus fréquents** : poids de région 25 par défaut et deux points climatiques par biome.
+- **Biomes plus fréquents** : poids de région **33** par défaut (nouvelle clé `netherRegionWeightV2`) et deux points
+  climatiques par biome.
+- **Biomes plus organiques** : rochers et troncs couchés propres à chaque biome, sol de la Jungle varié.
+- **Apparitions augmentées** : vaches de braise, poules de cendre, crabes de magma, scarabées de basalte, ghasts de feu.
+- **Champion flétri** : ses coups infligent Lenteur, Faiblesse et Cécité.
+- **Cache secrète** beaucoup plus fréquente, signalée par une colonne de fumée bleue (feu de camp des âmes) et
+  repérable avec la Boussole des âmes.
+- **Boussoles** (des âmes et du créateur) : pagination adaptée à la taille de l'écran, défilement à la molette.
+- Citadelle d'onyx : lanternes des balcons accrochées au plafond, plus de blocs d'onyx dans la salle du boss.
+- **Icônes d'armure v3** : silhouette propre à chaque set (cimier de cristal, flammes, capuche, cornes de scarabée,
+  cornes abyssales), ombrage et pierres d'accent.
 - **Butins des coffres fortement réduits** (donjons, trésors des boss, petites structures, coffres mimiques, coffres vanilla).
 - Enclume et four en onyx retexturés d'après les textures vanilla.
 - Les minerais d'onyx, de soufre et de quartz riche ainsi que les flancs des nyliums et de l'herbe du Nether sont dessinés
@@ -58,6 +95,7 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - Onglet créatif : tous les objets et blocs (boussole du créateur comprise), armure de carapace regroupée.
 
 ### Corrigé
+- Collision du cube d'onyx (boîte de collision alignée sur le modèle).
 - Les passagers du bateau d'obsidienne ne brûlent plus sur la lave.
 - Animations des boss avec courbes d'accélération (GeckoLib).
 - **Textures façon diamant** : outils et armes en onyx (manche du Nether et pommeau en gemme), icônes de toutes les armures

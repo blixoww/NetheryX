@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "MM",
+    "MM"
+  ],
+  "key": {
+    "M": {
+      "item": "netheryx:molten_shard"
+    }
+  },
+  "result": {
+    "item": "netheryx:molten_glass",
+    "count": 1
+  }
+}

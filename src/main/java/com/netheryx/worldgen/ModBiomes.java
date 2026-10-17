@@ -19,6 +19,9 @@ public final class ModBiomes {
     public static final ResourceKey<Biome> RIMEFROST_CHASM = key("rimefrost_chasm");
     public static final ResourceKey<Biome> WARTVINE_TANGLE = key("wartvine_tangle");
     public static final ResourceKey<Biome> QUARTZ_REEF = key("quartz_reef");
+    public static final ResourceKey<Biome> HELLWOOD_JUNGLE = key("hellwood_jungle");
+    public static final ResourceKey<Biome> MOLTEN_GLASS_LAKE = key("molten_glass_lake");
+    public static final ResourceKey<Biome> PETRIFIED_ONYX_FOREST = key("petrified_onyx_forest");
 
     private ModBiomes() {
     }

@@ -6,6 +6,7 @@
     "netheryx:withered_catacombs",
     "minecraft:bastion_remnant",
     "minecraft:fortress",
-    "netheryx:nomad_caravan"
+    "netheryx:nomad_caravan",
+    "netheryx:hidden_cache"
   ]
 }

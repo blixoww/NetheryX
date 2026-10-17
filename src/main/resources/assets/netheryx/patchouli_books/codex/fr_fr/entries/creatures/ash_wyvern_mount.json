@@ -1,0 +1,20 @@
+{
+  "name": "Wyverne de cendre (monture)",
+  "icon": "netheryx:ash_wyvern_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 102,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:ash_wyvern",
+      "scale": 0.45,
+      "offset": 0.0,
+      "text": "Éclot de l'$(item)Œuf de wyverne de cendre$() lâché par le Cœur du Nether, et vous appartient.$(li)Clic droit : la monter.$(li)Accroupi + clic droit : attendre / suivre.$(li)La viande la soigne."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Voler$() : avancez en regardant vers le haut pour décoller, vers le bas pour piquer, relâchez pour planer doucement. Si vous descendez en plein vol, vous obtenez quelques secondes de $(l)Chute lente$().",
+      "title": "Vol"
+    }
+  ]
+}

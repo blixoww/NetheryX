@@ -8,6 +8,7 @@ import com.netheryx.block.LavaTrapBlock;
 import com.netheryx.block.RimeIceBlock;
 import com.netheryx.block.SoulAltarBlock;
 import com.netheryx.block.WardLanternBlock;
+import com.netheryx.block.WardedBlock;
 import com.netheryx.block.WartvineBlock;
 import com.netheryx.block.WartvinePlantBlock;
 import net.minecraft.core.particles.ParticleTypes;
@@ -25,6 +26,7 @@ import com.netheryx.block.CrustedLavaBlock;
 import com.netheryx.block.EmberNyliumBlock;
 import com.netheryx.block.FireBerryBushBlock;
 import com.netheryx.block.GuardianSealBlock;
+import com.netheryx.block.NetherDoublePlantBlock;
 import com.netheryx.block.NetherPlantBlock;
 import com.netheryx.block.OnyxAnvilBlock;
 import com.netheryx.block.OnyxFurnaceBlock;
@@ -38,6 +40,8 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DoubleHighBlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HalfTransparentBlock;
+import net.minecraft.world.level.block.MagmaBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.DoorBlock;
@@ -280,6 +284,12 @@ public final class ModBlocks {
                     .strength(-1.0F, 3600000.0F).noLootTable().lightLevel(state -> 9).sound(SoundType.DEEPSLATE_TILES)
                     .isValidSpawn((state, level, pos, type) -> false).pushReaction(PushReaction.BLOCK)));
 
+    /** Maconnerie scellee des salles au tresor : indestructible jusqu'a la mort du boss. */
+    public static final RegistryObject<Block> WARDED_BRICKS = BLOCKS.register("warded_bricks",
+            () -> new WardedBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK)
+                    .strength(-1.0F, 3600000.0F).noLootTable().sound(SoundType.DEEPSLATE_BRICKS)
+                    .isValidSpawn((state, level, pos, type) -> false).pushReaction(PushReaction.BLOCK)));
+
     // --- Technique -------------------------------------------------------------------------
     public static final RegistryObject<Block> CRUSTED_LAVA = BLOCKS.register("crusted_lava",
             () -> new CrustedLavaBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER)
@@ -398,6 +408,46 @@ public final class ModBlocks {
             () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
                     wartstalkWood().forceSolidOn().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY),
                     BlockSetType.CRIMSON));
+
+    // --- Jungle infernale -------------------------------------------------------------------------
+    public static final RegistryObject<Block> HELLFERN = register("hellfern",
+            () -> new NetherDoublePlantBlock(plant(MapColor.COLOR_ORANGE).sound(SoundType.GRASS).offsetType(BlockBehaviour.OffsetType.XZ)),
+            block -> new DoubleHighBlockItem(block, new Item.Properties()));
+    public static final RegistryObject<Block> BLAZING_GRASS = register("blazing_grass",
+            () -> new NetherPlantBlock(plant(MapColor.COLOR_ORANGE).sound(SoundType.GRASS).lightLevel(state -> 2),
+                    particles(ModParticles.EMBER_POLLEN, 30, AmbientParticles.Mode.INSIDE)));
+    public static final RegistryObject<Block> EMBER_VINES_PLANT = BLOCKS.register("ember_vines_plant",
+            () -> new HangingVinesPlantBlock(vines(MapColor.COLOR_ORANGE, 8), ModBlocks.EMBER_VINES));
+    public static final RegistryObject<Block> EMBER_VINES = register("ember_vines",
+            () -> new HangingVinesBlock(vines(MapColor.COLOR_ORANGE, 8).randomTicks(), EMBER_VINES_PLANT));
+    public static final RegistryObject<Block> EMBER_FIREFLY_JAR = register("ember_firefly_jar",
+            () -> new AmbientLanternBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN).sound(SoundType.GLASS).lightLevel(state -> 15),
+                    particles(ModParticles.EMBER_POLLEN, 3, AmbientParticles.Mode.INSIDE)));
+    public static final RegistryObject<Block> SOUL_FIREFLY_JAR = register("soul_firefly_jar",
+            () -> new AmbientLanternBlock(BlockBehaviour.Properties.copy(Blocks.SOUL_LANTERN).sound(SoundType.GLASS).lightLevel(state -> 12),
+                    particles(ModParticles.SOUL_WISP, 3, AmbientParticles.Mode.INSIDE)));
+
+    // --- Lac de verre en fusion ------------------------------------------------------------------
+    public static final RegistryObject<Block> MOLTEN_GLASS = register("molten_glass",
+            () -> new MagmaBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE).strength(0.8F)
+                    .sound(SoundType.GLASS).lightLevel(state -> 12).noOcclusion().requiresCorrectToolForDrops()
+                    .isValidSpawn((state, level, pos, type) -> type.fireImmune()).hasPostProcess((state, level, pos) -> true)
+                    .emissiveRendering((state, level, pos) -> true)));
+    public static final RegistryObject<Block> MOLTEN_CRYSTAL = register("molten_crystal",
+            () -> new AmbientClusterBlock(7, 3, BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_ORANGE)
+                    .forceSolidOn().noOcclusion().sound(SoundType.AMETHYST_CLUSTER).strength(1.5F)
+                    .lightLevel(state -> 9).pushReaction(PushReaction.DESTROY),
+                    particles(ModParticles.EMBER_SPARK, 4, AmbientParticles.Mode.INSIDE)));
+
+    // --- Foret petrifiee d'onyx ------------------------------------------------------------------
+    public static final RegistryObject<Block> PETRIFIED_LOG = register("petrified_log",
+            () -> new RotatedPillarBlock(BlockBehaviour.Properties.copy(Blocks.BASALT).mapColor(MapColor.COLOR_BLACK)
+                    .strength(2.5F, 6.0F).requiresCorrectToolForDrops()));
+    public static final RegistryObject<Block> ONYX_CRYSTAL_LEAVES = register("onyx_crystal_leaves",
+            () -> new HalfTransparentBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE).strength(0.6F)
+                    .sound(SoundType.AMETHYST).noOcclusion().lightLevel(state -> 5)
+                    .isValidSpawn((state, level, pos, type) -> false).isSuffocating((state, level, pos) -> false)
+                    .isViewBlocking((state, level, pos) -> false)));
 
     // --- Recifs de quartz ------------------------------------------------------------------------
     public static final RegistryObject<Block> RICH_QUARTZ_ORE = register("rich_quartz_ore",

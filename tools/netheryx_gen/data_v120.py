@@ -49,11 +49,18 @@ def generate_block_loot():
     for glass in ("quartz_glass", "quartz_glass_pane"):
         silk_only(glass)
     # Lianes de moelle : aux cisailles / toucher de soie, sinon une chance sur trois
-    for name in ("marrow_vines", "marrow_vines_plant"):
+    for name, drop in (("marrow_vines", "marrow_vines"), ("marrow_vines_plant", "marrow_vines"),
+                       ("ember_vines", "ember_vines"), ("ember_vines_plant", "ember_vines")):
         block_table(name, [{"rolls": 1, "bonus_rolls": 0, "entries": [{"type": "minecraft:alternatives", "children": [
-            item("marrow_vines", conditions=[SHEARS_OR_SILK]),
-            item("marrow_vines", conditions=[{"condition": "minecraft:table_bonus", "enchantment": "minecraft:fortune",
+            item(drop, conditions=[SHEARS_OR_SILK]),
+            item(drop, conditions=[{"condition": "minecraft:table_bonus", "enchantment": "minecraft:fortune",
                                               "chances": [0.33, 0.55, 0.77, 1.0]}])]}]}])
+    # Jungle infernale : fougere (moitie basse uniquement) et herbe ardente aux cisailles
+    block_table("hellfern", [{"rolls": 1, "bonus_rolls": 0, "entries": [item("hellfern")], "conditions": [
+        SHEARS_OR_SILK, {"condition": "minecraft:block_state_property", "block": mid("hellfern"), "properties": {"half": "lower"}}]}])
+    block_table("blazing_grass", [{"rolls": 1, "bonus_rolls": 0, "entries": [{"type": "minecraft:alternatives", "children": [
+        item("blazing_grass", conditions=[SHEARS_OR_SILK]),
+        item("fire_berries", conditions=[{"condition": "minecraft:random_chance", "chance": 0.1}])]}]}])
     # Verruliane : seulement les fruits
     for name in ("wartvine", "wartvine_plant"):
         block_table(name, [{"rolls": 1, "bonus_rolls": 0, "entries": [item("wartfruit", functions=[count(1, 2)])], "conditions": [
@@ -85,6 +92,30 @@ def generate_entity_loot():
     entity_table("lantern_bearer", [{"rolls": 1, "entries": [item("soul_dust", functions=[count(0, 2), LOOTING])]}])
     entity_table("cinder_lizard", [{"rolls": 1, "entries": [item("minecraft:leather", functions=[count(0, 2), LOOTING])]},
                                    {"rolls": 1, "entries": [item("magma_shell", functions=[count(0, 1), LOOTING])]}])
+
+
+def generate_final_boss():
+    entity_table("nether_heart", [
+        {"rolls": 1, "entries": [item("abyssal_upgrade_template")]},
+        {"rolls": 1, "entries": [item("abyssal_shard", functions=[count(4, 6), LOOTING])]},
+        {"rolls": 1, "entries": [item("onyx", functions=[count(6, 12)])]},
+        {"rolls": 1, "entries": [item("onyx_apple", functions=[count(1, 2)])]},
+        {"rolls": 1, "entries": [item("minecraft:netherite_ingot")]},
+        {"rolls": 1, "entries": [item("ash_wyvern_egg")]},
+    ])
+    shaped("sealed_heart", ["OCO", "SXW", "OCO"], {"O": "onyx_block", "C": "minecraft:crying_obsidian", "S": "sentinel_eye",
+                                                  "X": "champion_crown", "W": "warlock_sigil"}, "sealed_heart", 1)
+    shaped("onyx_apple", ["SSS", "SAS", "SSS"], {"S": "onyx_shard", "A": "minecraft:golden_apple"}, "onyx_apple", 1, "food")
+    shaped("abyssal_upgrade_template", ["#T#", "#O#", "###"], {"#": "onyx_shard", "T": "abyssal_upgrade_template", "O": "abyssal_shard"},
+           "abyssal_upgrade_template", 2)
+    for piece in ("helmet", "chestplate", "leggings", "boots"):
+        write_json(data_path("recipes", f"abyssal_{piece}_smithing.json"), {
+            "type": "minecraft:smithing_transform", "template": {"item": mid("abyssal_upgrade_template")},
+            "base": {"item": mid(f"onyx_{piece}")}, "addition": {"item": mid("abyssal_shard")},
+            "result": {"item": mid(f"abyssal_{piece}")}})
+    advancement("nether_heart", "sealed_heart", "challenge", "root", {"kill": {
+        "trigger": "minecraft:player_killed_entity", "conditions": {"entity": [{"condition": "minecraft:entity_properties",
+                                                                                 "entity": "this", "predicate": {"type": mid("nether_heart")}}]}}})
 
 
 def generate_chest_loot():
@@ -216,7 +247,12 @@ def generate_tags():
     both(mc, "walls", m(["rimestone_brick_wall"]))
     tag("blocks", mc, "nylium", m(["ossified_nylium", "wart_moss"]))
     tag("blocks", mc, "wart_blocks", m(["marrow_cap"]))
-    tag("blocks", mc, "climbable", m(["marrow_vines", "marrow_vines_plant", "wartvine", "wartvine_plant"]))
+    tag("blocks", mc, "climbable", m(["marrow_vines", "marrow_vines_plant", "wartvine", "wartvine_plant", "ember_vines",
+                                      "ember_vines_plant"]))
+    tag("blocks", mc, "replaceable", m(["hellfern", "blazing_grass"]))
+    tag("blocks", mc, "replaceable_by_trees", m(["hellfern", "blazing_grass", "ember_vines", "ember_vines_plant"]))
+    tag("blocks", mc, "sword_efficient", m(["hellfern", "blazing_grass", "ember_vines", "ember_vines_plant"]))
+    both(mc, "tall_flowers", m(["hellfern"]))
     tag("blocks", mc, "ice", m(["rime_ice"]))
     tag("blocks", mc, "crystal_sound_blocks", m(["rime_crystal"]))
     tag("blocks", mc, "impermeable", m(["quartz_glass"]))
@@ -254,19 +290,22 @@ def generate_tags():
     tag("blocks", MOD_ID, "nether_vegetation_ground", ["#minecraft:nylium", mid("nether_grass_block")])
     tag("blocks", MOD_ID, "nether_plant_soil", m(["ossified_nylium", "wart_moss", "rimestone"]))
     tag("blocks", MOD_ID, "nether_animals_spawnable_on", m(["ossified_nylium", "wart_moss", "rimestone"]))
-    new_biomes = m(["marrow_thicket", "rimefrost_chasm", "wartvine_tangle", "quartz_reef"])
+    new_biomes = m(["marrow_thicket", "rimefrost_chasm", "wartvine_tangle", "quartz_reef", "hellwood_jungle"])
     tag("worldgen/biome", mc, "is_nether", new_biomes)
-    tag("worldgen/biome", fg, "is_hot/nether", m(["marrow_thicket", "wartvine_tangle", "quartz_reef"]))
+    tag("worldgen/biome", fg, "is_hot/nether", m(["marrow_thicket", "wartvine_tangle", "quartz_reef", "hellwood_jungle"]))
     tag("worldgen/biome", fg, "is_cold/nether", m(["rimefrost_chasm"]))
-    tag("worldgen/biome", fg, "is_lush", m(["wartvine_tangle"]))
+    tag("worldgen/biome", fg, "is_lush", m(["wartvine_tangle", "hellwood_jungle"]))
+    tag("worldgen/biome", fg, "is_dense", m(["hellwood_jungle"]))
     tag("worldgen/biome", fg, "is_spooky", m(["marrow_thicket"]))
     tag("worldgen/biome", mc, "has_structure/bastion_remnant", m(["wartvine_tangle", "quartz_reef"]))
     tag("worldgen/biome", mc, "has_structure/nether_fossil", m(["marrow_thicket"]))
     tag("worldgen/biome", MOD_ID, "has_structure/withered_catacombs", m(["marrow_thicket"]))
     tag("worldgen/biome", MOD_ID, "has_structure/onyx_citadel", m(["rimefrost_chasm", "quartz_reef"]))
-    tag("worldgen/biome", MOD_ID, "has_structure/infernal_sanctum", m(["wartvine_tangle"]))
+    tag("worldgen/biome", MOD_ID, "has_structure/infernal_sanctum", m(["wartvine_tangle", "hellwood_jungle"]))
+    tag("worldgen/biome", MOD_ID, "has_structure/nether_garden", m(["hellwood_jungle"]))
+    tag("worldgen/biome", mc, "has_structure/bastion_remnant", m(["hellwood_jungle"]))
     tag("worldgen/biome", MOD_ID, "has_structure/nomad_caravan", ["#minecraft:is_nether"])
-    tag("worldgen/structure", MOD_ID, "soul_compass_targets", m(["nomad_caravan"]))
+    tag("worldgen/structure", MOD_ID, "soul_compass_targets", m(["nomad_caravan", "hidden_cache"]))
 
 
 def generate_advancements():
@@ -296,6 +335,7 @@ def generate_loot_modifiers():
 
 
 def generate():
+    generate_final_boss()
     generate_block_loot()
     generate_entity_loot()
     generate_chest_loot()
@@ -303,5 +343,7 @@ def generate():
     generate_tags()
     generate_advancements()
     generate_loot_modifiers()
+    from . import data_v124
+    data_v124.generate()
     from . import loot_balance
     loot_balance.generate()

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_hanging_lantern",
+  "textures": {
+    "lantern": "netheryx:block/soul_firefly_jar"
+  },
+  "render_type": "minecraft:cutout"
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "netheryx:block/hellfern_bottom"
+  },
+  "render_type": "minecraft:cutout"
+}

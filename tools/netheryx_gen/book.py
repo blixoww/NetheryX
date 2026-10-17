@@ -743,6 +743,128 @@ entry("building", "Rimestone", "Pierre de givre", "netheryx:rimestone_bricks", [
     craft("rimestone_bricks", "rimestone_brick_wall"),
 ])
 
+# ---------------------------------------------------------------- 1.2.0 : Jungle infernale, boss final
+entry("biomes", "Hellwood Jungle", "Jungle infernale", "netheryx:hellfern", [
+    text("The forest of Hell: towering $(l)hellwood trees$() with buttress roots and burning canopies, tall $(item)Hellferns$(), "
+         "waves of $(item)Blazing Grass$() and long glowing $(item)Ember Vines$() hanging from the ceiling (climbable).$(br2)"
+         "Creatures: Ember Stalkers, Fire Ghasts, plenty of Cinder Hens and Ember Cows.",
+         "La forêt des Enfers : d'immenses $(l)arbres infernaux$() aux racines en contreforts et aux cimes embrasées, de hautes "
+         "$(item)Fougères infernales$(), des vagues d'$(item)Herbe ardente$() et de longues $(item)Lianes de braise$() lumineuses qui "
+         "pendent de la voûte (elles s'escaladent).$(br2)Créatures : Traqueurs de braise, Ghasts de feu, beaucoup de Poules de cendre "
+         "et de Vaches de braise.", "Jungle infernale"),
+])
+entry("structures", "Warded Masonry", "Maçonnerie scellée", "netheryx:guardian_seal", [
+    text("The walls, floor and ceiling of every $(l)treasure room$() are made of $(item)Warded Masonry$(): glowing runes, "
+         "unbreakable and impossible to dig around. When the dungeon boss dies, the runes fade and the masonry turns back into "
+         "ordinary bricks: no more shortcuts!$(br2)Dungeons also hide $(l)Mimics$() among their chests, including on the citadel balconies.",
+         "Les murs, le sol et le plafond de chaque $(l)salle au trésor$() sont en $(item)Maçonnerie scellée$() : des runes lumineuses, "
+         "indestructibles et impossibles à contourner en creusant. À la mort du boss du donjon, les runes s'éteignent et la maçonnerie "
+         "redevient de la brique ordinaire : fini les raccourcis !$(br2)Les donjons cachent aussi des $(l)Mimiques$() parmi leurs coffres, "
+         "jusque sur les balcons de la citadelle.", "Salles scellées"),
+])
+entry("structures", "Hidden Cache", "Cache secrète", "minecraft:soul_campfire", [
+    text("Small buried treasure rooms, now common. Look for a $(l)column of blue smoke$() rising from a soul campfire, next to a "
+         "small cairn with a lantern: the trapdoor is right beside it. The $(item)Soul Compass$() can also track them.",
+         "Petites salles au trésor enterrées, désormais fréquentes. Cherchez une $(l)colonne de fumée bleue$() qui s'élève d'un feu de "
+         "camp des âmes, à côté d'un petit cairn surmonté d'une lanterne : la trappe est juste à côté. La $(item)Boussole des âmes$() "
+         "peut aussi les pister.", "Cache secrète"),
+])
+entry("creatures", "Heart of the Nether (final boss)", "Cœur du Nether (boss final)", "netheryx:sealed_heart", [
+    text("Each of the three dungeon bosses drops a unique trophy: the $(item)Sentinel Eye$() (Onyx Sentinel), the "
+         "$(item)Warlock Sigil$() (Infernal Warlock) and the $(item)Champion Crown$() (Withered Champion). Together they make the "
+         "$(item)Sealed Heart$().$(br2)Right-click it $(l)in the Nether only$(): the Heart of the Nether awakens above you.",
+         "Chacun des trois boss de donjon lâche un trophée unique : l'$(item)Œil de sentinelle$() (Sentinelle d'onyx), le "
+         "$(item)Sceau du sorcier$() (Sorcier infernal) et la $(item)Couronne du champion$() (Champion flétri). Ensemble, ils forment le "
+         "$(item)Cœur scellé$().$(br2)Clic droit avec, $(l)uniquement dans le Nether$() : le Cœur du Nether s'éveille au-dessus de vous.",
+         "Boss final"),
+    craft("sealed_heart"),
+    mob("nether_heart", "600 HP, flies. Fireball volleys, a fiery $(l)pulse$() that throws you back, telegraphed $(l)meteor rains$(). "
+                        "At 66% and 33% it summons guards and hides behind a shield until they fall. Last phase: $(l)lava geysers$().",
+        "600 PV, vole. Salves de boules de feu, une $(l)pulsation$() ardente qui repousse, des $(l)pluies de météores$() annoncées. "
+        "À 66 % et 33 %, il invoque des gardes et s'abrite derrière un bouclier tant qu'ils vivent. Dernière phase : $(l)geysers de lave$().",
+        0.3),
+])
+entry("equipment", "Abyssal Armor", "Armure abyssale", "netheryx:abyssal_chestplate", [
+    text("The Heart of the Nether drops $(item)Abyssal Shards$() and an $(item)Abyssal Upgrade Template$(). At a Smithing Table, "
+         "template + Onyx armor piece + shard = Abyssal piece, the strongest armor of the mod.$(br2)$(l)Full set$(): permanent Fire "
+         "Resistance, Resistance, Strength in the Nether and immunity to Wither.",
+         "Le Cœur du Nether lâche des $(item)Éclats abyssaux$() et un $(item)Gabarit d'amélioration abyssale$(). À la Table de forgeron, "
+         "gabarit + pièce d'armure en onyx + éclat = pièce abyssale, la meilleure armure du mod.$(br2)$(l)Ensemble complet$() : "
+         "résistance au feu, Résistance, Force dans le Nether et immunité au Flétrissement.", "Armure abyssale"),
+    spot("abyssal_upgrade_template", "Duplicate it with 7 Onyx Shards and 1 Abyssal Shard.",
+         "Se duplique avec 7 éclats d'onyx et 1 éclat abyssal."),
+])
+entry("farming", "Onyx Apple", "Pomme d'onyx", "netheryx:onyx_apple", [
+    craft("onyx_apple", en="A golden apple wrapped in onyx: Regeneration II, Absorption II, Resistance and long Fire Resistance.",
+          fr="Une pomme dorée enrobée d'onyx : Régénération II, Absorption II, Résistance et longue résistance au feu."),
+])
+
+# ---------------------------------------------------------------- 1.2.0 : nouvelles creatures et biomes
+entry("biomes", "Molten Glass Lake", "Lac de verre en fusion", "netheryx:molten_glass", [
+    text("A glowing lake region: lava pools rimmed with obsidian, $(l)obsidian islands$() floating on the lava sea, spires of "
+         "obsidian and crying obsidian, and floors of $(item)Molten Glass$() (hot: it burns like magma).$(br2)"
+         "$(item)Molten Crystals$() give $(item)Molten Glass Shards$(), used for the $(l)Nether Lantern$(). Watch out for $(l)Basalt Golems$().",
+         "Une région de lave lumineuse : bassins de lave cerclés d'obsidienne, $(l)îlots d'obsidienne$() sur la mer de lave, "
+         "aiguilles d'obsidienne et d'obsidienne pleureuse, et sols de $(item)Verre en fusion$() (brûlant comme le magma).$(br2)"
+         "Les $(item)Cristaux en fusion$() donnent des $(item)Éclats de verre en fusion$(), utilisés pour la $(l)Lanterne du Nether$(). "
+         "Attention aux $(l)Golems de basalte$().", "Lac de verre en fusion"),
+])
+entry("biomes", "Petrified Onyx Forest", "Forêt pétrifiée d'onyx", "netheryx:onyx_crystal_leaves", [
+    text("A silent forest turned to stone: twisted $(item)Petrified Logs$() crowned with $(item)Crystallized Foliage$() and Onyx "
+         "Clusters, on calcite and smooth basalt. Rich in onyx ore.$(br2)Creatures: $(l)Crystal Snails$(), Soul Fireflies, Onyx Cubes, wraiths.",
+         "Une forêt silencieuse changée en pierre : des $(item)Bûches pétrifiées$() tordues, couronnées de $(item)Feuillage cristallisé$() "
+         "et d'amas d'onyx, sur de la calcite et du basalte lisse. Riche en minerai d'onyx.$(br2)Créatures : $(l)Escargots de cristal$(), "
+         "lucioles des âmes, cubes d'onyx, spectres.", "Forêt pétrifiée"),
+])
+entry("creatures", "Basalt Golem (mini-boss)", "Golem de basalte (mini-boss)", "netheryx:basalt_golem_spawn_egg", [
+    mob("basalt_golem", "160 HP, roams Magma Rifts and Molten Glass Lakes. A $(l)ground slam$() announced by a cloud of dust, volleys "
+                        "of $(l)magma chunks$() at range, half damage from projectiles. Below 50% its core melts: faster, it sets "
+                        "attackers on fire.",
+        "160 PV, rôde dans les Failles de magma et les Lacs de verre en fusion. Une $(l)frappe au sol$() annoncée par un nuage de "
+        "poussière, des salves d'$(l)éclats de magma$() à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur "
+        "entre en fusion : plus rapide, il enflamme ceux qui le frappent.", 0.4),
+])
+entry("creatures", "Ash Wyvern (mount)", "Wyverne de cendre (monture)", "netheryx:ash_wyvern_egg", [
+    mob("ash_wyvern", "Hatches from the $(item)Ash Wyvern Egg$() dropped by the Heart of the Nether, and belongs to you.$(li)Right-click: ride."
+                      "$(li)Sneak + right-click: sit / follow.$(li)Meat heals it.",
+        "Éclot de l'$(item)Œuf de wyverne de cendre$() lâché par le Cœur du Nether, et vous appartient.$(li)Clic droit : la monter."
+        "$(li)Accroupi + clic droit : attendre / suivre.$(li)La viande la soigne.", 0.45),
+    text("$(l)Flying$(): move forward while looking up to take off, look down to dive, release to glide slowly. If you dismount in "
+         "the air, you get a few seconds of $(l)Slow Falling$().",
+         "$(l)Voler$() : avancez en regardant vers le haut pour décoller, vers le bas pour piquer, relâchez pour planer doucement. "
+         "Si vous descendez en plein vol, vous obtenez quelques secondes de $(l)Chute lente$().", "Vol"),
+])
+entry("creatures", "Fireflies", "Lucioles", "netheryx:ember_firefly_jar", [
+    mob("ember_firefly", "$(l)Ember Fireflies$() swarm in the Hellwood Jungle, Ember Grove and Meadow; $(l)Soul Fireflies$() in soul "
+                         "valleys and the Petrified Forest. Harmless.",
+        "Les $(l)Lucioles de braise$() volent en essaims dans la Jungle infernale, le Bosquet et la Prairie de braise ; les "
+        "$(l)Lucioles des âmes$() dans les vallées des âmes et la Forêt pétrifiée. Inoffensives.", 2.0),
+    spot("ember_firefly_jar", "Right-click a firefly with a $(item)Glass Bottle$() to catch it in a $(l)jar$(): a lantern that "
+                              "lights like a real one (ember: 15, soul: 12).",
+         "Clic droit sur une luciole avec une $(item)Fiole vide$() pour l'attraper dans un $(l)bocal$() : une lanterne qui éclaire "
+         "vraiment (braise : 15, âmes : 12).", link=False),
+])
+entry("creatures", "Blaze Pig", "Cochon de blaze", "netheryx:blaze_pig_spawn_egg", [
+    mob("blaze_pig", "A peaceful little pig bristling with blaze rods. Breed it with $(item)Blaze Peppers$() or Fire Berries. "
+                     "It drops a little $(l)Blaze Powder$() every 5-10 minutes, and $(item)Blaze Pork$() (grilled: Fire Resistance).",
+        "Un petit cochon paisible hérissé de bâtonnets de blaze. S'élève avec des $(item)Piments de blaze$() ou des baies de feu. "
+        "Il perd un peu de $(l)poudre de blaze$() toutes les 5 à 10 minutes, et donne des $(item)Côtelettes de blaze$() "
+        "(grillées : résistance au feu).", 0.9),
+])
+entry("creatures", "Crystal Snail", "Escargot de cristal", "netheryx:crystal_snail_spawn_egg", [
+    mob("crystal_snail", "Slow and armored. Onyx crystals grow on its shell: $(l)shear it$() for Onyx Shards, they grow back in a "
+                         "few minutes. Breed it with $(item)Glowcaps$().",
+        "Lent et cuirassé. Des cristaux d'onyx poussent sur sa coquille : $(l)tondez-le$() pour des éclats d'onyx, ils repoussent en "
+        "quelques minutes. S'élève avec des $(item)Luminelles$().", 0.9),
+])
+entry("utility", "Nether Lantern", "Lanterne du Nether", "netheryx:nether_lantern", [
+    spot("nether_lantern", "Right-click: every ore within $(l)16 blocks$() is outlined $(l)through walls$() for 10 seconds, colored by "
+                           "type (debris, gold, onyx, sulfur, quartz). 30 s cooldown, 64 uses, repaired with Molten Glass Shards.",
+         "Clic droit : chaque minerai à moins de $(l)16 blocs$() est entouré $(l)à travers les murs$() pendant 10 secondes, avec une "
+         "couleur par type (débris, or, onyx, soufre, quartz). Recharge de 30 s, 64 utilisations, se répare avec des éclats de verre en fusion."),
+    craft("nether_lantern"),
+])
+
 
 def slug(name):
     out = []

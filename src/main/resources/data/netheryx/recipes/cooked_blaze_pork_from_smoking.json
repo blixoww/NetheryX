@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "ingredient": {
+    "item": "netheryx:blaze_pork"
+  },
+  "result": "netheryx:cooked_blaze_pork",
+  "experience": 0.35,
+  "cookingtime": 100
+}

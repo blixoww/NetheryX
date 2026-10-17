@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "netheryx:abyssal_upgrade_template"
+  },
+  "base": {
+    "item": "netheryx:onyx_helmet"
+  },
+  "addition": {
+    "item": "netheryx:abyssal_shard"
+  },
+  "result": {
+    "item": "netheryx:abyssal_helmet"
+  }
+}

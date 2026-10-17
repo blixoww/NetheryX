@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:stalker_meat",
+    "netheryx:cooked_stalker_meat",
+    "netheryx:infernal_beef",
+    "netheryx:cooked_infernal_beef",
+    "netheryx:blaze_pork",
+    "netheryx:cooked_blaze_pork",
+    "netheryx:magmafish",
+    "netheryx:grilled_magmafish",
+    "minecraft:porkchop",
+    "minecraft:cooked_porkchop",
+    "minecraft:beef",
+    "minecraft:cooked_beef"
+  ]
+}

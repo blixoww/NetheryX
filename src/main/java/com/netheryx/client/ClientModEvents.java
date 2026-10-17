@@ -12,8 +12,15 @@ import com.netheryx.entity.CinderLizard;
 import com.netheryx.entity.LanternBearer;
 import com.netheryx.entity.Magmafish;
 import com.netheryx.entity.Mimic;
+import com.netheryx.entity.NetherHeart;
+import com.netheryx.entity.AshWyvern;
+import com.netheryx.entity.BasaltGolem;
+import com.netheryx.entity.BlazePig;
+import com.netheryx.entity.CrystalSnail;
+import com.netheryx.entity.Firefly;
 import com.netheryx.entity.PiglinMerchant;
 import com.netheryx.client.renderer.CinderLizardModel;
+import com.netheryx.client.renderer.CrystalSnailModel;
 import com.netheryx.client.renderer.SoulAltarRenderer;
 import com.netheryx.registry.ModBlockEntities;
 import com.netheryx.registry.ModBlocks;
@@ -103,6 +110,20 @@ public final class ClientModEvents {
         event.registerEntityRenderer(ModEntities.CINDER_LIZARD.get(),
                 context -> new NetheryXGeoRenderer<CinderLizard>(context, new CinderLizardModel(), 0.7F, 1.0F).glowing());
         event.registerBlockEntityRenderer(ModBlockEntities.SOUL_ALTAR.get(), SoulAltarRenderer::new);
+        event.registerEntityRenderer(ModEntities.NETHER_HEART.get(),
+                context -> new NetheryXGeoRenderer<NetherHeart>(context, "nether_heart", 1.5F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.BASALT_GOLEM.get(),
+                context -> new NetheryXGeoRenderer<BasaltGolem>(context, "basalt_golem", 1.0F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.ASH_WYVERN.get(),
+                context -> new NetheryXGeoRenderer<AshWyvern>(context, "ash_wyvern", 1.0F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.EMBER_FIREFLY.get(),
+                context -> new NetheryXGeoRenderer<Firefly>(context, "ember_firefly", 0.0F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.SOUL_FIREFLY.get(),
+                context -> new NetheryXGeoRenderer<Firefly>(context, "soul_firefly", 0.0F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.BLAZE_PIG.get(),
+                context -> new NetheryXGeoRenderer<BlazePig>(context, "blaze_pig", 0.5F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.CRYSTAL_SNAIL.get(),
+                context -> new NetheryXGeoRenderer<CrystalSnail>(context, new CrystalSnailModel(), 0.5F, 1.0F).glowing());
     }
 
     /** Teinte du liquide du Chaudron infernal = couleur de la potion contenue. */

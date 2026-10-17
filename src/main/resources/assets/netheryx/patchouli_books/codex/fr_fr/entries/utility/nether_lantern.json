@@ -1,0 +1,18 @@
+{
+  "name": "Lanterne du Nether",
+  "icon": "netheryx:nether_lantern",
+  "category": "netheryx:utility",
+  "sortnum": 106,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:nether_lantern",
+      "text": "Clic droit : chaque minerai à moins de $(l)16 blocs$() est entouré $(l)à travers les murs$() pendant 10 secondes, avec une couleur par type (débris, or, onyx, soufre, quartz). Recharge de 30 s, 64 utilisations, se répare avec des éclats de verre en fusion.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:nether_lantern"
+    }
+  ]
+}

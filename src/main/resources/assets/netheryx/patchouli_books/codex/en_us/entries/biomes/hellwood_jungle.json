@@ -1,0 +1,13 @@
+{
+  "name": "Hellwood Jungle",
+  "icon": "netheryx:hellfern",
+  "category": "netheryx:biomes",
+  "sortnum": 93,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "The forest of Hell: towering $(l)hellwood trees$() with buttress roots and burning canopies, tall $(item)Hellferns$(), waves of $(item)Blazing Grass$() and long glowing $(item)Ember Vines$() hanging from the ceiling (climbable).$(br2)Creatures: Ember Stalkers, Fire Ghasts, plenty of Cinder Hens and Ember Cows.",
+      "title": "Jungle infernale"
+    }
+  ]
+}

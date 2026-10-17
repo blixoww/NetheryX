@@ -76,6 +76,22 @@ public final class ModFoods {
             .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 300), 1.0F)
             .build();
 
+    public static final FoodProperties BLAZE_PORK = new FoodProperties.Builder()
+            .nutrition(3).saturationMod(0.3F).meat().build();
+    /** Cotelette de blaze grillee : rassasiante et brulante, elle protege un moment du feu. */
+    public static final FoodProperties COOKED_BLAZE_PORK = new FoodProperties.Builder()
+            .nutrition(8).saturationMod(0.8F).meat()
+            .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 400), 1.0F)
+            .build();
+    /** Pomme en onyx : entre la pomme dorée et la pomme dorée enchantée, pensée pour le Nether. */
+    public static final FoodProperties ONYX_APPLE = new FoodProperties.Builder()
+            .nutrition(4).saturationMod(1.2F).alwaysEat()
+            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 200, 1), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.ABSORPTION, 2400, 1), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 1200, 0), 1.0F)
+            .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 3600, 0), 1.0F)
+            .build();
+
     private ModFoods() {
     }
 }

@@ -1,0 +1,126 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.soul_firefly",
+        "texture_width": 32,
+        "texture_height": 16,
+        "visible_bounds_width": 0.5,
+        "visible_bounds_height": 0.5,
+        "visible_bounds_offset": [
+          0,
+          0.25,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "body",
+          "pivot": [
+            0,
+            2.5,
+            0
+          ],
+          "parent": "root",
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                2,
+                -2
+              ],
+              "size": [
+                2,
+                2,
+                2
+              ],
+              "uv": [
+                10,
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1,
+                1.5,
+                0
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": [
+                0,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_left",
+          "pivot": [
+            1,
+            4,
+            -1
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
+                1,
+                4,
+                -1.5
+              ],
+              "size": [
+                3,
+                0.5,
+                2
+              ],
+              "uv": [
+                18,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "wing_right",
+          "pivot": [
+            -1,
+            4,
+            -1
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                4,
+                -1.5
+              ],
+              "size": [
+                3,
+                0.5,
+                2
+              ],
+              "uv": [
+                0,
+                5
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

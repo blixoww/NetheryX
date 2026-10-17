@@ -1,0 +1,17 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "netheryx:magma_rift",
+    "netheryx:ember_grove",
+    "netheryx:hellwood_jungle",
+    "minecraft:nether_wastes"
+  ],
+  "spawners": [
+    {
+      "type": "netheryx:blaze_pig",
+      "weight": 20,
+      "minCount": 2,
+      "maxCount": 4
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Heart of the Nether (final boss)",
+  "icon": "netheryx:sealed_heart",
+  "category": "netheryx:creatures",
+  "sortnum": 96,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Each of the three dungeon bosses drops a unique trophy: the $(item)Sentinel Eye$() (Onyx Sentinel), the $(item)Warlock Sigil$() (Infernal Warlock) and the $(item)Champion Crown$() (Withered Champion). Together they make the $(item)Sealed Heart$().$(br2)Right-click it $(l)in the Nether only$(): the Heart of the Nether awakens above you.",
+      "title": "Boss final"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:sealed_heart"
+    },
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:nether_heart",
+      "scale": 0.3,
+      "offset": 0.0,
+      "text": "600 HP, flies. Fireball volleys, a fiery $(l)pulse$() that throws you back, telegraphed $(l)meteor rains$(). At 66% and 33% it summons guards and hides behind a shield until they fall. Last phase: $(l)lava geysers$()."
+    }
+  ]
+}

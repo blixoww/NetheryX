@@ -17,7 +17,7 @@ grille), objets, blocs, créatures (modèle 3D animé), biomes, structures, outi
 première connexion et se fabrique avec **un livre + un bloc de netherrack**.
 
 ### En chiffres
-12 biomes · 19 créatures (dont 3 boss) · 3 grands donjons + 4 petites structures · 4 bois complets · ~50 blocs · ~50 objets · ~110 recettes.
+15 biomes · 26 créatures (dont 3 boss, 1 mini-boss et 1 boss final) · 3 grands donjons + 4 petites structures · 4 bois complets · ~50 blocs · ~50 objets · ~110 recettes.
 Les 5 biomes vanilla sont aussi décorés (plantes, créatures) : le Nether a un aspect différent partout.
 
 ### L'Onyx
@@ -91,7 +91,12 @@ Les bastions et forteresses contiennent aussi du butin NetheryX (Global Loot Mod
 - **Soufre** : engrais pour les cultures du Nether, y compris les verrues ; donne aussi de la poudre a canon.
 
 ### Nouveautés 1.2.0
-- **Biomes** : Fourré de moelle, Gouffre de givre (l'eau du Nether), Enchevêtrement de verrues (fruits renouvelables), Récifs de quartz.
+- **Boss final** : le Cœur du Nether, invoqué dans le Nether avec le Cœur scellé (fabriqué avec les trophées des 3 boss) ;
+  il lâche de quoi forger l'**armure abyssale**.
+- **Biomes** : Fourré de moelle, Gouffre de givre (l'eau du Nether), Enchevêtrement de verrues (fruits renouvelables), Récifs de quartz,
+  Jungle infernale (arbres géants, fougères, lianes de braise), Lac de verre en fusion, Forêt pétrifiée d'onyx.
+- **Nouvelles créatures** : Golem de basalte (mini-boss), Wyverne de cendre (monture volante), lucioles de braise et des âmes
+  (à mettre en bocal), cochon de blaze, escargot de cristal. **Lanterne du Nether** : révèle les minerais à travers les murs.
 - **Créatures** : poisson de magme, lézard de cendre (monture), porteur de lanterne (lumière dynamique), fouisseur de basalte,
   marchand piglin (caravanes nomades), coffre mimique.
 - **Ateliers** : nasse à magma, chaudron infernal, autel des âmes (enchantements du Nether), lanterne de garde.

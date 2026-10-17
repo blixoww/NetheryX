@@ -21,6 +21,12 @@ import com.netheryx.entity.CinderLizard;
 import com.netheryx.entity.LanternBearer;
 import com.netheryx.entity.Magmafish;
 import com.netheryx.entity.Mimic;
+import com.netheryx.entity.NetherHeart;
+import com.netheryx.entity.AshWyvern;
+import com.netheryx.entity.BasaltGolem;
+import com.netheryx.entity.BlazePig;
+import com.netheryx.entity.CrystalSnail;
+import com.netheryx.entity.Firefly;
 import com.netheryx.entity.PiglinMerchant;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -57,7 +63,7 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<FireGhast>> FIRE_GHAST = register("fire_ghast",
             EntityType.Builder.of(FireGhast::new, MobCategory.MONSTER).sized(4.0F, 4.0F).fireImmune().clientTrackingRange(10));
     public static final RegistryObject<EntityType<OnyxCube>> ONYX_CUBE = register("onyx_cube",
-            EntityType.Builder.of(OnyxCube::new, MobCategory.MONSTER).sized(0.52F, 0.52F).fireImmune().clientTrackingRange(8));
+            EntityType.Builder.of(OnyxCube::new, MobCategory.MONSTER).sized(2.04F, 2.04F).fireImmune().clientTrackingRange(8));
     public static final RegistryObject<EntityType<SulfurBombEntity>> SULFUR_BOMB = register("sulfur_bomb",
             EntityType.Builder.<SulfurBombEntity>of(SulfurBombEntity::new, MobCategory.MISC).sized(0.25F, 0.25F)
                     .clientTrackingRange(4).updateInterval(10));
@@ -77,6 +83,22 @@ public final class ModEntities {
             EntityType.Builder.of(LanternBearer::new, MobCategory.CREATURE).sized(0.6F, 1.0F).fireImmune().clientTrackingRange(10));
     public static final RegistryObject<EntityType<CinderLizard>> CINDER_LIZARD = register("cinder_lizard",
             EntityType.Builder.of(CinderLizard::new, MobCategory.CREATURE).sized(1.3F, 0.9F).fireImmune().clientTrackingRange(10));
+
+    public static final RegistryObject<EntityType<NetherHeart>> NETHER_HEART = register("nether_heart",
+            EntityType.Builder.of(NetherHeart::new, MobCategory.MONSTER).sized(3.0F, 3.0F).fireImmune().clientTrackingRange(12));
+
+    public static final RegistryObject<EntityType<BasaltGolem>> BASALT_GOLEM = register("basalt_golem",
+            EntityType.Builder.of(BasaltGolem::new, MobCategory.MONSTER).sized(1.5F, 2.7F).fireImmune().clientTrackingRange(10));
+    public static final RegistryObject<EntityType<AshWyvern>> ASH_WYVERN = register("ash_wyvern",
+            EntityType.Builder.of(AshWyvern::new, MobCategory.CREATURE).sized(1.8F, 1.6F).fireImmune().clientTrackingRange(10));
+    public static final RegistryObject<EntityType<Firefly>> EMBER_FIREFLY = register("ember_firefly",
+            EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.3F, 0.3F).fireImmune().clientTrackingRange(6));
+    public static final RegistryObject<EntityType<Firefly>> SOUL_FIREFLY = register("soul_firefly",
+            EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.3F, 0.3F).fireImmune().clientTrackingRange(6));
+    public static final RegistryObject<EntityType<BlazePig>> BLAZE_PIG = register("blaze_pig",
+            EntityType.Builder.of(BlazePig::new, MobCategory.CREATURE).sized(0.8F, 0.8F).fireImmune().clientTrackingRange(10));
+    public static final RegistryObject<EntityType<CrystalSnail>> CRYSTAL_SNAIL = register("crystal_snail",
+            EntityType.Builder.of(CrystalSnail::new, MobCategory.CREATURE).sized(0.8F, 0.8F).fireImmune().clientTrackingRange(8));
 
     private ModEntities() {
     }

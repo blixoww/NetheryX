@@ -19,7 +19,6 @@ import java.util.Locale;
  * qui peuvent exister dans la dimension du joueur. Cliquer une structure lance la recherche cote serveur.
  */
 public class SoulCompassScreen extends Screen {
-    private static final int PER_PAGE = 8;
     private static final int BUTTON_WIDTH = 240;
 
     private final List<ResourceLocation> allStructures;
@@ -79,11 +78,11 @@ public class SoulCompassScreen extends Screen {
     private void rebuildButtons() {
         this.clearWidgets();
         this.addRenderableWidget(this.search);
-        int pages = Math.max(1, (this.filtered.size() + PER_PAGE - 1) / PER_PAGE);
+        int pages = Math.max(1, (this.filtered.size() + this.perPage() - 1) / this.perPage());
         this.page = Math.min(this.page, pages - 1);
         int x = this.width / 2 - BUTTON_WIDTH / 2;
         int y = 56;
-        for (int i = this.page * PER_PAGE; i < Math.min(this.filtered.size(), (this.page + 1) * PER_PAGE); i++) {
+        for (int i = this.page * this.perPage(); i < Math.min(this.filtered.size(), (this.page + 1) * this.perPage()); i++) {
             ResourceLocation id = this.filtered.get(i);
             this.addRenderableWidget(Button.builder(displayName(id), button -> this.select(id))
                     .bounds(x, y, BUTTON_WIDTH, 20).build());
@@ -114,9 +113,26 @@ public class SoulCompassScreen extends Screen {
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 14, 0x7FE8FF);
-        int pages = Math.max(1, (this.filtered.size() + PER_PAGE - 1) / PER_PAGE);
+        int pages = Math.max(1, (this.filtered.size() + this.perPage() - 1) / this.perPage());
         graphics.drawCenteredString(this.font, Component.translatable("screen.netheryx.soul_compass.page", this.page + 1, pages,
-                this.filtered.size()), this.width / 2, 56 + PER_PAGE * 22 + 12, 0xAAAAAA);
+                this.filtered.size()), this.width / 2, 56 + this.perPage() * 22 + 12, 0xAAAAAA);
+    }
+
+    /** Nombre de lignes par page selon la hauteur de la fenetre (les boutons de navigation restent visibles). */
+    private int perPage() {
+        return Math.max(3, (this.height - 56 - 40) / 22);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        int pages = Math.max(1, (this.filtered.size() + this.perPage() - 1) / this.perPage());
+        int target = Math.max(0, Math.min(pages - 1, this.page - (int) Math.signum(delta)));
+        if (target != this.page) {
+            this.page = target;
+            this.rebuildButtons();
+            return true;
+        }
+        return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
     @Override

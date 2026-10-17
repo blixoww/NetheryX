@@ -167,6 +167,18 @@ class Dungeon(Template):
     def seal(self, x0, y0, z0, x1, y1, z1):
         self.box(x0, y0, z0, x1, y1, z1, "guardian_seal")
 
+    KEEP_UNWARDED = ("chest", "ladder", "lantern", "chain", "guardian_seal", "air", "fire", "netherrack", "cluster", "ember_lamp",
+                     "skull", "barrel", "cobweb")
+
+    def ward(self, x0, y0, z0, x1, y1, z1, variant):
+        """Enveloppe indestructible : la maconnerie de la zone devient de la maconnerie scellee (sauf les objets utiles)."""
+        for x in range(min(x0, x1), max(x0, x1) + 1):
+            for y in range(min(y0, y1), max(y0, y1) + 1):
+                for z in range(min(z0, z1), max(z0, z1) + 1):
+                    current = self.blocks.get((x, y, z))
+                    if current and not any(k in current[0] for k in self.KEEP_UNWARDED):
+                        self.set(x, y, z, "warded_bricks", variant=variant)
+
     def guard(self, x, y, z, entity):
         self.entity(x + 0.5, y, z + 0.5, entity)
 
@@ -253,7 +265,7 @@ def onyx_citadel():
     d.air(c - 1, 1, hz0 - 1, c + 1, 5, hz0 - 1)
     for x in (14, 18, 26, 30):
         d.pillar(x, 29, 1, 6, cap="onyx_lantern")
-    d.box(c - 1, 0, hz0, c + 1, 0, kz1 - 1, "onyx_block")
+    d.box(c - 1, 0, hz0, c + 1, 0, kz1 - 1, "polished_onyx")
     d.spawner(kx0 + 1, 1, kz1 - 1, "ember_stalker")
     d.spawner(kx1 - 1, 1, kz1 - 1, "ember_stalker")
     d.guard(c - 3, 1, 28, "withered_knight")
@@ -267,7 +279,7 @@ def onyx_citadel():
     for x in range(kx0 + 1, kx1):
         for z in range(az0, az1 + 1):
             if (x - c) ** 2 + (z - 18.5) ** 2 <= 20:
-                d.set(x, 0, z, "onyx_block")
+                d.set(x, 0, z, "onyx_bricks")
             elif (x - c) ** 2 + (z - 18.5) ** 2 <= 30:
                 d.set(x, 0, z, "minecraft:crying_obsidian")
     for (x, z) in ((kx0 + 1, az0), (kx1 - 1, az0), (kx0 + 1, az1), (kx1 - 1, az1)):
@@ -286,7 +298,11 @@ def onyx_citadel():
         d.air(ladder_x, 6, az1, ladder_x, 6, az1)
         for y in range(1, 7):
             d.set(ladder_x, y, az1, "minecraft:ladder", facing="north", waterlogged="false")
-        d.hanging_lantern((bx0 + bx1) // 2, 15, az0 + 2, 2, "onyx_lantern")
+        d.hanging_lantern((bx0 + bx1) // 2, 16, az0 + 2, 2, "onyx_lantern")
+        d.hanging_lantern((bx0 + bx1) // 2, 16, az1 - 3, 2, "onyx_lantern")
+        chest_x = bx1 - 1 if bx0 == kx0 + 1 else bx0 + 1
+        d.chest(chest_x, 7, az0, "onyx_citadel", facing="south")
+        d.guard(chest_x, 7, az0 + 2, "mimic")
 
     # Salle scellee : un puits mene a la tour du tresor, au-dessus du donjon
     d.box(kx0 + 1, 1, kz0 + 1, kx1 - 1, 15, az0 - 1, ONYX_WALL)
@@ -322,6 +338,9 @@ def onyx_citadel():
         d.chest(x, ty0 + 1, tz1 - 1, "onyx_citadel_vault", facing="north")
     d.set(c, ty0 + 1, tz1 - 1, "onyx_cluster", facing="up", waterlogged="false")
     d.hanging_lantern(c, ty1, tz0 + 3, 2, "onyx_lantern")
+    # La salle scellee et sa tour sont indestructibles tant que la Sentinelle vit
+    d.ward(kx0, 0, kz0, kx1, 16, az0 - 1, "onyx")
+    d.ward(tx0, ty0, tz0, tx1, ty1 + 2, tz1, "onyx")
     d.save("onyx_citadel")
 
 
@@ -389,8 +408,7 @@ def infernal_sanctum():
         d.box(rx0, 0, az, rx1, 0, tz1 - 1, "minecraft:polished_blackstone")
         d.spawner((rx0 + rx1) // 2, 1, 30, mob)
         d.chest((rx0 + rx1) // 2, 1, tz1 - 1, loot, facing="north")
-        if side == "east":
-            d.guard((rx0 + rx1) // 2 + 2, 1, tz1 - 1, "mimic")
+        d.guard((rx0 + rx1) // 2 + (2 if side == "east" else -2), 1, tz1 - 1, "mimic")
         d.hanging_lantern((rx0 + rx1) // 2, 13, 29, 4, "minecraft:lantern")
     d.spawner(c, 1, 30, "ember_stalker")
 
@@ -442,6 +460,8 @@ def infernal_sanctum():
     d.set(sx1 - 1, sy0 + 1, sz1 - 1, "minecraft:netherrack")
     d.set(sx1 - 1, sy0 + 2, sz1 - 1, "minecraft:fire", age="0", east="false", north="false", south="false", up="false", west="false")
     d.hanging_lantern((sx0 + sx1) // 2, sy1 - 1, (sz0 + sz1) // 2, 2, "minecraft:lantern")
+    d.ward(tx0, 0, tz0, tx1, 14, rz0 - 1, "magma")
+    d.ward(sx0, 14, sz0, sx1, sy1 + 2, sz1, "magma")
     d.save("infernal_sanctum")
 
 
@@ -490,7 +510,7 @@ def withered_catacombs():
         cx, cz = (x0 + x1) // 2, (z0 + z1) // 2
         d.spawner(cx, 1, cz, mob)
         d.chest(x0, 1, z0, "withered_catacombs", facing="south")
-        if (x0 + z0) % 3 == 0:
+        if (x0, z0) in ((1, 15), (1, 33)):
             d.guard(x0 + 2, 1, z0, "mimic")
         d.box(x1, 1, z1, x1, 1, z1 - 2 if z1 - z0 > 4 else z1, "minecraft:polished_blackstone_slab",
               type="bottom", waterlogged="false")
@@ -520,12 +540,11 @@ def withered_catacombs():
     d.air(15, 1, 11, 23, 4, 13)
     d.box(15, 0, 11, 23, 0, 13, "minecraft:gilded_blackstone")
     d.seal(17, 1, 14, 21, 4, 14)
-    for x in (16, 19, 22):
+    for x in (17, 21):
         d.chest(x, 1, 11, "withered_catacombs_vault", facing="south")
-    d.set(15, 1, 11, "minecraft:gold_block")
-    d.set(23, 1, 11, "minecraft:gold_block")
-    d.lantern(15, 2, 11)
-    d.lantern(23, 2, 11)
+    d.lantern(15, 1, 11)
+    d.lantern(23, 1, 11)
+    d.ward(14, 0, 10, 24, 5, 14, "blackstone")
 
     # Escalier vers la surface (descend vers l'ouest)
     for i in range(G):
@@ -655,7 +674,10 @@ def hidden_cache():
     d.lantern(3, 2, 1, "onyx_lantern")
     d.set(1, 1, 4, "minecraft:barrel", facing="up", open="false")
     d.skull(5, 1, 4)
-    # Repere en surface : un petit cairn avec une lanterne des ames
+    # Repere en surface bien visible : un feu de camp des ames sur une botte de foin (colonne de fumee haute,
+    # visible de loin) et un cairn avec une lanterne des ames
+    d.set(2, G, 2, "minecraft:hay_block", axis="y")
+    d.set(2, G + 1, 2, "minecraft:soul_campfire", facing="north", lit="true", signal_fire="true", waterlogged="false")
     d.set(5, G + 1, 4, "minecraft:polished_blackstone_brick_wall", up="true")
     d.lantern(5, G + 2, 4)
     d.save("hidden_cache")

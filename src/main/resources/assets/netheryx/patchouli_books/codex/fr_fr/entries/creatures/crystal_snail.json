@@ -1,0 +1,15 @@
+{
+  "name": "Escargot de cristal",
+  "icon": "netheryx:crystal_snail_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 105,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:crystal_snail",
+      "scale": 0.9,
+      "offset": 0.0,
+      "text": "Lent et cuirassé. Des cristaux d'onyx poussent sur sa coquille : $(l)tondez-le$() pour des éclats d'onyx, ils repoussent en quelques minutes. S'élève avec des $(item)Luminelles$()."
+    }
+  ]
+}

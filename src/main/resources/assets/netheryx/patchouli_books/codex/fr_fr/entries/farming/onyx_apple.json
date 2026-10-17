@@ -1,0 +1,13 @@
+{
+  "name": "Pomme d'onyx",
+  "icon": "netheryx:onyx_apple",
+  "category": "netheryx:farming",
+  "sortnum": 98,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_apple",
+      "text": "Une pomme dorée enrobée d'onyx : Régénération II, Absorption II, Résistance et longue résistance au feu."
+    }
+  ]
+}

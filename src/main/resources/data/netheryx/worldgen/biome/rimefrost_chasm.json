@@ -86,7 +86,9 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_rimefrost_chasm"
+    ],
     [],
     [],
     [],

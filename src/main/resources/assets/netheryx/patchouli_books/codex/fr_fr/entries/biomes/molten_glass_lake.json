@@ -1,0 +1,13 @@
+{
+  "name": "Lac de verre en fusion",
+  "icon": "netheryx:molten_glass",
+  "category": "netheryx:biomes",
+  "sortnum": 99,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Une région de lave lumineuse : bassins de lave cerclés d'obsidienne, $(l)îlots d'obsidienne$() sur la mer de lave, aiguilles d'obsidienne et d'obsidienne pleureuse, et sols de $(item)Verre en fusion$() (brûlant comme le magma).$(br2)Les $(item)Cristaux en fusion$() donnent des $(item)Éclats de verre en fusion$(), utilisés pour la $(l)Lanterne du Nether$(). Attention aux $(l)Golems de basalte$().",
+      "title": "Lac de verre en fusion"
+    }
+  ]
+}

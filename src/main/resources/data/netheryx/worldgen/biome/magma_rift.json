@@ -41,7 +41,7 @@
       },
       {
         "type": "netheryx:fire_ghast",
-        "weight": 25,
+        "weight": 40,
         "minCount": 1,
         "maxCount": 1
       },
@@ -73,9 +73,9 @@
     "creature": [
       {
         "type": "netheryx:basalt_beetle",
-        "weight": 25,
-        "minCount": 1,
-        "maxCount": 3
+        "weight": 40,
+        "minCount": 2,
+        "maxCount": 4
       },
       {
         "type": "minecraft:strider",
@@ -98,7 +98,9 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_magma_rift"
+    ],
     [],
     [],
     [],

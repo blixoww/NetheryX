@@ -1,0 +1,11 @@
+{
+  "type": "netheryx:boulder",
+  "config": {
+    "state": {
+      "Name": "minecraft:bone_block",
+      "Properties": {
+        "axis": "y"
+      }
+    }
+  }
+}

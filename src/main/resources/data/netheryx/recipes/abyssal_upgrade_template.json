@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#T#",
+    "#O#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:onyx_shard"
+    },
+    "T": {
+      "item": "netheryx:abyssal_upgrade_template"
+    },
+    "O": {
+      "item": "netheryx:abyssal_shard"
+    }
+  },
+  "result": {
+    "item": "netheryx:abyssal_upgrade_template",
+    "count": 2
+  }
+}

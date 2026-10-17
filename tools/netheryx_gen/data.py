@@ -136,6 +136,7 @@ def generate_entity_loot():
     ])
     entity_table("onyx_sentinel", [
         {"rolls": 1, "entries": [item("sentinel_core")]},
+        {"rolls": 1, "entries": [item("sentinel_eye")]},
         {"rolls": 1, "entries": [item("onyx", functions=[count(4, 8), LOOTING])]},
         {"rolls": 1, "entries": [item("onyx_shard", functions=[count(6, 12)])]},
     ])
@@ -185,12 +186,14 @@ def generate_entity_loot_v11():
     ])
     entity_table("withered_champion", [
         {"rolls": 1, "entries": [item("withered_blade")]},
+        {"rolls": 1, "entries": [item("champion_crown")]},
         {"rolls": 1, "entries": [item("minecraft:wither_skeleton_skull")]},
         {"rolls": 1, "entries": [item("onyx", functions=[count(3, 6)])]},
         {"rolls": 1, "entries": [item("withered_bone", functions=[count(4, 8)])]},
     ])
     entity_table("infernal_warlock", [
         {"rolls": 1, "entries": [item("warlock_staff")]},
+        {"rolls": 1, "entries": [item("warlock_sigil")]},
         {"rolls": 1, "entries": [item("recall_stone")]},
         {"rolls": 1, "entries": [item("onyx", functions=[count(2, 5)])]},
         {"rolls": 1, "entries": [item("minecraft:blaze_rod", functions=[count(2, 4)])]},

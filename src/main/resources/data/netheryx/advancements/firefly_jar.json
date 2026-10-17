@@ -1,0 +1,50 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:ember_firefly_jar"
+    },
+    "title": {
+      "translate": "advancements.netheryx.firefly_jar.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.firefly_jar.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "ember": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "netheryx:ember_firefly_jar"
+            ]
+          }
+        ]
+      }
+    },
+    "soul": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "netheryx:soul_firefly_jar"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:root",
+  "requirements": [
+    [
+      "ember",
+      "soul"
+    ]
+  ]
+}

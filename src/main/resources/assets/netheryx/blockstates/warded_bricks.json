@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "variant=onyx": {
+      "model": "netheryx:block/warded_bricks_onyx"
+    },
+    "variant=magma": {
+      "model": "netheryx:block/warded_bricks_magma"
+    },
+    "variant=blackstone": {
+      "model": "netheryx:block/warded_bricks_blackstone"
+    }
+  }
+}

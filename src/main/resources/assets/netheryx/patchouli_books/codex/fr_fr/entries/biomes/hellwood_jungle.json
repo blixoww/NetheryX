@@ -1,0 +1,13 @@
+{
+  "name": "Jungle infernale",
+  "icon": "netheryx:hellfern",
+  "category": "netheryx:biomes",
+  "sortnum": 93,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "La forêt des Enfers : d'immenses $(l)arbres infernaux$() aux racines en contreforts et aux cimes embrasées, de hautes $(item)Fougères infernales$(), des vagues d'$(item)Herbe ardente$() et de longues $(item)Lianes de braise$() lumineuses qui pendent de la voûte (elles s'escaladent).$(br2)Créatures : Traqueurs de braise, Ghasts de feu, beaucoup de Poules de cendre et de Vaches de braise.",
+      "title": "Jungle infernale"
+    }
+  ]
+}

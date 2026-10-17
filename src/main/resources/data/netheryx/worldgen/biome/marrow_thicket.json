@@ -99,7 +99,10 @@
   "features": [
     [],
     [],
-    [],
+    [
+      "netheryx:boulder_marrow_thicket",
+      "netheryx:fallen_log_marrow_thicket"
+    ],
     [],
     [],
     [],

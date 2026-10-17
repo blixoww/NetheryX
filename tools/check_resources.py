@@ -64,7 +64,7 @@ for n in particles:
             if not (A / "textures/particle" / (t.split(":")[1] + ".png")).exists():
                 errors.append(f"texture de particule manquante {t}")
 recipes = {p.stem for p in (D / "netheryx/recipes").glob("*.json")}
-known = reg | particles | recipes | {p.stem for p in D.rglob("*.json")} | {"ember_stems", "withered_stems"}
+known = reg | items | particles | recipes | {p.stem for p in D.rglob("*.json")} | {"ember_stems", "withered_stems"}
 for f in D.rglob("*.json"):
     for m in re.findall(r'"netheryx:([a-z_0-9]+)"', f.read_text()):
         if m not in known:

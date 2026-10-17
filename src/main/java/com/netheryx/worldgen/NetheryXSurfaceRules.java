@@ -57,6 +57,26 @@ public final class NetheryXSurfaceRules {
                         SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(Blocks.BLACKSTONE)),
                         state(Blocks.BASALT))),
 
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.HELLWOOD_JUNGLE), SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(aboveLavaSea, SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, 0.35D), state(ModBlocks.EMBER_NYLIUM.get())),
+                                state(ModBlocks.NETHER_GRASS_BLOCK.get())))),
+                        SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, state(ModBlocks.EMBER_WART_BLOCK.get())))),
+
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.MOLTEN_GLASS_LAKE), SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, 0.3D), state(ModBlocks.MOLTEN_GLASS.get())),
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, -0.15D), state(Blocks.OBSIDIAN)),
+                                state(Blocks.BLACKSTONE))),
+                        SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(Blocks.BLACKSTONE)))),
+
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.PETRIFIED_ONYX_FOREST), SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, 0.25D), state(Blocks.CALCITE)),
+                                state(Blocks.SMOOTH_BASALT))),
+                        SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(Blocks.BLACKSTONE)),
+                        SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, state(Blocks.BLACKSTONE)))),
+
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.MARROW_THICKET), SurfaceRules.sequence(
                         SurfaceRules.ifTrue(aboveLavaSea, SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, state(ModBlocks.OSSIFIED_NYLIUM.get()))),
                         SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, state(Blocks.BONE_BLOCK)))),

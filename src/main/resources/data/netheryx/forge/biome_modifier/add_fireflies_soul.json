@@ -1,0 +1,16 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "netheryx:soulfire_marsh",
+    "minecraft:soul_sand_valley",
+    "minecraft:warped_forest"
+  ],
+  "spawners": [
+    {
+      "type": "netheryx:soul_firefly",
+      "weight": 12,
+      "minCount": 3,
+      "maxCount": 6
+    }
+  ]
+}

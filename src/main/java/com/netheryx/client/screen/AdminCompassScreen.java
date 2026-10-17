@@ -19,7 +19,6 @@ import java.util.Locale;
  * Un clic teleporte directement le joueur.
  */
 public class AdminCompassScreen extends Screen {
-    private static final int PER_PAGE = 8;
     private static final int BUTTON_WIDTH = 240;
 
     private final List<ResourceLocation> structures;
@@ -76,10 +75,10 @@ public class AdminCompassScreen extends Screen {
         this.addRenderableWidget(structuresTab);
         this.addRenderableWidget(biomesTab);
         this.addRenderableWidget(this.search);
-        int pages = Math.max(1, (this.filtered.size() + PER_PAGE - 1) / PER_PAGE);
+        int pages = Math.max(1, (this.filtered.size() + this.perPage() - 1) / this.perPage());
         this.page = Math.min(this.page, pages - 1);
         int y = 80;
-        for (int i = this.page * PER_PAGE; i < Math.min(this.filtered.size(), (this.page + 1) * PER_PAGE); i++) {
+        for (int i = this.page * this.perPage(); i < Math.min(this.filtered.size(), (this.page + 1) * this.perPage()); i++) {
             ResourceLocation id = this.filtered.get(i);
             this.addRenderableWidget(Button.builder(this.name(id), b -> this.select(id)).bounds(x, y, BUTTON_WIDTH, 20).build());
             y += 22;
@@ -87,12 +86,12 @@ public class AdminCompassScreen extends Screen {
         Button previous = Button.builder(Component.literal("<"), b -> {
             this.page--;
             this.rebuild();
-        }).bounds(x, 80 + PER_PAGE * 22 + 6, 40, 20).build();
+        }).bounds(x, 80 + this.perPage() * 22 + 6, 40, 20).build();
         previous.active = this.page > 0;
         Button next = Button.builder(Component.literal(">"), b -> {
             this.page++;
             this.rebuild();
-        }).bounds(x + BUTTON_WIDTH - 40, 80 + PER_PAGE * 22 + 6, 40, 20).build();
+        }).bounds(x + BUTTON_WIDTH - 40, 80 + this.perPage() * 22 + 6, 40, 20).build();
         next.active = this.page < pages - 1;
         this.addRenderableWidget(previous);
         this.addRenderableWidget(next);
@@ -115,9 +114,26 @@ public class AdminCompassScreen extends Screen {
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 14, 0xFFD36B);
-        int pages = Math.max(1, (this.filtered.size() + PER_PAGE - 1) / PER_PAGE);
+        int pages = Math.max(1, (this.filtered.size() + this.perPage() - 1) / this.perPage());
         graphics.drawCenteredString(this.font, Component.translatable("screen.netheryx.admin_compass.page", this.page + 1, pages,
-                this.filtered.size()), this.width / 2, 80 + PER_PAGE * 22 + 12, 0xAAAAAA);
+                this.filtered.size()), this.width / 2, 80 + this.perPage() * 22 + 12, 0xAAAAAA);
+    }
+
+    /** Nombre de lignes par page selon la hauteur de la fenetre (les boutons de navigation restent visibles). */
+    private int perPage() {
+        return Math.max(3, (this.height - 80 - 40) / 22);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double delta) {
+        int pages = Math.max(1, (this.filtered.size() + this.perPage() - 1) / this.perPage());
+        int target = Math.max(0, Math.min(pages - 1, this.page - (int) Math.signum(delta)));
+        if (target != this.page) {
+            this.page = target;
+            this.rebuild();
+            return true;
+        }
+        return super.mouseScrolled(mouseX, mouseY, delta);
     }
 
     @Override

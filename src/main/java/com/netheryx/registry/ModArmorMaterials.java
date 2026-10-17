@@ -21,6 +21,8 @@ public enum ModArmorMaterials implements ArmorMaterial {
             () -> Ingredient.of(ModItems.BASALT_CARAPACE.get())),
     EMBER("ember", 24, protection(2, 5, 6, 2), 15, SoundEvents.ARMOR_EQUIP_GOLD, 1.0F, 0.0F,
             () -> Ingredient.of(ModItems.MAGMA_SHELL.get())),
+    ABYSSAL("abyssal", 70, protection(5, 8, 10, 5), 22, SoundEvents.ARMOR_EQUIP_NETHERITE, 5.0F, 0.2F,
+            () -> Ingredient.of(ModItems.ABYSSAL_SHARD.get())),
     WRAITH("wraith", 18, protection(2, 4, 5, 2), 20, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F,
             () -> Ingredient.of(ModItems.WRAITH_CLOTH.get()));
 
