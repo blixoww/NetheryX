@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:cinder_lizard_spawn_egg"
+    },
+    "title": {
+      "translate": "advancements.netheryx.ride_lizard.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.ride_lizard.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "ride": {
+      "trigger": "minecraft:started_riding",
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "vehicle": {
+                "type": "netheryx:cinder_lizard"
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:root"
+}

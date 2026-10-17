@@ -1,0 +1,18 @@
+{
+  "name": "Infernal Cauldron",
+  "icon": "netheryx:infernal_cauldron",
+  "category": "netheryx:utility",
+  "sortnum": 86,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:infernal_cauldron",
+      "text": "Mass potions: pour up to 9 doses of one potion, $(l)heat it from below$(), then add $(item)Sulfur$(): each sulfur adds 2 doses. Fill glass bottles to take them back.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:infernal_cauldron"
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "name": "Lanterne de garde",
+  "icon": "netheryx:ward_lantern",
+  "category": "netheryx:utility",
+  "sortnum": 87,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:ward_lantern",
+      "text": "Aucune créature hostile n'apparaît naturellement à moins de $(l)24 blocs$(). Idéale pour sécuriser une base ou une ferme du Nether.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:ward_lantern"
+    }
+  ]
+}

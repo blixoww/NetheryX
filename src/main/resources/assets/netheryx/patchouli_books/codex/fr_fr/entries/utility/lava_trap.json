@@ -1,0 +1,23 @@
+{
+  "name": "Nasse à magma",
+  "icon": "netheryx:lava_trap",
+  "category": "netheryx:utility",
+  "sortnum": 85,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:lava_trap",
+      "text": "Immergez-la dans un $(l)lac de lave$() : elle attrape seule des poissons de magme et des trésors de la lave. Plus il y a de lave, plus elle est rapide ; de la $(item)viande crue$() en appât double la vitesse. Compatible entonnoirs.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:lava_trap"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Écaille de poisson de magme$() + $(item)Potion étrange$() = $(l)Potion de plongée en lave$() : résistance au feu et $(l)Vision de lave$() (voir clair et nager vite dans la lave). La redstone la prolonge.",
+      "title": "Plongée en lave"
+    }
+  ]
+}

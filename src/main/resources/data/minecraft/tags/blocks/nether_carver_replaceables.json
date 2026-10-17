@@ -4,6 +4,9 @@
     "netheryx:ash_block",
     "netheryx:sulfur_rock",
     "netheryx:withered_soil",
-    "netheryx:nether_grass_block"
+    "netheryx:nether_grass_block",
+    "netheryx:rimestone",
+    "netheryx:ossified_nylium",
+    "netheryx:wart_moss"
   ]
 }

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:marrow_stem",
+    "netheryx:stripped_marrow_stem",
+    "netheryx:marrow_hyphae",
+    "netheryx:stripped_marrow_hyphae"
+  ]
+}

@@ -53,11 +53,11 @@ CATEGORIES = [
     ("onyx", "netheryx:onyx", T("Onyx", "Onyx"),
      T("The black gem stronger than diamond.", "La gemme noire plus solide que le diamant.")),
     ("biomes", "netheryx:ember_nylium", T("Biomes", "Biomes"),
-     T("Seven new Nether biomes, and changes to the vanilla ones.", "Sept nouveaux biomes du Nether, et les changements des biomes vanilla.")),
+     T("Twelve new Nether biomes, and changes to the vanilla ones.", "Douze nouveaux biomes du Nether, et les changements des biomes vanilla.")),
     ("creatures", "netheryx:ember_stalker_spawn_egg", T("Creatures", "Créatures"),
      T("Friends, foes and bosses of the new Nether.", "Amis, ennemis et boss du nouveau Nether.")),
     ("structures", "netheryx:onyx_bricks", T("Dungeons", "Donjons"),
-     T("Three great dungeons and their bosses.", "Trois grands donjons et leurs boss.")),
+     T("Great dungeons, their bosses, camps and caravans.", "Grands donjons, boss, campements et caravanes.")),
     ("equipment", "netheryx:onyx_sword", T("Tools & Armor", "Outils et armures"),
      T("Weapons, tools and armor.", "Armes, outils et armures.")),
     ("utility", "netheryx:soul_compass", T("Useful Items", "Objets utiles"),
@@ -77,10 +77,10 @@ def entry(category, name_en, name_fr, icon, pages, priority=False):
 
 # ---------------------------------------------------------------- Premiers pas
 entry("getting_started", "Welcome to NetheryX", "Bienvenue dans NetheryX", "minecraft:book", [
-    text("NetheryX overhauls the Nether: $(l)8 new biomes$(), $(l)13 creatures$() including three bosses, $(l)3 great dungeons$() and small camps, "
+    text("NetheryX overhauls the Nether: $(l)12 new biomes$(), $(l)19 creatures$() including three bosses, $(l)3 great dungeons$() and small camps, "
          "the $(item)Onyx$() material, new crops, foods, tools and many useful items.$(br2)"
          "The vanilla biomes change too: new plants and creatures appear everywhere.",
-         "NetheryX transforme le Nether : $(l)8 nouveaux biomes$(), $(l)13 créatures$() dont trois boss, $(l)3 grands donjons$() et de petits campements, "
+         "NetheryX transforme le Nether : $(l)12 nouveaux biomes$(), $(l)19 créatures$() dont trois boss, $(l)3 grands donjons$() et de petits campements, "
          "le matériau $(item)Onyx$(), de nouvelles cultures, nourritures, outils et objets utiles.$(br2)"
          "Les biomes vanilla changent aussi : nouvelles plantes et créatures un peu partout.", "NetheryX"),
     text("This codex is given once to every player. Lost it? Craft a new one with a $(item)Book$() and a $(item)Netherrack$() "
@@ -541,6 +541,173 @@ entry("building", "Other Blocks", "Autres blocs", "netheryx:sulfur_block", [
     craft("sulfur_block", "onyx_block"),
     text("$(item)Ash Block$() falls like sand. $(item)Crusted Lava$() is created by Magma Treads and melts back into lava.",
          "Le $(item)bloc de cendre$() tombe comme le sable. La $(item)lave croûtée$() est créée par les Semelles de magma et redevient de la lave."),
+])
+
+
+# ---------------------------------------------------------------- 1.2.0
+entry("getting_started", "Nether Events", "Événements du Nether", "netheryx:sulfur", [
+    text("Every 20 to 45 minutes, an event shakes the Nether for a few minutes:$(br)"
+         "$(li)$(l)Ash fall$(): thick grey fog, Ash Wraiths and Withered Knights grow stronger.$(li)$(l)Sulfur storm$(): sulfur falls "
+         "from the ceiling, pick it up!$(li)$(l)Eruption$(): in Magma Rifts and Basalt Deltas, volcanic bombs, magma and ores rain down.",
+         "Toutes les 20 à 45 minutes, un événement secoue le Nether pendant quelques minutes :$(br)"
+         "$(li)$(l)Pluie de cendres$() : épais brouillard gris, Spectres et Chevaliers flétris renforcés.$(li)$(l)Tempête de soufre$() : "
+         "du soufre tombe de la voûte, ramassez-le !$(li)$(l)Éruption$() : dans les Failles de magma et les deltas de basalte, "
+         "bombes volcaniques, magma et minerais pleuvent.", "Événements"),
+    text("The full $(item)Wraith armor$() lets you see through the ash fall.$(br2)Server operators can start or stop an event with "
+         "$(l)/netheryx event start <type>$() and $(l)/netheryx event stop$(). Events can be disabled in the config.",
+         "L'$(item)armure spectrale$() complète permet de voir à travers la pluie de cendres.$(br2)Les opérateurs peuvent lancer ou "
+         "arrêter un événement avec $(l)/netheryx event start <type>$() et $(l)/netheryx event stop$(). Les événements se désactivent "
+         "dans la configuration."),
+])
+
+entry("biomes", "Marrow Thicket", "Fourré de moelle", "netheryx:ossified_nylium", [
+    text("A pale forest of $(l)marrow trees$() on ossified nylium. When the ceiling is close, trunks fuse with it into natural pillars. "
+         "Glowing $(item)Marrow Vines$() hang from the caps and can be climbed.$(br2)Resources: Marrow wood, $(item)Marrow Caps$() "
+         "(turned into $(item)Marrow Meal$()), bones.",
+         "Une forêt pâle d'$(l)arbres de moelle$() sur du nylium ossifié. Quand la voûte est proche, les troncs s'y soudent en piliers "
+         "naturels. Des $(item)Lianes de moelle$() lumineuses pendent des chapeaux et s'escaladent.$(br2)Ressources : bois de moelle, "
+         "$(item)Chapeaux de moelle$() (transformés en $(item)Farine de moelle$()), os.", "Fourré de moelle"),
+    spot("marrow_meal", "Bone meal on a whole $(l)3x3$() area in one use.", "De la poudre d'os sur toute une zone de $(l)3x3$() en un seul usage."),
+])
+entry("biomes", "Rimefrost Chasm", "Gouffre de givre", "netheryx:rime_ice", [
+    text("A frozen wound in the Nether: rimestone, spikes of $(l)Rime Ice$() rising from the floor and hanging from the ceiling, "
+         "and $(item)Rime Crystals$(). Skeletons and wraiths roam here.",
+         "Une plaie gelée du Nether : pierre de givre, pics de $(l)glace de givre$() dressés au sol et suspendus à la voûte, "
+         "et $(item)Cristaux de givre$(). Squelettes et spectres y rôdent.", "Gouffre de givre"),
+    spot("rime_ice", "$(l)The only water of the Nether.$() Rime Ice never melts by itself; placed against heat (lava, fire, "
+                     "magma block, lit campfire) it slowly melts into a $(l)water source$().",
+         "$(l)La seule eau du Nether.$() La glace de givre ne fond jamais seule ; placée contre une source de chaleur (lave, feu, "
+         "bloc de magma, feu de camp allumé) elle fond lentement en $(l)source d'eau$()."),
+    craft("rime_ice", en="4 Rime Shards from Rime Crystals.", fr="4 éclats de givre, issus des cristaux de givre."),
+])
+entry("biomes", "Wartvine Tangle", "Enchevêtrement de verrues", "netheryx:wartfruit", [
+    text("Giant wart bulbs on wartstalk trunks, studded with glowing bulbs. $(item)Wartvines$() hang everywhere, loaded with "
+         "$(l)Wartfruits$(): the renewable food of the Nether. Hoglins, piglins and $(l)Cinder Lizards$() live here.",
+         "Des verrues géantes sur des troncs de verrutige, constellées de bulbes lumineux. Des $(item)Verrulianes$() pendent partout, "
+         "chargées de $(l)Fruits de verrue$() : la nourriture renouvelable du Nether. Hoglins, piglins et $(l)Lézards de cendre$() y vivent.",
+         "Enchevêtrement"),
+    spot("wartfruit", "Right-click a glowing vine to pick its fruits: they grow back. Place a fruit under a ceiling to plant a new vine.",
+         "Clic droit sur une liane lumineuse pour cueillir ses fruits : ils repoussent. Posez un fruit sous un plafond pour planter une liane."),
+])
+entry("biomes", "Quartz Reef", "Récifs de quartz", "netheryx:rich_quartz_ore", [
+    text("Natural $(l)quartz spires$() pierce blackstone flats near the lava seas, veined with $(item)Rich Quartz Ore$() (2 to 5 quartz "
+         "each). The lava around is full of $(l)Magmafish$().",
+         "Des $(l)aiguilles de quartz$() naturelles percent les plaines de pierre noire près des mers de lave, veinées de "
+         "$(item)Minerai de quartz riche$() (2 à 5 quartz chacun). La lave alentour grouille de $(l)Poissons de magme$().", "Récifs de quartz"),
+    craft("quartz_glass", "quartz_lamp"),
+])
+
+entry("creatures", "Magmafish", "Poisson de magme", "netheryx:magmafish", [
+    mob("magmafish", "Swims in lava seas. Hunt it, or catch it with a $(item)Lava Trap$(). Its scales brew the "
+                     "$(item)Potion of Lava Diving$().",
+        "Nage dans les mers de lave. Chassez-le ou attrapez-le avec une $(item)Nasse à magma$(). Ses écailles servent à brasser la "
+        "$(item)Potion de plongée en lave$().", 1.5),
+])
+entry("creatures", "Cinder Lizard", "Lézard de cendre", "netheryx:cinder_lizard_spawn_egg", [
+    mob("cinder_lizard", "A Nether $(l)mount$(). Tame it with $(item)Fire Berries$(), put a $(item)Saddle$() on it and ride it. "
+                         "It walks on lava and runs even faster on basalt and blackstone.",
+        "Une $(l)monture$() du Nether. Apprivoisez-le avec des $(item)Baies de feu$(), sellez-le et chevauchez-le. "
+        "Il marche sur la lave et court encore plus vite sur le basalte et la pierre noire.", 0.7),
+])
+entry("creatures", "Lantern Bearer", "Porteur de lanterne", "netheryx:lantern_bearer_spawn_egg", [
+    mob("lantern_bearer", "Its soul lantern truly $(l)lights up$() the area. Tame it with $(item)Glowcaps$(): it follows you and "
+                          "lights your way. Right-click to make it stay.",
+        "Sa lanterne des âmes $(l)éclaire vraiment$() les alentours. Apprivoisez-le avec des $(item)Luminelles$() : il vous suit et "
+        "éclaire votre chemin. Clic droit pour qu'il reste sur place."),
+])
+entry("creatures", "Basalt Burrower", "Fouisseur de basalte", "netheryx:basalt_burrower_spawn_egg", [
+    mob("basalt_burrower", "A huge neutral rock worm that digs long $(l)tunnels$() through netherrack and basalt. It digests ores: "
+                           "nuggets, quartz, onyx, and its $(item)Fang$() (reach infusion).",
+        "Un énorme ver de roche neutre qui creuse de longs $(l)tunnels$() dans la netherrack et le basalte. Il digère les minerais : "
+        "pépites, quartz, onyx, et son $(item)Croc$() (infusion de portée).", 0.6),
+])
+entry("creatures", "Piglin Merchant", "Marchand piglin", "netheryx:piglin_merchant_spawn_egg", [
+    mob("piglin_merchant", "Travels with the $(l)Nomad Caravans$(). Trades in $(item)gold$() and $(item)onyx$(): rare seeds, lava traps, "
+                           "infusion templates, Nether enchanted books and Soul Compasses already tuned to a dungeon.",
+        "Voyage avec les $(l)Caravanes nomades$(). Commerce en $(item)or$() et en $(item)onyx$() : graines rares, nasses, gabarits "
+        "d'infusion, livres d'enchantements du Nether et Boussoles des âmes déjà accordées sur un donjon.", 0.8),
+])
+entry("creatures", "Mimic", "Coffre mimique", "netheryx:mimic_spawn_egg", [
+    mob("mimic", "Hides among dungeon chests. Approach while $(l)sneaking$() to tell it apart... or fight it: its loot is much better "
+                 "than a chest's.",
+        "Se cache parmi les coffres des donjons. Approchez $(l)accroupi$() pour le démasquer... ou combattez-le : son butin est bien "
+        "meilleur que celui d'un coffre."),
+])
+
+entry("structures", "Nomad Caravan", "Caravane nomade", "netheryx:wartstalk_planks", [
+    text("Two tents, a lizard pen and a campfire: Nomad Caravans host a $(l)Piglin Merchant$(). Their chests hold gold, sulfur, "
+         "food and sometimes an $(item)Onyx Infusion Template$().",
+         "Deux tentes, un enclos à lézards et un feu de camp : les Caravanes nomades abritent un $(l)Marchand piglin$(). Leurs coffres "
+         "contiennent or, soufre, nourriture et parfois un $(item)Gabarit d'infusion d'onyx$().", "Caravanes"),
+])
+
+entry("equipment", "Themed Armors", "Armures thématiques", "netheryx:ember_chestplate", [
+    spot("ember_chestplate", "$(l)Ember armor$() (Magma Shells). Full set: immune to fire and hot floors, faster on Nether grass and nylium.",
+         "$(l)Armure de braise$() (carapaces de magma). Ensemble : insensible au feu et aux sols brûlants, plus rapide sur l'herbe et le nylium."),
+    spot("wraith_robe", "$(l)Wraith armor$() (Wraith Cloth). Full set: creatures only notice you up close, and you see through ash falls.",
+         "$(l)Armure spectrale$() (étoffe spectrale). Ensemble : les créatures ne vous repèrent que de près, et vous voyez à travers les cendres."),
+    spot("carapace_helmet", "$(l)Carapace armor$() (Basalt Carapaces). Full set: heavy knockback resistance and reflects 25% of melee damage.",
+         "$(l)Armure de carapace$() (carapaces de basalte). Ensemble : grande résistance au recul et renvoie 25 % des dégâts de mêlée."),
+])
+entry("equipment", "Onyx Infusions", "Infusions d'onyx", "netheryx:onyx_infusion_template", [
+    text("At a $(item)Smithing Table$(), an $(item)Onyx Infusion Template$() adds a permanent bonus to $(l)any$() tool, weapon or armor:"
+         "$(li)$(item)Magma Cream$(): $(l)Smelting$(), mined blocks come out smelted.$(li)$(item)Burrower Fang$(): $(l)Reach$(), +1.5 blocks."
+         "$(li)$(item)Onyx$(): $(l)Resilience$(), the item slowly repairs itself.",
+         "À la $(item)Table de forgeron$(), un $(item)Gabarit d'infusion d'onyx$() ajoute un bonus permanent à $(l)n'importe quel$() outil, "
+         "arme ou armure :$(li)$(item)Crème de magma$() : $(l)Fonte$(), les blocs minés sortent fondus.$(li)$(item)Croc de fouisseur$() : "
+         "$(l)Portée$(), +1,5 bloc.$(li)$(item)Onyx$() : $(l)Résilience$(), l'objet se répare lentement.", "Infusions"),
+    craft("onyx_infusion_template", en="Templates are found in dungeons, bastions and caravans, then duplicated.",
+          fr="Les gabarits se trouvent dans les donjons, bastions et caravanes, puis se dupliquent."),
+])
+entry("equipment", "Soul Altar", "Autel des âmes", "netheryx:soul_altar", [
+    text("Place an item (or a book) on the altar, light at least $(l)2 soul flames$() nearby (soul fire, torches, lanterns or "
+         "campfires), then right-click with an offering. Each level costs 5 experience levels.$(br)"
+         "$(li)2 $(item)Magma Shells$(): $(l)Ember Stride$() (boots).$(li)4 $(item)Soul Dust$(): $(l)Soul Harvest$() (weapons)."
+         "$(li)2 $(item)Basalt Carapaces$(): $(l)Anchoring$() (chest, legs).",
+         "Posez un objet (ou un livre) sur l'autel, allumez au moins $(l)2 flammes des âmes$() à proximité (feu, torches, lanternes ou "
+         "feux de camp des âmes), puis clic droit avec une offrande. Chaque niveau coûte 5 niveaux d'expérience.$(br)"
+         "$(li)2 $(item)Carapaces de magma$() : $(l)Pas de braise$() (bottes).$(li)4 $(item)Poussières d'âme$() : $(l)Récolte d'âmes$() (armes)."
+         "$(li)2 $(item)Carapaces de basalte$() : $(l)Ancrage$() (plastron, jambières).", "Autel des âmes"),
+    craft("soul_altar"),
+])
+
+entry("utility", "Lava Trap", "Nasse à magma", "netheryx:lava_trap", [
+    spot("lava_trap", "Sink it in a $(l)lava lake$(): it catches Magmafish and lava treasures on its own. The more lava around, the "
+                      "faster; $(item)raw meat$() as bait doubles the speed. Works with hoppers.",
+         "Immergez-la dans un $(l)lac de lave$() : elle attrape seule des poissons de magme et des trésors de la lave. Plus il y a de lave, "
+         "plus elle est rapide ; de la $(item)viande crue$() en appât double la vitesse. Compatible entonnoirs."),
+    craft("lava_trap"),
+    text("$(item)Magmafish Scale$() + $(item)Awkward Potion$() = $(l)Potion of Lava Diving$(): Fire Resistance and $(l)Lava Vision$() "
+         "(see clearly and swim fast in lava). Redstone extends it.",
+         "$(item)Écaille de poisson de magme$() + $(item)Potion étrange$() = $(l)Potion de plongée en lave$() : résistance au feu et "
+         "$(l)Vision de lave$() (voir clair et nager vite dans la lave). La redstone la prolonge.", "Plongée en lave"),
+])
+entry("utility", "Infernal Cauldron", "Chaudron infernal", "netheryx:infernal_cauldron", [
+    spot("infernal_cauldron", "Mass potions: pour up to 9 doses of one potion, $(l)heat it from below$(), then add $(item)Sulfur$(): each "
+                              "sulfur adds 2 doses. Fill glass bottles to take them back.",
+         "Des potions en masse : versez jusqu'à 9 doses d'une potion, $(l)chauffez-le par dessous$(), puis ajoutez du $(item)Soufre$() : "
+         "chaque soufre ajoute 2 doses. Remplissez des fioles pour les récupérer."),
+    craft("infernal_cauldron"),
+])
+entry("utility", "Ward Lantern", "Lanterne de garde", "netheryx:ward_lantern", [
+    spot("ward_lantern", "No hostile creature spawns naturally within $(l)24 blocks$(). Perfect to secure a Nether base or farm.",
+         "Aucune créature hostile n'apparaît naturellement à moins de $(l)24 blocs$(). Idéale pour sécuriser une base ou une ferme du Nether."),
+    craft("ward_lantern"),
+])
+
+entry("farming", "Wartfruit Tart", "Tarte aux fruits de verrue", "netheryx:wartfruit_tart", [
+    craft("wartfruit_tart", en="A filling meal that may grant Regeneration.", fr="Un repas copieux qui peut donner la Régénération."),
+    smelt("grilled_magmafish"),
+])
+
+entry("building", "Marrow Wood", "Bois de moelle", "netheryx:marrow_planks", [
+    craft("marrow_planks", "marrow_door", en="A pale, bone-white wood.", fr="Un bois pâle, blanc comme l'os."),
+])
+entry("building", "Wartstalk Wood", "Bois de verrutige", "netheryx:wartstalk_planks", [
+    craft("wartstalk_planks", "wartstalk_door", en="A deep red wood from the Wartvine Tangle.", fr="Un bois rouge profond de l'Enchevêtrement."),
+])
+entry("building", "Rimestone", "Pierre de givre", "netheryx:rimestone_bricks", [
+    craft("rimestone_bricks", "rimestone_brick_wall"),
 ])
 
 

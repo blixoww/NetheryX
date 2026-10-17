@@ -40,6 +40,11 @@ public final class ModCreativeTabs {
                 event.accept(ModItems.ONYX_CHESTPLATE);
                 event.accept(ModItems.ONYX_LEGGINGS);
                 event.accept(ModItems.ONYX_BOOTS);
+                for (var armor : java.util.List.of(ModItems.EMBER_HELMET, ModItems.EMBER_CHESTPLATE, ModItems.EMBER_LEGGINGS,
+                        ModItems.EMBER_BOOTS, ModItems.WRAITH_HOOD, ModItems.WRAITH_ROBE, ModItems.WRAITH_LEGGINGS, ModItems.WRAITH_BOOTS,
+                        ModItems.CARAPACE_HELMET, ModItems.CARAPACE_LEGGINGS, ModItems.CARAPACE_BOOTS)) {
+                    event.accept(armor);
+                }
             } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
                 event.accept(ModItems.ONYX_PICKAXE);
                 event.accept(ModItems.ONYX_AXE);
@@ -50,6 +55,7 @@ public final class ModCreativeTabs {
                 event.accept(ModItems.RECALL_STONE);
                 event.accept(ModItems.OBSIDIAN_BOAT);
                 event.accept(ModItems.OBSIDIAN_BUCKET);
+                event.accept(ModItems.ONYX_INFUSION_TEMPLATE);
             }
         }
     }

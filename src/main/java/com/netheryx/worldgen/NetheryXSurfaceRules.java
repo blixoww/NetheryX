@@ -57,6 +57,26 @@ public final class NetheryXSurfaceRules {
                         SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(Blocks.BLACKSTONE)),
                         state(Blocks.BASALT))),
 
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.MARROW_THICKET), SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(aboveLavaSea, SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, state(ModBlocks.OSSIFIED_NYLIUM.get()))),
+                        SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, state(Blocks.BONE_BLOCK)))),
+
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.RIMEFROST_CHASM), SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, 0.15D), state(ModBlocks.RIME_ICE.get())),
+                                state(ModBlocks.RIMESTONE.get()))),
+                        SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(ModBlocks.RIMESTONE.get())),
+                        SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, state(ModBlocks.RIMESTONE.get())))),
+
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.WARTVINE_TANGLE),
+                        SurfaceRules.ifTrue(aboveLavaSea, SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, state(ModBlocks.WART_MOSS.get())))),
+
+                SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.QUARTZ_REEF), SurfaceRules.sequence(
+                        SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, 0.25D), state(Blocks.SMOOTH_QUARTZ)),
+                                state(Blocks.BLACKSTONE))),
+                        SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(Blocks.BLACKSTONE)))),
+
                 state(Blocks.NETHERRACK)
         );
     }

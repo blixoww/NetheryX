@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "#T#",
+    "#O#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:blackstone"
+    },
+    "T": {
+      "item": "netheryx:onyx_infusion_template"
+    },
+    "O": {
+      "item": "netheryx:onyx"
+    }
+  },
+  "result": {
+    "item": "netheryx:onyx_infusion_template",
+    "count": 2
+  }
+}

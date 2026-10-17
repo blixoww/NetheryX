@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "netheryx:sulfur_ore",
-    "netheryx:sulfur_block"
+    "netheryx:sulfur_block",
+    "netheryx:rimestone",
+    "netheryx:rimestone_bricks",
+    "netheryx:rich_quartz_ore"
   ]
 }

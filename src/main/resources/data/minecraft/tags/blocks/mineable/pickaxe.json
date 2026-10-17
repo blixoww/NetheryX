@@ -21,6 +21,21 @@
     "netheryx:magma_brick_wall",
     "netheryx:onyx_lantern",
     "netheryx:onyx_anvil",
-    "netheryx:onyx_furnace"
+    "netheryx:onyx_furnace",
+    "netheryx:rimestone",
+    "netheryx:rimestone_bricks",
+    "netheryx:rimestone_brick_stairs",
+    "netheryx:rimestone_brick_slab",
+    "netheryx:rimestone_brick_wall",
+    "netheryx:rime_ice",
+    "netheryx:rime_crystal",
+    "netheryx:rich_quartz_ore",
+    "netheryx:quartz_lamp",
+    "netheryx:lava_trap",
+    "netheryx:infernal_cauldron",
+    "netheryx:soul_altar",
+    "netheryx:ward_lantern",
+    "netheryx:ossified_nylium",
+    "netheryx:wart_moss"
   ]
 }

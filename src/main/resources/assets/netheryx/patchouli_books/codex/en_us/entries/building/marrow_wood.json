@@ -1,0 +1,14 @@
+{
+  "name": "Marrow Wood",
+  "icon": "netheryx:marrow_planks",
+  "category": "netheryx:building",
+  "sortnum": 89,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:marrow_planks",
+      "recipe2": "netheryx:marrow_door",
+      "text": "A pale, bone-white wood."
+    }
+  ]
+}

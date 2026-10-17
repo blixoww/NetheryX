@@ -1,0 +1,18 @@
+{
+  "name": "Récifs de quartz",
+  "icon": "netheryx:rich_quartz_ore",
+  "category": "netheryx:biomes",
+  "sortnum": 74,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Des $(l)aiguilles de quartz$() naturelles percent les plaines de pierre noire près des mers de lave, veinées de $(item)Minerai de quartz riche$() (2 à 5 quartz chacun). La lave alentour grouille de $(l)Poissons de magme$().",
+      "title": "Récifs de quartz"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:quartz_glass",
+      "recipe2": "netheryx:quartz_lamp"
+    }
+  ]
+}

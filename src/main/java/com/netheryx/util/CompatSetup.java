@@ -1,7 +1,15 @@
 package com.netheryx.util;
 
 import com.netheryx.entity.SulfurBombEntity;
+import com.netheryx.registry.ModEffects;
 import com.netheryx.registry.ModItems;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.common.crafting.StrictNBTIngredient;
 import net.minecraft.Util;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
@@ -48,6 +56,14 @@ public final class CompatSetup {
         pot.addPlant(ModBlocks.EMBER_FUNGUS.getId(), ModBlocks.POTTED_EMBER_FUNGUS);
         pot.addPlant(ModBlocks.WITHERED_FUNGUS.getId(), ModBlocks.POTTED_WITHERED_FUNGUS);
 
+        // 1.2.0 : compost, potions
+        ComposterBlock.COMPOSTABLES.put(ModItems.WARTFRUIT.get(), 0.3F);
+        ComposterBlock.COMPOSTABLES.put(ModBlocks.MARROW_SPROUTS.get().asItem(), 0.5F);
+        ComposterBlock.COMPOSTABLES.put(ModBlocks.MARROW_VINES.get().asItem(), 0.5F);
+        ComposterBlock.COMPOSTABLES.put(ModBlocks.MARROW_CAP.get().asItem(), 0.85F);
+        ComposterBlock.COMPOSTABLES.put(ModBlocks.WART_BULB.get().asItem(), 0.65F);
+        registerBrewing();
+
         DispenserBlock.registerBehavior(ModItems.SULFUR_BOMB.get(), new AbstractProjectileDispenseBehavior() {
             @Override
             protected Projectile getProjectile(Level level, Position position, ItemStack stack) {
@@ -55,5 +71,17 @@ public final class CompatSetup {
                         bomb -> bomb.setItem(stack));
             }
         });
+    }
+
+    /** Potion de plongee en lave : potion etrange + ecaille de poisson de magme, prolongee a la redstone. */
+    private static void registerBrewing() {
+        for (Item container : new Item[]{Items.POTION, Items.SPLASH_POTION, Items.LINGERING_POTION}) {
+            BrewingRecipeRegistry.addRecipe(StrictNBTIngredient.of(PotionUtils.setPotion(new ItemStack(container), Potions.AWKWARD)),
+                    Ingredient.of(ModItems.MAGMAFISH_SCALE.get()),
+                    PotionUtils.setPotion(new ItemStack(container), ModEffects.LAVA_DIVING.get()));
+            BrewingRecipeRegistry.addRecipe(StrictNBTIngredient.of(PotionUtils.setPotion(new ItemStack(container), ModEffects.LAVA_DIVING.get())),
+                    Ingredient.of(Items.REDSTONE),
+                    PotionUtils.setPotion(new ItemStack(container), ModEffects.LONG_LAVA_DIVING.get()));
+        }
     }
 }

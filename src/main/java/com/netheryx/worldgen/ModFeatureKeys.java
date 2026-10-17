@@ -14,6 +14,8 @@ public final class ModFeatureKeys {
     public static final ResourceKey<ConfiguredFeature<?, ?>> WITHERED_FUNGUS_PLANTED = key("withered_fungus_planted");
     public static final ResourceKey<ConfiguredFeature<?, ?>> MEADOW_VEGETATION_BONEMEAL = key("meadow_vegetation_bonemeal");
     public static final ResourceKey<ConfiguredFeature<?, ?>> EMBER_VEGETATION_BONEMEAL = key("ember_vegetation_bonemeal");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> MARROW_VEGETATION_BONEMEAL = key("marrow_vegetation_bonemeal");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> WART_VEGETATION_BONEMEAL = key("wart_vegetation_bonemeal");
 
     private ModFeatureKeys() {
     }

@@ -4,6 +4,9 @@ import com.netheryx.NetheryX;
 import com.netheryx.item.GlimmerElixirItem;
 import com.netheryx.item.InfernalHeartItem;
 import com.netheryx.item.MagmaTreadsItem;
+import com.netheryx.item.MarrowMealItem;
+import com.netheryx.item.SetBonusArmorItem;
+import com.netheryx.item.TooltipItem;
 import com.netheryx.item.ObsidianBoatItem;
 import com.netheryx.item.ObsidianBucketItem;
 import com.netheryx.item.OnyxArmorItem;
@@ -181,7 +184,56 @@ public final class ModItems {
     public static final RegistryObject<Item> ONYX_CUBE_SPAWN_EGG = register("onyx_cube_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.ONYX_CUBE, 0x16131C, 0xB06CFF, new Item.Properties()));
 
+    // =============================================================================================
+    // 1.2.0
+    // =============================================================================================
+    public static final RegistryObject<Item> MARROW_MEAL = register("marrow_meal", () -> new MarrowMealItem(new Item.Properties()));
+    public static final RegistryObject<Item> RIME_SHARD = register("rime_shard", () -> new TooltipItem(new Item.Properties()));
+    public static final RegistryObject<Item> WARTFRUIT = register("wartfruit",
+            () -> new ItemNameBlockItem(ModBlocks.WARTVINE.get(), new Item.Properties().food(ModFoods.WARTFRUIT)));
+    public static final RegistryObject<Item> WARTFRUIT_TART = register("wartfruit_tart",
+            () -> new Item(new Item.Properties().food(ModFoods.WARTFRUIT_TART)));
+    public static final RegistryObject<Item> MAGMAFISH = register("magmafish",
+            () -> new Item(new Item.Properties().food(ModFoods.MAGMAFISH).fireResistant()));
+    public static final RegistryObject<Item> GRILLED_MAGMAFISH = register("grilled_magmafish",
+            () -> new Item(new Item.Properties().food(ModFoods.GRILLED_MAGMAFISH).fireResistant()));
+    public static final RegistryObject<Item> MAGMAFISH_SCALE = register("magmafish_scale",
+            () -> new TooltipItem(new Item.Properties().fireResistant()));
+    public static final RegistryObject<Item> WRAITH_CLOTH = register("wraith_cloth", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> ONYX_INFUSION_TEMPLATE = register("onyx_infusion_template",
+            () -> new TooltipItem(new Item.Properties().rarity(Rarity.UNCOMMON).fireResistant()));
+    public static final RegistryObject<Item> BURROWER_FANG = register("burrower_fang", () -> new TooltipItem(new Item.Properties()));
+
+    public static final RegistryObject<Item> EMBER_HELMET = armor("ember_helmet", ModArmorMaterials.EMBER, ArmorItem.Type.HELMET, "ember");
+    public static final RegistryObject<Item> EMBER_CHESTPLATE = armor("ember_chestplate", ModArmorMaterials.EMBER, ArmorItem.Type.CHESTPLATE, "ember");
+    public static final RegistryObject<Item> EMBER_LEGGINGS = armor("ember_leggings", ModArmorMaterials.EMBER, ArmorItem.Type.LEGGINGS, "ember");
+    public static final RegistryObject<Item> EMBER_BOOTS = armor("ember_boots", ModArmorMaterials.EMBER, ArmorItem.Type.BOOTS, "ember");
+    public static final RegistryObject<Item> WRAITH_HOOD = armor("wraith_hood", ModArmorMaterials.WRAITH, ArmorItem.Type.HELMET, "wraith");
+    public static final RegistryObject<Item> WRAITH_ROBE = armor("wraith_robe", ModArmorMaterials.WRAITH, ArmorItem.Type.CHESTPLATE, "wraith");
+    public static final RegistryObject<Item> WRAITH_LEGGINGS = armor("wraith_leggings", ModArmorMaterials.WRAITH, ArmorItem.Type.LEGGINGS, "wraith");
+    public static final RegistryObject<Item> WRAITH_BOOTS = armor("wraith_boots", ModArmorMaterials.WRAITH, ArmorItem.Type.BOOTS, "wraith");
+    public static final RegistryObject<Item> CARAPACE_HELMET = armor("carapace_helmet", ModArmorMaterials.CARAPACE, ArmorItem.Type.HELMET, "carapace");
+    public static final RegistryObject<Item> CARAPACE_LEGGINGS = armor("carapace_leggings", ModArmorMaterials.CARAPACE, ArmorItem.Type.LEGGINGS, "carapace");
+    public static final RegistryObject<Item> CARAPACE_BOOTS = armor("carapace_boots", ModArmorMaterials.CARAPACE, ArmorItem.Type.BOOTS, "carapace");
+
+    public static final RegistryObject<Item> MAGMAFISH_SPAWN_EGG = register("magmafish_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.MAGMAFISH, 0x3A0E06, 0xFF8A1A, new Item.Properties()));
+    public static final RegistryObject<Item> PIGLIN_MERCHANT_SPAWN_EGG = register("piglin_merchant_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.PIGLIN_MERCHANT, 0xC88A6A, 0xE8C040, new Item.Properties()));
+    public static final RegistryObject<Item> MIMIC_SPAWN_EGG = register("mimic_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.MIMIC, 0x6A4214, 0x1A0A0A, new Item.Properties()));
+    public static final RegistryObject<Item> BASALT_BURROWER_SPAWN_EGG = register("basalt_burrower_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.BASALT_BURROWER, 0x3A3A40, 0xC8B080, new Item.Properties()));
+    public static final RegistryObject<Item> LANTERN_BEARER_SPAWN_EGG = register("lantern_bearer_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.LANTERN_BEARER, 0x2A2440, 0x7FE8FF, new Item.Properties()));
+    public static final RegistryObject<Item> CINDER_LIZARD_SPAWN_EGG = register("cinder_lizard_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.CINDER_LIZARD, 0x2A1A14, 0xFF6A1A, new Item.Properties()));
+
     private ModItems() {
+    }
+
+    private static RegistryObject<Item> armor(String name, ModArmorMaterials material, ArmorItem.Type type, String set) {
+        return register(name, () -> new SetBonusArmorItem(material, type, new Item.Properties().fireResistant(), set));
     }
 
     private static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {

@@ -1,0 +1,17 @@
+{
+  "name": "Soul Altar",
+  "icon": "netheryx:soul_altar",
+  "category": "netheryx:equipment",
+  "sortnum": 84,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Place an item (or a book) on the altar, light at least $(l)2 soul flames$() nearby (soul fire, torches, lanterns or campfires), then right-click with an offering. Each level costs 5 experience levels.$(br)$(li)2 $(item)Magma Shells$(): $(l)Ember Stride$() (boots).$(li)4 $(item)Soul Dust$(): $(l)Soul Harvest$() (weapons).$(li)2 $(item)Basalt Carapaces$(): $(l)Anchoring$() (chest, legs).",
+      "title": "Autel des âmes"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:soul_altar"
+    }
+  ]
+}

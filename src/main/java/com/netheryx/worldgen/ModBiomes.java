@@ -15,6 +15,10 @@ public final class ModBiomes {
     public static final ResourceKey<Biome> SOULFIRE_MARSH = key("soulfire_marsh");
     public static final ResourceKey<Biome> WITHERED_FOREST = key("withered_forest");
     public static final ResourceKey<Biome> MAGMA_RIFT = key("magma_rift");
+    public static final ResourceKey<Biome> MARROW_THICKET = key("marrow_thicket");
+    public static final ResourceKey<Biome> RIMEFROST_CHASM = key("rimefrost_chasm");
+    public static final ResourceKey<Biome> WARTVINE_TANGLE = key("wartvine_tangle");
+    public static final ResourceKey<Biome> QUARTZ_REEF = key("quartz_reef");
 
     private ModBiomes() {
     }

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "netheryx:block/rime_ice"
+  },
+  "render_type": "minecraft:translucent"
+}

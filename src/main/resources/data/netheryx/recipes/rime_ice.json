@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:rime_shard"
+    }
+  },
+  "result": {
+    "item": "netheryx:rime_ice",
+    "count": 1
+  }
+}

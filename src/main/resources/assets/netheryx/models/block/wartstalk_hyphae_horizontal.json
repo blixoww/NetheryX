@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "netheryx:block/wartstalk_stem",
+    "side": "netheryx:block/wartstalk_stem"
+  }
+}

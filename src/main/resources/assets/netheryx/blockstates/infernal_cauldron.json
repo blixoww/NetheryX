@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "doses=0": {
+      "model": "netheryx:block/infernal_cauldron"
+    },
+    "doses=1": {
+      "model": "netheryx:block/infernal_cauldron_level1"
+    },
+    "doses=2": {
+      "model": "netheryx:block/infernal_cauldron_level1"
+    },
+    "doses=3": {
+      "model": "netheryx:block/infernal_cauldron_level1"
+    },
+    "doses=4": {
+      "model": "netheryx:block/infernal_cauldron_level2"
+    },
+    "doses=5": {
+      "model": "netheryx:block/infernal_cauldron_level2"
+    },
+    "doses=6": {
+      "model": "netheryx:block/infernal_cauldron_level2"
+    },
+    "doses=7": {
+      "model": "netheryx:block/infernal_cauldron_full"
+    },
+    "doses=8": {
+      "model": "netheryx:block/infernal_cauldron_full"
+    },
+    "doses=9": {
+      "model": "netheryx:block/infernal_cauldron_full"
+    }
+  }
+}

@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "netheryx:ember_trapdoor",
-    "netheryx:withered_trapdoor"
+    "netheryx:withered_trapdoor",
+    "netheryx:marrow_trapdoor",
+    "netheryx:wartstalk_trapdoor"
   ]
 }

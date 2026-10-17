@@ -10,6 +10,9 @@
     "minecraft:smooth_basalt",
     "netheryx:ash_block",
     "netheryx:sulfur_rock",
-    "#minecraft:dirt"
+    "#minecraft:dirt",
+    "netheryx:ossified_nylium",
+    "netheryx:wart_moss",
+    "netheryx:rimestone"
   ]
 }

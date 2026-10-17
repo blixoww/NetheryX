@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:onyx_infusion_template"
+    },
+    "title": {
+      "translate": "advancements.netheryx.infusion.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.infusion.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "template": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "netheryx:onyx_infusion_template"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:root"
+}

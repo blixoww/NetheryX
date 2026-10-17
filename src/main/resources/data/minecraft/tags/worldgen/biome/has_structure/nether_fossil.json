@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "netheryx:soulfire_marsh"
+    "netheryx:soulfire_marsh",
+    "netheryx:marrow_thicket"
   ]
 }

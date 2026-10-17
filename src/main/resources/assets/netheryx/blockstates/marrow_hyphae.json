@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "netheryx:block/marrow_hyphae"
+    },
+    "axis=z": {
+      "model": "netheryx:block/marrow_hyphae_horizontal",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "netheryx:block/marrow_hyphae_horizontal",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:magmafish"
+    },
+    "title": {
+      "translate": "advancements.netheryx.lava_trap.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.lava_trap.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "fish": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "netheryx:magmafish"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:root"
+}

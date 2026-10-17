@@ -1,0 +1,14 @@
+{
+  "name": "Bois de verrutige",
+  "icon": "netheryx:wartstalk_planks",
+  "category": "netheryx:building",
+  "sortnum": 90,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:wartstalk_planks",
+      "recipe2": "netheryx:wartstalk_door",
+      "text": "Un bois rouge profond de l'Enchevêtrement."
+    }
+  ]
+}

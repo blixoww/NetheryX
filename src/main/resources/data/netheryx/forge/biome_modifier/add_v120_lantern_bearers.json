@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "netheryx:soulfire_marsh",
+    "netheryx:withered_forest"
+  ],
+  "spawners": [
+    {
+      "type": "netheryx:lantern_bearer",
+      "weight": 8,
+      "minCount": 1,
+      "maxCount": 2
+    }
+  ]
+}

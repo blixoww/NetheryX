@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "# #",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:magma_shell"
+    }
+  },
+  "result": {
+    "item": "netheryx:ember_boots",
+    "count": 1
+  }
+}

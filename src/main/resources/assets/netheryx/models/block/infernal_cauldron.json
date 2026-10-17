@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/cauldron",
+  "textures": {
+    "particle": "netheryx:block/infernal_cauldron_side",
+    "side": "netheryx:block/infernal_cauldron_side",
+    "top": "netheryx:block/infernal_cauldron_top",
+    "bottom": "netheryx:block/infernal_cauldron_bottom",
+    "inside": "netheryx:block/infernal_cauldron_inner"
+  }
+}

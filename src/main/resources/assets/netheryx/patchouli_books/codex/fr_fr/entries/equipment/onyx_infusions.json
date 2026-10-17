@@ -1,0 +1,18 @@
+{
+  "name": "Infusions d'onyx",
+  "icon": "netheryx:onyx_infusion_template",
+  "category": "netheryx:equipment",
+  "sortnum": 83,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "À la $(item)Table de forgeron$(), un $(item)Gabarit d'infusion d'onyx$() ajoute un bonus permanent à $(l)n'importe quel$() outil, arme ou armure :$(li)$(item)Crème de magma$() : $(l)Fonte$(), les blocs minés sortent fondus.$(li)$(item)Croc de fouisseur$() : $(l)Portée$(), +1,5 bloc.$(li)$(item)Onyx$() : $(l)Résilience$(), l'objet se répare lentement.",
+      "title": "Infusions"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_infusion_template",
+      "text": "Les gabarits se trouvent dans les donjons, bastions et caravanes, puis se dupliquent."
+    }
+  ]
+}

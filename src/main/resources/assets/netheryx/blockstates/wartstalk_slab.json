@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "netheryx:block/wartstalk_slab"
+    },
+    "type=top": {
+      "model": "netheryx:block/wartstalk_slab_top"
+    },
+    "type=double": {
+      "model": "netheryx:block/wartstalk_planks"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Marchand piglin",
+  "icon": "netheryx:piglin_merchant_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 79,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:piglin_merchant",
+      "scale": 0.8,
+      "offset": 0.0,
+      "text": "Voyage avec les $(l)Caravanes nomades$(). Commerce en $(item)or$() et en $(item)onyx$() : graines rares, nasses, gabarits d'infusion, livres d'enchantements du Nether et Boussoles des âmes déjà accordées sur un donjon."
+    }
+  ]
+}

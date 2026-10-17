@@ -1,0 +1,19 @@
+{
+  "name": "Marrow Thicket",
+  "icon": "netheryx:ossified_nylium",
+  "category": "netheryx:biomes",
+  "sortnum": 71,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A pale forest of $(l)marrow trees$() on ossified nylium. When the ceiling is close, trunks fuse with it into natural pillars. Glowing $(item)Marrow Vines$() hang from the caps and can be climbed.$(br2)Resources: Marrow wood, $(item)Marrow Caps$() (turned into $(item)Marrow Meal$()), bones.",
+      "title": "Fourré de moelle"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:marrow_meal",
+      "text": "Bone meal on a whole $(l)3x3$() area in one use.",
+      "link_recipe": true
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Tarte aux fruits de verrue",
+  "icon": "netheryx:wartfruit_tart",
+  "category": "netheryx:farming",
+  "sortnum": 88,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:wartfruit_tart",
+      "text": "Un repas copieux qui peut donner la Régénération."
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:grilled_magmafish"
+    }
+  ]
+}

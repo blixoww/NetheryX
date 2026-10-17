@@ -1,0 +1,15 @@
+{
+  "name": "Cinder Lizard",
+  "icon": "netheryx:cinder_lizard_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 76,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:cinder_lizard",
+      "scale": 0.7,
+      "offset": 0.0,
+      "text": "A Nether $(l)mount$(). Tame it with $(item)Fire Berries$(), put a $(item)Saddle$() on it and ride it. It walks on lava and runs even faster on basalt and blackstone."
+    }
+  ]
+}

@@ -106,6 +106,29 @@ public class SoulCompassItem extends Item {
                 Mth.floor(Math.sqrt(pos.distSqr(player.blockPosition())))).withStyle(ChatFormatting.AQUA), true);
     }
 
+    /**
+     * Cree une boussole deja accordee sur la structure donnee la plus proche de {@code origin}
+     * (vendue par le marchand piglin). Renvoie une pile vide si la structure est introuvable.
+     */
+    public static ItemStack attuned(ServerLevel level, BlockPos origin, ResourceLocation structureId) {
+        Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        Optional<Holder.Reference<Structure>> structure = registry.getHolder(ResourceKey.create(Registries.STRUCTURE, structureId));
+        if (structure.isEmpty()) {
+            return ItemStack.EMPTY;
+        }
+        Pair<BlockPos, Holder<Structure>> found = level.getChunkSource().getGenerator().findNearestMapStructure(level,
+                HolderSet.direct(structure.get()), origin, 50, false);
+        if (found == null) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack stack = new ItemStack(com.netheryx.registry.ModItems.SOUL_COMPASS.get());
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putString(TAG_STRUCTURE, structureId.toString());
+        tag.put(TAG_TARGET, NbtUtils.writeBlockPos(found.getFirst()));
+        tag.putString(TAG_DIMENSION, level.dimension().location().toString());
+        return stack;
+    }
+
     private static ItemStack findCompass(Player player) {
         for (InteractionHand hand : InteractionHand.values()) {
             ItemStack stack = player.getItemInHand(hand);

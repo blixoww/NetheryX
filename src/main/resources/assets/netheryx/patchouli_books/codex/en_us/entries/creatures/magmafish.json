@@ -1,0 +1,15 @@
+{
+  "name": "Magmafish",
+  "icon": "netheryx:magmafish",
+  "category": "netheryx:creatures",
+  "sortnum": 75,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:magmafish",
+      "scale": 1.5,
+      "offset": 0.0,
+      "text": "Swims in lava seas. Hunt it, or catch it with a $(item)Lava Trap$(). Its scales brew the $(item)Potion of Lava Diving$()."
+    }
+  ]
+}

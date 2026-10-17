@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:soul_altar"
+    },
+    "title": {
+      "translate": "advancements.netheryx.soul_altar.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.soul_altar.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "altar": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "netheryx:soul_altar"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:root"
+}

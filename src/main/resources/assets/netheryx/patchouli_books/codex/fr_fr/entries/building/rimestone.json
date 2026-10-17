@@ -1,0 +1,13 @@
+{
+  "name": "Pierre de givre",
+  "icon": "netheryx:rimestone_bricks",
+  "category": "netheryx:building",
+  "sortnum": 91,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:rimestone_bricks",
+      "recipe2": "netheryx:rimestone_brick_wall"
+    }
+  ]
+}

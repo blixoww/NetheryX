@@ -2,6 +2,12 @@ package com.netheryx.event;
 
 import com.netheryx.NetheryX;
 import com.netheryx.entity.AshWraith;
+import com.netheryx.entity.BasaltBurrower;
+import com.netheryx.entity.CinderLizard;
+import com.netheryx.entity.LanternBearer;
+import com.netheryx.entity.Magmafish;
+import com.netheryx.entity.Mimic;
+import com.netheryx.entity.PiglinMerchant;
 import com.netheryx.entity.BasaltBeetle;
 import com.netheryx.entity.CinderHen;
 import com.netheryx.entity.EmberCow;
@@ -46,6 +52,12 @@ public final class ModBusEvents {
         event.put(ModEntities.CINDER_HEN.get(), CinderHen.createAttributes().build());
         event.put(ModEntities.FIRE_GHAST.get(), FireGhast.createAttributes().build());
         event.put(ModEntities.ONYX_CUBE.get(), OnyxCube.createAttributes().build());
+        event.put(ModEntities.MAGMAFISH.get(), Magmafish.createAttributes().build());
+        event.put(ModEntities.PIGLIN_MERCHANT.get(), PiglinMerchant.createAttributes().build());
+        event.put(ModEntities.MIMIC.get(), Mimic.createAttributes().build());
+        event.put(ModEntities.BASALT_BURROWER.get(), BasaltBurrower.createAttributes().build());
+        event.put(ModEntities.LANTERN_BEARER.get(), LanternBearer.createAttributes().build());
+        event.put(ModEntities.CINDER_LIZARD.get(), CinderLizard.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -74,6 +86,16 @@ public final class ModBusEvents {
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.ONYX_CUBE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 (type, level, reason, pos, random) -> level.getDifficulty() != Difficulty.PEACEFUL,
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(ModEntities.MAGMAFISH.get(), SpawnPlacements.Type.IN_LAVA, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Magmafish::checkMagmafishSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(ModEntities.BASALT_BURROWER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Monster::checkAnyLightMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(ModEntities.LANTERN_BEARER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (type, level, reason, pos, random) -> level.getBlockState(pos.below()).isSolid(),
+                SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(ModEntities.CINDER_LIZARD.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (type, level, reason, pos, random) -> level.getBlockState(pos.below()).isSolid(),
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.INFERNAL_WARLOCK.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkAnyLightMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);

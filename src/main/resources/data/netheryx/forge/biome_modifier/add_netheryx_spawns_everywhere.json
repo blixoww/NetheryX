@@ -61,6 +61,12 @@
       "weight": 6,
       "minCount": 1,
       "maxCount": 3
+    },
+    {
+      "type": "netheryx:magmafish",
+      "weight": 10,
+      "minCount": 2,
+      "maxCount": 4
     }
   ]
 }

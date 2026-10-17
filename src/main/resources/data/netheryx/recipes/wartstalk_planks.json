@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "netheryx:wartstalk_stems"
+    }
+  ],
+  "result": {
+    "item": "netheryx:wartstalk_planks",
+    "count": 4
+  }
+}

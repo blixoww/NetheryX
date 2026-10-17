@@ -55,7 +55,6 @@ public class FireBerryBushBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         int age = state.getValue(AGE);
         if (age == 0) {
@@ -86,6 +85,7 @@ public class FireBerryBushBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
         if (entity instanceof LivingEntity living && !living.fireImmune()) {
             entity.makeStuckInBlock(state, new Vec3(0.8D, 0.75D, 0.8D));

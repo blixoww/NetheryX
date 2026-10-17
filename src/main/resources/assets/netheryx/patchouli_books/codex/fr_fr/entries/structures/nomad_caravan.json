@@ -1,0 +1,13 @@
+{
+  "name": "Caravane nomade",
+  "icon": "netheryx:wartstalk_planks",
+  "category": "netheryx:structures",
+  "sortnum": 81,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Deux tentes, un enclos à lézards et un feu de camp : les Caravanes nomades abritent un $(l)Marchand piglin$(). Leurs coffres contiennent or, soufre, nourriture et parfois un $(item)Gabarit d'infusion d'onyx$().",
+      "title": "Caravanes"
+    }
+  ]
+}

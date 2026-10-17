@@ -18,7 +18,11 @@ public enum ModArmorMaterials implements ArmorMaterial {
     MAGMA("magma", 20, protection(2, 4, 5, 2), 12, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F,
             () -> Ingredient.of(ModItems.MAGMA_SHELL.get())),
     CARAPACE("carapace", 28, protection(2, 5, 7, 2), 10, SoundEvents.ARMOR_EQUIP_TURTLE, 3.0F, 0.2F,
-            () -> Ingredient.of(ModItems.BASALT_CARAPACE.get()));
+            () -> Ingredient.of(ModItems.BASALT_CARAPACE.get())),
+    EMBER("ember", 24, protection(2, 5, 6, 2), 15, SoundEvents.ARMOR_EQUIP_GOLD, 1.0F, 0.0F,
+            () -> Ingredient.of(ModItems.MAGMA_SHELL.get())),
+    WRAITH("wraith", 18, protection(2, 4, 5, 2), 20, SoundEvents.ARMOR_EQUIP_LEATHER, 0.0F, 0.0F,
+            () -> Ingredient.of(ModItems.WRAITH_CLOTH.get()));
 
     private static final EnumMap<ArmorItem.Type, Integer> BASE_DURABILITY = Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
         map.put(ArmorItem.Type.BOOTS, 13);

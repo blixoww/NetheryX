@@ -1,0 +1,23 @@
+{
+  "name": "Lava Trap",
+  "icon": "netheryx:lava_trap",
+  "category": "netheryx:utility",
+  "sortnum": 85,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:lava_trap",
+      "text": "Sink it in a $(l)lava lake$(): it catches Magmafish and lava treasures on its own. The more lava around, the faster; $(item)raw meat$() as bait doubles the speed. Works with hoppers.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:lava_trap"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(item)Magmafish Scale$() + $(item)Awkward Potion$() = $(l)Potion of Lava Diving$(): Fire Resistance and $(l)Lava Vision$() (see clearly and swim fast in lava). Redstone extends it.",
+      "title": "Plongée en lave"
+    }
+  ]
+}

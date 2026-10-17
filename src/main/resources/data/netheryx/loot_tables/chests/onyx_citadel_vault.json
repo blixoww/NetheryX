@@ -330,6 +330,11 @@
           "type": "minecraft:item",
           "name": "netheryx:magma_treads",
           "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "netheryx:onyx_infusion_template",
+          "weight": 4
         }
       ]
     }

@@ -1,0 +1,24 @@
+{
+  "name": "Gouffre de givre",
+  "icon": "netheryx:rime_ice",
+  "category": "netheryx:biomes",
+  "sortnum": 72,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Une plaie gelée du Nether : pierre de givre, pics de $(l)glace de givre$() dressés au sol et suspendus à la voûte, et $(item)Cristaux de givre$(). Squelettes et spectres y rôdent.",
+      "title": "Gouffre de givre"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:rime_ice",
+      "text": "$(l)La seule eau du Nether.$() La glace de givre ne fond jamais seule ; placée contre une source de chaleur (lave, feu, bloc de magma, feu de camp allumé) elle fond lentement en $(l)source d'eau$().",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:rime_ice",
+      "text": "4 éclats de givre, issus des cristaux de givre."
+    }
+  ]
+}

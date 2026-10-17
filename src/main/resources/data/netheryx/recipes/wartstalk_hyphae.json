@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:wartstalk_stem"
+    }
+  },
+  "result": {
+    "item": "netheryx:wartstalk_hyphae",
+    "count": 3
+  }
+}

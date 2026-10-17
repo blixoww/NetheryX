@@ -1,0 +1,15 @@
+{
+  "name": "Fouisseur de basalte",
+  "icon": "netheryx:basalt_burrower_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 78,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:basalt_burrower",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "Un énorme ver de roche neutre qui creuse de longs $(l)tunnels$() dans la netherrack et le basalte. Il digère les minerais : pépites, quartz, onyx, et son $(item)Croc$() (infusion de portée)."
+    }
+  ]
+}

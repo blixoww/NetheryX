@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "fruit=false": {
+      "model": "netheryx:block/wartvine_plant"
+    },
+    "fruit=true": {
+      "model": "netheryx:block/wartvine_plant_lit"
+    }
+  }
+}

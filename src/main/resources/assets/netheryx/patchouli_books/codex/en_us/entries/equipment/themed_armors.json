@@ -1,0 +1,26 @@
+{
+  "name": "Themed Armors",
+  "icon": "netheryx:ember_chestplate",
+  "category": "netheryx:equipment",
+  "sortnum": 82,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:ember_chestplate",
+      "text": "$(l)Ember armor$() (Magma Shells). Full set: immune to fire and hot floors, faster on Nether grass and nylium.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:wraith_robe",
+      "text": "$(l)Wraith armor$() (Wraith Cloth). Full set: creatures only notice you up close, and you see through ash falls.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:carapace_helmet",
+      "text": "$(l)Carapace armor$() (Basalt Carapaces). Full set: heavy knockback resistance and reflects 25% of melee damage.",
+      "link_recipe": true
+    }
+  ]
+}

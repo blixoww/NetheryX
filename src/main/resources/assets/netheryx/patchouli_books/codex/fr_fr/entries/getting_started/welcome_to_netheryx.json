@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "NetheryX transforme le Nether : $(l)8 nouveaux biomes$(), $(l)13 créatures$() dont trois boss, $(l)3 grands donjons$() et de petits campements, le matériau $(item)Onyx$(), de nouvelles cultures, nourritures, outils et objets utiles.$(br2)Les biomes vanilla changent aussi : nouvelles plantes et créatures un peu partout.",
+      "text": "NetheryX transforme le Nether : $(l)12 nouveaux biomes$(), $(l)19 créatures$() dont trois boss, $(l)3 grands donjons$() et de petits campements, le matériau $(item)Onyx$(), de nouvelles cultures, nourritures, outils et objets utiles.$(br2)Les biomes vanilla changent aussi : nouvelles plantes et créatures un peu partout.",
       "title": "NetheryX"
     },
     {

@@ -1,0 +1,12 @@
+{
+  "feature": "netheryx:rime_crystal_patch",
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 2
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -345,6 +345,11 @@
               }
             }
           ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "netheryx:onyx_infusion_template",
+          "weight": 4
         }
       ]
     }

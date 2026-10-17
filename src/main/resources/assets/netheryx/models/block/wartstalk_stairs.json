@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "netheryx:block/wartstalk_planks",
+    "top": "netheryx:block/wartstalk_planks",
+    "side": "netheryx:block/wartstalk_planks"
+  }
+}

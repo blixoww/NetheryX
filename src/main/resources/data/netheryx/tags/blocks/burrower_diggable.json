@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:netherrack",
+    "minecraft:basalt",
+    "minecraft:smooth_basalt",
+    "minecraft:blackstone",
+    "minecraft:soul_soil",
+    "netheryx:ash_block",
+    "netheryx:sulfur_rock"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "netheryx:nomad_caravan",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 14,
+    "separation": 5,
+    "salt": 902817364,
+    "exclusion_zone": {
+      "other_set": "minecraft:nether_complexes",
+      "chunk_count": 2
+    }
+  }
+}

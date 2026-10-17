@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:marrow_planks"
+    }
+  },
+  "result": {
+    "item": "netheryx:marrow_slab",
+    "count": 6
+  }
+}

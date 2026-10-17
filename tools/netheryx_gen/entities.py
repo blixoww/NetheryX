@@ -683,6 +683,12 @@ def cinder_hen():
 
 
 def generate():
+    magmafish()
+    piglin_merchant()
+    mimic()
+    basalt_burrower()
+    lantern_bearer()
+    cinder_lizard()
     ember_cow()
     cinder_hen()
     soul_moth()
@@ -694,3 +700,196 @@ def generate():
     ash_wraith()
     onyx_sentinel()
     magma_crab()
+
+
+# ------------------------------------------------------------------------------------------------
+# 1.2.0
+# ------------------------------------------------------------------------------------------------
+
+def magmafish():
+    m = Model("magmafish", 32, 32, (1, 1))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 1.5, 0], "root", cubes=[
+        Cube([-1.5, 0, -4], [3, 3, 7], "scale", detail=eyes("#ffe27a", y_frac=0.2, spacing=0.35)),
+        Cube([-0.5, 3, -1], [1, 2, 3], "fin"),
+        Cube([-0.5, -1, 0], [1, 1, 2], "fin"),
+    ])
+    m.bone("tail", [0, 1.5, 3], "body", cubes=[Cube([-1, 0.5, 3], [2, 2, 2], "scale"), Cube([-0.5, -0.5, 5], [1, 4, 3], "fin")])
+    save_model(m, {
+        "scale": {"colors": ["#5a1206", "#8a2a0a", "#c8460e", "#ff6a1a", "#ff9a3a"], "pattern": "scales",
+                  "speckle": ("#ffe27a", 0.08), "speckle_glow": True},
+        "fin": {"colors": ["#ff8a1a", "#ffb84a", "#ffe27a"], "pattern": "flame", "glow": True, "edge": False},
+    })
+    save_animations("magmafish", {
+        "swim": anim(0.8, {"tail": {"rotation": wave(0.8, 25, axis=1)}, "body": {"rotation": wave(0.8, 6, math.pi, axis=1)}}),
+        "flop": anim(0.5, {"body": {"rotation": wave(0.5, 35, axis=2)}, "tail": {"rotation": wave(0.5, 40, axis=1)}}),
+    })
+
+
+def piglin_merchant():
+    m = Model("piglin_merchant", 128, 64, (2, 2.5))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 12, 0], "root", cubes=[Cube([-4, 12, -2], [8, 12, 4], "robe")])
+    m.bone("pack", [0, 18, 2], "body", cubes=[Cube([-4, 13, 2], [8, 10, 5], "pack"), Cube([-5, 22, 2.5], [10, 3, 3], "roll"),
+                                             Cube([-1, 15, 7], [2, 3, 1], "gold")])
+    m.bone("head", [0, 24, 0], "body", cubes=[
+        Cube([-5, 24, -4], [10, 8, 8], "skin", detail=eyes("#3a1a0a", glow=False, y_frac=0.3, spacing=0.3)),
+        Cube([-2, 25, -5], [4, 3, 1], "snout"),
+        Cube([-6, 27, -1], [1, 4, 3], "skin"), Cube([5, 27, -1], [1, 4, 3], "skin"),
+        Cube([-5.5, 31.5, -4.5], [11, 2, 9], "hat"), Cube([-3, 33.5, -3], [6, 2, 6], "hat"),
+        Cube([-1, 25, -5.5], [2, 1, 1], "gold"),
+    ])
+    m.bone("arm_right", [-5, 22, 0], "body", cubes=[Cube([-8, 12, -2], [3, 12, 4], "robe"), Cube([-8, 11, -2], [3, 1, 4], "skin")])
+    m.bone("arm_left", [5, 22, 0], "body", cubes=[Cube([5, 12, -2], [3, 12, 4], "robe"), Cube([5, 11, -2], [3, 1, 4], "skin")])
+    m.bone("leg_right", [-2, 12, 0], "root", cubes=[Cube([-4, 0, -2], [4, 12, 4], "leg")])
+    m.bone("leg_left", [2, 12, 0], "root", cubes=[Cube([0, 0, -2], [4, 12, 4], "leg")])
+    save_model(m, {
+        "skin": {"colors": ["#b87060", "#c88070", "#d89080", "#e8a090"], "speckle": ("#a05a4a", 0.06)},
+        "snout": {"colors": ["#d88a7a", "#e8a090"]},
+        "robe": {"colors": ["#3a1a4a", "#4a2258", "#5a2a68", "#6a3278"], "pattern": "stripes", "trim": "#e8c040"},
+        "pack": {"colors": ["#5a3a1a", "#6a4422", "#7a4e2a"], "pattern": "plates"},
+        "roll": {"colors": ["#8a1e1e", "#a02a2a"]},
+        "hat": {"colors": ["#6a2a1a", "#7a3422", "#8a3e2a"], "trim": "#e8c040"},
+        "gold": {"colors": ["#c89a20", "#e8c040", "#ffe27a"], "glow": True},
+        "leg": {"colors": ["#2a1a12", "#3a2418"]},
+    })
+    save_animations("piglin_merchant", {
+        "idle": anim(4.0, {"head": {"rotation": keys((0, [0, 0, 0]), (1.0, [0, 25, 0]), (2.0, [0, 0, 0]), (3.0, [0, -25, 0]), (4.0, [0, 0, 0]))},
+                           "arm_right": {"rotation": wave(4.0, 4)}, "arm_left": {"rotation": wave(4.0, 4, math.pi)}}),
+        "walk": anim(1.0, {"leg_right": {"rotation": wave(1.0, 30)}, "leg_left": {"rotation": wave(1.0, 30, math.pi)},
+                           "arm_right": {"rotation": wave(1.0, 20, math.pi)}, "arm_left": {"rotation": wave(1.0, 20)},
+                           "pack": {"rotation": wave(1.0, 3, axis=2)}}),
+    })
+
+
+def mimic():
+    m = Model("mimic", 64, 64, (1.5, 1.5))
+    m.bone("root", [0, 0, 0])
+    m.bone("base", [0, 0, 0], "root", cubes=[
+        Cube([-7, 0, -7], [14, 9, 14], "wood"),
+        Cube([-6, 9, -6.5], [12, 1, 1], "tooth"), Cube([-6.5, 9, -6], [1, 1, 11], "tooth"), Cube([5.5, 9, -6], [1, 1, 11], "tooth"),
+        Cube([-2, 8.5, -4], [4, 1, 7], "tongue"),
+        Cube([-1, 5, -8], [2, 4, 1], "gold"),
+    ])
+    m.bone("lid", [0, 9, 7], "base", cubes=[
+        Cube([-7, 9, -7], [14, 5, 14], "wood"),
+        Cube([-6, 8, -6.5], [12, 1, 1], "tooth"),
+        Cube([-1, 9, -8], [2, 2, 1], "gold"),
+    ])
+    m.bone("eyes", [0, 12, -7], "lid", cubes=[Cube([-4, 11, -7.1], [8, 2, 0.1], "eye")])
+    save_model(m, {
+        "wood": {"colors": ["#4a2a10", "#5a3414", "#6a4018", "#7a4a1e"], "pattern": "plates", "trim": "#2a1a0a"},
+        "tooth": {"colors": ["#e8e0c8", "#f8f0dc"]},
+        "tongue": {"colors": ["#8a1a2a", "#b02a3a", "#c83a4a"]},
+        "gold": {"colors": ["#a8801a", "#c89a20", "#e8c040"]},
+        "eye": {"colors": ["#ff3a1a", "#ff7a1a"], "glow": True, "edge": False},
+    })
+    save_animations("mimic", {
+        "dormant": anim(6.0, {"lid": {"rotation": keys((0, [0, 0, 0]), (5.4, [0, 0, 0]), (5.7, [-4, 0, 0]), (6.0, [0, 0, 0]))}}),
+        "chomp": anim(0.6, {"lid": {"rotation": keys((0, [0, 0, 0]), (0.25, [-40, 0, 0]), (0.45, [-5, 0, 0]), (0.6, [0, 0, 0]))},
+                            "base": {"position": keys((0, [0, 0, 0]), (0.3, [0, 0.5, 0]), (0.6, [0, 0, 0]))}}),
+        "hop": anim(0.5, {"lid": {"rotation": keys((0, [-25, 0, 0]), (0.25, [-45, 0, 0]), (0.5, [-25, 0, 0]))}}),
+    })
+
+
+def basalt_burrower():
+    m = Model("basalt_burrower", 64, 64, (2, 1.5))
+    m.bone("root", [0, 0, 0])
+    m.bone("head", [0, 4, -5], "root", cubes=[
+        Cube([-3.5, 0.5, -11], [7, 7, 6], "plate", detail=eyes("#ffb347", y_frac=0.25, spacing=0.3)),
+        Cube([-3, 0.5, -13], [1, 2, 2], "fang"), Cube([2, 0.5, -13], [1, 2, 2], "fang"),
+        Cube([-0.5, 7.5, -10], [1, 2, 4], "crystal"),
+    ])
+    previous = "root"
+    z = -5
+    for i, (w, h, length) in enumerate(((6, 6, 5), (6, 6, 5), (5, 5, 5), (4, 4, 5), (3, 3, 4))):
+        name = f"segment{i + 1}"
+        m.bone(name, [0, h / 2, z], previous, cubes=[Cube([-w / 2, 0.5, z], [w, h, length], "plate"),
+                                                    Cube([-0.5, h + 0.5, z + 1], [1, 1, 2], "crystal")])
+        previous = name
+        z += length
+    save_model(m, {
+        "plate": {"colors": ["#2a2a30", "#34343a", "#3e3e46", "#4a4a52"], "pattern": "cracks", "crack": "#ff6a1a"},
+        "fang": {"colors": ["#d8ccb0", "#e8dcc0"]},
+        "crystal": {"colors": ["#c87a2a", "#ffb347"], "glow": True},
+    })
+    crawl = {f"segment{i + 1}": {"rotation": wave(1.2, 14, i * 0.9, axis=1)} for i in range(5)}
+    crawl["head"] = {"rotation": wave(1.2, 8, -0.9, axis=1)}
+    idle = {f"segment{i + 1}": {"rotation": wave(3.0, 4, i * 0.8, axis=1)} for i in range(5)}
+    save_animations("basalt_burrower", {"crawl": anim(1.2, crawl), "idle": anim(3.0, idle)})
+
+
+def lantern_bearer():
+    m = Model("lantern_bearer", 64, 64, (1, 1.5))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 4, 0], "root", cubes=[Cube([-3, 4, -2], [6, 7, 4], "cloak")])
+    m.bone("head", [0, 11, 0], "body", cubes=[
+        Cube([-3, 11, -3], [6, 5, 6], "face", detail=eyes("#7fe8ff", y_frac=0.35, spacing=0.25)),
+        Cube([-3.5, 14, -3.5], [7, 3, 7], "cloak"), Cube([-2, 17, -2], [4, 1, 4], "cloak"),
+    ])
+    m.bone("arm_right", [-3, 10, 0], "body", cubes=[Cube([-5, 5, -1], [2, 6, 2], "cloak")])
+    m.bone("lantern", [-4, 5, -2], "arm_right", cubes=[Cube([-5.5, 2, -3.5], [3, 4, 3], "lantern"), Cube([-4.5, 6, -2.5], [1, 1, 1], "pole")])
+    m.bone("arm_left", [3, 10, 0], "body", cubes=[Cube([3, 5, -1], [2, 6, 2], "cloak")])
+    m.bone("leg_right", [-1.5, 4, 0], "root", cubes=[Cube([-2.5, 0, -1], [2, 4, 2], "leg")])
+    m.bone("leg_left", [1.5, 4, 0], "root", cubes=[Cube([0.5, 0, -1], [2, 4, 2], "leg")])
+    save_model(m, {
+        "cloak": {"colors": ["#1a1a2a", "#22223a", "#2a2a48", "#323256"], "pattern": "tatters"},
+        "face": {"colors": ["#0c0a14", "#14101e"]},
+        "lantern": {"colors": ["#7fe8ff", "#c4f8ff", "#ffffff"], "glow": True, "trim": "#24343c"},
+        "pole": {"colors": ["#24343c", "#34444c"]},
+        "leg": {"colors": ["#14141e", "#1c1c28"]},
+    })
+    save_animations("lantern_bearer", {
+        "idle": anim(3.0, {"lantern": {"rotation": wave(3.0, 8, axis=2)}, "head": {"rotation": wave(3.0, 5, axis=1)}}),
+        "walk": anim(0.8, {"leg_right": {"rotation": wave(0.8, 30)}, "leg_left": {"rotation": wave(0.8, 30, math.pi)},
+                           "lantern": {"rotation": wave(0.8, 15)}, "arm_left": {"rotation": wave(0.8, 20, math.pi)}}),
+        "sit": anim(2.0, {"body": {"position": keys((0, [0, -2, 0]), (2.0, [0, -2, 0]))},
+                          "leg_right": {"rotation": keys((0, [-80, 10, 0]), (2.0, [-80, 10, 0]))},
+                          "leg_left": {"rotation": keys((0, [-80, -10, 0]), (2.0, [-80, -10, 0]))},
+                          "lantern": {"rotation": wave(2.0, 4, axis=2)}}),
+    })
+
+
+def cinder_lizard():
+    m = Model("cinder_lizard", 128, 64, (2.5, 1.5))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 9, 0], "root", cubes=[
+        Cube([-4, 6, -9], [8, 6, 18], "scales"),
+        Cube([-0.5, 12, -6], [1, 2, 2], "spike"), Cube([-0.5, 12, -1], [1, 2, 2], "spike"), Cube([-0.5, 12, 4], [1, 2, 2], "spike"),
+    ])
+    m.bone("saddle", [0, 12, 0], "body", cubes=[Cube([-4.5, 12, -4], [9, 1, 8], "saddle"), Cube([-1.5, 13, 3], [3, 2, 1], "saddle"),
+                                               Cube([-4.6, 8, -1], [0.1, 4, 2], "saddle"), Cube([4.5, 8, -1], [0.1, 4, 2], "saddle")])
+    m.bone("head", [0, 10, -9], "body", cubes=[
+        Cube([-3, 8, -15], [6, 5, 6], "scales", detail=eyes("#ffd36b", y_frac=0.2, spacing=0.36)),
+        Cube([-2.5, 7, -17], [5, 2, 4], "belly"),
+        Cube([-5, 12, -11], [10, 3, 1], "frill"),
+    ])
+    m.bone("tail", [0, 10, 9], "body", cubes=[Cube([-2, 7, 9], [4, 4, 9], "scales")])
+    m.bone("tail_tip", [0, 9, 18], "tail", cubes=[Cube([-1, 8, 18], [2, 2, 7], "scales"), Cube([-1.5, 7.5, 24], [3, 3, 2], "frill")])
+    for name, x, z in (("leg_front_left", 4.5, -6), ("leg_front_right", -4.5, -6), ("leg_back_left", 4.5, 6), ("leg_back_right", -4.5, 6)):
+        m.bone(name, [x, 7, z], "root", cubes=[Cube([x - 1.5, 0, z - 1.5], [3, 7, 3], "leg")])
+    save_model(m, {
+        "scales": {"colors": ["#1e120e", "#2a1a14", "#36221a", "#422a20"], "pattern": "scales",
+                   "speckle": ("#ff6a1a", 0.06), "speckle_glow": True},
+        "belly": {"colors": ["#6a3a1a", "#7a4422"]},
+        "spike": {"colors": ["#ff5a1a", "#ff8a2a", "#ffc04a"], "pattern": "flame", "glow": True, "edge": False},
+        "frill": {"colors": ["#c8320a", "#ff5a1a", "#ff8a2a"], "glow": True},
+        "saddle": {"colors": ["#5a3418", "#6a3e1e", "#7a4824"], "trim": "#c89a20"},
+        "leg": {"colors": ["#1a0e0a", "#26160f"]},
+    })
+    legs = lambda length, amp: {
+        "leg_front_left": {"rotation": wave(length, amp)}, "leg_back_right": {"rotation": wave(length, amp)},
+        "leg_front_right": {"rotation": wave(length, amp, math.pi)}, "leg_back_left": {"rotation": wave(length, amp, math.pi)},
+    }
+    walk = legs(1.0, 30)
+    walk["tail"] = {"rotation": wave(1.0, 12, axis=1)}
+    walk["tail_tip"] = {"rotation": wave(1.0, 16, 0.8, axis=1)}
+    run = legs(0.5, 45)
+    run["tail"] = {"rotation": wave(0.5, 18, axis=1)}
+    run["body"] = {"rotation": wave(0.5, 4, axis=1)}
+    save_animations("cinder_lizard", {
+        "idle": anim(3.0, {"tail": {"rotation": wave(3.0, 8, axis=1)}, "tail_tip": {"rotation": wave(3.0, 10, 0.8, axis=1)},
+                           "head": {"rotation": keys((0, [0, 0, 0]), (1.4, [0, 0, 0]), (1.6, [-12, 0, 0]), (1.8, [0, 0, 0]), (3.0, [0, 0, 0]))}}),
+        "walk": anim(1.0, walk),
+        "run": anim(0.5, run),
+    })

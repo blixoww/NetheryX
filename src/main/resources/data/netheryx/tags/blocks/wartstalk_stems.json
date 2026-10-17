@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:wartstalk_stem",
+    "netheryx:stripped_wartstalk_stem",
+    "netheryx:wartstalk_hyphae",
+    "netheryx:stripped_wartstalk_hyphae"
+  ]
+}

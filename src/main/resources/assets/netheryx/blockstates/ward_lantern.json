@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "netheryx:block/ward_lantern"
+    },
+    "hanging=true": {
+      "model": "netheryx:block/ward_lantern_hanging"
+    }
+  }
+}

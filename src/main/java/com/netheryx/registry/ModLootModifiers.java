@@ -3,6 +3,7 @@ package com.netheryx.registry;
 import com.mojang.serialization.Codec;
 import com.netheryx.NetheryX;
 import com.netheryx.loot.AddItemLootModifier;
+import com.netheryx.loot.InfusionSmeltingModifier;
 import net.minecraftforge.common.loot.IGlobalLootModifier;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -14,6 +15,8 @@ public final class ModLootModifiers {
             DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, NetheryX.MOD_ID);
 
     public static final RegistryObject<Codec<AddItemLootModifier>> ADD_ITEM = LOOT_MODIFIERS.register("add_item", () -> AddItemLootModifier.CODEC);
+    public static final RegistryObject<Codec<InfusionSmeltingModifier>> INFUSION_SMELTING = LOOT_MODIFIERS.register("infusion_smelting",
+            () -> InfusionSmeltingModifier.CODEC);
 
     private ModLootModifiers() {
     }

@@ -1,0 +1,15 @@
+{
+  "name": "Poisson de magme",
+  "icon": "netheryx:magmafish",
+  "category": "netheryx:creatures",
+  "sortnum": 75,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:magmafish",
+      "scale": 1.5,
+      "offset": 0.0,
+      "text": "Nage dans les mers de lave. Chassez-le ou attrapez-le avec une $(item)Nasse à magma$(). Ses écailles servent à brasser la $(item)Potion de plongée en lave$()."
+    }
+  ]
+}

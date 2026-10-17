@@ -10,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.model.DefaultedEntityGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
 import software.bernie.geckolib.renderer.layer.AutoGlowingGeoLayer;
 
@@ -22,7 +23,12 @@ public class NetheryXGeoRenderer<T extends LivingEntity & GeoAnimatable> extends
     private boolean translucent;
 
     public NetheryXGeoRenderer(EntityRendererProvider.Context context, String name, float shadowRadius, float scale) {
-        super(context, new DefaultedEntityGeoModel<>(NetheryX.id(name), true));
+        this(context, new DefaultedEntityGeoModel<>(NetheryX.id(name), true), shadowRadius, scale);
+    }
+
+    /** Variante avec un modele personnalise (parties masquees selon l'etat, etc.). */
+    public NetheryXGeoRenderer(EntityRendererProvider.Context context, GeoModel<T> model, float shadowRadius, float scale) {
+        super(context, model);
         this.shadowRadius = shadowRadius;
         this.withScale(scale);
     }

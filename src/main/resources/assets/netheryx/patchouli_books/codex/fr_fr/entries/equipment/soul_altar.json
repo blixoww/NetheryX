@@ -1,0 +1,17 @@
+{
+  "name": "Autel des âmes",
+  "icon": "netheryx:soul_altar",
+  "category": "netheryx:equipment",
+  "sortnum": 84,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Posez un objet (ou un livre) sur l'autel, allumez au moins $(l)2 flammes des âmes$() à proximité (feu, torches, lanternes ou feux de camp des âmes), puis clic droit avec une offrande. Chaque niveau coûte 5 niveaux d'expérience.$(br)$(li)2 $(item)Carapaces de magma$() : $(l)Pas de braise$() (bottes).$(li)4 $(item)Poussières d'âme$() : $(l)Récolte d'âmes$() (armes).$(li)2 $(item)Carapaces de basalte$() : $(l)Ancrage$() (plastron, jambières).",
+      "title": "Autel des âmes"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:soul_altar"
+    }
+  ]
+}

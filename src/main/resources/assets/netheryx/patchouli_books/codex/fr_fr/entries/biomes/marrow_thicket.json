@@ -1,0 +1,19 @@
+{
+  "name": "Fourré de moelle",
+  "icon": "netheryx:ossified_nylium",
+  "category": "netheryx:biomes",
+  "sortnum": 71,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Une forêt pâle d'$(l)arbres de moelle$() sur du nylium ossifié. Quand la voûte est proche, les troncs s'y soudent en piliers naturels. Des $(item)Lianes de moelle$() lumineuses pendent des chapeaux et s'escaladent.$(br2)Ressources : bois de moelle, $(item)Chapeaux de moelle$() (transformés en $(item)Farine de moelle$()), os.",
+      "title": "Fourré de moelle"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:marrow_meal",
+      "text": "De la poudre d'os sur toute une zone de $(l)3x3$() en un seul usage.",
+      "link_recipe": true
+    }
+  ]
+}

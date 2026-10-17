@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:wartstalk_planks"
+    }
+  },
+  "result": {
+    "item": "netheryx:wartstalk_slab",
+    "count": 6
+  }
+}

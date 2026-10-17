@@ -1,0 +1,14 @@
+{
+  "name": "Wartstalk Wood",
+  "icon": "netheryx:wartstalk_planks",
+  "category": "netheryx:building",
+  "sortnum": 90,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:wartstalk_planks",
+      "recipe2": "netheryx:wartstalk_door",
+      "text": "A deep red wood from the Wartvine Tangle."
+    }
+  ]
+}

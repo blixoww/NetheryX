@@ -1,0 +1,18 @@
+{
+  "name": "Chaudron infernal",
+  "icon": "netheryx:infernal_cauldron",
+  "category": "netheryx:utility",
+  "sortnum": 86,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:infernal_cauldron",
+      "text": "Des potions en masse : versez jusqu'à 9 doses d'une potion, $(l)chauffez-le par dessous$(), puis ajoutez du $(item)Soufre$() : chaque soufre ajoute 2 doses. Remplissez des fioles pour les récupérer.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:infernal_cauldron"
+    }
+  ]
+}

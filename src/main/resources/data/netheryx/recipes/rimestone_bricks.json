@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:rimestone"
+    }
+  },
+  "result": {
+    "item": "netheryx:rimestone_bricks",
+    "count": 4
+  }
+}

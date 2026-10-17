@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:quartz_glass"
+    }
+  },
+  "result": {
+    "item": "netheryx:quartz_glass_pane",
+    "count": 16
+  }
+}

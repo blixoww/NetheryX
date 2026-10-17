@@ -6,6 +6,10 @@ import com.netheryx.network.NetheryXNetwork;
 import com.netheryx.registry.ModBlockEntities;
 import com.netheryx.registry.ModBlocks;
 import com.netheryx.registry.ModCreativeTabs;
+import com.netheryx.registry.ModEffects;
+import com.netheryx.registry.ModEnchantments;
+import com.netheryx.registry.ModFeatures;
+import com.netheryx.registry.ModRecipes;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.registry.ModItems;
 import com.netheryx.registry.ModLootModifiers;
@@ -48,6 +52,11 @@ public final class NetheryX {
         ModStructureTypes.STRUCTURE_TYPES.register(modBus);
         ModLootModifiers.LOOT_MODIFIERS.register(modBus);
         ModParticles.PARTICLES.register(modBus);
+        ModEnchantments.ENCHANTMENTS.register(modBus);
+        ModEffects.EFFECTS.register(modBus);
+        ModEffects.POTIONS.register(modBus);
+        ModFeatures.FEATURES.register(modBus);
+        ModRecipes.SERIALIZERS.register(modBus);
 
         NetheryXNetwork.register();
         modBus.addListener(this::commonSetup);

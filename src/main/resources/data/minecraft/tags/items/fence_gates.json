@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "netheryx:ember_fence_gate",
-    "netheryx:withered_fence_gate"
+    "netheryx:withered_fence_gate",
+    "netheryx:marrow_fence_gate",
+    "netheryx:wartstalk_fence_gate"
   ]
 }

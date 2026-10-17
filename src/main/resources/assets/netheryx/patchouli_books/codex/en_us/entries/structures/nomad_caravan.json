@@ -1,0 +1,13 @@
+{
+  "name": "Nomad Caravan",
+  "icon": "netheryx:wartstalk_planks",
+  "category": "netheryx:structures",
+  "sortnum": 81,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Two tents, a lizard pen and a campfire: Nomad Caravans host a $(l)Piglin Merchant$(). Their chests hold gold, sulfur, food and sometimes an $(item)Onyx Infusion Template$().",
+      "title": "Caravanes"
+    }
+  ]
+}

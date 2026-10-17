@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "#netheryx:ember_stems",
-    "#netheryx:withered_stems"
+    "#netheryx:withered_stems",
+    "#netheryx:marrow_stems",
+    "#netheryx:wartstalk_stems"
   ]
 }

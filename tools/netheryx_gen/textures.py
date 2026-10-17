@@ -916,6 +916,8 @@ def generate():
     generate_v13()
     generate_v14()
     generate_v110()
+    from . import textures_v120
+    textures_v120.generate()
 
 
 # ------------------------------------------------------------------------------------------------

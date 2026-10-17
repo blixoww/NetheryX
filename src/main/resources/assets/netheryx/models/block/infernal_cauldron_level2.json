@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/template_cauldron_level2",
+  "textures": {
+    "particle": "netheryx:block/infernal_cauldron_side",
+    "side": "netheryx:block/infernal_cauldron_side",
+    "top": "netheryx:block/infernal_cauldron_top",
+    "bottom": "netheryx:block/infernal_cauldron_bottom",
+    "inside": "netheryx:block/infernal_cauldron_inner",
+    "content": "minecraft:block/water_still"
+  }
+}

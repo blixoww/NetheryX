@@ -1,0 +1,26 @@
+{
+  "name": "Armures thématiques",
+  "icon": "netheryx:ember_chestplate",
+  "category": "netheryx:equipment",
+  "sortnum": 82,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:ember_chestplate",
+      "text": "$(l)Armure de braise$() (carapaces de magma). Ensemble : insensible au feu et aux sols brûlants, plus rapide sur l'herbe et le nylium.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:wraith_robe",
+      "text": "$(l)Armure spectrale$() (étoffe spectrale). Ensemble : les créatures ne vous repèrent que de près, et vous voyez à travers les cendres.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:carapace_helmet",
+      "text": "$(l)Armure de carapace$() (carapaces de basalte). Ensemble : grande résistance au recul et renvoie 25 % des dégâts de mêlée.",
+      "link_recipe": true
+    }
+  ]
+}

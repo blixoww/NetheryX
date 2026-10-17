@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:wartstalk_planks"
+    }
+  },
+  "result": {
+    "item": "netheryx:wartstalk_trapdoor",
+    "count": 2
+  }
+}

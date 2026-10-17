@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "netheryx:block/lava_trap"
+  },
+  "render_type": "minecraft:cutout"
+}

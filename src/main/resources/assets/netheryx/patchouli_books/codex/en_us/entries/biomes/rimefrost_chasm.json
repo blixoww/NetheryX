@@ -1,0 +1,24 @@
+{
+  "name": "Rimefrost Chasm",
+  "icon": "netheryx:rime_ice",
+  "category": "netheryx:biomes",
+  "sortnum": 72,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A frozen wound in the Nether: rimestone, spikes of $(l)Rime Ice$() rising from the floor and hanging from the ceiling, and $(item)Rime Crystals$(). Skeletons and wraiths roam here.",
+      "title": "Gouffre de givre"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:rime_ice",
+      "text": "$(l)The only water of the Nether.$() Rime Ice never melts by itself; placed against heat (lava, fire, magma block, lit campfire) it slowly melts into a $(l)water source$().",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:rime_ice",
+      "text": "4 Rime Shards from Rime Crystals."
+    }
+  ]
+}

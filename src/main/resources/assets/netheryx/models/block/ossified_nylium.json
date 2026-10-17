@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "minecraft:block/netherrack",
+    "top": "netheryx:block/ossified_nylium",
+    "side": "netheryx:block/ossified_nylium_side"
+  }
+}

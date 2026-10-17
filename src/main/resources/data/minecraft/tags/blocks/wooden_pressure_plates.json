@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "netheryx:ember_pressure_plate",
-    "netheryx:withered_pressure_plate"
+    "netheryx:withered_pressure_plate",
+    "netheryx:marrow_pressure_plate",
+    "netheryx:wartstalk_pressure_plate"
   ]
 }

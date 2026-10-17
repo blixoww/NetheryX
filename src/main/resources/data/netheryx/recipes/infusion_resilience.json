@@ -1,0 +1,10 @@
+{
+  "type": "netheryx:infusion",
+  "template": {
+    "item": "netheryx:onyx_infusion_template"
+  },
+  "addition": {
+    "item": "netheryx:onyx"
+  },
+  "infusion": "resilience"
+}

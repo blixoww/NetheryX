@@ -298,15 +298,16 @@ def generate_dungeon_loot():
                      item("minecraft:totem_of_undying", weight=3)]
     vault("onyx_citadel_vault", [item("soul_scythe", weight=6), item("onyx_hammer", weight=5),
                                  item("minecraft:netherite_ingot", weight=4, functions=[count(1, 2)])] + common_unique,
-          [item("sentinel_core", weight=2), item("magma_treads", weight=3)])
+          [item("sentinel_core", weight=2), item("magma_treads", weight=3), item("onyx_infusion_template", weight=4)])
     vault("infernal_sanctum_vault", [item("warlock_staff", weight=6), item("magma_treads", weight=6),
                                      item("minecraft:snout_armor_trim_smithing_template", weight=3)] + common_unique,
           [item("recall_stone", weight=4), item("glimmer_elixir", weight=6, functions=[count(2, 4)]),
-           item("minecraft:blaze_rod", weight=8, functions=[count(4, 10)])])
+           item("minecraft:blaze_rod", weight=8, functions=[count(4, 10)]), item("onyx_infusion_template", weight=4)])
     vault("withered_catacombs_vault", [item("withered_blade", weight=6), item("soul_scythe", weight=4),
                                        item("minecraft:music_disc_pigstep", weight=3),
                                        item("minecraft:wither_skeleton_skull", weight=4, functions=[count(1, 3)])] + common_unique,
-          [item("soul_compass", weight=4), item("recall_stone", weight=3), item("soul_dust", weight=8, functions=[count(4, 10)])])
+          [item("soul_compass", weight=4), item("recall_stone", weight=3), item("soul_dust", weight=8, functions=[count(4, 10)]),
+           item("onyx_infusion_template", weight=4)])
     chest_table("withered_catacombs", [
         pool(4, 7, [
             item("withered_bone", weight=16, functions=[count(2, 6)]),
@@ -838,3 +839,5 @@ def generate():
     generate_tags()
     generate_advancements()
     generate_loot_modifiers()
+    from . import data_v120
+    data_v120.generate()

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "# #",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:basalt_carapace"
+    }
+  },
+  "result": {
+    "item": "netheryx:carapace_boots",
+    "count": 1
+  }
+}

@@ -11,16 +11,31 @@ A = R / "assets/netheryx"
 D = R / "data"
 java = "".join(p.read_text() for p in (ROOT / "src/main/java").rglob("*.java"))
 reg = set(re.findall(r'register\("([a-z_]+)"', java))
-particles = set(re.findall(r'register\("([a-z_]+)"\)', (ROOT / "src/main/java/com/netheryx/registry/ModParticles.java").read_text()))
+JAVA = ROOT / "src/main/java/com/netheryx"
+
+
+def names_in(*files):
+    found = set()
+    for f in files:
+        found |= set(re.findall(r'register\("([a-z_]+)"', (JAVA / f).read_text()))
+    return found
+
+
+particles = names_in("registry/ModParticles.java")
 reg -= particles
-non_items = {"blaze_pepper_crop", "soul_tuber_crop", "fire_berry_bush", "crusted_lava", "netheryx", "add_item", "nether_floor",
-             "ember_stalker", "ash_wraith", "onyx_sentinel", "magma_crab", "sulfur_bomb_entity", "soul_moth",
-             "withered_knight", "basalt_beetle", "infernal_warlock", "withered_champion", "ember_cow", "cinder_hen",
-             "fire_ghast", "onyx_cube", "cinder_wheat_crop", "potted_"}
+# Enregistrements sans objet (entites, enchantements, effets, potions, features, recettes, butins...)
+entities = names_in("registry/ModEntities.java")
+technical = names_in("registry/ModFeatures.java", "registry/ModRecipes.java", "registry/ModLootModifiers.java") | {"netheryx", "nether_floor"}
+effects = names_in("registry/ModEffects.java", "registry/ModEnchantments.java")
+block_only = set(re.findall(r'BLOCKS\.register\("([a-z_]+)"', java))
+item_registered = set(re.findall(r'ITEMS\.register\(', java))
 reg.discard("potted_")
-reg |= {f"potted_{p}" for p in re.findall(r'pot\("([a-z_]+)"', java)}
-non_items |= {f"potted_{p}" for p in re.findall(r'pot\("([a-z_]+)"', java)}
-items = (reg - non_items) | {"sulfur_bomb"}
+pots = {f"potted_{p}" for p in re.findall(r'pot\("([a-z_]+)"', java)}
+reg |= pots
+non_items = entities | technical | effects | block_only | pots
+items = (reg - non_items) | {"sulfur_bomb", "obsidian_boat"} | (set(re.findall(r'ModItems\.[A-Z_]+ = register\("([a-z_]+)"', java)))
+items |= set(re.findall(r'RegistryObject<Item> [A-Z_]+ = (?:register|armor)\("([a-z_]+)"', java))
+untranslated = technical | {f"long_{p}" for p in effects}
 errors = []
 
 for f in A.rglob("models/**/*.json"):
@@ -37,7 +52,7 @@ for n in items:
         errors.append(f"modele d'objet manquant {n}")
 for lang in ("en_us", "fr_fr"):
     keys = json.loads((A / "lang" / f"{lang}.json").read_text())
-    for n in reg - {"add_item", "nether_floor", "netheryx"}:
+    for n in reg - untranslated:
         if not any(k.endswith("." + n) for k in keys):
             errors.append(f"traduction {lang} manquante {n}")
 for n in particles:

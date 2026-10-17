@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "tag": "netheryx:marrow_stems"
+    }
+  ],
+  "result": {
+    "item": "netheryx:marrow_planks",
+    "count": 4
+  }
+}

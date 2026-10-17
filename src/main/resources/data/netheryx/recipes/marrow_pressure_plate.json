@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:marrow_planks"
+    }
+  },
+  "result": {
+    "item": "netheryx:marrow_pressure_plate",
+    "count": 1
+  }
+}

@@ -7,6 +7,18 @@ import com.netheryx.client.renderer.ObsidianBoatRenderer;
 import com.netheryx.client.renderer.NetheryXGeoRenderer;
 import com.netheryx.client.renderer.OnyxCubeRenderer;
 import com.netheryx.entity.AshWraith;
+import com.netheryx.entity.BasaltBurrower;
+import com.netheryx.entity.CinderLizard;
+import com.netheryx.entity.LanternBearer;
+import com.netheryx.entity.Magmafish;
+import com.netheryx.entity.Mimic;
+import com.netheryx.entity.PiglinMerchant;
+import com.netheryx.client.renderer.CinderLizardModel;
+import com.netheryx.client.renderer.SoulAltarRenderer;
+import com.netheryx.registry.ModBlockEntities;
+import com.netheryx.registry.ModBlocks;
+import com.netheryx.blockentity.InfernalCauldronBlockEntity;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import com.netheryx.entity.BasaltBeetle;
 import com.netheryx.entity.CinderHen;
 import com.netheryx.entity.EmberCow;
@@ -78,6 +90,27 @@ public final class ClientModEvents {
         event.registerEntityRenderer(ModEntities.ONYX_CUBE.get(), OnyxCubeRenderer::new);
         event.registerEntityRenderer(ModEntities.SULFUR_BOMB.get(), ThrownItemRenderer::new);
         event.registerEntityRenderer(ModEntities.OBSIDIAN_BOAT.get(), ObsidianBoatRenderer::new);
+        event.registerEntityRenderer(ModEntities.MAGMAFISH.get(),
+                context -> new NetheryXGeoRenderer<Magmafish>(context, "magmafish", 0.3F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.PIGLIN_MERCHANT.get(),
+                context -> new NetheryXGeoRenderer<PiglinMerchant>(context, "piglin_merchant", 0.5F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.MIMIC.get(),
+                context -> new NetheryXGeoRenderer<Mimic>(context, "mimic", 0.5F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.BASALT_BURROWER.get(),
+                context -> new NetheryXGeoRenderer<BasaltBurrower>(context, "basalt_burrower", 0.6F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.LANTERN_BEARER.get(),
+                context -> new NetheryXGeoRenderer<LanternBearer>(context, "lantern_bearer", 0.3F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.CINDER_LIZARD.get(),
+                context -> new NetheryXGeoRenderer<CinderLizard>(context, new CinderLizardModel(), 0.7F, 1.0F).glowing());
+        event.registerBlockEntityRenderer(ModBlockEntities.SOUL_ALTAR.get(), SoulAltarRenderer::new);
+    }
+
+    /** Teinte du liquide du Chaudron infernal = couleur de la potion contenue. */
+    @SubscribeEvent
+    public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
+        event.register((state, level, pos, tintIndex) -> level != null && pos != null
+                        && level.getBlockEntity(pos) instanceof InfernalCauldronBlockEntity cauldron ? cauldron.getColor() : 0x3F76E4,
+                ModBlocks.INFERNAL_CAULDRON.get());
     }
 
     @SubscribeEvent
@@ -89,6 +122,8 @@ public final class ClientModEvents {
         particle(event, ModParticles.SULFUR_PUFF, NetheryXParticle.Style.PUFF);
         particle(event, ModParticles.EMBER_POLLEN, NetheryXParticle.Style.POLLEN);
         particle(event, ModParticles.WITHER_SPORE, NetheryXParticle.Style.SPORE);
+        particle(event, ModParticles.FROST_MOTE, NetheryXParticle.Style.ASH);
+        particle(event, ModParticles.QUARTZ_GLINT, NetheryXParticle.Style.GLINT);
     }
 
     private static void particle(RegisterParticleProvidersEvent event, RegistryObject<SimpleParticleType> type,

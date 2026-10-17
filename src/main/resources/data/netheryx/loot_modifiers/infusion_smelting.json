@@ -1,0 +1,11 @@
+{
+  "type": "netheryx:infusion_smelting",
+  "conditions": [
+    {
+      "condition": "minecraft:match_tool",
+      "predicate": {
+        "nbt": "{NetheryXInfusion:\"smelting\"}"
+      }
+    }
+  ]
+}

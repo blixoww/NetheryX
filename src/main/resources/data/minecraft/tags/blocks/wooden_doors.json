@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "netheryx:ember_door",
-    "netheryx:withered_door"
+    "netheryx:withered_door",
+    "netheryx:marrow_door",
+    "netheryx:wartstalk_door"
   ]
 }

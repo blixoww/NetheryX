@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "netheryx:onyx_leggings"
+    "netheryx:onyx_leggings",
+    "netheryx:ember_leggings",
+    "netheryx:wraith_leggings",
+    "netheryx:carapace_leggings"
   ]
 }

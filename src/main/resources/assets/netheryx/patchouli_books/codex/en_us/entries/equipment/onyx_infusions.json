@@ -1,0 +1,18 @@
+{
+  "name": "Onyx Infusions",
+  "icon": "netheryx:onyx_infusion_template",
+  "category": "netheryx:equipment",
+  "sortnum": 83,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "At a $(item)Smithing Table$(), an $(item)Onyx Infusion Template$() adds a permanent bonus to $(l)any$() tool, weapon or armor:$(li)$(item)Magma Cream$(): $(l)Smelting$(), mined blocks come out smelted.$(li)$(item)Burrower Fang$(): $(l)Reach$(), +1.5 blocks.$(li)$(item)Onyx$(): $(l)Resilience$(), the item slowly repairs itself.",
+      "title": "Infusions"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:onyx_infusion_template",
+      "text": "Templates are found in dungeons, bastions and caravans, then duplicated."
+    }
+  ]
+}

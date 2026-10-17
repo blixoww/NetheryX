@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:nether_forest_vegetation",
+  "config": {
+    "state_provider": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 80,
+          "data": {
+            "Name": "netheryx:marrow_sprouts"
+          }
+        },
+        {
+          "weight": 12,
+          "data": {
+            "Name": "netheryx:charred_shrub"
+          }
+        },
+        {
+          "weight": 8,
+          "data": {
+            "Name": "netheryx:glowcap"
+          }
+        }
+      ]
+    },
+    "spread_width": 8,
+    "spread_height": 4
+  }
+}

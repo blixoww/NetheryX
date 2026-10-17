@@ -11,6 +11,11 @@
     "netheryx:fortress_withered_bone",
     "netheryx:bastion_treasure_recall_stone",
     "netheryx:bastion_other_glimmer_elixir",
-    "netheryx:bartering_fire_berries"
+    "netheryx:bartering_fire_berries",
+    "netheryx:bastion_treasure_infusion_template",
+    "netheryx:bastion_other_infusion_template",
+    "netheryx:fortress_rime_shard",
+    "netheryx:ruined_portal_magmafish",
+    "netheryx:infusion_smelting"
   ]
 }

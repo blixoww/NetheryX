@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "netheryx:marrow_planks"
+    }
+  ],
+  "result": {
+    "item": "netheryx:marrow_button",
+    "count": 1
+  }
+}

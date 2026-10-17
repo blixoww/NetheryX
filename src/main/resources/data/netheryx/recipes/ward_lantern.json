@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "OEO",
+    "ELE",
+    "OEO"
+  ],
+  "key": {
+    "O": {
+      "item": "netheryx:onyx_shard"
+    },
+    "E": {
+      "item": "netheryx:wraith_essence"
+    },
+    "L": {
+      "item": "minecraft:soul_lantern"
+    }
+  },
+  "result": {
+    "item": "netheryx:ward_lantern",
+    "count": 1
+  }
+}

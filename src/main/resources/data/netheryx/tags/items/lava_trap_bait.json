@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:stalker_meat",
+    "netheryx:crab_leg",
+    "netheryx:infernal_beef",
+    "netheryx:infernal_chicken",
+    "minecraft:rotten_flesh"
+  ]
+}

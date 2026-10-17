@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smoking",
+  "category": "food",
+  "ingredient": {
+    "item": "netheryx:magmafish"
+  },
+  "result": "netheryx:grilled_magmafish",
+  "experience": 0.35,
+  "cookingtime": 100
+}

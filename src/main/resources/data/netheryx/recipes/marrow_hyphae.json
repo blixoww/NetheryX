@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:marrow_stem"
+    }
+  },
+  "result": {
+    "item": "netheryx:marrow_hyphae",
+    "count": 3
+  }
+}

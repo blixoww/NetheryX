@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "#minecraft:base_stone_nether",
+    "#minecraft:nylium",
+    "minecraft:soul_soil",
+    "minecraft:soul_sand",
+    "minecraft:magma_block",
+    "minecraft:smooth_basalt",
+    "netheryx:ash_block",
+    "netheryx:sulfur_rock",
+    "netheryx:withered_soil"
+  ]
+}

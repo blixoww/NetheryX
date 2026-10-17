@@ -1,0 +1,18 @@
+{
+  "name": "Quartz Reef",
+  "icon": "netheryx:rich_quartz_ore",
+  "category": "netheryx:biomes",
+  "sortnum": 74,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Natural $(l)quartz spires$() pierce blackstone flats near the lava seas, veined with $(item)Rich Quartz Ore$() (2 to 5 quartz each). The lava around is full of $(l)Magmafish$().",
+      "title": "Récifs de quartz"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:quartz_glass",
+      "recipe2": "netheryx:quartz_lamp"
+    }
+  ]
+}

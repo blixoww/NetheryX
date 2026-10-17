@@ -1,0 +1,18 @@
+{
+  "name": "Ward Lantern",
+  "icon": "netheryx:ward_lantern",
+  "category": "netheryx:utility",
+  "sortnum": 87,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:ward_lantern",
+      "text": "No hostile creature spawns naturally within $(l)24 blocks$(). Perfect to secure a Nether base or farm.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:ward_lantern"
+    }
+  ]
+}

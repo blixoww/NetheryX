@@ -197,6 +197,8 @@ def onyx_citadel():
             d.set(tx + 6, y, tz + 7, "minecraft:ladder", facing="north", waterlogged="false")
         d.spawner(tx + 3, 1, tz + 3, "ash_wraith")
         d.chest(tx + 2, 8, tz + 2, "onyx_citadel", facing="south")
+        if (tx + tz) % 2 == 0:
+            d.guard(tx + 4, 8, tz + 2, "mimic")
         d.lantern(tx + 4, 8, tz + 4, "onyx_lantern")
         d.hanging_lantern(tx + 4, 7, tz + 1, 1)
         for k in range(0, 9, 2):
@@ -352,6 +354,8 @@ def infernal_sanctum():
         d.box(rx0, 0, az, rx1, 0, tz1 - 1, "minecraft:polished_blackstone")
         d.spawner((rx0 + rx1) // 2, 1, 30, mob)
         d.chest((rx0 + rx1) // 2, 1, tz1 - 1, loot, facing="north")
+        if side == "east":
+            d.guard((rx0 + rx1) // 2 + 2, 1, tz1 - 1, "mimic")
         d.hanging_lantern((rx0 + rx1) // 2, 13, 29, 4, "minecraft:lantern")
     d.spawner(c, 1, 30, "ember_stalker")
 
@@ -430,6 +434,8 @@ def withered_catacombs():
         cx, cz = (x0 + x1) // 2, (z0 + z1) // 2
         d.spawner(cx, 1, cz, mob)
         d.chest(x0, 1, z0, "withered_catacombs", facing="south")
+        if (x0 + z0) % 3 == 0:
+            d.guard(x0 + 2, 1, z0, "mimic")
         d.box(x1, 1, z1, x1, 1, z1 - 2 if z1 - z0 > 4 else z1, "minecraft:polished_blackstone_slab",
               type="bottom", waterlogged="false")
         d.skull(x1, 2, z1)
@@ -599,7 +605,50 @@ def hidden_cache():
     d.save("hidden_cache")
 
 
+def nomad_caravan():
+    """Caravane nomade : deux tentes de verrutige, un enclos a lezards, un feu de camp et le marchand piglin."""
+    d = Dungeon(19, 8, 15, "nomad_caravan")
+    d.air(0, 1, 0, 18, 7, 14)
+    d.box(1, 0, 1, 17, 0, 13, [("minecraft:netherrack", 40), ("wart_moss", 25), ("minecraft:soul_soil", 15), ("minecraft:blackstone", 20)])
+    for (x0, color) in ((2, "minecraft:red_wool"), (11, "minecraft:orange_wool")):
+        for z in range(2, 8):
+            for (y, xs) in ((1, (x0, x0 + 6)), (2, (x0 + 1, x0 + 5)), (3, (x0 + 2, x0 + 4))):
+                for x in xs:
+                    d.set(x, y, z, color)
+            d.set(x0 + 3, 4, z, "wartstalk_planks")
+        for y in range(1, 5):
+            d.set(x0 + 3, y, 8, "wartstalk_fence", north="true", south="false", east="false", west="false", waterlogged="false")
+        d.box(x0 + 1, 0, 3, x0 + 5, 0, 6, "wartstalk_planks")
+        d.set(x0 + 3, 1, 3, "minecraft:magenta_carpet" if x0 == 2 else "minecraft:yellow_carpet")
+    d.chest(3, 1, 3, "nomad_caravan", facing="south")
+    d.barrel(7, 1, 3, "nomad_caravan")
+    d.set(12, 1, 3, "infernal_cauldron", doses="0")
+    d.set(16, 1, 3, "lava_trap")
+    d.lantern(4, 1, 6, "ward_lantern")
+    d.lantern(14, 1, 6, "minecraft:soul_lantern")
+    # Feu de camp central et bancs
+    d.set(9, 1, 11, "minecraft:campfire", lit="true", facing="north", signal_fire="false", waterlogged="false")
+    d.set(7, 1, 11, "wartstalk_stem", axis="z")
+    d.set(11, 1, 11, "wartstalk_stem", axis="z")
+    # Enclos a lezards
+    for x in range(13, 18):
+        for z in (10, 13):
+            d.set(x, 1, z, "wartstalk_fence", north="false", south="false", east=str(x < 17).lower(), west=str(x > 13).lower(),
+                  waterlogged="false")
+    for z in range(10, 14):
+        for x in (13, 17):
+            d.set(x, 1, z, "wartstalk_fence", north=str(z > 10).lower(), south=str(z < 13).lower(), east="false", west="false",
+                  waterlogged="false")
+    d.set(13, 1, 11, "wartstalk_fence_gate", facing="west", in_wall="false", open="false", powered="false")
+    d.guard(15, 1, 11, "cinder_lizard")
+    d.guard(9, 1, 8, "piglin_merchant")
+    d.set(1, 1, 12, "crimson_bellflower")
+    d.set(6, 1, 13, "minecraft:crimson_roots")
+    d.save("nomad_caravan")
+
+
 def generate():
+    nomad_caravan()
     traveler_camp()
     nether_garden()
     hidden_cache()

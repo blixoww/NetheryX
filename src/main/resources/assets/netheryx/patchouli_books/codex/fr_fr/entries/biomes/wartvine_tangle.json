@@ -1,0 +1,19 @@
+{
+  "name": "Enchevêtrement de verrues",
+  "icon": "netheryx:wartfruit",
+  "category": "netheryx:biomes",
+  "sortnum": 73,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Des verrues géantes sur des troncs de verrutige, constellées de bulbes lumineux. Des $(item)Verrulianes$() pendent partout, chargées de $(l)Fruits de verrue$() : la nourriture renouvelable du Nether. Hoglins, piglins et $(l)Lézards de cendre$() y vivent.",
+      "title": "Enchevêtrement"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:wartfruit",
+      "text": "Clic droit sur une liane lumineuse pour cueillir ses fruits : ils repoussent. Posez un fruit sous un plafond pour planter une liane.",
+      "link_recipe": true
+    }
+  ]
+}

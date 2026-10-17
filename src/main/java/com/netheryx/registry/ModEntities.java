@@ -16,6 +16,12 @@ import com.netheryx.entity.MagmaCrab;
 import com.netheryx.entity.OnyxSentinel;
 import com.netheryx.entity.SulfurBombEntity;
 import com.netheryx.entity.ObsidianBoat;
+import com.netheryx.entity.BasaltBurrower;
+import com.netheryx.entity.CinderLizard;
+import com.netheryx.entity.LanternBearer;
+import com.netheryx.entity.Magmafish;
+import com.netheryx.entity.Mimic;
+import com.netheryx.entity.PiglinMerchant;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -58,6 +64,19 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<ObsidianBoat>> OBSIDIAN_BOAT = register("obsidian_boat",
             EntityType.Builder.<ObsidianBoat>of(ObsidianBoat::new, MobCategory.MISC).sized(1.375F, 0.5625F).fireImmune()
                     .clientTrackingRange(10));
+
+    public static final RegistryObject<EntityType<Magmafish>> MAGMAFISH = register("magmafish",
+            EntityType.Builder.of(Magmafish::new, MobCategory.CREATURE).sized(0.7F, 0.4F).fireImmune().clientTrackingRange(6));
+    public static final RegistryObject<EntityType<PiglinMerchant>> PIGLIN_MERCHANT = register("piglin_merchant",
+            EntityType.Builder.of(PiglinMerchant::new, MobCategory.MISC).sized(0.6F, 1.95F).fireImmune().clientTrackingRange(10));
+    public static final RegistryObject<EntityType<Mimic>> MIMIC = register("mimic",
+            EntityType.Builder.of(Mimic::new, MobCategory.MONSTER).sized(0.9F, 0.9F).fireImmune().clientTrackingRange(8));
+    public static final RegistryObject<EntityType<BasaltBurrower>> BASALT_BURROWER = register("basalt_burrower",
+            EntityType.Builder.of(BasaltBurrower::new, MobCategory.MONSTER).sized(1.0F, 0.8F).fireImmune().clientTrackingRange(8));
+    public static final RegistryObject<EntityType<LanternBearer>> LANTERN_BEARER = register("lantern_bearer",
+            EntityType.Builder.of(LanternBearer::new, MobCategory.CREATURE).sized(0.6F, 1.0F).fireImmune().clientTrackingRange(10));
+    public static final RegistryObject<EntityType<CinderLizard>> CINDER_LIZARD = register("cinder_lizard",
+            EntityType.Builder.of(CinderLizard::new, MobCategory.CREATURE).sized(1.3F, 0.9F).fireImmune().clientTrackingRange(10));
 
     private ModEntities() {
     }

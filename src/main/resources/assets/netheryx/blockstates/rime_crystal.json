@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "netheryx:block/rime_crystal"
+    },
+    "facing=down": {
+      "model": "netheryx:block/rime_crystal",
+      "x": 180
+    },
+    "facing=north": {
+      "model": "netheryx:block/rime_crystal",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "netheryx:block/rime_crystal",
+      "x": 90,
+      "y": 180
+    },
+    "facing=east": {
+      "model": "netheryx:block/rime_crystal",
+      "x": 90,
+      "y": 90
+    },
+    "facing=west": {
+      "model": "netheryx:block/rime_crystal",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

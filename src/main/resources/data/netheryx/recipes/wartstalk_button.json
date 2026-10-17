@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "netheryx:wartstalk_planks"
+    }
+  ],
+  "result": {
+    "item": "netheryx:wartstalk_button",
+    "count": 1
+  }
+}

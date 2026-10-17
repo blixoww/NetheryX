@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "DCD",
+    " P ",
+    "PPP"
+  ],
+  "key": {
+    "D": {
+      "item": "netheryx:soul_dust"
+    },
+    "C": {
+      "item": "minecraft:crying_obsidian"
+    },
+    "P": {
+      "item": "minecraft:polished_blackstone"
+    }
+  },
+  "result": {
+    "item": "netheryx:soul_altar",
+    "count": 1
+  }
+}

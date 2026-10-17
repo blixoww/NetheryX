@@ -1,0 +1,17 @@
+{
+  "name": "Wartfruit Tart",
+  "icon": "netheryx:wartfruit_tart",
+  "category": "netheryx:farming",
+  "sortnum": 88,
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:wartfruit_tart",
+      "text": "A filling meal that may grant Regeneration."
+    },
+    {
+      "type": "patchouli:smelting",
+      "recipe": "netheryx:grilled_magmafish"
+    }
+  ]
+}

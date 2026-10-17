@@ -3,6 +3,8 @@
   "values": [
     "netheryx:ember_nylium",
     "netheryx:withered_soil",
-    "netheryx:nether_grass_block"
+    "netheryx:nether_grass_block",
+    "netheryx:ossified_nylium",
+    "netheryx:wart_moss"
   ]
 }

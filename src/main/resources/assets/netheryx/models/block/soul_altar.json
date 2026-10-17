@@ -1,0 +1,215 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "netheryx:block/soul_altar_side",
+    "side": "netheryx:block/soul_altar_side",
+    "top": "netheryx:block/soul_altar_top",
+    "bottom": "netheryx:block/soul_altar_bottom"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        4,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side",
+          "uv": [
+            1,
+            12,
+            15,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            1,
+            12,
+            15,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            1,
+            12,
+            15,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            1,
+            12,
+            15,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#bottom",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        4,
+        3
+      ],
+      "to": [
+        13,
+        10,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side",
+          "uv": [
+            3,
+            6,
+            13,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            3,
+            6,
+            13,
+            12
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            3,
+            6,
+            13,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            3,
+            6,
+            13,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ]
+        },
+        "down": {
+          "texture": "#bottom",
+          "uv": [
+            3,
+            3,
+            13,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        10,
+        0
+      ],
+      "to": [
+        16,
+        13,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#side",
+          "uv": [
+            0,
+            3,
+            16,
+            6
+          ]
+        },
+        "south": {
+          "texture": "#side",
+          "uv": [
+            0,
+            3,
+            16,
+            6
+          ]
+        },
+        "east": {
+          "texture": "#side",
+          "uv": [
+            0,
+            3,
+            16,
+            6
+          ]
+        },
+        "west": {
+          "texture": "#side",
+          "uv": [
+            0,
+            3,
+            16,
+            6
+          ]
+        },
+        "up": {
+          "texture": "#top",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "down": {
+          "texture": "#bottom",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        }
+      }
+    }
+  ]
+}

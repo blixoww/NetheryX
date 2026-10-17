@@ -20,6 +20,11 @@ public final class NetheryXConfig {
     public static final ForgeConfigSpec.IntValue RECALL_STONE_COOLDOWN;
     public static final ForgeConfigSpec.DoubleValue WARLOCK_MAX_HEALTH;
     public static final ForgeConfigSpec.DoubleValue CHAMPION_MAX_HEALTH;
+    public static final ForgeConfigSpec.BooleanValue BURROWER_DIGS;
+    public static final ForgeConfigSpec.BooleanValue NETHER_EVENTS;
+    public static final ForgeConfigSpec.IntValue NETHER_EVENT_MIN_DELAY;
+    public static final ForgeConfigSpec.IntValue NETHER_EVENT_MAX_DELAY;
+    public static final ForgeConfigSpec.IntValue WARD_LANTERN_RADIUS;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -65,6 +70,27 @@ public final class NetheryXConfig {
         CHAMPION_MAX_HEALTH = builder
                 .comment("Points de vie du Champion fletri (boss des Catacombes fletries).")
                 .defineInRange("championMaxHealth", 200.0D, 50.0D, 2048.0D);
+        BURROWER_DIGS = builder
+                .comment("Le Fouisseur de basalte creuse des tunnels (respecte aussi la regle mobGriefing).")
+                .define("burrowerDigs", true);
+        builder.pop();
+
+        builder.comment("Evenements du Nether (pluie de cendres, tempete de soufre, eruption)").push("events");
+        NETHER_EVENTS = builder
+                .comment("Active les evenements dynamiques du Nether.")
+                .define("netherEvents", true);
+        NETHER_EVENT_MIN_DELAY = builder
+                .comment("Delai minimal (en minutes) entre deux evenements.")
+                .defineInRange("minDelayMinutes", 20, 1, 600);
+        NETHER_EVENT_MAX_DELAY = builder
+                .comment("Delai maximal (en minutes) entre deux evenements.")
+                .defineInRange("maxDelayMinutes", 45, 1, 600);
+        builder.pop();
+
+        builder.comment("Blocs").push("blocks");
+        WARD_LANTERN_RADIUS = builder
+                .comment("Rayon (en blocs) dans lequel une Lanterne de garde empeche l'apparition naturelle des monstres.")
+                .defineInRange("wardLanternRadius", 24, 4, 64);
         builder.pop();
 
         SPEC = builder.build();

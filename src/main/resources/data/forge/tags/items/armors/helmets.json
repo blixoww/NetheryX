@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "netheryx:onyx_helmet"
+    "netheryx:onyx_helmet",
+    "netheryx:ember_helmet",
+    "netheryx:wraith_hood",
+    "netheryx:carapace_helmet"
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    " G ",
+    "QLQ",
+    " G "
+  ],
+  "key": {
+    "G": {
+      "item": "netheryx:quartz_glass"
+    },
+    "Q": {
+      "item": "minecraft:quartz_block"
+    },
+    "L": {
+      "item": "minecraft:glowstone"
+    }
+  },
+  "result": {
+    "item": "netheryx:quartz_lamp",
+    "count": 2
+  }
+}

@@ -28,6 +28,10 @@ public final class ModParticles {
     public static final RegistryObject<SimpleParticleType> EMBER_POLLEN = register("ember_pollen");
     /** Spore fletrie : descend en spirale dans la foret fletrie. */
     public static final RegistryObject<SimpleParticleType> WITHER_SPORE = register("wither_spore");
+    /** Poussiere de givre : flotte et descend lentement (Gouffre de givre, glace de givre). */
+    public static final RegistryObject<SimpleParticleType> FROST_MOTE = register("frost_mote");
+    /** Eclat de quartz : scintillement blanc (Recifs de quartz). */
+    public static final RegistryObject<SimpleParticleType> QUARTZ_GLINT = register("quartz_glint");
 
     private ModParticles() {
     }

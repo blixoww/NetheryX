@@ -3,6 +3,8 @@
   "values": [
     "netheryx:ember_wart_block",
     "netheryx:withered_wart_block",
-    "netheryx:ember_lamp"
+    "netheryx:ember_lamp",
+    "netheryx:marrow_cap",
+    "netheryx:wart_bulb"
   ]
 }

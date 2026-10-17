@@ -7,6 +7,9 @@
     "minecraft:soul_sand",
     "minecraft:magma_block",
     "netheryx:ash_block",
-    "minecraft:gravel"
+    "minecraft:gravel",
+    "netheryx:ossified_nylium",
+    "netheryx:wart_moss",
+    "netheryx:rimestone"
   ]
 }

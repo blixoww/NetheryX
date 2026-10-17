@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "food",
+  "ingredients": [
+    {
+      "item": "netheryx:wartfruit"
+    },
+    {
+      "item": "netheryx:wartfruit"
+    },
+    {
+      "item": "netheryx:cinder_wheat"
+    },
+    {
+      "item": "netheryx:ember_egg"
+    }
+  ],
+  "result": {
+    "item": "netheryx:wartfruit_tart",
+    "count": 1
+  }
+}

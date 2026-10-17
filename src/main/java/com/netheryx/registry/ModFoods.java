@@ -63,6 +63,19 @@ public final class ModFoods {
             .effect(() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 300), 0.4F)
             .build();
 
+    public static final FoodProperties WARTFRUIT = new FoodProperties.Builder()
+            .nutrition(3).saturationMod(0.4F).fast().build();
+    public static final FoodProperties WARTFRUIT_TART = new FoodProperties.Builder()
+            .nutrition(9).saturationMod(0.7F)
+            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 100), 0.5F)
+            .build();
+    public static final FoodProperties MAGMAFISH = new FoodProperties.Builder()
+            .nutrition(2).saturationMod(0.2F).build();
+    public static final FoodProperties GRILLED_MAGMAFISH = new FoodProperties.Builder()
+            .nutrition(6).saturationMod(0.8F)
+            .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 300), 1.0F)
+            .build();
+
     private ModFoods() {
     }
 }

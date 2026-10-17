@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "netheryx:block/wartstalk_pressure_plate"
+    },
+    "powered=true": {
+      "model": "netheryx:block/wartstalk_pressure_plate_down"
+    }
+  }
+}

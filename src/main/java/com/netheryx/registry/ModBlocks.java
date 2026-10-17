@@ -1,6 +1,18 @@
 package com.netheryx.registry;
 
 import com.netheryx.NetheryX;
+import com.netheryx.block.HangingVinesBlock;
+import com.netheryx.block.HangingVinesPlantBlock;
+import com.netheryx.block.InfernalCauldronBlock;
+import com.netheryx.block.LavaTrapBlock;
+import com.netheryx.block.RimeIceBlock;
+import com.netheryx.block.SoulAltarBlock;
+import com.netheryx.block.WardLanternBlock;
+import com.netheryx.block.WartvineBlock;
+import com.netheryx.block.WartvinePlantBlock;
+import net.minecraft.core.particles.ParticleTypes;
+import com.netheryx.block.QuartzGlassBlock;
+import com.netheryx.block.QuartzGlassPaneBlock;
 import com.netheryx.block.AmbientBlock;
 import com.netheryx.block.AmbientClusterBlock;
 import com.netheryx.block.AmbientFungusBlock;
@@ -274,6 +286,145 @@ public final class ModBlocks {
                     .strength(0.5F).randomTicks().lightLevel(state -> 7).sound(SoundType.BASALT)
                     .isValidSpawn((state, level, pos, type) -> false).noLootTable()));
 
+    // =============================================================================================
+    // 1.2.0 : Fourre de moelle, Gouffre de givre, Enchevetrement de verrues, Recifs de quartz
+    // =============================================================================================
+
+    // --- Fourre de moelle -------------------------------------------------------------------------
+    public static final RegistryObject<Block> OSSIFIED_NYLIUM = register("ossified_nylium",
+            () -> new EmberNyliumBlock(BlockBehaviour.Properties.copy(Blocks.WARPED_NYLIUM).mapColor(MapColor.TERRACOTTA_WHITE),
+                    ModFeatureKeys.MARROW_VEGETATION_BONEMEAL, particles(() -> ParticleTypes.WHITE_ASH, 30, AmbientParticles.Mode.ABOVE)));
+    public static final RegistryObject<Block> MARROW_CAP = register("marrow_cap",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.WARPED_WART_BLOCK).mapColor(MapColor.TERRACOTTA_WHITE)
+                    .sound(SoundType.BONE_BLOCK)));
+    public static final RegistryObject<Block> MARROW_VINES_PLANT = BLOCKS.register("marrow_vines_plant",
+            () -> new HangingVinesPlantBlock(vines(MapColor.TERRACOTTA_WHITE, 6), ModBlocks.MARROW_VINES));
+    public static final RegistryObject<Block> MARROW_VINES = register("marrow_vines",
+            () -> new HangingVinesBlock(vines(MapColor.TERRACOTTA_WHITE, 6).randomTicks(), MARROW_VINES_PLANT));
+    public static final RegistryObject<Block> MARROW_SPROUTS = register("marrow_sprouts",
+            () -> new NetherPlantBlock(plant(MapColor.TERRACOTTA_WHITE).sound(SoundType.BONE_BLOCK),
+                    particles(() -> ParticleTypes.WHITE_ASH, 40, AmbientParticles.Mode.INSIDE)));
+
+    // --- Bois : marrow -----------------------------------------------------------------------
+    public static final RegistryObject<Block> STRIPPED_MARROW_STEM = register("stripped_marrow_stem",
+            () -> new RotatedPillarBlock(marrowWood()));
+    public static final RegistryObject<Block> MARROW_STEM = register("marrow_stem",
+            () -> new StrippableLogBlock(marrowWood(), STRIPPED_MARROW_STEM));
+    public static final RegistryObject<Block> STRIPPED_MARROW_HYPHAE = register("stripped_marrow_hyphae",
+            () -> new RotatedPillarBlock(marrowWood()));
+    public static final RegistryObject<Block> MARROW_HYPHAE = register("marrow_hyphae",
+            () -> new StrippableLogBlock(marrowWood(), STRIPPED_MARROW_HYPHAE));
+    public static final RegistryObject<Block> MARROW_PLANKS = register("marrow_planks",
+            () -> new Block(marrowWood()));
+    public static final RegistryObject<Block> MARROW_STAIRS = register("marrow_stairs",
+            () -> new StairBlock(() -> ModBlocks.MARROW_PLANKS.get().defaultBlockState(), marrowWood()));
+    public static final RegistryObject<Block> MARROW_SLAB = register("marrow_slab",
+            () -> new SlabBlock(marrowWood()));
+    public static final RegistryObject<Block> MARROW_FENCE = register("marrow_fence",
+            () -> new FenceBlock(marrowWood()));
+    public static final RegistryObject<Block> MARROW_FENCE_GATE = register("marrow_fence_gate",
+            () -> new FenceGateBlock(marrowWood().forceSolidOn(), WoodType.WARPED));
+    public static final RegistryObject<Block> MARROW_DOOR = register("marrow_door",
+            () -> new DoorBlock(marrowWood().noOcclusion().pushReaction(PushReaction.DESTROY), BlockSetType.WARPED),
+            block -> new DoubleHighBlockItem(block, new Item.Properties()));
+    public static final RegistryObject<Block> MARROW_TRAPDOOR = register("marrow_trapdoor",
+            () -> new TrapDoorBlock(marrowWood().noOcclusion().isValidSpawn((state, level, pos, type) -> false), BlockSetType.WARPED));
+    public static final RegistryObject<Block> MARROW_BUTTON = register("marrow_button",
+            () -> new ButtonBlock(BlockBehaviour.Properties.of().noCollission().strength(0.5F)
+                    .pushReaction(PushReaction.DESTROY), BlockSetType.WARPED, 30, true));
+    public static final RegistryObject<Block> MARROW_PRESSURE_PLATE = register("marrow_pressure_plate",
+            () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
+                    marrowWood().forceSolidOn().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY),
+                    BlockSetType.WARPED));
+
+    // --- Gouffre de givre ---------------------------------------------------------------------
+    public static final RegistryObject<Block> RIMESTONE = register("rimestone", () -> new Block(rimestone()));
+    public static final RegistryObject<Block> RIMESTONE_BRICKS = register("rimestone_bricks", () -> new Block(rimestone()));
+    public static final RegistryObject<Block> RIMESTONE_BRICK_STAIRS = register("rimestone_brick_stairs",
+            () -> new StairBlock(() -> ModBlocks.RIMESTONE_BRICKS.get().defaultBlockState(), rimestone()));
+    public static final RegistryObject<Block> RIMESTONE_BRICK_SLAB = register("rimestone_brick_slab", () -> new SlabBlock(rimestone()));
+    public static final RegistryObject<Block> RIMESTONE_BRICK_WALL = register("rimestone_brick_wall",
+            () -> new WallBlock(rimestone().forceSolidOn()));
+    public static final RegistryObject<Block> RIME_ICE = register("rime_ice",
+            () -> new RimeIceBlock(BlockBehaviour.Properties.copy(Blocks.PACKED_ICE).mapColor(MapColor.ICE).randomTicks()
+                    .lightLevel(state -> 4)));
+    public static final RegistryObject<Block> RIME_CRYSTAL = register("rime_crystal",
+            () -> new AmbientClusterBlock(7, 3, BlockBehaviour.Properties.of().mapColor(MapColor.ICE)
+                    .forceSolidOn().noOcclusion().sound(SoundType.AMETHYST_CLUSTER).strength(1.2F)
+                    .lightLevel(state -> 7).pushReaction(PushReaction.DESTROY),
+                    particles(ModParticles.FROST_MOTE, 4, AmbientParticles.Mode.INSIDE)));
+
+    // --- Enchevetrement de verrues ---------------------------------------------------------------
+    public static final RegistryObject<Block> WART_MOSS = register("wart_moss",
+            () -> new EmberNyliumBlock(BlockBehaviour.Properties.copy(Blocks.CRIMSON_NYLIUM).mapColor(MapColor.CRIMSON_NYLIUM)
+                    .sound(SoundType.MOSS), ModFeatureKeys.WART_VEGETATION_BONEMEAL,
+                    particles(() -> ParticleTypes.CRIMSON_SPORE, 30, AmbientParticles.Mode.ABOVE)));
+    public static final RegistryObject<Block> WART_BULB = register("wart_bulb",
+            () -> new AmbientBlock(BlockBehaviour.Properties.copy(Blocks.SHROOMLIGHT).mapColor(MapColor.COLOR_RED).lightLevel(state -> 13),
+                    particles(ModParticles.EMBER_POLLEN, 8, AmbientParticles.Mode.BELOW)));
+    public static final RegistryObject<Block> WARTVINE_PLANT = BLOCKS.register("wartvine_plant",
+            () -> new WartvinePlantBlock(vines(MapColor.COLOR_RED, 0).lightLevel(WartvineBlock::lightLevel), ModBlocks.WARTVINE));
+    public static final RegistryObject<Block> WARTVINE = BLOCKS.register("wartvine",
+            () -> new WartvineBlock(vines(MapColor.COLOR_RED, 0).lightLevel(WartvineBlock::lightLevel), WARTVINE_PLANT));
+
+    // --- Bois : wartstalk -----------------------------------------------------------------------
+    public static final RegistryObject<Block> STRIPPED_WARTSTALK_STEM = register("stripped_wartstalk_stem",
+            () -> new RotatedPillarBlock(wartstalkWood()));
+    public static final RegistryObject<Block> WARTSTALK_STEM = register("wartstalk_stem",
+            () -> new StrippableLogBlock(wartstalkWood(), STRIPPED_WARTSTALK_STEM));
+    public static final RegistryObject<Block> STRIPPED_WARTSTALK_HYPHAE = register("stripped_wartstalk_hyphae",
+            () -> new RotatedPillarBlock(wartstalkWood()));
+    public static final RegistryObject<Block> WARTSTALK_HYPHAE = register("wartstalk_hyphae",
+            () -> new StrippableLogBlock(wartstalkWood(), STRIPPED_WARTSTALK_HYPHAE));
+    public static final RegistryObject<Block> WARTSTALK_PLANKS = register("wartstalk_planks",
+            () -> new Block(wartstalkWood()));
+    public static final RegistryObject<Block> WARTSTALK_STAIRS = register("wartstalk_stairs",
+            () -> new StairBlock(() -> ModBlocks.WARTSTALK_PLANKS.get().defaultBlockState(), wartstalkWood()));
+    public static final RegistryObject<Block> WARTSTALK_SLAB = register("wartstalk_slab",
+            () -> new SlabBlock(wartstalkWood()));
+    public static final RegistryObject<Block> WARTSTALK_FENCE = register("wartstalk_fence",
+            () -> new FenceBlock(wartstalkWood()));
+    public static final RegistryObject<Block> WARTSTALK_FENCE_GATE = register("wartstalk_fence_gate",
+            () -> new FenceGateBlock(wartstalkWood().forceSolidOn(), WoodType.CRIMSON));
+    public static final RegistryObject<Block> WARTSTALK_DOOR = register("wartstalk_door",
+            () -> new DoorBlock(wartstalkWood().noOcclusion().pushReaction(PushReaction.DESTROY), BlockSetType.CRIMSON),
+            block -> new DoubleHighBlockItem(block, new Item.Properties()));
+    public static final RegistryObject<Block> WARTSTALK_TRAPDOOR = register("wartstalk_trapdoor",
+            () -> new TrapDoorBlock(wartstalkWood().noOcclusion().isValidSpawn((state, level, pos, type) -> false), BlockSetType.CRIMSON));
+    public static final RegistryObject<Block> WARTSTALK_BUTTON = register("wartstalk_button",
+            () -> new ButtonBlock(BlockBehaviour.Properties.of().noCollission().strength(0.5F)
+                    .pushReaction(PushReaction.DESTROY), BlockSetType.CRIMSON, 30, true));
+    public static final RegistryObject<Block> WARTSTALK_PRESSURE_PLATE = register("wartstalk_pressure_plate",
+            () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING,
+                    wartstalkWood().forceSolidOn().noCollission().strength(0.5F).pushReaction(PushReaction.DESTROY),
+                    BlockSetType.CRIMSON));
+
+    // --- Recifs de quartz ------------------------------------------------------------------------
+    public static final RegistryObject<Block> RICH_QUARTZ_ORE = register("rich_quartz_ore",
+            () -> new AmbientOreBlock(BlockBehaviour.Properties.copy(Blocks.NETHER_QUARTZ_ORE).strength(3.5F, 3.0F),
+                    UniformInt.of(3, 7), particles(ModParticles.QUARTZ_GLINT, 6, AmbientParticles.Mode.FACES)));
+    public static final RegistryObject<Block> QUARTZ_GLASS = register("quartz_glass",
+            () -> new QuartzGlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).mapColor(MapColor.QUARTZ).strength(0.6F)));
+    public static final RegistryObject<Block> QUARTZ_GLASS_PANE = register("quartz_glass_pane",
+            () -> new QuartzGlassPaneBlock(BlockBehaviour.Properties.copy(Blocks.GLASS_PANE).mapColor(MapColor.QUARTZ).strength(0.6F)));
+    public static final RegistryObject<Block> QUARTZ_LAMP = register("quartz_lamp",
+            () -> new AmbientBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).mapColor(MapColor.QUARTZ).strength(0.6F)
+                    .lightLevel(state -> 15), particles(ModParticles.QUARTZ_GLINT, 12, AmbientParticles.Mode.FACES)));
+
+    // --- Ateliers et rituels -----------------------------------------------------------------------
+    public static final RegistryObject<Block> LAVA_TRAP = register("lava_trap",
+            () -> new LavaTrapBlock(BlockBehaviour.Properties.copy(Blocks.CHAIN).mapColor(MapColor.COLOR_BLACK).strength(3.0F, 1200.0F)
+                    .noOcclusion()));
+    public static final RegistryObject<Block> INFERNAL_CAULDRON = register("infernal_cauldron",
+            () -> new InfernalCauldronBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON).mapColor(MapColor.COLOR_BLACK)
+                    .lightLevel(state -> state.getValue(InfernalCauldronBlock.LEVEL) > 0 ? 7 : 0)));
+    public static final RegistryObject<Block> SOUL_ALTAR = register("soul_altar",
+            () -> new SoulAltarBlock(BlockBehaviour.Properties.copy(Blocks.POLISHED_BLACKSTONE).mapColor(MapColor.COLOR_CYAN)
+                    .strength(5.0F, 1200.0F).lightLevel(state -> 7).noOcclusion()));
+    public static final RegistryObject<Block> WARD_LANTERN = register("ward_lantern",
+            () -> new WardLanternBlock(BlockBehaviour.Properties.copy(Blocks.SOUL_LANTERN).mapColor(MapColor.COLOR_CYAN)
+                    .lightLevel(state -> 15)));
+
     private ModBlocks() {
     }
 
@@ -294,6 +445,26 @@ public final class ModBlocks {
     private static BlockBehaviour.Properties witheredWood() {
         return BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_GRAY).instrument(NoteBlockInstrument.BASS)
                 .strength(2.0F, 3.0F).sound(SoundType.NETHER_WOOD);
+    }
+
+    private static BlockBehaviour.Properties marrowWood() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.TERRACOTTA_WHITE).instrument(NoteBlockInstrument.BASS)
+                .strength(2.0F, 3.0F).sound(SoundType.NETHER_WOOD);
+    }
+
+    private static BlockBehaviour.Properties wartstalkWood() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.CRIMSON_STEM).instrument(NoteBlockInstrument.BASS)
+                .strength(2.0F, 3.0F).sound(SoundType.NETHER_WOOD);
+    }
+
+    private static BlockBehaviour.Properties rimestone() {
+        return BlockBehaviour.Properties.of().mapColor(MapColor.ICE).instrument(NoteBlockInstrument.BASEDRUM)
+                .requiresCorrectToolForDrops().strength(1.5F, 6.0F).sound(SoundType.DEEPSLATE_TILES);
+    }
+
+    private static BlockBehaviour.Properties vines(MapColor color, int light) {
+        return BlockBehaviour.Properties.of().mapColor(color).noCollission().instabreak().sound(SoundType.WEEPING_VINES)
+                .lightLevel(state -> light).pushReaction(PushReaction.DESTROY);
     }
 
     private static BlockBehaviour.Properties magmaBricks() {

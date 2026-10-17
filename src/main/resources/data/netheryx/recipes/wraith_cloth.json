@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "EWE"
+  ],
+  "key": {
+    "E": {
+      "item": "netheryx:wraith_essence"
+    },
+    "W": {
+      "item": "minecraft:white_wool"
+    }
+  },
+  "result": {
+    "item": "netheryx:wraith_cloth",
+    "count": 2
+  }
+}

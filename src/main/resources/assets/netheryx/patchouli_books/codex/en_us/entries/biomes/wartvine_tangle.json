@@ -1,0 +1,19 @@
+{
+  "name": "Wartvine Tangle",
+  "icon": "netheryx:wartfruit",
+  "category": "netheryx:biomes",
+  "sortnum": 73,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Giant wart bulbs on wartstalk trunks, studded with glowing bulbs. $(item)Wartvines$() hang everywhere, loaded with $(l)Wartfruits$(): the renewable food of the Nether. Hoglins, piglins and $(l)Cinder Lizards$() live here.",
+      "title": "Enchevêtrement"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:wartfruit",
+      "text": "Right-click a glowing vine to pick its fruits: they grow back. Place a fruit under a ceiling to plant a new vine.",
+      "link_recipe": true
+    }
+  ]
+}

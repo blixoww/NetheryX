@@ -164,6 +164,64 @@ def generate_features():
 
 
 
+def generate_features_v120():
+    """Features des biomes 1.2.0 (arbres et aiguilles sont des features Java du mod)."""
+    for name, feature, per_layer, rarity in (("marrow_tree", "marrow_tree", 6, None), ("wart_tree", "wart_tree", 5, None),
+                                             ("quartz_spire", "quartz_spire", 3, None), ("rime_spike", "rime_spike", 3, None)):
+        configured(name, mid(feature), {})
+        placement = [every_layer(per_layer)]
+        if rarity:
+            placement.append({"type": "minecraft:rarity_filter", "chance": rarity})
+        placement.append(BIOME_FILTER)
+        placed(name, name, placement)
+    marrow = {"type": "minecraft:weighted_state_provider", "entries": [
+        {"weight": 80, "data": state("marrow_sprouts")}, {"weight": 12, "data": state("charred_shrub")},
+        {"weight": 8, "data": state("glowcap")}]}
+    configured("marrow_vegetation", "minecraft:nether_forest_vegetation", {"state_provider": marrow, "spread_width": 8, "spread_height": 4})
+    placed("marrow_vegetation", "marrow_vegetation", [every_layer(6), BIOME_FILTER])
+    configured("marrow_vegetation_bonemeal", "minecraft:nether_forest_vegetation",
+               {"state_provider": marrow, "spread_width": 3, "spread_height": 1})
+    wart = {"type": "minecraft:weighted_state_provider", "entries": [
+        {"weight": 50, "data": {"Name": "minecraft:crimson_roots"}}, {"weight": 25, "data": state("crimson_bellflower")},
+        {"weight": 15, "data": state("fire_berry_bush", age=3)}, {"weight": 10, "data": {"Name": "minecraft:crimson_fungus"}}]}
+    configured("wart_vegetation", "minecraft:nether_forest_vegetation", {"state_provider": wart, "spread_width": 8, "spread_height": 4})
+    placed("wart_vegetation", "wart_vegetation", [every_layer(8), BIOME_FILTER])
+    configured("wart_vegetation_bonemeal", "minecraft:nether_forest_vegetation", {"state_provider": wart, "spread_width": 3, "spread_height": 1})
+    patch("rime_crystal_patch", state("rime_crystal", facing="up"), 24, 6, 3, 2)
+    ore("ore_rich_quartz", 8, 0.0, [{"target": {"predicate_type": "minecraft:tag_match", "tag": "minecraft:base_stone_nether"},
+                                     "state": state("rich_quartz_ore")}], 12, {"above_bottom": 10}, {"below_top": 10})
+    ore("ore_rimestone", 40, 0.0, [{"target": {"predicate_type": "minecraft:block_match", "block": "minecraft:netherrack"},
+                                    "state": state("rimestone")}], 8, {"above_bottom": 5}, {"below_top": 5})
+    # Verrulianes au plafond de l'Enchevetrement (comme les lianes pleureuses vanilla, mais avec des fruits)
+    configured("wartvine_ceiling", "minecraft:block_column", {
+        "direction": "down", "allowed_placement": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"},
+        "prioritize_tip": True,
+        "layers": [{"height": {"type": "minecraft:uniform", "value": {"min_inclusive": 1, "max_inclusive": 6}},
+                    "provider": {"type": "minecraft:weighted_state_provider", "entries": [
+                        {"weight": 3, "data": state("wartvine_plant", fruit=False)}, {"weight": 1, "data": state("wartvine_plant", fruit=True)}]}},
+                   {"height": 1, "provider": {"type": "minecraft:simple_state_provider", "state": state("wartvine", age=20, fruit=True)}}]})
+    placed("wartvine_ceiling", "wartvine_ceiling", [
+        {"type": "minecraft:count", "count": 40}, {"type": "minecraft:in_square"},
+        {"type": "minecraft:height_range", "height": {"type": "minecraft:uniform", "min_inclusive": {"above_bottom": 0},
+                                                      "max_inclusive": {"below_top": 0}}},
+        {"type": "minecraft:environment_scan", "direction_of_search": "up", "max_steps": 12,
+         "target_condition": {"type": "minecraft:solid"}, "allowed_search_condition": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"}},
+        {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -1}, BIOME_FILTER])
+    configured("marrow_vines_ceiling", "minecraft:block_column", {
+        "direction": "down", "allowed_placement": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"},
+        "prioritize_tip": True,
+        "layers": [{"height": {"type": "minecraft:uniform", "value": {"min_inclusive": 2, "max_inclusive": 9}},
+                    "provider": {"type": "minecraft:simple_state_provider", "state": state("marrow_vines_plant")}},
+                   {"height": 1, "provider": {"type": "minecraft:simple_state_provider", "state": state("marrow_vines", age=20)}}]})
+    placed("marrow_vines_ceiling", "marrow_vines_ceiling", [
+        {"type": "minecraft:count", "count": 30}, {"type": "minecraft:in_square"},
+        {"type": "minecraft:height_range", "height": {"type": "minecraft:uniform", "min_inclusive": {"above_bottom": 0},
+                                                      "max_inclusive": {"below_top": 0}}},
+        {"type": "minecraft:environment_scan", "direction_of_search": "up", "max_steps": 12,
+         "target_condition": {"type": "minecraft:solid"}, "allowed_search_condition": {"type": "minecraft:matching_blocks", "blocks": "minecraft:air"}},
+        {"type": "minecraft:random_offset", "xz_spread": 0, "y_spread": -1}, BIOME_FILTER])
+
+
 def spawner(entity, weight, lo, hi):
     return {"type": mid(entity), "weight": weight, "minCount": lo, "maxCount": hi}
 
@@ -246,6 +304,32 @@ def generate_biomes():
           + vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone") + [mid("magma_delta")],
           [])
 
+    # --- 1.2.0 -------------------------------------------------------------------------------------
+    biome("marrow_thicket", "#3a3428", "minecraft:white_ash", 0.04, "soul_sand_valley", "soul_sand_valley",
+          [spawner("minecraft:skeleton", 30, 2, 3), spawner("withered_knight", 15, 1, 2), spawner("minecraft:ghast", 10, 1, 1),
+           spawner("basalt_burrower", 10, 1, 1), spawner("minecraft:enderman", 2, 1, 2)],
+          [spawner("lantern_bearer", 10, 1, 2), strider],
+          vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone"),
+          [mid("marrow_tree"), mid("marrow_vegetation"), mid("marrow_vines_ceiling"), mid("glowcap_patch")],
+          ambient_mobs=[spawner("soul_moth", 6, 1, 2)])
+    biome("rimefrost_chasm", "#2a3e52", "netheryx:frost_mote", 0.02, "soul_sand_valley", "soul_sand_valley",
+          [spawner("minecraft:ghast", 20, 1, 1), spawner("minecraft:skeleton", 25, 2, 3), spawner("ash_wraith", 15, 1, 2),
+           spawner("minecraft:enderman", 2, 1, 2)],
+          [spawner("lantern_bearer", 10, 1, 2), strider],
+          vanilla("patch_fire", "patch_soul_fire", "ore_gravel_nether", "ore_blackstone") + [mid("ore_rimestone")],
+          [mid("rime_spike"), mid("rime_crystal_patch")])
+    biome("wartvine_tangle", "#4a0e0c", "minecraft:crimson_spore", 0.03, "crimson_forest", "crimson_forest",
+          [spawner("minecraft:hoglin", 30, 2, 4), spawner("minecraft:piglin", 20, 2, 4), spawner("minecraft:zombified_piglin", 10, 2, 3)],
+          [spawner("cinder_lizard", 20, 1, 3), spawner("ember_cow", 10, 2, 3), strider],
+          vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone"),
+          [mid("wart_tree"), mid("wart_vegetation"), mid("wartvine_ceiling")])
+    biome("quartz_reef", "#3a2a30", "netheryx:quartz_glint", 0.01, "nether_wastes", "nether_wastes",
+          [spawner("minecraft:magma_cube", 30, 2, 4), spawner("minecraft:ghast", 20, 1, 1), spawner("fire_ghast", 10, 1, 1),
+           spawner("minecraft:blaze", 5, 1, 2)],
+          [spawner("magmafish", 25, 3, 5), spawner("magma_crab", 15, 2, 3), strider],
+          vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone") + [mid("ore_rich_quartz")],
+          [mid("quartz_spire")])
+
 
 def biome_modifier(name, data):
     write_json(data_path("forge", "biome_modifier", f"{name}.json"), data)
@@ -271,7 +355,17 @@ def generate_biome_modifiers():
         spawner("ember_stalker", 8, 1, 2), spawner("ash_wraith", 6, 1, 1), spawner("withered_knight", 6, 1, 2),
         spawner("fire_ghast", 10, 1, 1), spawner("onyx_cube", 8, 1, 3),
         spawner("magma_crab", 6, 1, 3), spawner("basalt_beetle", 4, 1, 2), spawner("ember_cow", 8, 2, 3),
-        spawner("cinder_hen", 8, 2, 3), spawner("soul_moth", 6, 1, 3)]})
+        spawner("cinder_hen", 8, 2, 3), spawner("soul_moth", 6, 1, 3), spawner("magmafish", 10, 2, 4)]})
+    biome_modifier("add_v120_vanilla_spawns_basalt", {"type": "forge:add_spawns", "biomes": "minecraft:basalt_deltas", "spawners": [
+        spawner("basalt_burrower", 15, 1, 1), spawner("cinder_lizard", 6, 1, 2)]})
+    biome_modifier("add_v120_vanilla_spawns_soul", {"type": "forge:add_spawns", "biomes": "minecraft:soul_sand_valley", "spawners": [
+        spawner("lantern_bearer", 8, 1, 2)]})
+    biome_modifier("add_v120_modded_spawns", {"type": "forge:add_spawns", "biomes": [mid(b) for b in ("ashen_wastes", "onyx_depths")],
+                                              "spawners": [spawner("basalt_burrower", 12, 1, 1)]})
+    biome_modifier("add_v120_lantern_bearers", {"type": "forge:add_spawns", "biomes": [mid(b) for b in ("soulfire_marsh", "withered_forest")],
+                                                "spawners": [spawner("lantern_bearer", 8, 1, 2)]})
+    biome_modifier("add_v120_lizards", {"type": "forge:add_spawns", "biomes": [mid(b) for b in ("magma_rift", "ember_meadow")],
+                                        "spawners": [spawner("cinder_lizard", 8, 1, 2)]})
 
 
 STRUCTURES = {
@@ -283,6 +377,7 @@ STRUCTURES = {
     "traveler_camp": (9, 3, 734029118, 6, 33, 0, 12, "beard_thin"),
     "nether_garden": (10, 4, 192837465, 6, 33, 0, 14, "beard_thin"),
     "hidden_cache": (8, 3, 556172839, 4, 40, 6, 6, "beard_thin"),
+    "nomad_caravan": (14, 5, 902817364, 6, 33, 0, 20, "beard_thin"),
 }
 
 PROCESSORS = {
@@ -330,6 +425,7 @@ def generate_structures():
 
 def generate():
     generate_features()
+    generate_features_v120()
     generate_biomes()
     generate_biome_modifiers()
     generate_structures()

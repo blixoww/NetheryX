@@ -1,0 +1,15 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "netheryx:ashen_wastes",
+    "netheryx:onyx_depths"
+  ],
+  "spawners": [
+    {
+      "type": "netheryx:basalt_burrower",
+      "weight": 12,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

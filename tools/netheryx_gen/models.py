@@ -6,6 +6,7 @@ from .content import (BIOMES, BLOCKS, BLOCKS_WITHOUT_ITEM, EXTRA_LANG, GENERATED
                       SPAWN_EGGS)
 
 CUTOUT = "minecraft:cutout"
+TRANSLUCENT = "minecraft:translucent"
 
 
 def block_tex(name):
@@ -295,6 +296,80 @@ def gen_aged(name, parent, texture_prefix, key="crop"):
     blockstate(name, variants)
 
 
+# --- 1.2.0 ----------------------------------------------------------------------------------------
+
+def gen_vines(name, tex, item):
+    m = model(name, "minecraft:block/cross", {"cross": block_tex(tex)}, CUTOUT)
+    blockstate(name, {"": v(m)})
+    if item:
+        item_model(name, layer0=block_tex(tex))
+
+
+def gen_fruit_vines(name, tex):
+    plain = model(name, "minecraft:block/cross", {"cross": block_tex(tex)}, CUTOUT)
+    lit = model(f"{name}_lit", "minecraft:block/cross", {"cross": block_tex(f"{tex}_lit")}, CUTOUT)
+    blockstate(name, {"fruit=false": v(plain), "fruit=true": v(lit)})
+
+
+def gen_translucent_cube(name):
+    m = model(name, "minecraft:block/cube_all", {"all": block_tex(name)}, TRANSLUCENT)
+    blockstate(name, {"": v(m)})
+    return m
+
+
+def gen_pane(name, glass):
+    t = {"pane": block_tex(glass), "edge": block_tex(f"{name}_top")}
+    parts = {}
+    for suffix in ("post", "side", "side_alt", "noside", "noside_alt"):
+        parts[suffix] = model(f"{name}_{suffix}", f"minecraft:block/template_glass_pane_{suffix}", t, TRANSLUCENT)
+    multipart = [{"apply": {"model": parts["post"]}}]
+    for direction, model_key, y in (("north", "side", 0), ("east", "side", 90), ("south", "side_alt", 0), ("west", "side_alt", 90)):
+        multipart.append({"when": {direction: "true"}, "apply": v(parts[model_key], y=y)})
+    for direction, model_key, y in (("north", "noside", 0), ("east", "noside_alt", 0), ("south", "noside_alt", 90), ("west", "noside", 270)):
+        multipart.append({"when": {direction: "false"}, "apply": v(parts[model_key], y=y)})
+    blockstate(name, multipart=multipart)
+    item_model(name, layer0=block_tex(glass))
+
+
+def gen_cage(name):
+    m = model(name, "minecraft:block/cube_all", {"all": block_tex(name)}, CUTOUT)
+    blockstate(name, {"": v(m)})
+    return m
+
+
+def gen_cauldron(name):
+    t = {"particle": block_tex(f"{name}_side"), "side": block_tex(f"{name}_side"), "top": block_tex(f"{name}_top"),
+         "bottom": block_tex(f"{name}_bottom"), "inside": block_tex(f"{name}_inner")}
+    empty = model(name, "minecraft:block/cauldron", t)
+    levels = {}
+    for level, template in ((1, "level1"), (2, "level2"), (3, "full")):
+        levels[level] = model(f"{name}_{template}", f"minecraft:block/template_cauldron_{template}",
+                              dict(t, content="minecraft:block/water_still"))
+    variants = {"doses=0": v(empty)}
+    for doses in range(1, 10):
+        variants[f"doses={doses}"] = v(levels[1 if doses <= 3 else 2 if doses <= 6 else 3])
+    blockstate(name, variants)
+    item_model(name, layer0=f"{MOD_ID}:item/{name}")
+
+
+def gen_altar(name):
+    def faces(tex_side, tex_top, tex_bottom, x0, y0, z0, x1, y1, z1):
+        side = {"texture": "#side", "uv": [x0, 16 - y1, x1, 16 - y0]}
+        return {"from": [x0, y0, z0], "to": [x1, y1, z1], "faces": {
+            "north": dict(side), "south": dict(side), "east": {"texture": "#side", "uv": [z0, 16 - y1, z1, 16 - y0]},
+            "west": {"texture": "#side", "uv": [z0, 16 - y1, z1, 16 - y0]},
+            "up": {"texture": "#top", "uv": [x0, z0, x1, z1]}, "down": {"texture": "#bottom", "uv": [x0, z0, x1, z1]}}}
+    data = {"parent": "minecraft:block/block",
+            "textures": {"particle": block_tex(f"{name}_side"), "side": block_tex(f"{name}_side"),
+                         "top": block_tex(f"{name}_top"), "bottom": block_tex(f"{name}_bottom")},
+            "elements": [faces(None, None, None, 1, 0, 1, 15, 4, 15), faces(None, None, None, 3, 4, 3, 13, 10, 13),
+                         faces(None, None, None, 0, 10, 0, 16, 13, 16)]}
+    write_json(asset_path("models", "block", f"{name}.json"), data)
+    m = f"{MOD_ID}:block/{name}"
+    blockstate(name, {"": v(m)})
+    return m
+
+
 def generate_blocks():
     for name, kind, extra in BLOCKS:
         item_parent = None
@@ -345,6 +420,24 @@ def generate_blocks():
             gen_aged(name, "minecraft:block/crop", extra, "crop")
         elif kind == "bush":
             gen_aged(name, "minecraft:block/cross", extra, "cross")
+        elif kind == "vines_head":
+            gen_vines(name, extra, True)
+        elif kind == "vines_body":
+            gen_vines(name, f"{extra}_plant", False)
+        elif kind == "fruit_vines_head":
+            gen_fruit_vines(name, extra)
+        elif kind == "fruit_vines_body":
+            gen_fruit_vines(name, f"{extra}_plant")
+        elif kind == "translucent_cube":
+            item_parent = gen_translucent_cube(name)
+        elif kind == "pane":
+            gen_pane(name, extra)
+        elif kind == "cage":
+            item_parent = gen_cage(name)
+        elif kind == "cauldron":
+            gen_cauldron(name)
+        elif kind == "altar":
+            item_parent = gen_altar(name)
         else:
             raise ValueError(kind)
         if item_parent and name not in BLOCKS_WITHOUT_ITEM:

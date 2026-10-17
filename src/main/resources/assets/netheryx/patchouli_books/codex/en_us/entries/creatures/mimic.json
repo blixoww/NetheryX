@@ -1,0 +1,15 @@
+{
+  "name": "Mimic",
+  "icon": "netheryx:mimic_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 80,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:mimic",
+      "scale": 1.0,
+      "offset": 0.0,
+      "text": "Hides among dungeon chests. Approach while $(l)sneaking$() to tell it apart... or fight it: its loot is much better than a chest's."
+    }
+  ]
+}

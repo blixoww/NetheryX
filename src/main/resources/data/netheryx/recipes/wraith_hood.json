@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "###",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "item": "netheryx:wraith_cloth"
+    }
+  },
+  "result": {
+    "item": "netheryx:wraith_hood",
+    "count": 1
+  }
+}

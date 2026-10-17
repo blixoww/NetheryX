@@ -1,0 +1,17 @@
+{
+  "name": "Nether Events",
+  "icon": "netheryx:sulfur",
+  "category": "netheryx:getting_started",
+  "sortnum": 70,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Every 20 to 45 minutes, an event shakes the Nether for a few minutes:$(br)$(li)$(l)Ash fall$(): thick grey fog, Ash Wraiths and Withered Knights grow stronger.$(li)$(l)Sulfur storm$(): sulfur falls from the ceiling, pick it up!$(li)$(l)Eruption$(): in Magma Rifts and Basalt Deltas, volcanic bombs, magma and ores rain down.",
+      "title": "Événements"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "The full $(item)Wraith armor$() lets you see through the ash fall.$(br2)Server operators can start or stop an event with $(l)/netheryx event start <type>$() and $(l)/netheryx event stop$(). Events can be disabled in the config."
+    }
+  ]
+}
