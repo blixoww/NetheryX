@@ -10,6 +10,11 @@
       "scale": 0.35,
       "offset": 0.0,
       "text": "250 PV, insensible au recul. Coups, $(l)onde de choc$() et, sous la moitié de sa vie, une $(l)rage$() : plus rapide, elle fait jaillir des crocs de cristal vers vous. Lâche le $(item)Cœur de sentinelle$() et beaucoup d'onyx."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)Bond$() : saute sur les joueurs éloignés et frappe le sol à la réception.$(li)$(l)Pluie de cristaux$() : des cercles scintillants apparaissent sous les joueurs, des crocs jaillissent 2 secondes plus tard. Bougez !$(li)$(l)Carapace d'onyx$() (rage) : bras croisés, 75 % de dégâts en moins pendant 4 s. Attendez.$(li)Sous 25 % : appelle des Cubes d'onyx.",
+      "title": "Tactique"
     }
   ]
 }

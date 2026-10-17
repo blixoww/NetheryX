@@ -34,6 +34,7 @@ import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.SmallFireball;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -46,8 +47,10 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
 /**
- * Sorcier infernal : mini-boss du Sanctuaire infernal. Lance des salves de boules de feu,
- * se teleporte quand on le frappe et invoque des Traqueurs de braise a mi-vie.
+ * Sorcier infernal : boss du Sanctuaire infernal. Salves de boules de feu, nova de flammes au contact,
+ * pluie de meteores telegraphiee (cercle de flammes au sol), clignement derriere les cibles eloignees.
+ * A 50 % et 25 % de vie il invoque des Traqueurs de braise : tant qu'ils vivent, son bouclier de braise
+ * absorbe 70 % des degats.
  */
 public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEntity {
     private static final String NAME = "infernal_warlock";
@@ -55,6 +58,8 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
     private static final RawAnimation WALK = NetheryXAnimations.loop(NAME, "walk");
     private static final RawAnimation CAST = NetheryXAnimations.once(NAME, "cast");
     private static final RawAnimation SUMMON = NetheryXAnimations.once(NAME, "summon");
+    private static final RawAnimation METEOR = NetheryXAnimations.once(NAME, "meteor");
+    private static final RawAnimation BLINK = NetheryXAnimations.once(NAME, "blink");
     private static final String TAG_SUMMONED = "HasSummoned";
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -62,6 +67,12 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
             BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS).setCreateWorldFog(true);
     private boolean hasSummoned;
     private int novaCooldown = 60;
+    private int meteorCooldown = 120;
+    private int meteorTicks;
+    private Vec3 meteorTarget;
+    private int blinkCooldown = 160;
+    private int summonWaves;
+    private final java.util.List<java.util.UUID> minions = new java.util.ArrayList<>();
 
     public InfernalWarlock(EntityType<? extends InfernalWarlock> type, Level level) {
         super(type, level);
@@ -115,8 +126,70 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
         this.playSound(SoundEvents.BLAZE_SHOOT, 1.2F, 0.7F);
     }
 
+    /** Bouclier de braise : tant que ses serviteurs vivent, le Sorcier ne subit que 30 % des degats. */
+    private boolean shielded() {
+        if (!(this.level() instanceof ServerLevel server)) {
+            return false;
+        }
+        this.minions.removeIf(id -> {
+            net.minecraft.world.entity.Entity minion = server.getEntity(id);
+            return minion == null || !minion.isAlive() || minion.distanceToSqr(this) > 24.0D * 24.0D;
+        });
+        return !this.minions.isEmpty();
+    }
+
+    // --- Pluie de meteores : cercle de flammes au sol, puis boules de feu tombant du ciel ---------------
+
+    private void tickMeteor(@Nullable LivingEntity target) {
+        if (this.meteorTicks > 0 && this.meteorTarget != null && this.level() instanceof ServerLevel server) {
+            this.meteorTicks--;
+            for (int i = 0; i < 16; i++) {
+                double angle = i * Math.PI / 8.0D;
+                server.sendParticles(ParticleTypes.FLAME, this.meteorTarget.x + Math.cos(angle) * 2.5D, this.meteorTarget.y + 0.1D,
+                        this.meteorTarget.z + Math.sin(angle) * 2.5D, 1, 0.0D, 0.02D, 0.0D, 0.0D);
+            }
+            if (this.meteorTicks % 6 == 0 && this.meteorTicks <= 24) {
+                double x = this.meteorTarget.x + (this.random.nextDouble() - 0.5D) * 4.0D;
+                double z = this.meteorTarget.z + (this.random.nextDouble() - 0.5D) * 4.0D;
+                SmallFireball meteor = new SmallFireball(this.level(), this, 0.0D, -1.0D, 0.0D);
+                meteor.setPos(x, this.meteorTarget.y + 12.0D, z);
+                this.level().addFreshEntity(meteor);
+                this.playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 0.5F);
+            }
+            return;
+        }
+        if (--this.meteorCooldown <= 0 && target != null) {
+            this.meteorTarget = target.position();
+            this.meteorTicks = 50;
+            this.meteorCooldown = 160 + this.random.nextInt(60);
+            this.triggerAnim("attack", "meteor");
+            this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, 1.5F, 0.6F);
+        }
+    }
+
+    // --- Clignement : reapparait derriere une cible eloignee et explose en nova ------------------------
+
+    private void tickBlink(@Nullable LivingEntity target) {
+        if (--this.blinkCooldown > 0 || target == null || this.distanceToSqr(target) < 64.0D) {
+            return;
+        }
+        this.blinkCooldown = 200 + this.random.nextInt(80);
+        Vec3 behind = target.position().subtract(target.getLookAngle().multiply(2.5D, 0.0D, 2.5D));
+        this.triggerAnim("attack", "blink");
+        if (this.randomTeleport(behind.x, target.getY(), behind.z, true)) {
+            this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.2F, 0.5F);
+            this.novaCooldown = 10;
+        }
+    }
+
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (this.shielded() && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            amount *= 0.3F;
+            if (this.level() instanceof ServerLevel server) {
+                server.sendParticles(ParticleTypes.FLAME, this.getX(), this.getY(1.0D), this.getZ(), 20, 0.8D, 1.0D, 0.8D, 0.02D);
+            }
+        }
         boolean hurt = super.hurt(source, amount);
         if (hurt && !this.level().isClientSide && this.isAlive() && source.getEntity() != null && this.random.nextFloat() < 0.25F) {
             this.teleportAway();
@@ -167,7 +240,11 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
             this.flameNova();
             this.novaCooldown = 80 + this.random.nextInt(40);
         }
-        if (!this.hasSummoned && this.getHealth() < this.getMaxHealth() / 2.0F && this.level() instanceof ServerLevel server) {
+        this.tickMeteor(target);
+        this.tickBlink(target);
+        int expectedWaves = this.getHealth() < this.getMaxHealth() * 0.25F ? 2 : this.getHealth() < this.getMaxHealth() / 2.0F ? 1 : 0;
+        if (this.summonWaves < expectedWaves && this.level() instanceof ServerLevel server) {
+            this.summonWaves++;
             this.hasSummoned = true;
             this.triggerAnim("attack", "summon");
             for (int i = 0; i < 2; i++) {
@@ -176,6 +253,7 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
                     minion.moveTo(this.getX() + (i == 0 ? 2 : -2), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                     minion.setTarget(this.getTarget());
                     server.addFreshEntity(minion);
+                    this.minions.add(minion.getUUID());
                     server.sendParticles(ParticleTypes.FLAME, minion.getX(), minion.getY(0.5D), minion.getZ(), 30, 0.4D, 0.6D, 0.4D, 0.05D);
                 }
             }
@@ -195,12 +273,14 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean(TAG_SUMMONED, this.hasSummoned);
+        tag.putInt("SummonWaves", this.summonWaves);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.hasSummoned = tag.getBoolean(TAG_SUMMONED);
+        this.summonWaves = tag.contains("SummonWaves") ? tag.getInt("SummonWaves") : (this.hasSummoned ? 1 : 0);
         if (this.hasCustomName()) {
             this.bossEvent.setName(this.getDisplayName());
         }
@@ -258,7 +338,9 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
         controllers.add(new AnimationController<>(this, "movement", 5, this::movementPredicate));
         controllers.add(new AnimationController<>(this, "attack", 0, this::idlePredicate)
                 .triggerableAnim("cast", CAST)
-                .triggerableAnim("summon", SUMMON));
+                .triggerableAnim("summon", SUMMON)
+                .triggerableAnim("meteor", METEOR)
+                .triggerableAnim("blink", BLINK));
     }
 
     private PlayState movementPredicate(AnimationState<InfernalWarlock> state) {

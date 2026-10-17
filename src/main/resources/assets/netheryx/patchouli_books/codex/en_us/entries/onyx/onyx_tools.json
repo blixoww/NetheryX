@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Durability $(l)4500$() (diamond 1561, netherite 2031), speed $(l)9.5$(), damage bonus $(l)3.5$(). The hammer has 7000. Handles are $(item)Blaze Rods$(). Onyx items do not burn in lava."
+      "text": "$(l)Stronger than netherite$(): durability $(l)4500$() (netherite 2031), speed $(l)10$() (9), damage bonus $(l)5$() (4): an onyx sword deals $(l)9$(). The hammer has 7000. Handles are $(item)Blaze Rods$(). Onyx items do not burn in lava."
     },
     {
       "type": "patchouli:crafting",

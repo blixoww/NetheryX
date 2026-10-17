@@ -239,7 +239,23 @@ def anim(length, bones, loop=True):
     return data
 
 
+EXTRA_ANIMS = {}
+
+
+def ekeys(*frames):
+    """Keyframes avec courbe d'acceleration GeckoLib : (temps, [x, y, z], easing) ; easing peut valoir None."""
+    data = {}
+    for t, vec, easing in frames:
+        frame = {"vector": [round(x, 3) for x in vec]}
+        if easing:
+            frame["easing"] = easing
+        data[f"{round(t, 4)}"] = frame
+    return data
+
+
 def save_animations(name, animations):
+    animations = dict(animations)
+    animations.update(EXTRA_ANIMS.get(name, {}))
     # Le Champion fletri herite du code du Chevalier fletri : il en garde les noms d'animation.
     prefix = "withered_knight" if name == "withered_champion" else name
     write_json(asset_path("animations", "entity", f"{name}.animation.json"), {
@@ -893,3 +909,84 @@ def cinder_lizard():
         "walk": anim(1.0, walk),
         "run": anim(0.5, run),
     })
+
+
+# ------------------------------------------------------------------------------------------------
+# 1.2.1 : nouvelles attaques des boss (animations avec courbes d'acceleration)
+# ------------------------------------------------------------------------------------------------
+
+EXTRA_ANIMS["onyx_sentinel"] = {
+    # Bond : accroupissement, extension explosive, reception lourde
+    "leap": anim(1.4, {
+        "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.35, [25, 0, 0], "easeOutQuad"), (0.55, [-20, 0, 0], "easeOutBack"),
+                                   (1.1, [30, 0, 0], "easeInQuad"), (1.4, [0, 0, 0], "easeOutElastic")),
+                 "position": ekeys((0, [0, 0, 0], None), (0.35, [0, -4, 0], "easeOutQuad"), (0.55, [0, 2, 0], "easeOutBack"),
+                                   (1.1, [0, -3, 0], "easeInQuad"), (1.4, [0, 0, 0], "easeOutBounce"))},
+        "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.35, [40, 0, -20], "easeOutQuad"), (0.55, [-175, 0, -15], "easeOutBack"),
+                                       (1.1, [-60, 0, 0], "easeInCubic"), (1.4, [0, 0, 0], "easeOutQuad"))},
+        "arm_right": {"rotation": ekeys((0, [0, 0, 0], None), (0.35, [40, 0, 20], "easeOutQuad"), (0.55, [-175, 0, 15], "easeOutBack"),
+                                        (1.1, [-60, 0, 0], "easeInCubic"), (1.4, [0, 0, 0], "easeOutQuad"))},
+    }, loop=False),
+    # Carapace d'onyx : bras croises devant le coeur
+    "shell": anim(2.0, {
+        "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.3, [-80, -40, 0], "easeOutBack"), (1.7, [-80, -40, 0], None),
+                                       (2.0, [0, 0, 0], "easeInOutSine"))},
+        "arm_right": {"rotation": ekeys((0, [0, 0, 0], None), (0.3, [-80, 40, 0], "easeOutBack"), (1.7, [-80, 40, 0], None),
+                                        (2.0, [0, 0, 0], "easeInOutSine"))},
+        "head": {"rotation": ekeys((0, [0, 0, 0], None), (0.3, [20, 0, 0], "easeOutQuad"), (1.7, [20, 0, 0], None), (2.0, [0, 0, 0], None))},
+    }, loop=False),
+    # Rugissement d'entree en rage
+    "roar": anim(1.6, {
+        "head": {"rotation": ekeys((0, [0, 0, 0], None), (0.4, [-35, 0, 0], "easeOutBack"), (1.2, [-35, 0, 0], None),
+                                   (1.6, [0, 0, 0], "easeInOutSine"))},
+        "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.4, [-30, 0, -70], "easeOutBack"), (1.2, [-30, 0, -70], None),
+                                       (1.6, [0, 0, 0], "easeInOutSine"))},
+        "arm_right": {"rotation": ekeys((0, [0, 0, 0], None), (0.4, [-30, 0, 70], "easeOutBack"), (1.2, [-30, 0, 70], None),
+                                        (1.6, [0, 0, 0], "easeInOutSine"))},
+        "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.4, [-12, 0, 0], "easeOutBack"), (1.6, [0, 0, 0], "easeInOutSine"))},
+    }, loop=False),
+}
+
+EXTRA_ANIMS["infernal_warlock"] = {
+    # Pluie de meteores : baton leve, incantation tremblante
+    "meteor": anim(2.0, {
+        "arm_right": {"rotation": ekeys((0, [0, 0, 0], None), (0.4, [-175, 0, 10], "easeOutBack"), (1.6, [-175, 0, 10], None),
+                                        (2.0, [0, 0, 0], "easeInOutSine"))},
+        "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.4, [-150, 0, -25], "easeOutBack"), (1.6, [-150, 0, -25], None),
+                                       (2.0, [0, 0, 0], "easeInOutSine"))},
+        "body": {"position": ekeys((0, [0, 0, 0], None), (0.5, [0, 3, 0], "easeOutCubic"), (1.6, [0, 3, 0], None),
+                                   (2.0, [0, 0, 0], "easeInCubic")),
+                 "rotation": wave(2.0, 2, axis=2)},
+        "staff": {"rotation": wave(2.0, 8, axis=1, steps=16)},
+    }, loop=False),
+    # Clignement : se replie puis reapparait d'un coup
+    "blink": anim(0.6, {
+        "body": {"scale": ekeys((0, [1, 1, 1], None), (0.2, [0.6, 1.3, 0.6], "easeInBack"), (0.35, [1.2, 0.8, 1.2], "easeOutQuad"),
+                                (0.6, [1, 1, 1], "easeOutElastic"))},
+    }, loop=False),
+}
+
+EXTRA_ANIMS["withered_champion"] = {
+    # Balayage spectral : grand arc horizontal
+    "sweep": anim(0.9, {
+        "arm_right": {"rotation": ekeys((0, [-20, 0, 0], None), (0.3, [-90, 70, 0], "easeOutQuad"), (0.5, [-90, -80, 0], "easeOutExpo"),
+                                        (0.9, [-20, 0, 0], "easeInOutSine"))},
+        "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.3, [0, 35, 0], "easeOutQuad"), (0.5, [0, -40, 0], "easeOutExpo"),
+                                   (0.9, [0, 0, 0], "easeInOutSine"))},
+    }, loop=False),
+    # Chaines d'ames : bras tendu puis tire en arriere
+    "chains": anim(1.2, {
+        "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.3, [-95, 0, 0], "easeOutBack"), (0.7, [-95, 0, 0], None),
+                                       (0.9, [-20, 0, 0], "easeInBack"), (1.2, [0, 0, 0], None))},
+        "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.3, [10, 0, 0], None), (0.9, [-15, 0, 0], "easeInBack"),
+                                   (1.2, [0, 0, 0], None))},
+    }, loop=False),
+    # Pointes d'os : epee plantee dans le sol
+    "spikes": anim(1.3, {
+        "arm_right": {"rotation": ekeys((0, [-20, 0, 0], None), (0.4, [-170, 0, 0], "easeOutBack"), (0.6, [10, 0, 0], "easeInExpo"),
+                                        (1.0, [10, 0, 0], None), (1.3, [-20, 0, 0], "easeInOutSine"))},
+        "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.4, [-15, 0, 0], None), (0.6, [30, 0, 0], "easeInExpo"),
+                                   (1.0, [30, 0, 0], None), (1.3, [0, 0, 0], "easeInOutSine")),
+                 "position": ekeys((0, [0, 0, 0], None), (0.6, [0, -3, 0], "easeInExpo"), (1.3, [0, 0, 0], "easeOutQuad"))},
+    }, loop=False),
+}

@@ -177,7 +177,7 @@ class Dungeon(Template):
 
 def onyx_citadel():
     S = 45
-    d = Dungeon(S, 19, S, "onyx_citadel")
+    d = Dungeon(S, 32, S, "onyx_citadel")
     d.box(0, 0, 0, S - 1, 0, S - 1, ONYX_FLOOR)
     d.air(2, 1, 2, S - 3, 13, S - 3)
 
@@ -276,17 +276,52 @@ def onyx_citadel():
         d.hanging_lantern(x, 16, 18, 3, "onyx_lantern")
     d.guard(c, 1, 18, "onyx_sentinel")
 
-    # Salle au tresor scellee
+    # Balcons au-dessus de l'arene : des spectres y apparaissent et harcelent les joueurs d'en haut
+    for (bx0, bx1, rail) in ((kx0 + 1, kx0 + 3, kx0 + 3), (kx1 - 3, kx1 - 1, kx1 - 3)):
+        d.box(bx0, 6, az0, bx1, 6, az1, "polished_onyx")
+        for z in range(az0, az1 + 1):
+            d.set(rail, 7, z, "onyx_brick_wall", up="true")
+        d.spawner((bx0 + bx1) // 2, 7, (az0 + az1) // 2, "ash_wraith")
+        ladder_x = bx0 if bx0 == kx0 + 1 else bx1
+        d.air(ladder_x, 6, az1, ladder_x, 6, az1)
+        for y in range(1, 7):
+            d.set(ladder_x, y, az1, "minecraft:ladder", facing="north", waterlogged="false")
+        d.hanging_lantern((bx0 + bx1) // 2, 15, az0 + 2, 2, "onyx_lantern")
+
+    # Salle scellee : un puits mene a la tour du tresor, au-dessus du donjon
     d.box(kx0 + 1, 1, kz0 + 1, kx1 - 1, 15, az0 - 1, ONYX_WALL)
     d.air(17, 1, kz0 + 1, 27, 5, az0 - 2)
     d.box(16, 0, kz0 + 1, 28, 0, az0 - 2, "minecraft:gilded_blackstone")
     d.seal(c - 2, 1, az0 - 1, c + 2, 4, az0 - 1)
-    for x in (19, c, 25):
-        d.chest(x, 1, kz0 + 1, "onyx_citadel_vault", facing="south")
     for x in (17, 27):
-        d.set(x, 1, kz0 + 1, "minecraft:gold_block")
-        d.lantern(x, 2, kz0 + 1, "onyx_lantern")
-    d.box(c - 1, 0, kz0 + 2, c + 1, 0, az0 - 2, "minecraft:diamond_block")
+        d.lantern(x, 1, kz0 + 1, "onyx_lantern")
+    shaft_x = 18
+    d.air(shaft_x, 6, kz0 + 1, shaft_x, 16, kz0 + 1)
+    for y in range(1, 17):
+        d.set(shaft_x, y, kz0 + 1, "minecraft:ladder", facing="south", waterlogged="false")
+
+    # Tour du tresor : posee sur le toit du donjon, fenetres, creneaux, salle aux deux coffres
+    tx0, tx1, tz0, tz1, ty0, ty1 = 16, 28, kz0, kz0 + 7, 16, 27
+    d.walls(tx0, ty0 + 1, tz0, tx1, ty1 - 1, tz1, ONYX_WALL)
+    d.box(tx0, ty1, tz0, tx1, ty1, tz1, "polished_onyx")
+    d.air(tx0 + 1, ty0 + 1, tz0 + 1, tx1 - 1, ty1 - 1, tz1 - 1)
+    d.box(tx0 + 1, ty0, tz0 + 1, tx1 - 1, ty0, tz1 - 1, "minecraft:gilded_blackstone")
+    d.set(shaft_x, ty0, kz0 + 1, "minecraft:ladder", facing="south", waterlogged="false")
+    for k in range(tx0, tx1 + 1, 2):
+        d.set(k, ty1 + 1, tz0, "onyx_brick_wall", up="true")
+        d.set(k, ty1 + 1, tz1, "onyx_brick_wall", up="true")
+    for k in range(tz0, tz1 + 1, 2):
+        d.set(tx0, ty1 + 1, k, "onyx_brick_wall", up="true")
+        d.set(tx1, ty1 + 1, k, "onyx_brick_wall", up="true")
+    for (x, z) in ((tx0, tz0), (tx1, tz0), (tx0, tz1), (tx1, tz1)):
+        d.pillar(x, z, ty0 + 1, ty1 + 1, cap="onyx_lantern")
+    for x in (tx0 + 3, c, tx1 - 3):
+        d.set(x, ty0 + 3, tz1, "minecraft:iron_bars", north="false", south="false", east="true", west="true", waterlogged="false")
+        d.set(x, ty0 + 4, tz1, "minecraft:iron_bars", north="false", south="false", east="true", west="true", waterlogged="false")
+    for x in (c - 2, c + 2):
+        d.chest(x, ty0 + 1, tz1 - 1, "onyx_citadel_vault", facing="north")
+    d.set(c, ty0 + 1, tz1 - 1, "onyx_cluster", facing="up", waterlogged="false")
+    d.hanging_lantern(c, ty1, tz0 + 3, 2, "onyx_lantern")
     d.save("onyx_citadel")
 
 
@@ -297,7 +332,7 @@ def onyx_citadel():
 def infernal_sanctum():
     S = 41
     c = S // 2
-    d = Dungeon(S, 19, S, "infernal_sanctum")
+    d = Dungeon(S, 31, S, "infernal_sanctum")
     for x in range(S):
         for z in range(S):
             edge = min(x, z, S - 1 - x, S - 1 - z)
@@ -376,16 +411,37 @@ def infernal_sanctum():
         d.box(x, 0, z, x + 1, 0, z + 1, "minecraft:lava", level="0")
     d.guard(c, 1, 19, "infernal_warlock")
 
-    # Tresor scelle
+    # Antichambre scellee : une echelle grimpe jusqu'a la fleche du temple, ou se trouve le tresor
     d.box(tx0 + 1, 1, tz0 + 1, tx1 - 1, 13, rz0 - 1, MAGMA_WALL)
     d.air(14, 1, tz0 + 1, 26, 5, rz0 - 2)
     d.box(14, 0, tz0 + 1, 26, 0, rz0 - 2, "minecraft:gilded_blackstone")
     d.seal(c - 2, 1, rz0 - 1, c + 2, 4, rz0 - 1)
-    for x in (16, c, 24):
-        d.chest(x, 1, tz0 + 1, "infernal_sanctum_vault", facing="south")
-    for x in (14, 26):
-        d.set(x, 1, tz0 + 1, "minecraft:gold_block")
-        d.set(x, 2, tz0 + 1, "ember_lamp")
+    for x in (16, 24):
+        d.set(x, 1, tz0 + 1, "ember_lamp")
+    ladder = (14, tz0 + 2)
+    d.air(ladder[0], 6, ladder[1], ladder[0], 16, ladder[1])
+    for y in range(1, 17):
+        d.set(ladder[0], y, ladder[1], "minecraft:ladder", facing="east", waterlogged="false")
+
+    # Fleche du temple : 4 niveaux plus haut, balcon de pierre noire, braseros et tresor
+    sx0, sx1, sz0, sz1, sy0, sy1 = 11, 18, tz0 + 1, tz0 + 8, 16, 28
+    d.walls(sx0, sy0, sz0, sx1, sy1 - 1, sz1, MAGMA_WALL)
+    d.air(sx0 + 1, sy0 + 1, sz0 + 1, sx1 - 1, sy1 - 1, sz1 - 1)
+    d.box(sx0 + 1, sy0, sz0 + 1, sx1 - 1, sy0, sz1 - 1, "minecraft:polished_blackstone_bricks")
+    d.set(ladder[0], sy0, ladder[1], "minecraft:ladder", facing="east", waterlogged="false")
+    for step, inset in enumerate((0, 1, 2)):
+        d.box(sx0 + inset, sy1 + step, sz0 + inset, sx1 - inset, sy1 + step, sz1 - inset, MAGMA_WALL)
+    d.set((sx0 + sx1) // 2, sy1 + 2, (sz0 + sz1) // 2, "ember_lamp")
+    for (x, z) in ((sx0, sz0), (sx1, sz0), (sx0, sz1), (sx1, sz1)):
+        d.pillar(x, z, sy0 + 1, sy1 - 1, "minecraft:polished_basalt")
+    for z in (sz0 + 2, sz1 - 2):
+        for y in (sy0 + 2, sy0 + 3):
+            d.set(sx1, y, z, "minecraft:iron_bars", north="true", south="true", east="false", west="false", waterlogged="false")
+    for z in (sz0 + 2, sz0 + 5):
+        d.chest(sx0 + 1, sy0 + 1, z, "infernal_sanctum_vault", facing="east")
+    d.set(sx1 - 1, sy0 + 1, sz1 - 1, "minecraft:netherrack")
+    d.set(sx1 - 1, sy0 + 2, sz1 - 1, "minecraft:fire", age="0", east="false", north="false", south="false", up="false", west="false")
+    d.hanging_lantern((sx0 + sx1) // 2, sy1 - 1, (sz0 + sz1) // 2, 2, "minecraft:lantern")
     d.save("infernal_sanctum")
 
 

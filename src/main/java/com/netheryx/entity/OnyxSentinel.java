@@ -51,7 +51,9 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 /**
  * Sentinelle d'Onyx : boss gardien des Citadelles d'Onyx.
- * Elle frappe au corps a corps et declenche regulierement une onde de choc qui projette les joueurs.
+ * Phase 1 : coups, onde de choc, bond ecrasant sur les cibles eloignees, pluie de cristaux telegraphiee.
+ * Phase 2 (50 %) : rage, lignes de crocs de cristal, carapace d'onyx (degats reduits de 75 % quelques secondes).
+ * Phase 3 (25 %) : appelle des cubes d'onyx.
  */
 public class OnyxSentinel extends Monster implements GeoEntity {
     private static final String NAME = "onyx_sentinel";
@@ -59,6 +61,9 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     private static final RawAnimation WALK = NetheryXAnimations.loop(NAME, "walk");
     private static final RawAnimation PUNCH = NetheryXAnimations.once(NAME, "punch");
     private static final RawAnimation SLAM = NetheryXAnimations.once(NAME, "slam");
+    private static final RawAnimation LEAP = NetheryXAnimations.once(NAME, "leap");
+    private static final RawAnimation SHELL = NetheryXAnimations.once(NAME, "shell");
+    private static final RawAnimation ROAR = NetheryXAnimations.once(NAME, "roar");
 
     private static final double SLAM_RADIUS = 5.0D;
     private static final float SLAM_DAMAGE = 10.0F;
@@ -69,6 +74,15 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     private int slamCooldown = 60;
     private int eruptionCooldown = 80;
     private boolean enraged;
+    private boolean lastStand;
+    private int leapCooldown = 120;
+    private boolean leaping;
+    private int leapAirTicks;
+    private int rainCooldown = 160;
+    private int rainTicks;
+    private final java.util.List<Vec3> rainTargets = new java.util.ArrayList<>();
+    private int shellCooldown = 300;
+    private int shellTicks;
     private static final String TAG_ENRAGED = "Enraged";
     private static final java.util.UUID RAGE_SPEED_ID = java.util.UUID.fromString("6f1b5d2a-3c1e-4c8b-9a51-2f6c7d9e1a01");
 
@@ -168,6 +182,127 @@ public class OnyxSentinel extends Monster implements GeoEntity {
             this.crystalEruption(this.getTarget());
             this.eruptionCooldown = 90 + this.random.nextInt(40);
         }
+        if (!this.lastStand && this.getHealth() < this.getMaxHealth() * 0.25F) {
+            this.enterLastStand();
+        }
+        this.tickLeap();
+        this.tickCrystalRain();
+        this.tickShell();
+    }
+
+    // --- Bond ecrasant : saute sur une cible eloignee et provoque une onde de choc a la reception -----
+
+    private void tickLeap() {
+        LivingEntity target = this.getTarget();
+        if (this.leaping) {
+            this.leapAirTicks++;
+            if (this.onGround() && this.leapAirTicks > 6) {
+                this.leaping = false;
+                this.performSlam();
+            }
+            return;
+        }
+        if (--this.leapCooldown > 0 || target == null || !this.onGround()) {
+            return;
+        }
+        double distance = this.distanceToSqr(target);
+        if (distance > 49.0D && distance < 400.0D) {
+            this.triggerAnim("attack", "leap");
+            Vec3 toward = target.position().subtract(this.position());
+            this.setDeltaMovement(toward.x * 0.16D, 1.1D, toward.z * 0.16D);
+            this.hurtMarked = true;
+            this.leaping = true;
+            this.leapAirTicks = 0;
+            this.playSound(SoundEvents.RAVAGER_ATTACK, 1.5F, 0.5F);
+        }
+        this.leapCooldown = (this.enraged ? 100 : 160) + this.random.nextInt(60);
+    }
+
+    // --- Pluie de cristaux : zones marquees au sol, puis crocs de cristal deux secondes plus tard -------
+
+    private void tickCrystalRain() {
+        if (this.rainTicks > 0) {
+            this.rainTicks--;
+            if (this.level() instanceof ServerLevel server) {
+                for (Vec3 point : this.rainTargets) {
+                    for (int i = 0; i < 12; i++) {
+                        double angle = i * Math.PI / 6.0D + this.tickCount * 0.2D;
+                        server.sendParticles(ModParticles.ONYX_GLINT.get(), point.x + Math.cos(angle) * 1.5D, point.y + 0.1D,
+                                point.z + Math.sin(angle) * 1.5D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                    }
+                }
+                if (this.rainTicks == 0) {
+                    for (Vec3 point : this.rainTargets) {
+                        for (int dx = -1; dx <= 1; dx++) {
+                            for (int dz = -1; dz <= 1; dz++) {
+                                this.level().addFreshEntity(new net.minecraft.world.entity.projectile.EvokerFangs(this.level(),
+                                        point.x + dx, point.y, point.z + dz, 0.0F, this.random.nextInt(4), this));
+                            }
+                        }
+                    }
+                    this.playSound(SoundEvents.AMETHYST_CLUSTER_BREAK, 2.0F, 0.5F);
+                    this.rainTargets.clear();
+                }
+            }
+            return;
+        }
+        if (--this.rainCooldown > 0 || this.getTarget() == null) {
+            return;
+        }
+        for (Player player : this.level().getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(20.0D),
+                player -> !player.isCreative() && !player.isSpectator())) {
+            this.rainTargets.add(player.position());
+        }
+        if (!this.rainTargets.isEmpty()) {
+            this.rainTicks = 40;
+            this.triggerAnim("attack", "slam");
+            this.playSound(SoundEvents.AMETHYST_BLOCK_RESONATE, 2.0F, 0.5F);
+        }
+        this.rainCooldown = 200 + this.random.nextInt(80);
+    }
+
+    // --- Carapace d'onyx : reduit fortement les degats pendant quelques secondes -----------------------
+
+    private void tickShell() {
+        if (this.shellTicks > 0) {
+            this.shellTicks--;
+            if (this.level() instanceof ServerLevel server && this.tickCount % 4 == 0) {
+                server.sendParticles(ModParticles.ONYX_GLINT.get(), this.getX(), this.getY(1.0D), this.getZ(), 6, 1.2D, 1.6D, 1.2D, 0.0D);
+            }
+            return;
+        }
+        if (this.enraged && --this.shellCooldown <= 0) {
+            this.shellTicks = 80;
+            this.shellCooldown = 360 + this.random.nextInt(120);
+            this.triggerAnim("attack", "shell");
+            this.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 2.0F, 0.4F);
+        }
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (this.shellTicks > 0 && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            amount *= 0.25F;
+            this.playSound(SoundEvents.AMETHYST_BLOCK_HIT, 1.5F, 0.6F);
+        }
+        return super.hurt(source, amount);
+    }
+
+    /** Derniere phase : appelle des cubes d'onyx et reste en rage. */
+    private void enterLastStand() {
+        this.lastStand = true;
+        this.triggerAnim("attack", "roar");
+        this.playSound(SoundEvents.WARDEN_SONIC_BOOM, 1.5F, 0.6F);
+        if (this.level() instanceof ServerLevel server) {
+            for (int i = 0; i < 3; i++) {
+                OnyxCube cube = com.netheryx.registry.ModEntities.ONYX_CUBE.get().create(server);
+                if (cube != null) {
+                    cube.moveTo(this.getX() + (i - 1) * 2.5D, this.getY() + 0.5D, this.getZ() + 2.0D, this.getYRot(), 0.0F);
+                    cube.setTarget(this.getTarget());
+                    server.addFreshEntity(cube);
+                }
+            }
+        }
     }
 
     /** Phase 2 : la Sentinelle accelere et fait jaillir des cristaux sous les pieds des joueurs. */
@@ -180,6 +315,7 @@ public class OnyxSentinel extends Monster implements GeoEntity {
                     "Sentinel rage", 0.35D, net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_BASE));
         }
         this.playSound(SoundEvents.WARDEN_ROAR, 2.0F, 0.8F);
+        this.triggerAnim("attack", "roar");
         if (this.level() instanceof ServerLevel server) {
             server.sendParticles(ParticleTypes.REVERSE_PORTAL, this.getX(), this.getY(1.0D), this.getZ(), 120, 1.0D, 1.5D, 1.0D, 0.2D);
         }
@@ -230,12 +366,14 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean(TAG_ENRAGED, this.enraged);
+        tag.putBoolean("LastStand", this.lastStand);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.enraged = tag.getBoolean(TAG_ENRAGED);
+        this.lastStand = tag.getBoolean("LastStand");
         if (this.hasCustomName()) {
             this.bossEvent.setName(this.getDisplayName());
         }
@@ -278,7 +416,10 @@ public class OnyxSentinel extends Monster implements GeoEntity {
         controllers.add(new AnimationController<>(this, "movement", 6, this::movementPredicate));
         controllers.add(new AnimationController<>(this, "attack", 0, this::idlePredicate)
                 .triggerableAnim("punch", PUNCH)
-                .triggerableAnim("slam", SLAM));
+                .triggerableAnim("slam", SLAM)
+                .triggerableAnim("leap", LEAP)
+                .triggerableAnim("shell", SHELL)
+                .triggerableAnim("roar", ROAR));
     }
 
     private PlayState movementPredicate(AnimationState<OnyxSentinel> state) {

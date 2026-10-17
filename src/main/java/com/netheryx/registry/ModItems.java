@@ -1,6 +1,8 @@
 package com.netheryx.registry;
 
 import com.netheryx.NetheryX;
+import com.netheryx.item.AdminCompassItem;
+import com.netheryx.item.FireVeilItem;
 import com.netheryx.item.GlimmerElixirItem;
 import com.netheryx.item.InfernalHeartItem;
 import com.netheryx.item.MagmaTreadsItem;
@@ -202,6 +204,11 @@ public final class ModItems {
     public static final RegistryObject<Item> WRAITH_CLOTH = register("wraith_cloth", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ONYX_INFUSION_TEMPLATE = register("onyx_infusion_template",
             () -> new TooltipItem(new Item.Properties().rarity(Rarity.UNCOMMON).fireResistant()));
+    /** Objet d'administration : non fabricable, reserve au mode creatif / aux operateurs. */
+    public static final RegistryObject<Item> ADMIN_COMPASS = register("admin_compass",
+            () -> new AdminCompassItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> FIRE_VEIL = register("fire_veil",
+            () -> new FireVeilItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant()));
     public static final RegistryObject<Item> BURROWER_FANG = register("burrower_fang", () -> new TooltipItem(new Item.Properties()));
 
     public static final RegistryObject<Item> EMBER_HELMET = armor("ember_helmet", ModArmorMaterials.EMBER, ArmorItem.Type.HELMET, "ember");

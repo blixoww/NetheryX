@@ -1,5 +1,6 @@
 package com.netheryx.client;
 
+import com.netheryx.client.screen.AdminCompassScreen;
 import com.netheryx.client.screen.RecallStoneScreen;
 import com.netheryx.client.screen.SoulCompassScreen;
 import com.netheryx.util.PortalMemory;
@@ -15,6 +16,10 @@ public final class ClientPacketHandler {
 
     public static void openSoulCompass(List<ResourceLocation> structures) {
         Minecraft.getInstance().setScreen(new SoulCompassScreen(structures));
+    }
+
+    public static void openAdminCompass(List<ResourceLocation> structures, List<ResourceLocation> biomes) {
+        Minecraft.getInstance().setScreen(new AdminCompassScreen(structures, biomes));
     }
 
     public static void openRecallSelection(List<PortalMemory.Portal> portals) {

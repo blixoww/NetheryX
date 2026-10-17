@@ -7,10 +7,10 @@
     },
     {
       "condition": "minecraft:random_chance",
-      "chance": 0.6
+      "chance": 0.4
     }
   ],
   "item": "netheryx:onyx",
-  "min_count": 2,
-  "max_count": 4
+  "min_count": 1,
+  "max_count": 2
 }

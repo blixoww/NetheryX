@@ -19,7 +19,7 @@ public final class ForgeBusEvents {
     private ForgeBusEvents() {
     }
 
-    /** Bonus d'ensemble de l'armure en Onyx : Resistance I. */
+    /** Bonus d'ensemble de l'armure en Onyx : Resistance I et resistance au feu. */
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
@@ -28,10 +28,15 @@ public final class ForgeBusEvents {
             return;
         }
         if (OnyxArmorItem.hasFullSet(player)) {
-            MobEffectInstance current = player.getEffect(MobEffects.DAMAGE_RESISTANCE);
-            if (current == null || current.getDuration() < 60) {
-                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 100, 0, true, false, true));
-            }
+            refresh(player, MobEffects.DAMAGE_RESISTANCE);
+            refresh(player, MobEffects.FIRE_RESISTANCE);
+        }
+    }
+
+    private static void refresh(Player player, net.minecraft.world.effect.MobEffect effect) {
+        MobEffectInstance current = player.getEffect(effect);
+        if (current == null || current.getDuration() < 60) {
+            player.addEffect(new MobEffectInstance(effect, 100, 0, true, false, true));
         }
     }
 

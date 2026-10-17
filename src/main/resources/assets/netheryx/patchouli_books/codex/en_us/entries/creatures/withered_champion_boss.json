@@ -10,6 +10,11 @@
       "scale": 0.45,
       "offset": 0.0,
       "text": "200 HP, 12 armor. A giant knight whose blade withers. It $(l)dashes$() at distant targets and calls two Withered Knights at 66% and 33% health. Guards the Withered Catacombs."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)Spectral sweep$(): wide arc in front of him, inflicts Wither II. Stay behind him.$(li)$(l)Soul chains$(): pulls back players who flee and slows them.$(li)$(l)Soul dash$() toward distant targets.$(li)Below 50%: $(l)bone spikes$() burst in two rings around him. Back away!",
+      "title": "Tactique"
     }
   ]
 }

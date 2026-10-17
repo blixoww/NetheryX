@@ -10,6 +10,11 @@
       "scale": 0.6,
       "offset": 0.0,
       "text": "150 PV. Lance des salves de boules de feu, se téléporte quand on le frappe, déclenche une $(l)nova de flammes$() au contact et invoque deux $(l)Traqueurs$() à mi-vie. Lâche le $(item)Bâton du sorcier$() et une $(item)Pierre de rappel$()."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)Pluie de météores$() : un cercle de flammes marque le sol, des boules de feu y tombent.$(li)$(l)Clignement$() : réapparaît derrière les joueurs éloignés et explose en nova.$(li)À 50 % et 25 % : invoque des Traqueurs ; tant qu'ils vivent, son $(l)bouclier de braise$() absorbe 70 % des dégâts. Tuez-les d'abord !",
+      "title": "Tactique"
     }
   ]
 }

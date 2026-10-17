@@ -132,9 +132,9 @@ entry("onyx", "Onyx Gem", "Gemme d'onyx", "netheryx:onyx", [
          "Cristaux lumineux des Profondeurs d'onyx. Ils donnent des $(item)éclats d'onyx$() (Toucher de soie garde l'amas).", link=False),
 ])
 entry("onyx", "Onyx Tools", "Outils en onyx", "netheryx:onyx_pickaxe", [
-    text("Durability $(l)4500$() (diamond 1561, netherite 2031), speed $(l)9.5$(), damage bonus $(l)3.5$(). The hammer has 7000. Handles are $(item)Blaze Rods$(). "
+    text("$(l)Stronger than netherite$(): durability $(l)4500$() (netherite 2031), speed $(l)10$() (9), damage bonus $(l)5$() (4): an onyx sword deals $(l)9$(). The hammer has 7000. Handles are $(item)Blaze Rods$(). "
          "Onyx items do not burn in lava.",
-         "Durabilité $(l)4500$() (diamant 1561, netherite 2031), vitesse $(l)9,5$(), bonus de dégâts $(l)3,5$(). Le marteau : 7000. Les manches sont des "
+         "$(l)Plus fort que la netherite$() : durabilité $(l)4500$() (netherite 2031), vitesse $(l)10$() (9), bonus de dégâts $(l)5$() (4) : une épée en onyx inflige $(l)9$(). Le marteau : 7000. Les manches sont des "
          "$(item)bâtons de blaze$(). Les objets en onyx ne brûlent pas dans la lave."),
     craft("onyx_sword", "onyx_pickaxe"),
     craft("onyx_axe", "onyx_shovel"),
@@ -153,10 +153,10 @@ entry("onyx", "Onyx Hammer", "Marteau en onyx", "netheryx:onyx_hammer", [
     craft("onyx_hammer"),
 ])
 entry("onyx", "Onyx Armor", "Armure en onyx", "netheryx:onyx_chestplate", [
-    text("Same protection as diamond, toughness $(l)2.5$(), very high durability (55x, netherite 37x). $(l)Full set bonus$(): permanent "
-         "$(item)Resistance I$(). Works with armor trims.",
-         "Même protection que le diamant, robustesse $(l)2,5$(), très grande durabilité (55x, netherite 37x). $(l)Bonus d'ensemble$() : "
-         "$(item)Résistance I$() permanente. Compatible avec les garnitures d'armure."),
+    text("Better than netherite: protection $(l)4/9/7/4$() (netherite 3/8/6/3), toughness $(l)4$() (3), durability 55x (37x). "
+         "$(l)Full set bonus$(): permanent $(item)Resistance I$() and $(item)Fire Resistance$(). Works with armor trims.",
+         "Mieux que la netherite : protection $(l)4/9/7/4$() (netherite 3/8/6/3), robustesse $(l)4$() (3), durabilité 55x (37x). $(l)Bonus d'ensemble$() : "
+         "$(item)Résistance I$() et $(item)Résistance au feu$() permanentes. Compatible avec les garnitures d'armure."),
     craft("onyx_helmet", "onyx_chestplate"),
     craft("onyx_leggings", "onyx_boots"),
 ])
@@ -275,8 +275,34 @@ CREATURES = [
      "250 PV, insensible au recul. Coups, $(l)onde de choc$() et, sous la moitié de sa vie, une $(l)rage$() : plus rapide, elle fait jaillir des crocs de cristal vers vous. "
      "Lâche le $(item)Cœur de sentinelle$() et beaucoup d'onyx."),
 ]
+BOSS_TACTICS = {
+    "onyx_sentinel": text(
+        "$(li)$(l)Leap$(): jumps on distant players and slams on landing.$(li)$(l)Crystal rain$(): glittering circles appear under "
+        "players, crystal fangs burst out 2 seconds later. Move!$(li)$(l)Onyx shell$() (rage): arms crossed, takes 75% less damage "
+        "for 4 s. Wait it out.$(li)Below 25%: calls Onyx Cubes.",
+        "$(li)$(l)Bond$() : saute sur les joueurs éloignés et frappe le sol à la réception.$(li)$(l)Pluie de cristaux$() : des cercles "
+        "scintillants apparaissent sous les joueurs, des crocs jaillissent 2 secondes plus tard. Bougez !$(li)$(l)Carapace d'onyx$() "
+        "(rage) : bras croisés, 75 % de dégâts en moins pendant 4 s. Attendez.$(li)Sous 25 % : appelle des Cubes d'onyx.", "Tactique"),
+    "infernal_warlock": text(
+        "$(li)$(l)Meteor shower$(): a ring of flames marks the ground, fireballs fall into it.$(li)$(l)Blink$(): reappears behind distant "
+        "players and explodes in a nova.$(li)At 50% and 25%: summons Ember Stalkers; while they live, his $(l)ember shield$() absorbs "
+        "70% of the damage. Kill the stalkers first!",
+        "$(li)$(l)Pluie de météores$() : un cercle de flammes marque le sol, des boules de feu y tombent.$(li)$(l)Clignement$() : "
+        "réapparaît derrière les joueurs éloignés et explose en nova.$(li)À 50 % et 25 % : invoque des Traqueurs ; tant qu'ils vivent, "
+        "son $(l)bouclier de braise$() absorbe 70 % des dégâts. Tuez-les d'abord !", "Tactique"),
+    "withered_champion": text(
+        "$(li)$(l)Spectral sweep$(): wide arc in front of him, inflicts Wither II. Stay behind him.$(li)$(l)Soul chains$(): pulls back "
+        "players who flee and slows them.$(li)$(l)Soul dash$() toward distant targets.$(li)Below 50%: $(l)bone spikes$() burst in two rings "
+        "around him. Back away!",
+        "$(li)$(l)Balayage spectral$() : grand arc devant lui, inflige Flétrissement II. Restez derrière lui.$(li)$(l)Chaînes d'âmes$() : "
+        "ramène les fuyards et les ralentit.$(li)$(l)Ruée des âmes$() vers les cibles éloignées.$(li)Sous 50 % : des $(l)pointes d'os$() "
+        "jaillissent en deux anneaux autour de lui. Reculez !", "Tactique"),
+}
 for eid, en, fr, scale, ten, tfr in CREATURES:
-    entry("creatures", en, fr, f"{eid}_spawn_egg", [mob(eid, ten, tfr, scale=scale)])
+    pages = [mob(eid, ten, tfr, scale=scale)]
+    if eid in BOSS_TACTICS:
+        pages.append(BOSS_TACTICS[eid])
+    entry("creatures", en, fr, f"{eid}_spawn_egg", pages)
 
 # ---------------------------------------------------------------- Structures
 DUNGEON_INTRO = text(
@@ -688,6 +714,13 @@ entry("utility", "Infernal Cauldron", "Chaudron infernal", "netheryx:infernal_ca
          "Des potions en masse : versez jusqu'à 9 doses d'une potion, $(l)chauffez-le par dessous$(), puis ajoutez du $(item)Soufre$() : "
          "chaque soufre ajoute 2 doses. Remplissez des fioles pour les récupérer."),
     craft("infernal_cauldron"),
+])
+entry("utility", "Fire Veil", "Voile ignifuge", "netheryx:fire_veil", [
+    spot("fire_veil", "While it is $(l)anywhere in your inventory$() (or worn in a $(l)Curios charm slot$()), the flames covering "
+                      "your screen when you burn are hidden. Purely visual: you still burn, so pair it with Fire Resistance.",
+         "Tant qu'il est $(l)n'importe où dans l'inventaire$() (ou porté dans un $(l)emplacement breloque de Curios$()), les flammes qui "
+         "couvrent l'écran quand vous brûlez sont masquées. Purement visuel : vous brûlez toujours, associez-le à la résistance au feu."),
+    craft("fire_veil"),
 ])
 entry("utility", "Ward Lantern", "Lanterne de garde", "netheryx:ward_lantern", [
     spot("ward_lantern", "No hostile creature spawns naturally within $(l)24 blocks$(). Perfect to secure a Nether base or farm.",

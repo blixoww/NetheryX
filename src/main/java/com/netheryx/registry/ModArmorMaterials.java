@@ -13,7 +13,7 @@ import java.util.EnumMap;
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
-    ONYX("onyx", 55, protection(3, 6, 8, 3), 18, SoundEvents.ARMOR_EQUIP_NETHERITE, 2.5F, 0.05F,
+    ONYX("onyx", 55, protection(4, 7, 9, 4), 18, SoundEvents.ARMOR_EQUIP_NETHERITE, 4.0F, 0.15F,
             () -> Ingredient.of(ModItems.ONYX.get())),
     MAGMA("magma", 20, protection(2, 4, 5, 2), 12, SoundEvents.ARMOR_EQUIP_CHAIN, 0.0F, 0.0F,
             () -> Ingredient.of(ModItems.MAGMA_SHELL.get())),

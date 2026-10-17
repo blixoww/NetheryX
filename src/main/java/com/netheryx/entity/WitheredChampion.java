@@ -26,8 +26,9 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Champion fletri : boss des Catacombes fletries. Version geante du Chevalier fletri qui appelle
- * des renforts a 66 % et 33 % de vie. Sa mort brise les sceaux de la salle au tresor.
+ * Champion fletri : boss des Catacombes fletries. Version geante du Chevalier fletri : balayage spectral
+ * (fletrissement), ruee des ames, chaines d'ames qui attirent les fuyards, anneaux de pointes d'os sous 50 %,
+ * renforts a 66 % et 33 % de vie. Sa mort brise les sceaux de la salle au tresor.
  */
 public class WitheredChampion extends WitheredKnight {
     private static final String TAG_WAVES = "SummonWaves";
@@ -37,6 +38,10 @@ public class WitheredChampion extends WitheredKnight {
     private int summonWaves;
     private int dashCooldown = 100;
     private int dashTicks;
+    private int sweepCooldown = 60;
+    private int chainsCooldown = 140;
+    private int spikesCooldown = 100;
+    private int spikesTicks;
 
     public WitheredChampion(EntityType<? extends WitheredChampion> type, Level level) {
         super(type, level);
@@ -71,6 +76,9 @@ public class WitheredChampion extends WitheredKnight {
         super.customServerAiStep();
         float ratio = this.getHealth() / this.getMaxHealth();
         this.tickSoulDash();
+        this.tickSweep();
+        this.tickChains();
+        this.tickSpikes(ratio);
         this.bossEvent.setProgress(ratio);
         int expectedWaves = ratio < 0.33F ? 2 : (ratio < 0.66F ? 1 : 0);
         if (this.summonWaves < expectedWaves && this.level() instanceof ServerLevel server) {
@@ -114,6 +122,102 @@ public class WitheredChampion extends WitheredKnight {
             }
             this.dashCooldown = 100 + this.random.nextInt(60);
         }
+    }
+
+    // --- Balayage spectral : arc devant le Champion, fletrissement ----------------------------------
+
+    private void tickSweep() {
+        net.minecraft.world.entity.LivingEntity target = this.getTarget();
+        if (--this.sweepCooldown > 0 || target == null || this.distanceToSqr(target) > 16.0D) {
+            return;
+        }
+        this.sweepCooldown = 70 + this.random.nextInt(40);
+        this.triggerAnim("boss", "sweep");
+        net.minecraft.world.phys.Vec3 facing = this.getLookAngle().multiply(1.0D, 0.0D, 1.0D).normalize();
+        for (net.minecraft.world.entity.LivingEntity victim : this.level().getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class,
+                this.getBoundingBox().inflate(4.5D, 1.0D, 4.5D), e -> e != this && e.isAlive() && !(e instanceof WitheredKnight))) {
+            net.minecraft.world.phys.Vec3 toVictim = victim.position().subtract(this.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
+            if (toVictim.dot(facing) < 0.2D) {
+                continue;
+            }
+            victim.hurt(this.damageSources().mobAttack(this), 10.0F);
+            victim.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WITHER, 100, 1));
+            victim.push(toVictim.x * 0.8D, 0.3D, toVictim.z * 0.8D);
+            victim.hurtMarked = true;
+        }
+        if (this.level() instanceof ServerLevel server) {
+            for (int i = -4; i <= 4; i++) {
+                double angle = Math.atan2(facing.z, facing.x) + i * 0.25D;
+                server.sendParticles(ParticleTypes.SWEEP_ATTACK, this.getX() + Math.cos(angle) * 2.5D, this.getY(1.0D),
+                        this.getZ() + Math.sin(angle) * 2.5D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+            }
+        }
+        this.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 2.0F, 0.6F);
+    }
+
+    // --- Chaines d'ames : attire une cible lointaine et la ralentit ----------------------------------
+
+    private void tickChains() {
+        net.minecraft.world.entity.LivingEntity target = this.getTarget();
+        if (--this.chainsCooldown > 0 || target == null) {
+            return;
+        }
+        double distance = this.distanceToSqr(target);
+        if (distance < 49.0D || distance > 324.0D) {
+            return;
+        }
+        this.chainsCooldown = 180 + this.random.nextInt(80);
+        this.triggerAnim("boss", "chains");
+        net.minecraft.world.phys.Vec3 pull = this.position().subtract(target.position()).normalize();
+        target.setDeltaMovement(pull.x * 1.6D, 0.45D, pull.z * 1.6D);
+        target.hurtMarked = true;
+        target.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN, 60, 1));
+        if (this.level() instanceof ServerLevel server) {
+            net.minecraft.world.phys.Vec3 step = target.position().subtract(this.position()).scale(1.0D / 16.0D);
+            for (int i = 0; i <= 16; i++) {
+                server.sendParticles(ParticleTypes.SOUL, this.getX() + step.x * i, this.getY(0.6D) + step.y * i, this.getZ() + step.z * i,
+                        2, 0.05D, 0.05D, 0.05D, 0.0D);
+            }
+        }
+        this.playSound(SoundEvents.CHAIN_BREAK, 2.0F, 0.5F);
+    }
+
+    // --- Pointes d'os (sous 50 %) : deux anneaux de crocs successifs autour du Champion --------------
+
+    private void tickSpikes(float ratio) {
+        if (this.spikesTicks > 0) {
+            this.spikesTicks--;
+            if (this.spikesTicks == 10 || this.spikesTicks == 0) {
+                double radius = this.spikesTicks == 10 ? 3.0D : 5.5D;
+                int count = this.spikesTicks == 10 ? 12 : 20;
+                for (int i = 0; i < count; i++) {
+                    double angle = i * Math.PI * 2.0D / count;
+                    this.level().addFreshEntity(new net.minecraft.world.entity.projectile.EvokerFangs(this.level(),
+                            this.getX() + Math.cos(angle) * radius, this.getY(), this.getZ() + Math.sin(angle) * radius,
+                            (float) angle, 0, this));
+                }
+            }
+            return;
+        }
+        if (ratio < 0.5F && this.getTarget() != null && --this.spikesCooldown <= 0) {
+            this.spikesCooldown = 160 + this.random.nextInt(60);
+            this.spikesTicks = 20;
+            this.triggerAnim("boss", "spikes");
+            this.playSound(SoundEvents.SKELETON_HORSE_DEATH, 1.5F, 0.5F);
+            if (this.level() instanceof ServerLevel server) {
+                server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getX(), this.getY() + 0.1D, this.getZ(), 40, 3.0D, 0.0D, 3.0D, 0.0D);
+            }
+        }
+    }
+
+    @Override
+    public void registerControllers(software.bernie.geckolib.core.animation.AnimatableManager.ControllerRegistrar controllers) {
+        super.registerControllers(controllers);
+        controllers.add(new software.bernie.geckolib.core.animation.AnimationController<>(this, "boss", 0,
+                state -> software.bernie.geckolib.core.object.PlayState.STOP)
+                .triggerableAnim("sweep", NetheryXAnimations.once("withered_knight", "sweep"))
+                .triggerableAnim("chains", NetheryXAnimations.once("withered_knight", "chains"))
+                .triggerableAnim("spikes", NetheryXAnimations.once("withered_knight", "spikes")));
     }
 
     @Override

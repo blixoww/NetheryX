@@ -10,6 +10,11 @@
       "scale": 0.6,
       "offset": 0.0,
       "text": "150 HP. Fires volleys of fireballs, teleports when hit, unleashes a $(l)flame nova$() if you stay close and summons two $(l)Ember Stalkers$() at half health. Drops the $(item)Warlock Staff$() and a $(item)Recall Stone$()."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)Meteor shower$(): a ring of flames marks the ground, fireballs fall into it.$(li)$(l)Blink$(): reappears behind distant players and explodes in a nova.$(li)At 50% and 25%: summons Ember Stalkers; while they live, his $(l)ember shield$() absorbs 70% of the damage. Kill the stalkers first!",
+      "title": "Tactique"
     }
   ]
 }

@@ -5,21 +5,21 @@
       "rolls": {
         "type": "minecraft:uniform",
         "min": 1,
-        "max": 2
+        "max": 1
       },
       "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "netheryx:onyx_pickaxe",
-          "weight": 3,
+          "name": "minecraft:iron_pickaxe",
+          "weight": 8,
           "functions": [
             {
               "function": "minecraft:enchant_with_levels",
               "levels": {
                 "type": "minecraft:uniform",
                 "min": 5,
-                "max": 20
+                "max": 15
               },
               "treasure": false
             }
@@ -27,15 +27,15 @@
         },
         {
           "type": "minecraft:item",
-          "name": "netheryx:onyx_sword",
-          "weight": 3,
+          "name": "minecraft:iron_sword",
+          "weight": 8,
           "functions": [
             {
               "function": "minecraft:enchant_with_levels",
               "levels": {
                 "type": "minecraft:uniform",
                 "min": 5,
-                "max": 20
+                "max": 15
               },
               "treasure": false
             }
@@ -44,30 +44,14 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:diamond_pickaxe",
-          "weight": 4,
-          "functions": [
-            {
-              "function": "minecraft:enchant_with_levels",
-              "levels": {
-                "type": "minecraft:uniform",
-                "min": 10,
-                "max": 25
-              },
-              "treasure": false
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:iron_axe",
-          "weight": 6,
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:enchant_with_levels",
               "levels": {
                 "type": "minecraft:uniform",
                 "min": 5,
-                "max": 20
+                "max": 15
               },
               "treasure": false
             }
@@ -75,47 +59,36 @@
         },
         {
           "type": "minecraft:item",
-          "name": "netheryx:onyx_bow",
-          "weight": 2
-        },
-        {
-          "type": "minecraft:item",
           "name": "minecraft:golden_apple",
-          "weight": 6,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1,
-                "max": 2
-              }
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "netheryx:soul_compass",
           "weight": 3
         },
         {
           "type": "minecraft:item",
-          "name": "netheryx:recall_stone",
+          "name": "netheryx:soul_compass",
           "weight": 2
+        },
+        {
+          "type": "minecraft:item",
+          "name": "netheryx:recall_stone",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 10
         }
       ]
     },
     {
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 4,
-        "max": 7
+        "min": 3,
+        "max": 5
       },
       "bonus_rolls": 0,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "netheryx:onyx",
+          "name": "netheryx:onyx_shard",
           "weight": 8,
           "functions": [
             {
@@ -124,21 +97,6 @@
                 "type": "minecraft:uniform",
                 "min": 1,
                 "max": 3
-              }
-            }
-          ]
-        },
-        {
-          "type": "minecraft:item",
-          "name": "netheryx:onyx_shard",
-          "weight": 12,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 2,
-                "max": 6
               }
             }
           ]
@@ -146,17 +104,7 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:diamond",
-          "weight": 8,
-          "functions": [
-            {
-              "function": "minecraft:set_count",
-              "count": {
-                "type": "minecraft:uniform",
-                "min": 1,
-                "max": 3
-              }
-            }
-          ]
+          "weight": 2
         },
         {
           "type": "minecraft:item",
@@ -167,8 +115,8 @@
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2,
-                "max": 7
+                "min": 1,
+                "max": 4
               }
             }
           ]
@@ -176,14 +124,14 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:iron_ingot",
-          "weight": 10,
+          "weight": 12,
           "functions": [
             {
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2,
-                "max": 7
+                "min": 1,
+                "max": 4
               }
             }
           ]
@@ -197,8 +145,8 @@
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2,
-                "max": 6
+                "min": 1,
+                "max": 4
               }
             }
           ]
@@ -212,21 +160,26 @@
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 2,
-                "max": 5
+                "min": 1,
+                "max": 3
               }
             }
           ]
         },
         {
           "type": "minecraft:item",
-          "name": "netheryx:glowcap_stew",
-          "weight": 4
-        },
-        {
-          "type": "minecraft:item",
-          "name": "netheryx:glimmer_elixir",
-          "weight": 5
+          "name": "netheryx:sulfur",
+          "weight": 8,
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "type": "minecraft:uniform",
+                "min": 2,
+                "max": 5
+              }
+            }
+          ]
         },
         {
           "type": "minecraft:item",
@@ -237,8 +190,8 @@
               "function": "minecraft:set_count",
               "count": {
                 "type": "minecraft:uniform",
-                "min": 6,
-                "max": 16
+                "min": 4,
+                "max": 10
               }
             }
           ]
@@ -246,7 +199,7 @@
         {
           "type": "minecraft:item",
           "name": "minecraft:book",
-          "weight": 5,
+          "weight": 2,
           "functions": [
             {
               "function": "minecraft:enchant_randomly"

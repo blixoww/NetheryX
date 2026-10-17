@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Same protection as diamond, toughness $(l)2.5$(), very high durability (55x, netherite 37x). $(l)Full set bonus$(): permanent $(item)Resistance I$(). Works with armor trims."
+      "text": "Better than netherite: protection $(l)4/9/7/4$() (netherite 3/8/6/3), toughness $(l)4$() (3), durability 55x (37x). $(l)Full set bonus$(): permanent $(item)Resistance I$() and $(item)Fire Resistance$(). Works with armor trims."
     },
     {
       "type": "patchouli:crafting",

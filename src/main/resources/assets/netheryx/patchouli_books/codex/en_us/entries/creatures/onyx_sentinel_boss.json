@@ -10,6 +10,11 @@
       "scale": 0.35,
       "offset": 0.0,
       "text": "250 HP, immune to knockback. Punches, a $(l)shockwave$(), and below half health a $(l)rage$(): faster, it makes crystal fangs erupt toward you. Drops the $(item)Sentinel Core$() and lots of Onyx."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)Leap$(): jumps on distant players and slams on landing.$(li)$(l)Crystal rain$(): glittering circles appear under players, crystal fangs burst out 2 seconds later. Move!$(li)$(l)Onyx shell$() (rage): arms crossed, takes 75% less damage for 4 s. Wait it out.$(li)Below 25%: calls Onyx Cubes.",
+      "title": "Tactique"
     }
   ]
 }

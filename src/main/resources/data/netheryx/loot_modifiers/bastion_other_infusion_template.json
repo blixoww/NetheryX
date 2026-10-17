@@ -7,7 +7,7 @@
     },
     {
       "condition": "minecraft:random_chance",
-      "chance": 0.08
+      "chance": 0.04
     }
   ],
   "item": "netheryx:onyx_infusion_template",

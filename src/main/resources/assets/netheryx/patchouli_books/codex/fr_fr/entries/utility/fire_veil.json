@@ -1,0 +1,18 @@
+{
+  "name": "Voile ignifuge",
+  "icon": "netheryx:fire_veil",
+  "category": "netheryx:utility",
+  "sortnum": 87,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:fire_veil",
+      "text": "Tant qu'il est $(l)n'importe où dans l'inventaire$() (ou porté dans un $(l)emplacement breloque de Curios$()), les flammes qui couvrent l'écran quand vous brûlez sont masquées. Purement visuel : vous brûlez toujours, associez-le à la résistance au feu.",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:fire_veil"
+    }
+  ]
+}

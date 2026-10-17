@@ -10,6 +10,11 @@
       "scale": 0.45,
       "offset": 0.0,
       "text": "200 PV, 12 d'armure. Un chevalier géant dont la lame flétrit. Il $(l)fonce$() sur les cibles éloignées et appelle deux Chevaliers flétris à 66 % et 33 % de vie. Garde les Catacombes flétries."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)$(l)Balayage spectral$() : grand arc devant lui, inflige Flétrissement II. Restez derrière lui.$(li)$(l)Chaînes d'âmes$() : ramène les fuyards et les ralentit.$(li)$(l)Ruée des âmes$() vers les cibles éloignées.$(li)Sous 50 % : des $(l)pointes d'os$() jaillissent en deux anneaux autour de lui. Reculez !",
+      "title": "Tactique"
     }
   ]
 }

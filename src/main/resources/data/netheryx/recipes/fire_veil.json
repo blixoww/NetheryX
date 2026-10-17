@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " C ",
+    "CMC",
+    " C "
+  ],
+  "key": {
+    "C": {
+      "item": "netheryx:wraith_cloth"
+    },
+    "M": {
+      "item": "minecraft:magma_cream"
+    }
+  },
+  "result": {
+    "item": "netheryx:fire_veil",
+    "count": 1
+  }
+}

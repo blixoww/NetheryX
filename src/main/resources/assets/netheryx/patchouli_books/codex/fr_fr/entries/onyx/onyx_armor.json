@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Même protection que le diamant, robustesse $(l)2,5$(), très grande durabilité (55x, netherite 37x). $(l)Bonus d'ensemble$() : $(item)Résistance I$() permanente. Compatible avec les garnitures d'armure."
+      "text": "Mieux que la netherite : protection $(l)4/9/7/4$() (netherite 3/8/6/3), robustesse $(l)4$() (3), durabilité 55x (37x). $(l)Bonus d'ensemble$() : $(item)Résistance I$() et $(item)Résistance au feu$() permanentes. Compatible avec les garnitures d'armure."
     },
     {
       "type": "patchouli:crafting",

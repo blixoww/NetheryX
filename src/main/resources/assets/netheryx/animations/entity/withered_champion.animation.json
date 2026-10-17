@@ -408,6 +408,273 @@
           }
         }
       }
+    },
+    "animation.withered_knight.sweep": {
+      "animation_length": 0.9,
+      "bones": {
+        "arm_right": {
+          "rotation": {
+            "0": {
+              "vector": [
+                -20,
+                0,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                -90,
+                70,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.5": {
+              "vector": [
+                -90,
+                -80,
+                0
+              ],
+              "easing": "easeOutExpo"
+            },
+            "0.9": {
+              "vector": [
+                -20,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        },
+        "body": {
+          "rotation": {
+            "0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                0,
+                35,
+                0
+              ],
+              "easing": "easeOutQuad"
+            },
+            "0.5": {
+              "vector": [
+                0,
+                -40,
+                0
+              ],
+              "easing": "easeOutExpo"
+            },
+            "0.9": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        }
+      }
+    },
+    "animation.withered_knight.chains": {
+      "animation_length": 1.2,
+      "bones": {
+        "arm_left": {
+          "rotation": {
+            "0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                -95,
+                0,
+                0
+              ],
+              "easing": "easeOutBack"
+            },
+            "0.7": {
+              "vector": [
+                -95,
+                0,
+                0
+              ]
+            },
+            "0.9": {
+              "vector": [
+                -20,
+                0,
+                0
+              ],
+              "easing": "easeInBack"
+            },
+            "1.2": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        },
+        "body": {
+          "rotation": {
+            "0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.3": {
+              "vector": [
+                10,
+                0,
+                0
+              ]
+            },
+            "0.9": {
+              "vector": [
+                -15,
+                0,
+                0
+              ],
+              "easing": "easeInBack"
+            },
+            "1.2": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            }
+          }
+        }
+      }
+    },
+    "animation.withered_knight.spikes": {
+      "animation_length": 1.3,
+      "bones": {
+        "arm_right": {
+          "rotation": {
+            "0": {
+              "vector": [
+                -20,
+                0,
+                0
+              ]
+            },
+            "0.4": {
+              "vector": [
+                -170,
+                0,
+                0
+              ],
+              "easing": "easeOutBack"
+            },
+            "0.6": {
+              "vector": [
+                10,
+                0,
+                0
+              ],
+              "easing": "easeInExpo"
+            },
+            "1.0": {
+              "vector": [
+                10,
+                0,
+                0
+              ]
+            },
+            "1.3": {
+              "vector": [
+                -20,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          }
+        },
+        "body": {
+          "rotation": {
+            "0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.4": {
+              "vector": [
+                -15,
+                0,
+                0
+              ]
+            },
+            "0.6": {
+              "vector": [
+                30,
+                0,
+                0
+              ],
+              "easing": "easeInExpo"
+            },
+            "1.0": {
+              "vector": [
+                30,
+                0,
+                0
+              ]
+            },
+            "1.3": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeInOutSine"
+            }
+          },
+          "position": {
+            "0": {
+              "vector": [
+                0,
+                0,
+                0
+              ]
+            },
+            "0.6": {
+              "vector": [
+                0,
+                -3,
+                0
+              ],
+              "easing": "easeInExpo"
+            },
+            "1.3": {
+              "vector": [
+                0,
+                0,
+                0
+              ],
+              "easing": "easeOutQuad"
+            }
+          }
+        }
+      }
     }
   },
   "geckolib_format_version": 2

@@ -7,10 +7,10 @@
     },
     {
       "condition": "minecraft:random_chance",
-      "chance": 0.5
+      "chance": 0.35
     }
   ],
   "item": "netheryx:onyx_shard",
-  "min_count": 2,
-  "max_count": 5
+  "min_count": 1,
+  "max_count": 3
 }

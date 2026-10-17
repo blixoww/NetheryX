@@ -2,7 +2,7 @@
   "name": "Lanterne de garde",
   "icon": "netheryx:ward_lantern",
   "category": "netheryx:utility",
-  "sortnum": 87,
+  "sortnum": 88,
   "pages": [
     {
       "type": "patchouli:spotlight",

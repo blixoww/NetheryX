@@ -182,6 +182,7 @@ def generate_recipes():
            "soul_altar", 1)
     shaped("ward_lantern", ["OEO", "ELE", "OEO"], {"O": "onyx_shard", "E": "wraith_essence", "L": "minecraft:soul_lantern"},
            "ward_lantern", 1)
+    shaped("fire_veil", [" C ", "CMC", " C "], {"C": "wraith_cloth", "M": "minecraft:magma_cream"}, "fire_veil", 1)
     for addition, infusion in (("minecraft:magma_cream", "smelting"), ("burrower_fang", "reach"), ("onyx", "resilience")):
         write_json(data_path("recipes", f"infusion_{infusion}.json"), {
             "type": mid("infusion"), "template": {"item": mid("onyx_infusion_template")},
@@ -237,6 +238,9 @@ def generate_tags():
                                            "wraith_robe", "wraith_leggings", "wraith_boots", "carapace_helmet",
                                            "carapace_leggings", "carapace_boots"]))
     tag("items", mc, "piglin_loved", m(["onyx_infusion_template"]))
+    # Curios API (optionnel) : le Voile ignifuge se porte en breloque
+    tag("items", "curios", "charm", m(["fire_veil"]))
+    write_json(data_path("curios", "entities", "netheryx_player.json"), {"entities": ["player"], "slots": ["charm"]})
     tag("items", MOD_ID, "cinder_lizard_food", m(["fire_berries"]))
     tag("items", MOD_ID, "lantern_bearer_food", m(["glowcap"]))
     tag("items", MOD_ID, "lava_trap_bait", m(["stalker_meat", "crab_leg", "infernal_beef", "infernal_chicken"]) + ["minecraft:rotten_flesh"])
@@ -299,3 +303,5 @@ def generate():
     generate_tags()
     generate_advancements()
     generate_loot_modifiers()
+    from . import loot_balance
+    loot_balance.generate()

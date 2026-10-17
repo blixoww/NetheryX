@@ -19,7 +19,12 @@ public final class ModCreativeTabs {
     public static final RegistryObject<CreativeModeTab> NETHERYX = TABS.register("netheryx", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.netheryx"))
             .icon(() -> new ItemStack(ModItems.ONYX.get()))
-            .displayItems((parameters, output) -> ModItems.ITEMS.getEntries().forEach(item -> output.accept(item.get())))
+            .displayItems((parameters, output) -> ModItems.ITEMS.getEntries().forEach(item -> {
+                // La Boussole du createur n'apparait que pour les joueurs ayant les droits d'operateur
+                if (item != ModItems.ADMIN_COMPASS || parameters.hasPermissions()) {
+                    output.accept(item.get());
+                }
+            }))
             .build());
 
     /** Les oeufs et l'equipement apparaissent aussi dans les onglets vanilla correspondants. */
@@ -45,6 +50,8 @@ public final class ModCreativeTabs {
                         ModItems.CARAPACE_HELMET, ModItems.CARAPACE_LEGGINGS, ModItems.CARAPACE_BOOTS)) {
                     event.accept(armor);
                 }
+            } else if (event.getTabKey() == CreativeModeTabs.OP_BLOCKS && event.hasPermissions()) {
+                event.accept(ModItems.ADMIN_COMPASS);
             } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
                 event.accept(ModItems.ONYX_PICKAXE);
                 event.accept(ModItems.ONYX_AXE);

@@ -2,7 +2,7 @@
   "name": "Wartstalk Wood",
   "icon": "netheryx:wartstalk_planks",
   "category": "netheryx:building",
-  "sortnum": 90,
+  "sortnum": 91,
   "pages": [
     {
       "type": "patchouli:crafting",

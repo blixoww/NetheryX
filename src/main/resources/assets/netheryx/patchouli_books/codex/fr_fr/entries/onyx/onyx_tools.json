@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Durabilité $(l)4500$() (diamant 1561, netherite 2031), vitesse $(l)9,5$(), bonus de dégâts $(l)3,5$(). Le marteau : 7000. Les manches sont des $(item)bâtons de blaze$(). Les objets en onyx ne brûlent pas dans la lave."
+      "text": "$(l)Plus fort que la netherite$() : durabilité $(l)4500$() (netherite 2031), vitesse $(l)10$() (9), bonus de dégâts $(l)5$() (4) : une épée en onyx inflige $(l)9$(). Le marteau : 7000. Les manches sont des $(item)bâtons de blaze$(). Les objets en onyx ne brûlent pas dans la lave."
     },
     {
       "type": "patchouli:crafting",

@@ -34,23 +34,34 @@ public class NetheryXRegion extends Region {
 
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
-        // Les biomes vanilla restent presents dans la region pour des transitions naturelles.
+        // Un seul point vanilla pour garder des transitions naturelles ; chaque biome NetheryX occupe deux points
+        // du climat, ce qui les rend nettement plus frequents dans la region.
         add(mapper, 0.0F, 0.0F, 0.0F, Biomes.NETHER_WASTES);
-        add(mapper, 0.4F, 0.0F, 0.0F, Biomes.CRIMSON_FOREST);
-        add(mapper, 0.0F, -0.5F, 0.0F, Biomes.SOUL_SAND_VALLEY);
 
         add(mapper, 0.5F, 0.7F, 0.0F, ModBiomes.EMBER_MEADOW);
+        add(mapper, 0.2F, 0.2F, 0.05F, ModBiomes.EMBER_MEADOW);
         add(mapper, 0.7F, 0.3F, 0.0F, ModBiomes.EMBER_GROVE);
+        add(mapper, 0.4F, 0.0F, 0.05F, ModBiomes.EMBER_GROVE);
         add(mapper, -0.4F, -0.4F, 0.1F, ModBiomes.ASHEN_WASTES);
+        add(mapper, -0.1F, -0.6F, 0.05F, ModBiomes.ASHEN_WASTES);
         add(mapper, -0.6F, 0.5F, 0.2F, ModBiomes.ONYX_DEPTHS);
+        add(mapper, -0.3F, 0.25F, 0.15F, ModBiomes.ONYX_DEPTHS);
         add(mapper, 0.35F, -0.7F, 0.1F, ModBiomes.SULFUR_SPRINGS);
+        add(mapper, 0.6F, -0.5F, 0.05F, ModBiomes.SULFUR_SPRINGS);
         add(mapper, -0.2F, 0.8F, 0.1F, ModBiomes.SOULFIRE_MARSH);
+        add(mapper, 0.0F, -0.5F, 0.0F, ModBiomes.SOULFIRE_MARSH);
         add(mapper, -0.8F, -0.1F, 0.15F, ModBiomes.WITHERED_FOREST);
+        add(mapper, -0.6F, -0.7F, 0.1F, ModBiomes.WITHERED_FOREST);
         add(mapper, 0.9F, -0.3F, 0.2F, ModBiomes.MAGMA_RIFT);
+        add(mapper, 0.85F, 0.0F, 0.15F, ModBiomes.MAGMA_RIFT);
         add(mapper, -0.5F, 0.95F, 0.15F, ModBiomes.MARROW_THICKET);
+        add(mapper, -0.75F, 0.75F, 0.1F, ModBiomes.MARROW_THICKET);
         add(mapper, -0.95F, 0.4F, 0.2F, ModBiomes.RIMEFROST_CHASM);
+        add(mapper, -0.95F, 0.0F, 0.15F, ModBiomes.RIMEFROST_CHASM);
         add(mapper, 0.25F, 0.45F, 0.1F, ModBiomes.WARTVINE_TANGLE);
+        add(mapper, 0.45F, 0.9F, 0.05F, ModBiomes.WARTVINE_TANGLE);
         add(mapper, 0.1F, -0.95F, 0.15F, ModBiomes.QUARTZ_REEF);
+        add(mapper, 0.35F, -0.3F, 0.1F, ModBiomes.QUARTZ_REEF);
     }
 
     private void add(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper,
