@@ -40,6 +40,9 @@ public class WyvernEggItem extends Item {
             }
             wyvern.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, player.getYRot() + 180.0F, 0.0F);
             wyvern.tame(player);
+            if (context.getItemInHand().hasCustomHoverName()) {
+                wyvern.setCustomName(context.getItemInHand().getHoverName());
+            }
             level.addFreshEntity(wyvern);
             level.playSound(null, pos, SoundEvents.SNIFFER_EGG_HATCH, SoundSource.NEUTRAL, 1.5F, 0.7F);
             level.sendParticles(ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 30, 0.8D, 0.6D, 0.8D, 0.02D);

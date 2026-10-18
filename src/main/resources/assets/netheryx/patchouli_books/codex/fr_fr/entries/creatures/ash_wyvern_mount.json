@@ -13,8 +13,17 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(li)Clic droit : la monter. $(li)Accroupi + clic droit : attendre / suivre. $(li)La viande la soigne.$(br2)$(l)En combat$(), elle s'envole seule, tourne autour de votre ennemi, crache du feu (qui enflamme les créatures, jamais les blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que vous attaquez.",
+      "text": "$(li)Clic droit : la monter. $(li)Accroupi + clic droit : attendre / suivre. $(li)La viande la soigne ; apprivoisée, elle a $(l)160 PV$() et se régénère.$(br2)$(l)En combat$(), elle s'envole seule, tourne autour de votre ennemi, crache du feu (qui enflamme les créatures, jamais les blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que vous attaquez.",
       "title": "Compagnon"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Impossible à perdre$() :$(li)elle vous suit par les portails dans les autres dimensions (sauf si elle attend) ;$(li)le $(item)Sifflet de wyverne$() rappelle toutes vos wyvernes, de n'importe où, même d'une zone non chargée ou d'une autre dimension ;$(li)si elle meurt, son $(item)œuf$() vous revient avec son nom : faites-le éclore à nouveau.",
+      "title": "Fidélité"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:wyvern_whistle"
     },
     {
       "type": "patchouli:text",

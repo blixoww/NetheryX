@@ -821,12 +821,20 @@ entry("creatures", "Ash Wyvern (mount)", "Wyverne de cendre (monture)", "nethery
         "de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) contiennent un $(item)œuf$() "
         "et une wyverne sauvage ; d'autres errent dans ces biomes. Apprivoisez une wyverne sauvage avec de la $(item)viande$(), "
         "ou faites éclore l'œuf : elle vous appartient.", 0.3),
-    text("$(li)Right-click: ride it. $(li)Sneak + right-click: sit / follow. $(li)Meat heals it.$(br2)$(l)In combat$(), it takes "
-         "off on its own, circles your enemy, breathes fire (it sets creatures ablaze, never blocks) and dives to bite. While "
-         "you ride it, it breathes fire on what you attack.",
-         "$(li)Clic droit : la monter. $(li)Accroupi + clic droit : attendre / suivre. $(li)La viande la soigne.$(br2)$(l)En "
-         "combat$(), elle s'envole seule, tourne autour de votre ennemi, crache du feu (qui enflamme les créatures, jamais les "
-         "blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que vous attaquez.", "Compagnon"),
+    text("$(li)Right-click: ride it. $(li)Sneak + right-click: sit / follow. $(li)Meat heals it; tamed, it has $(l)160 HP$() and "
+         "regenerates.$(br2)$(l)In combat$(), it takes off on its own, circles your enemy, breathes fire (it sets creatures ablaze, "
+         "never blocks) and dives to bite. While you ride it, it breathes fire on what you attack.",
+         "$(li)Clic droit : la monter. $(li)Accroupi + clic droit : attendre / suivre. $(li)La viande la soigne ; apprivoisée, elle a "
+         "$(l)160 PV$() et se régénère.$(br2)$(l)En combat$(), elle s'envole seule, tourne autour de votre ennemi, crache du feu "
+         "(qui enflamme les créatures, jamais les blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que "
+         "vous attaquez.", "Compagnon"),
+    text("$(l)Impossible to lose$():$(li)it follows you through portals to other dimensions (unless it is sitting);"
+         "$(li)the $(item)Wyvern Whistle$() calls all your wyverns back, from anywhere, even unloaded areas or another dimension;"
+         "$(li)if it dies, its $(item)egg$() comes back to you with its name: hatch it again.",
+         "$(l)Impossible à perdre$() :$(li)elle vous suit par les portails dans les autres dimensions (sauf si elle attend) ;"
+         "$(li)le $(item)Sifflet de wyverne$() rappelle toutes vos wyvernes, de n'importe où, même d'une zone non chargée ou d'une "
+         "autre dimension ;$(li)si elle meurt, son $(item)œuf$() vous revient avec son nom : faites-le éclore à nouveau.", "Fidélité"),
+    craft("wyvern_whistle"),
     text("$(l)Flying$(): move forward while looking up to take off, look down to dive, release to glide slowly. If you dismount in "
          "the air, you get a few seconds of $(l)Slow Falling$().",
          "$(l)Voler$() : avancez en regardant vers le haut pour décoller, vers le bas pour piquer, relâchez pour planer doucement. "

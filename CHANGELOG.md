@@ -66,6 +66,10 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - **Nids de wyverne** : pitons rocheux coiffés d'un nid d'os, avec un œuf garanti et une wyverne sauvage qui le garde
   (repérables avec la Boussole des âmes) ; des wyvernes sauvages errent aussi dans les Terres cendrées, les deltas de
   basalte et le Lac de verre en fusion, et s'apprivoisent avec de la viande.
+- **Wyverne fidèle** : 160 PV une fois apprivoisée (régénération hors combat) ; elle suit son maître à travers les
+  portails ; le **Sifflet de wyverne** la rappelle de n'importe où (zone non chargée ou autre dimension comprise) ; à sa
+  mort, son œuf revient au maître avec son nom.
+- **Boussoles** : les structures NetheryX (dont les nids de wyverne) apparaissent en tête de liste.
 - **Wyverne alliée en combat** : elle s'envole seule, tourne autour de l'ennemi, crache du feu (créatures enflammées,
   aucun bloc touché) et pique pour mordre ; montée, elle crache du feu sur ce que le cavalier attaque.
 - **Coffres-forts scellés** : le trésor de chaque donjon est dans un petit coffre-fort dont les six faces sont en

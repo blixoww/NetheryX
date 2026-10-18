@@ -69,7 +69,9 @@ public class SoulCompassItem extends Item {
         return registry.holders()
                 .filter(holder -> holder.value().biomes().stream().anyMatch(biomes::contains))
                 .map(holder -> holder.key().location())
-                .sorted()
+                // Structures NetheryX en tete de liste, puis les autres par ordre alphabetique
+                .sorted(java.util.Comparator.comparing((ResourceLocation id) -> !id.getNamespace().equals(com.netheryx.NetheryX.MOD_ID))
+                        .thenComparing(ResourceLocation::toString))
                 .toList();
     }
 

@@ -18,6 +18,7 @@ import com.netheryx.item.RecallStoneItem;
 import com.netheryx.item.SealedHeartItem;
 import com.netheryx.item.AbyssalBladeItem;
 import com.netheryx.item.WyvernEggItem;
+import com.netheryx.item.WyvernWhistleItem;
 import com.netheryx.item.NetherLanternItem;
 import com.netheryx.item.SoulCompassItem;
 import com.netheryx.item.SoulScytheItem;
@@ -287,6 +288,8 @@ public final class ModItems {
             () -> new NetherLanternItem(new Item.Properties().durability(64).rarity(Rarity.RARE).fireResistant()));
     public static final RegistryObject<Item> ASH_WYVERN_EGG = register("ash_wyvern_egg",
             () -> new WyvernEggItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> WYVERN_WHISTLE = register("wyvern_whistle",
+            () -> new WyvernWhistleItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant()));
     public static final RegistryObject<Item> BASALT_GOLEM_SPAWN_EGG = register("basalt_golem_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.BASALT_GOLEM, 0x2E2C30, 0xFF7A1A, new Item.Properties()));
     public static final RegistryObject<Item> ASH_WYVERN_SPAWN_EGG = register("ash_wyvern_spawn_egg",

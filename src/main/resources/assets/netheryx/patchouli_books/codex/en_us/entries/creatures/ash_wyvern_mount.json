@@ -13,8 +13,17 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(li)Right-click: ride it. $(li)Sneak + right-click: sit / follow. $(li)Meat heals it.$(br2)$(l)In combat$(), it takes off on its own, circles your enemy, breathes fire (it sets creatures ablaze, never blocks) and dives to bite. While you ride it, it breathes fire on what you attack.",
+      "text": "$(li)Right-click: ride it. $(li)Sneak + right-click: sit / follow. $(li)Meat heals it; tamed, it has $(l)160 HP$() and regenerates.$(br2)$(l)In combat$(), it takes off on its own, circles your enemy, breathes fire (it sets creatures ablaze, never blocks) and dives to bite. While you ride it, it breathes fire on what you attack.",
       "title": "Compagnon"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(l)Impossible to lose$():$(li)it follows you through portals to other dimensions (unless it is sitting);$(li)the $(item)Wyvern Whistle$() calls all your wyverns back, from anywhere, even unloaded areas or another dimension;$(li)if it dies, its $(item)egg$() comes back to you with its name: hatch it again.",
+      "title": "Fidélité"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:wyvern_whistle"
     },
     {
       "type": "patchouli:text",

@@ -74,6 +74,23 @@ def wyvern_egg():
     return shape.render(outline=hexc("#140c0a"))
 
 
+def wyvern_whistle():
+    """Sifflet taille dans une corne, bague doree et cordon de cuir."""
+    shape = Shape()
+    horn = ["#e6dcc4", "#d0c4aa", "#b8ac94", "#9a8e78"]
+    for k in range(9):
+        x, y = 3 + k, 11 - k // 2
+        w = 2 if k < 6 else 3
+        for dy in range(w):
+            shape.put(x, y + dy - (w // 2), hexc(horn[min(3, dy + (1 if k > 5 else 0))]))
+    shape.put(12, 5, hexc("#3a2414"))
+    for (x, y) in ((6, 9), (6, 10), (7, 9), (7, 10)):
+        shape.put(x, y, hexc("#f0c040"))
+    for (x, y) in ((3, 12), (2, 13), (2, 14), (3, 15)):
+        shape.put(x, y, hexc("#6a4022"))
+    return shape.render(outline=hexc("#2a1a10"))
+
+
 def greatsword(u, v):
     """Lame abyssale : lame large, arete incandescente au centre, garde en croissant."""
     if -3 <= u <= 11 and 12 <= v <= 17:
@@ -110,3 +127,4 @@ def generate():
     save(nether_lantern(), "item", "nether_lantern.png")
     save(wyvern_egg(), "item", "ash_wyvern_egg.png")
     save(tool_image(greatsword, -7, "abyssal"), "item", "abyssal_blade.png")
+    save(wyvern_whistle(), "item", "wyvern_whistle.png")

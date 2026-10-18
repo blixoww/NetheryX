@@ -104,6 +104,67 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
         this.entityData.define(AERIAL, false);
     }
 
+    // --- Compagnon : sante, registre, oeuf a la mort ---------------------------------------------------
+
+    public static final double WILD_HEALTH = 80.0D;
+    public static final double TAMED_HEALTH = 160.0D;
+
+    @Override
+    public void setTame(boolean tame) {
+        super.setTame(tame);
+        var health = this.getAttribute(Attributes.MAX_HEALTH);
+        if (health != null) {
+            health.setBaseValue(tame ? TAMED_HEALTH : WILD_HEALTH);
+        }
+    }
+
+    @Override
+    public void tame(Player player) {
+        super.tame(player);
+        this.setHealth(this.getMaxHealth());
+        if (this.level() instanceof ServerLevel server) {
+            this.updateRegistry(server);
+        }
+    }
+
+    private void updateRegistry(ServerLevel server) {
+        java.util.UUID owner = this.getOwnerUUID();
+        if (owner != null) {
+            com.netheryx.util.WyvernRegistry.get(server.getServer()).update(this.getUUID(), owner, server.dimension(), this.blockPosition());
+        }
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        if (this.level() instanceof ServerLevel server && this.isTame()) {
+            // Elle ne disparait jamais vraiment : son oeuf revient a son maitre (ou tombe a ses pieds), avec son nom
+            ItemStack egg = new ItemStack(com.netheryx.registry.ModItems.ASH_WYVERN_EGG.get());
+            if (this.hasCustomName()) {
+                egg.setHoverName(this.getCustomName());
+            }
+            LivingEntity owner = this.getOwner();
+            if (owner instanceof Player player) {
+                if (!player.getInventory().add(egg)) {
+                    player.drop(egg, false);
+                }
+                player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.netheryx.wyvern_fallen")
+                        .withStyle(net.minecraft.ChatFormatting.GOLD), false);
+            } else {
+                this.spawnAtLocation(egg);
+            }
+            com.netheryx.util.WyvernRegistry.get(server.getServer()).remove(this.getUUID());
+        }
+        super.die(source);
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        if (reason == RemovalReason.DISCARDED && this.level() instanceof ServerLevel server) {
+            com.netheryx.util.WyvernRegistry.get(server.getServer()).remove(this.getUUID());
+        }
+        super.remove(reason);
+    }
+
     public boolean isAerial() {
         return this.entityData.get(AERIAL);
     }
@@ -224,6 +285,13 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
         this.setNoGravity((this.isVehicle() && !this.onGround()) || this.isAerial());
         super.tick();
         if (this.level() instanceof ServerLevel server) {
+            if (this.isTame() && this.tickCount % 100 == 0) {
+                this.updateRegistry(server);
+            }
+            // Regeneration lente hors combat
+            if (this.isTame() && this.getTarget() == null && this.tickCount % 40 == 0 && this.getHealth() < this.getMaxHealth()) {
+                this.heal(1.0F);
+            }
             if (this.breathCooldown > 0) {
                 this.breathCooldown--;
             }

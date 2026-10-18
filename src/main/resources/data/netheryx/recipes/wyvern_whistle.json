@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "minecraft:bone"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:phantom_membrane"
+    },
+    {
+      "item": "netheryx:molten_shard"
+    }
+  ],
+  "result": {
+    "item": "netheryx:wyvern_whistle",
+    "count": 1
+  }
+}

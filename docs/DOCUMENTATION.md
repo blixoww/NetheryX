@@ -402,10 +402,20 @@ Clic droit avec, **uniquement dans le Nether** : le Cœur du Nether s'éveille a
 
 - Clic droit : la monter. 
 - Accroupi + clic droit : attendre / suivre. 
-- La viande la soigne.
+- La viande la soigne ; apprivoisée, elle a **160 PV** et se régénère.
 
 **En combat**, elle s'envole seule, tourne autour de votre ennemi, crache du feu (qui enflamme les créatures, jamais les blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que vous attaquez.
 
+
+**Fidélité**
+
+**Impossible à perdre** :
+- elle vous suit par les portails dans les autres dimensions (sauf si elle attend) ;
+- le *Sifflet de wyverne* rappelle toutes vos wyvernes, de n'importe où, même d'une zone non chargée ou d'une autre dimension ;
+- si elle meurt, son *œuf* vous revient avec son nom : faites-le éclore à nouveau.
+
+
+- Établi (sans forme) : Os + Lingot d'or + Membrane de phantom + Éclat de verre en fusion → **Sifflet de wyverne**
 
 **Vol**
 
@@ -1338,6 +1348,8 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi : `###` / `#·#` / `#·#` (`#` = Étoffe spectrale) → **Jambières spectrales**
 - **Robe spectrale** (`netheryx:wraith_robe`)
   - Établi : `#·#` / `###` / `###` (`#` = Étoffe spectrale) → **Robe spectrale**
+- **Sifflet de wyverne** (`netheryx:wyvern_whistle`)
+  - Établi (sans forme) : Os + Lingot d'or + Membrane de phantom + Éclat de verre en fusion → **Sifflet de wyverne**
 
 ### Œufs d'apparition (créatif)
 
