@@ -212,6 +212,53 @@ class Dungeon(Template):
     def guard(self, x, y, z, entity):
         self.entity(x + 0.5, y, z + 0.5, entity)
 
+    def roof_pyramid(self, x0, z0, x1, z1, y, stairs, full, cap=None):
+        """Toit en pyramide d'escaliers (les angles en bloc plein) ; renvoie la hauteur du sommet."""
+        k = 0
+        while True:
+            xa, xb, za, zb, yy = x0 + k, x1 - k, z0 + k, z1 - k, y + k
+            if xa > xb or za > zb:
+                top = yy - 1
+                break
+            if xb - xa < 2 or zb - za < 2:
+                self.box(xa, yy, za, xb, yy, zb, full)
+                top = yy
+                break
+            for x in range(xa + 1, xb):
+                self.stair(x, yy, za, stairs, "south")
+                self.stair(x, yy, zb, stairs, "north")
+            for z in range(za + 1, zb):
+                self.stair(xa, yy, z, stairs, "east")
+                self.stair(xb, yy, z, stairs, "west")
+            for (x, z) in ((xa, za), (xa, zb), (xb, za), (xb, zb)):
+                self.set(x, yy, z, full)
+            k += 1
+        if cap:
+            self.set((x0 + x1) // 2, top + 1, (z0 + z1) // 2, cap, hanging="false", waterlogged="false")
+        return top
+
+    def window_x(self, x, y0, y1, z, pane):
+        """Fenetre verticale dans un mur oriente nord/sud (le mur court le long de x)."""
+        for y in range(y0, y1 + 1):
+            self.set(x, y, z, pane, east="true", west="true", north="false", south="false", waterlogged="false")
+
+    def window_z(self, x, y0, y1, z, pane):
+        """Fenetre verticale dans un mur oriente est/ouest (le mur court le long de z)."""
+        for y in range(y0, y1 + 1):
+            self.set(x, y, z, pane, north="true", south="true", east="false", west="false", waterlogged="false")
+
+    def cornice(self, x0, z0, x1, z1, y, stairs):
+        """Corniche : anneau d'escaliers renverses colles a l'exterieur d'un batiment (x0..x1, z0..z1)."""
+        for x in range(x0, x1 + 1):
+            self.stair(x, y, z0 - 1, stairs, "south", "top")
+            self.stair(x, y, z1 + 1, stairs, "north", "top")
+        for z in range(z0, z1 + 1):
+            self.stair(x0 - 1, y, z, stairs, "east", "top")
+            self.stair(x1 + 1, y, z, stairs, "west", "top")
+
+    def candle(self, x, y, z, count=None):
+        self.set(x, y, z, "minecraft:candle", candles=str(count or self.rng.randint(1, 4)), lit="true", waterlogged="false")
+
 
 # ------------------------------------------------------------------------------------------------
 # Citadelle d'onyx : remparts et tours, puis un donjon a trois etages qu'on gravit.
@@ -222,7 +269,7 @@ class Dungeon(Template):
 def onyx_citadel():
     S = 45
     c = S // 2
-    d = Dungeon(S, 31, S, "onyx_citadel")
+    d = Dungeon(S, 38, S, "onyx_citadel")
     d.box(0, 0, 0, S - 1, 0, S - 1, ONYX_FLOOR)
     d.air(2, 1, 2, S - 3, 13, S - 3)
 
@@ -257,8 +304,8 @@ def onyx_citadel():
     for x in (c - 3, c + 3):
         d.pillar(x, S - 1, 1, 7, cap="onyx_lantern")
     d.box(c - 3, 6, S - 2, c + 3, 6, S - 1, "polished_onyx")
-    d.guard(c - 4, 1, S - 5, "withered_knight")
-    d.guard(c + 4, 1, S - 5, "withered_knight")
+    d.guard(c - 2, 1, S - 6, "withered_knight")
+    d.guard(c + 2, 1, S - 6, "withered_knight")
 
     # Cour : allee, bassins de lave, lampadaires, amas d'onyx
     d.box(c - 2, 0, 33, c + 2, 0, S - 3, "polished_onyx")
@@ -266,7 +313,7 @@ def onyx_citadel():
         d.box(bx, 1, 30, bx + 6, 1, 35, "onyx_brick_slab", type="bottom", waterlogged="false")
         d.box(bx + 1, 1, 31, bx + 5, 1, 34, AIR)
         d.box(bx + 1, 0, 31, bx + 5, 0, 34, "minecraft:lava", level="0")
-    for (x, z) in ((c - 4, 36), (c + 4, 36), (c - 4, 40), (c + 4, 40), (5, 20), (S - 6, 20), (c, 4)):
+    for (x, z) in ((c - 4, 36), (c + 4, 36), (c - 3, 39), (c + 3, 39), (5, 20), (S - 6, 20), (c, 4)):
         d.box(x, 1, z, x, 3, z, "onyx_brick_wall", up="true")
         d.lantern(x, 4, z, "onyx_lantern")
     for (x, z) in ((4, 14), (S - 5, 14), (4, 26), (S - 5, 26), (14, 4), (30, 4)):
@@ -375,7 +422,83 @@ def onyx_citadel():
         d.guard(chest_x, 23, kz0 + 3, "mimic")
         d.hanging_lantern(chest_x, 28, 14, 2, "onyx_lantern")
         d.hanging_lantern(chest_x, 28, 27, 2, "onyx_lantern")
+    decorate_citadel(d, S, c, kx0, kx1, kz0, kz1)
     d.save("onyx_citadel")
+
+
+def decorate_citadel(d, S, c, kx0, kx1, kz0, kz1):
+    """Habillage : toits pointus des tours, tourelles et fleche du donjon, pilastres, corniches, vitraux,
+    corps de garde a herse, jardins de la cour et tapis du grand hall."""
+    pane = "quartz_glass_pane"
+    # Tours d'angle : fenetres et toits en pyramide
+    for (tx, tz) in ((0, 0), (S - 9, 0), (0, S - 9), (S - 9, S - 9)):
+        d.cornice(tx, tz, tx + 8, tz + 8, 15, "onyx_brick_stairs")
+        d.roof_pyramid(tx, tz, tx + 8, tz + 8, 16, "onyx_brick_stairs", "polished_onyx", cap="onyx_lantern")
+        for y0 in (3, 10):
+            d.window_x(tx + 4, y0, y0 + 2, tz if tz == 0 else tz + 8, pane)
+            d.window_z(tx if tx == 0 else tx + 8, y0, y0 + 2, tz + 4, pane)
+    # Remparts : soubassement et bandeau
+    for x in range(S):
+        for z in range(S):
+            if min(x, z, S - 1 - x, S - 1 - z) == 0 and (x, 5, z) in d.blocks and "onyx_bricks" in d.blocks[(x, 5, z)][0]:
+                d.set(x, 5, z, "polished_onyx")
+                d.set(x, 1, z, "minecraft:polished_blackstone_bricks")
+    # Corps de garde : deux tours a toit pointu encadrent la porte, herse au-dessus du passage
+    for gx in (c - 7, c + 3):
+        d.box(gx, 1, S - 5, gx + 4, 13, S - 1, ONYX_WALL)
+        d.cornice(gx, S - 5, gx + 4, S - 2, 13, "onyx_brick_stairs")
+        d.roof_pyramid(gx, S - 5, gx + 4, S - 1, 14, "onyx_brick_stairs", "polished_onyx", cap="onyx_lantern")
+        d.window_x(gx + 2, 8, 10, S - 1, pane)
+    d.box(c - 2, 6, S - 2, c + 2, 13, S - 1, ONYX_WALL)
+    for x in range(c - 2, c + 3):
+        d.set(x, 5, S - 1, "minecraft:iron_bars", east=str(x < c + 2).lower(), west=str(x > c - 2).lower(), north="false",
+              south="false", waterlogged="false")
+    for x in range(c - 2, c + 3, 2):
+        d.set(x, 13, S - 1, "onyx_brick_wall", up="true")
+    # Donjon : pilastres, corniches a chaque etage, hautes fenetres
+    for x in range(kx0 + 2, kx1 - 1, 4):
+        for z in (kz0 - 1, kz1 + 1):
+            if abs(x - c) > 2:
+                d.pillar(x, z, 1, 28, "minecraft:polished_basalt")
+    for z in range(kz0 + 2, kz1 - 1, 4):
+        for x in (kx0 - 1, kx1 + 1):
+            d.pillar(x, z, 1, 28, "minecraft:polished_basalt")
+    for y in (8, 16, 27):
+        d.cornice(kx0, kz0, kx1, kz1, y, "onyx_brick_stairs")
+    for x in range(kx0 + 4, kx1 - 2, 4):
+        for z in (kz0, kz1):
+            if abs(x - c) > 2:
+                d.window_x(x, 11, 13, z, pane)
+            d.window_x(x, 19, 24, z, pane)
+    for z in range(kz0 + 4, kz1 - 2, 4):
+        for x in (kx0, kx1):
+            d.window_z(x, 19, 24, z, pane)
+    # Tourelles d'angle du donjon et fleche centrale sur le toit
+    for (tx, tz) in ((kx0 - 2, kz0 - 2), (kx1, kz0 - 2), (kx0 - 2, kz1), (kx1, kz1)):
+        d.box(tx, 1, tz, tx + 2, 31, tz + 2, "polished_onyx")
+        d.roof_pyramid(tx, tz, tx + 2, tz + 2, 32, "onyx_brick_stairs", "polished_onyx", cap="onyx_lantern")
+    d.walls(c - 2, 29, 18, c + 2, 33, 22, ONYX_WALL)
+    d.air(c - 1, 29, 19, c + 1, 33, 21)
+    d.window_x(c, 30, 32, 18, pane)
+    d.window_x(c, 30, 32, 22, pane)
+    d.window_z(c - 2, 30, 32, 20, pane)
+    d.window_z(c + 2, 30, 32, 20, pane)
+    d.set(c, 29, 20, "ember_lamp")
+    d.roof_pyramid(c - 2, 18, c + 2, 22, 34, "onyx_brick_stairs", "polished_onyx", cap="onyx_lantern")
+    # Cour : jardins de braise et de luminelles
+    for (x0, z0) in ((3, 15), (3, 23), (S - 9, 15), (S - 9, 23)):
+        d.box(x0, 0, z0, x0 + 5, 0, z0 + 2, "ember_nylium")
+        for x in range(x0, x0 + 6):
+            for z in range(z0, z0 + 3):
+                roll = d.rng.random()
+                if roll < 0.18:
+                    d.set(x, 1, z, "ember_fungus")
+                elif roll < 0.4:
+                    d.set(x, 1, z, "glowcap")
+                elif roll < 0.6:
+                    d.set(x, 1, z, "ember_roots")
+    # Grand hall : tapis rouge de la porte a l'escalier du fond
+    d.box(c - 1, 1, 12, c + 1, 1, kz1 - 1, "minecraft:red_carpet")
 
 
 # ------------------------------------------------------------------------------------------------
@@ -390,7 +513,7 @@ def infernal_sanctum():
     S = 41
     c = S // 2
     G = SANCTUM_SINK  # y du sol du Nether dans le gabarit
-    d = Dungeon(S, G + 18, S, "infernal_sanctum")
+    d = Dungeon(S, G + 22, S, "infernal_sanctum")
     # Sous-sol massif : la nef ne communique pas avec les grottes alentour
     d.box(0, 0, 0, S - 1, G - 1, S - 1, MAGMA_WALL)
     for x in range(S):
@@ -490,7 +613,55 @@ def infernal_sanctum():
     for x in (17, 23):
         d.pillar(x, nz0, 2, G - 1, "minecraft:polished_basalt")
     d.set(c, 6, nz0, "ember_lamp")
+    decorate_sanctum(d, S, c, G, tx0, tx1, tz0, tz1, nx0, nx1, nz0, nz1)
     d.save("infernal_sanctum")
+
+
+def decorate_sanctum(d, S, c, G, tx0, tx1, tz0, tz1, nx0, nx1, nz0, nz1):
+    """Habillage : portique a colonnes, fenetres grillagees, corniches, obelisques ardents, flamme sommitale,
+    tapis rituel et braseros de la nef."""
+    # Portique devant la porte sud
+    pz0, pz1 = tz1 + 1, tz1 + 3
+    d.box(c - 5, G, pz0, c + 5, G, pz1, "magma_bricks")
+    for x in (c - 5, c - 3, c + 3, c + 5):
+        d.pillar(x, pz1, G + 1, G + 7, "minecraft:polished_basalt")
+        d.set(x, G + 1, pz1, "minecraft:chiseled_polished_blackstone")
+    d.box(c - 5, G + 8, pz0, c + 5, G + 8, pz1, "magma_brick_slab", type="top", waterlogged="false")
+    for x in range(c - 5, c + 6):
+        d.stair(x, G + 9, pz1, "magma_brick_stairs", "north")
+    for x in (c - 4, c + 4):
+        d.set(x, G + 7, pz1, "ember_lamp")
+    for x in (c - 1, c + 1):
+        d.stair(x, G, pz1 + 1, "magma_brick_stairs", "north")
+    d.stair(c, G, pz1 + 1, "magma_brick_stairs", "north")
+    # Facade : soubassement, corniches, fenetres grillagees
+    for y in (G + 6, G + 12):
+        d.cornice(tx0, tz0, tx1, tz1, y, "magma_brick_stairs")
+    for z in range(tz0 + 3, tz1 - 1, 5):
+        for x in (tx0, tx1):
+            for y in range(G + 3, G + 6):
+                d.set(x, y, z, "minecraft:iron_bars", north="true", south="true", east="false", west="false", waterlogged="false")
+    for x in range(tx0 + 3, tx1 - 1, 5):
+        if abs(x - c) > 2:
+            for y in range(G + 3, G + 6):
+                d.set(x, y, tz1, "minecraft:iron_bars", east="true", west="true", north="false", south="false", waterlogged="false")
+    # Flamme sommitale au-dessus de la ziggourat
+    d.box(c - 1, G + 16, 19, c + 1, G + 16, 21, "magma_bricks")
+    d.pillar(c, 20, G + 17, G + 18, "minecraft:polished_basalt")
+    d.set(c, G + 19, 20, "minecraft:netherrack")
+    d.set(c, G + 20, 20, "minecraft:fire", age="0", east="false", north="false", south="false", up="false", west="false")
+    # Obelisques ardents dans la cour (remplacent les braseros)
+    for (x, z) in ((6, 20), (S - 7, 20), (6, S - 8), (S - 7, S - 8)):
+        d.box(x - 1, G + 1, z - 1, x + 1, G + 1, z + 1, "minecraft:polished_blackstone_bricks")
+        d.pillar(x, z, G + 2, G + 7, "minecraft:chiseled_nether_bricks")
+        for (dx, dz, f) in ((0, -1, "north"), (0, 1, "south"), (-1, 0, "west"), (1, 0, "east")):
+            d.stair(x + dx, G + 2, z + dz, "magma_brick_stairs", {"north": "south", "south": "north", "west": "east", "east": "west"}[f])
+        d.set(x, G + 8, z, "minecraft:netherrack")
+        d.set(x, G + 9, z, "minecraft:fire", age="0", east="false", north="false", south="false", up="false", west="false")
+    # Interieur : tapis rituel et braseros de la nef
+    d.box(c - 1, G + 1, 20, c + 1, G + 1, tz1 - 1, "minecraft:red_carpet")
+    for (x, z) in ((nx0 + 3, nz0 + 3), (nx1 - 3, nz0 + 3), (nx0 + 3, nz1 - 3), (nx1 - 3, nz1 - 3)):
+        d.set(x, 2, z, "minecraft:campfire", lit="true", facing="north", signal_fire="false", waterlogged="false")
 
 
 # ------------------------------------------------------------------------------------------------
@@ -505,7 +676,7 @@ def withered_catacombs():
     S = 39
     G = CATACOMB_SINK  # y du sol du Nether dans le gabarit
     U = 9              # sol de la crypte superieure
-    d = Dungeon(S, G + 10, S, "withered_catacombs")
+    d = Dungeon(S, G + 13, S, "withered_catacombs")
     # Roche massive : rien ne doit communiquer avec les grottes alentour
     d.box(0, 0, 0, S - 1, G - 1, S - 1, CRYPT_WALL)
 
@@ -625,7 +796,89 @@ def withered_catacombs():
     d.lantern(36, G + 1, mz1 - 1)
     d.set(36, G + 1, 31, "soul_lily")
     d.set(27, G + 1, 31, "soul_lily")
+    decorate_catacombs(d, S, G, U, mx0, mx1, mz0, mz1)
     d.save("withered_catacombs")
+
+
+GRAVE_GROUND = [("minecraft:soul_soil", 40), ("minecraft:netherrack", 25), ("minecraft:blackstone", 20), ("withered_soil", 15)]
+
+
+def dead_tree(d, x, y, z, height):
+    for k in range(height):
+        d.set(x, y + k, z, "withered_stem", axis="y")
+    for (dx, dz, axis) in ((1, 0, "x"), (-1, 0, "x"), (0, 1, "z"), (0, -1, "z")):
+        if d.rng.random() < 0.7:
+            by = y + height - 1 - d.rng.randint(0, 2)
+            for k in (1, 2):
+                d.set(x + dx * k, by + (k - 1), z + dz * k, "withered_stem", axis=axis)
+
+
+def decorate_catacombs(d, S, G, U, mx0, mx1, mz0, mz1):
+    """Surface : cimetiere clos (tombes, arbres morts, lanternes, bougies) autour d'un mausolee a toit a deux pans.
+    Sous terre : bougies sur les sarcophages et dans les cryptes."""
+    # Sol du cimetiere (couche superieure du bloc de roche)
+    for x in range(S):
+        for z in range(S):
+            if not (mx0 <= x <= mx1 and mz0 <= z <= mz1):
+                d.set(x, G - 1, z, d.pick(GRAVE_GROUND))
+    # Muret d'enceinte a piliers et lanternes, portail au sud-ouest
+    for k in range(S):
+        for (x, z) in ((k, 0), (0, k), (S - 1, k), (k, S - 1)):
+            if mx0 <= x <= mx1 and mz0 <= z <= mz1:
+                continue
+            if z == S - 1 and 6 <= x <= 10:
+                continue
+            d.set(x, G, z, "minecraft:polished_blackstone_brick_wall", up="true")
+            if k % 6 == 0:
+                d.pillar(x, z, G, G + 1, "minecraft:polished_blackstone_bricks")
+                d.lantern(x, G + 2, z)
+    for x in (5, 11):
+        d.pillar(x, S - 1, G, G + 2, "minecraft:polished_blackstone_bricks")
+        d.set(x, G + 3, S - 1, "minecraft:soul_campfire", lit="true", facing="south", signal_fire="false", waterlogged="false")
+    # Allee vers le mausolee
+    for x in range(8, mx0):
+        d.set(x, G - 1, 34, "minecraft:polished_blackstone_bricks")
+    for z in range(34, S - 1):
+        d.set(8, G - 1, z, "minecraft:polished_blackstone_bricks")
+    # Tombes : stele, dalle et parfois une bougie
+    for gx in range(3, 24, 4):
+        for gz in range(4, 29, 5):
+            if d.rng.random() < 0.2:
+                continue
+            d.set(gx, G, gz, "minecraft:polished_blackstone_brick_wall", up="true")
+            if d.rng.random() < 0.5:
+                d.skull(gx, G + 1, gz)
+            d.set(gx, G, gz + 1, "minecraft:polished_blackstone_slab", type="bottom", waterlogged="false")
+            d.set(gx, G, gz + 2, "minecraft:polished_blackstone_slab", type="bottom", waterlogged="false")
+            if d.rng.random() < 0.4:
+                d.set(gx, G - 1, gz + 2, "minecraft:soul_soil")
+                d.set(gx + 1, G, gz + 1, "soul_lily")
+            elif d.rng.random() < 0.5:
+                d.candle(gx, G + 1, gz + 1)
+    for (x, z, h) in ((27, 6, 5), (32, 16, 6), (16, 30, 4), (34, 25, 5)):
+        dead_tree(d, x, G, z, h)
+    # Mausolee : toit a deux pans en escaliers fletris, pignons, portique
+    for k in range(5):
+        y = G + 7 + k
+        for x in range(mx0 - 1, mx1 + 2):
+            if 0 <= x < S:
+                d.stair(x, y, mz0 + k, "withered_stairs", "south")
+                if mz1 - k != mz0 + k:
+                    d.stair(x, y, mz1 - k, "withered_stairs", "north")
+        for x in (mx0, mx1):
+            d.box(x, y, mz0 + k + 1, x, y, mz1 - k - 1, "withered_planks")
+    for x in range(mx0 - 1, mx1 + 2):
+        if 0 <= x < S:
+            d.set(x, G + 12, (mz0 + mz1) // 2, "withered_slab", type="bottom", waterlogged="false")
+    for z in range(mz0 + 2, mz1 - 1, 3):
+        for x in (mx0, mx1):
+            d.set(x, G + 3, z, "minecraft:iron_bars", north="true", south="true", east="false", west="false", waterlogged="false")
+            d.set(x, G + 4, z, "minecraft:iron_bars", north="true", south="true", east="false", west="false", waterlogged="false")
+    # Sous terre : bougies sur les sarcophages du tombeau et dans les cryptes
+    for (x, z) in ((16, 21), (17, 21), (22, 21), (23, 21)):
+        d.candle(x, 3, z)
+    for (x, z) in ((2, 22), (36, 22), (16, 4), (2, 36)):
+        d.candle(x, U + 1, z)
 
 
 # ------------------------------------------------------------------------------------------------

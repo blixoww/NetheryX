@@ -1,7 +1,6 @@
 package com.netheryx.entity;
 
 import com.netheryx.registry.ModEntities;
-import com.netheryx.registry.ModItems;
 import com.netheryx.registry.ModParticles;
 import com.netheryx.util.MobParticles;
 import com.netheryx.util.ModTags;

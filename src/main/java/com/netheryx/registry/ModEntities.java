@@ -90,7 +90,7 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<BasaltGolem>> BASALT_GOLEM = register("basalt_golem",
             EntityType.Builder.of(BasaltGolem::new, MobCategory.MONSTER).sized(1.5F, 2.7F).fireImmune().clientTrackingRange(10));
     public static final RegistryObject<EntityType<AshWyvern>> ASH_WYVERN = register("ash_wyvern",
-            EntityType.Builder.of(AshWyvern::new, MobCategory.CREATURE).sized(1.8F, 1.6F).fireImmune().clientTrackingRange(10));
+            EntityType.Builder.of(AshWyvern::new, MobCategory.CREATURE).sized(2.4F, 1.9F).fireImmune().clientTrackingRange(10));
     public static final RegistryObject<EntityType<Firefly>> EMBER_FIREFLY = register("ember_firefly",
             EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.3F, 0.3F).fireImmune().clientTrackingRange(6));
     public static final RegistryObject<EntityType<Firefly>> SOUL_FIREFLY = register("soul_firefly",

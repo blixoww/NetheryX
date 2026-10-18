@@ -8,12 +8,14 @@ from .pixels import hexc, mix, rng, shade, value_noise
 
 
 class Cube:
-    def __init__(self, origin, size, material, detail=None, inflate=0.0):
+    def __init__(self, origin, size, material, detail=None, inflate=0.0, rotation=None, pivot=None):
         self.origin = origin
         self.size = size
         self.material = material
         self.detail = detail
         self.inflate = inflate
+        self.rotation = rotation
+        self.pivot = pivot
         self.uv = (0, 0)
 
     @property
@@ -71,6 +73,9 @@ class Model:
                     cube = {"origin": c.origin, "size": c.size, "uv": list(c.uv)}
                     if c.inflate:
                         cube["inflate"] = c.inflate
+                    if c.rotation:
+                        cube["rotation"] = c.rotation
+                        cube["pivot"] = c.pivot or c.origin
                     cubes.append(cube)
                 data["cubes"] = cubes
             bones.append(data)
@@ -1125,54 +1130,8 @@ def basalt_golem():
 
 
 def ash_wyvern():
-    m = Model("ash_wyvern", 128, 128, (3, 3))
-    m.bone("root", [0, 0, 0])
-    m.bone("body", [0, 12, 0], "root", cubes=[
-        Cube([-5, 9, -8], [10, 9, 18], "scales"),
-        Cube([-4, 8.5, -6], [8, 1, 14], "belly"),
-        Cube([-0.5, 18, -6], [1, 2, 2], "spine"), Cube([-0.5, 18, -1], [1, 2, 2], "spine"), Cube([-0.5, 18, 4], [1, 2, 2], "spine"),
-    ])
-    m.bone("neck", [0, 15, -8], "body", rotation=[-25, 0, 0], cubes=[Cube([-2.5, 13, -15], [5, 5, 8], "scales")])
-    m.bone("head", [0, 17, -15], "neck", cubes=[
-        Cube([-3.5, 14, -22], [7, 6, 7], "scales", detail=eyes("#ff9a2a", y_frac=0.25, spacing=0.34)),
-        Cube([-2.5, 13, -26], [5, 3, 4], "belly"),
-        Cube([-3, 20, -19], [1, 2, 5], "horn"), Cube([2, 20, -19], [1, 2, 5], "horn"),
-    ])
-    for side, sx in (("left", 1), ("right", -1)):
-        x_inner = 5 if sx > 0 else -21
-        m.bone(f"wing_{side}", [5 * sx, 17, -4], "body", cubes=[
-            Cube([x_inner, 16, -6], [16, 1.5, 3], "scales"),
-            Cube([x_inner, 16.5, -3], [16, 0.5, 13], "membrane"),
-        ])
-        m.bone(f"leg_{side}", [3 * sx, 10, 4], "body", cubes=[Cube([3 * sx - 1.5, 0, 2.5], [3, 10, 3], "scales")])
-    m.bone("tail", [0, 13, 10], "body", cubes=[Cube([-2, 11, 10], [4, 4, 10], "scales")])
-    m.bone("tail_tip", [0, 13, 20], "tail", cubes=[Cube([-1, 12, 20], [2, 2, 9], "scales"), Cube([-3, 12.5, 27], [6, 1, 4], "membrane")])
-    save_model(m, {
-        "scales": {"colors": ["#2a2828", "#363434", "#44403e", "#524e4a", "#605a56"], "pattern": "scales",
-                   "speckle": ("#ff7a2a", 0.04), "speckle_glow": True},
-        "belly": {"colors": ["#8a8078", "#a09488", "#b4a898"], "pattern": "stripes"},
-        "membrane": {"colors": ["#5a3a30", "#6e4638", "#82523e"], "pattern": "plates", "trim": "#2a1a14"},
-        "spine": {"colors": ["#ff6a1a", "#ffa040"], "glow": True},
-        "horn": {"colors": ["#d8ccb4", "#ece2cc"]},
-    })
-    flap = {
-        "wing_left": {"rotation": wave(0.9, 40, axis=2, offset=-5)},
-        "wing_right": {"rotation": wave(0.9, 40, math.pi, axis=2, offset=5)},
-        "body": {"position": wave(0.9, 0.6, math.pi / 2, axis=1)},
-        "tail": {"rotation": wave(0.9, 6, 0.5, axis=0)},
-        "leg_left": {"rotation": keys((0, [60, 0, 0]))}, "leg_right": {"rotation": keys((0, [60, 0, 0]))},
-    }
-    folded = {"wing_left": {"rotation": keys((0, [0, -20, 60]))}, "wing_right": {"rotation": keys((0, [0, 20, -60]))}}
-    walk = dict(folded)
-    walk.update({"leg_left": {"rotation": wave(1.0, 30)}, "leg_right": {"rotation": wave(1.0, 30, math.pi)},
-                 "tail": {"rotation": wave(1.0, 10, axis=1)}, "neck": {"rotation": wave(1.0, 4, axis=0, base=[-25, 0, 0])}})
-    idle = dict(folded)
-    idle.update({"tail": {"rotation": wave(3.0, 8, axis=1)}, "tail_tip": {"rotation": wave(3.0, 12, 0.8, axis=1)},
-                 "neck": {"rotation": wave(3.0, 5, axis=0, base=[-25, 0, 0])}})
-    sit = dict(folded)
-    sit.update({"body": {"position": keys((0, [0, -5, 0]))}, "leg_left": {"rotation": keys((0, [-80, 0, 0]))},
-                "leg_right": {"rotation": keys((0, [-80, 0, 0]))}, "neck": {"rotation": keys((0, [-5, 0, 0]))}})
-    save_animations("ash_wyvern", {"idle": anim(3.0, idle), "walk": anim(1.0, walk), "fly": anim(0.9, flap), "sit": anim(1.0, sit)})
+    from . import wyvern
+    wyvern.generate()
 
 
 def firefly(name, body, glow_colors, eye):

@@ -57,13 +57,19 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
   - Citadelle d'onyx : donjon central à trois étages (grand hall, armurerie et bibliothèque, arène de la Sentinelle sous le toit).
   - Sanctuaire infernal : temple en surface et grand escalier vers une nef souterraine où attend le Sorcier.
   - Catacombes flétries : crypte supérieure (galerie, cryptes, chapelle) et crypte profonde (ossuaires, tombeau du Champion).
+- **Façades des donjons** : tours et corps de garde à toits pointus, herse, tourelles et flèche du donjon, pilastres,
+  corniches et vitraux de quartz (Citadelle) ; portique à colonnes, obélisques ardents, flamme sommitale et braseros
+  (Sanctuaire) ; cimetière clos avec tombes, arbres morts, lanternes et bougies autour d'un mausolée à toit à deux pans
+  (Catacombes).
 - **Coffres-forts scellés** : le trésor de chaque donjon est dans un petit coffre-fort dont les six faces sont en
   maçonnerie scellée (indestructible, insensible aux explosions), fermé par une porte de Sceaux du gardien qui ne s'ouvre
   qu'à la mort du boss. Vérifié automatiquement : aucun accès possible avant.
 - **6 nouvelles créatures** (GeckoLib) :
   - **Golem de basalte** (mini-boss, 160 PV, barre de boss) : frappe au sol annoncée, salves d'éclats de magma,
     résiste aux projectiles, cœur en fusion sous 50 % (Failles de magma, deltas de basalte, Lac de verre en fusion).
-  - **Wyverne de cendre** : monture volante qui éclot de l'œuf lâché par le Cœur du Nether ; on la dirige du regard,
+  - **Wyverne de cendre** : grand modèle articulé (près de 6 blocs d'envergure, ailes en trois segments avec membranes
+    repliables, cou, mâchoire et queue articulés) et animations de battement d'ailes, vol plané, marche, repos et
+    rugissement ; monture volante qui éclot de l'œuf lâché par le Cœur du Nether ; on la dirige du regard,
     elle obéit à son propriétaire (attendre / suivre), chute lente si l'on descend en vol.
   - **Lucioles de braise** et **lucioles des âmes** : essaims lumineux ; une fiole les capture dans un **bocal** qui
     éclaire comme une lanterne.

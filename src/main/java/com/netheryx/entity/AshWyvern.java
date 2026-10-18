@@ -57,6 +57,8 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     private static final RawAnimation WALK = NetheryXAnimations.loop(NAME, "walk");
     private static final RawAnimation FLY = NetheryXAnimations.loop(NAME, "fly");
     private static final RawAnimation SIT = NetheryXAnimations.loop(NAME, "sit");
+    private static final RawAnimation GLIDE = NetheryXAnimations.loop(NAME, "glide");
+    private static final RawAnimation ROAR = NetheryXAnimations.once(NAME, "roar");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
 
@@ -135,6 +137,8 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
             if (!this.level().isClientSide) {
                 this.setOrderedToSit(false);
                 player.startRiding(this);
+                this.triggerAnim("action", "roar");
+                this.playSound(SoundEvents.ENDER_DRAGON_GROWL, 0.5F, 1.4F);
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
@@ -223,7 +227,7 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
 
     @Override
     public double getPassengersRidingOffset() {
-        return this.getBbHeight() * 0.8D;
+        return 1.45D; // selle posee sur le dos du grand modele
     }
 
     @Override
@@ -288,7 +292,8 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "movement", 4, this::movementPredicate));
+        controllers.add(new AnimationController<>(this, "movement", 5, this::movementPredicate));
+        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("roar", ROAR));
     }
 
     private PlayState movementPredicate(AnimationState<AshWyvern> state) {
@@ -296,7 +301,10 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
             return state.setAndContinue(SIT);
         }
         if (!this.onGround()) {
-            return state.setAndContinue(FLY);
+            // Plane en descente, bat des ailes pour monter ou se maintenir
+            Vec3 motion = this.getDeltaMovement();
+            boolean gliding = motion.y < -0.04D && motion.horizontalDistanceSqr() > 0.01D;
+            return state.setAndContinue(gliding ? GLIDE : FLY);
         }
         return state.setAndContinue(state.isMoving() ? WALK : IDLE);
     }
