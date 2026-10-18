@@ -31,6 +31,8 @@ import org.jetbrains.annotations.Nullable;
  * renforts a 66 % et 33 % de vie. Sa mort brise les sceaux de la salle au tresor.
  */
 public class WitheredChampion extends WitheredKnight {
+    /** Le boss reste cloisonne dans son arene (rayon 7 blocs autour de son point d\'apparition). */
+    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(7.0D, 5.0D);
     private static final String TAG_WAVES = "SummonWaves";
 
     private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(this.getDisplayName(),
@@ -74,6 +76,7 @@ public class WitheredChampion extends WitheredKnight {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
+        this.arena.tick(this);
         float ratio = this.getHealth() / this.getMaxHealth();
         this.tickSoulDash();
         this.tickSweep();
@@ -251,12 +254,14 @@ public class WitheredChampion extends WitheredKnight {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        this.arena.save(tag);
         tag.putInt(TAG_WAVES, this.summonWaves);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.arena.load(tag);
         this.summonWaves = tag.getInt(TAG_WAVES);
         if (this.hasCustomName()) {
             this.bossEvent.setName(this.getDisplayName());

@@ -7,9 +7,14 @@
     {
       "type": "patchouli:entity",
       "entity": "netheryx:ash_wyvern",
-      "scale": 0.45,
+      "scale": 0.3,
       "offset": 0.0,
-      "text": "Hatches from the $(item)Ash Wyvern Egg$() dropped by the Heart of the Nether, and belongs to you.$(li)Right-click: ride.$(li)Sneak + right-click: sit / follow.$(li)Meat heals it."
+      "text": "Where to find one: $(l)Wyvern Nests$() (rock spires topped with a bone nest, in Ashen Wastes, Basalt Deltas, Molten Glass Lakes, Sulfur Springs and the Hellwood Jungle) hold an $(item)egg$() and a wild wyvern; wild ones also roam these biomes. Tame a wild wyvern with $(item)meat$(), or hatch the egg: it is yours."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)Right-click: ride it. $(li)Sneak + right-click: sit / follow. $(li)Meat heals it.$(br2)$(l)In combat$(), it takes off on its own, circles your enemy, breathes fire (it sets creatures ablaze, never blocks) and dives to bite. While you ride it, it breathes fire on what you attack.",
+      "title": "Compagnon"
     },
     {
       "type": "patchouli:text",

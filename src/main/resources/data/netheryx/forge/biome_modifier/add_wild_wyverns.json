@@ -1,0 +1,16 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": [
+    "netheryx:ashen_wastes",
+    "netheryx:molten_glass_lake",
+    "minecraft:basalt_deltas"
+  ],
+  "spawners": [
+    {
+      "type": "netheryx:ash_wyvern",
+      "weight": 2,
+      "minCount": 1,
+      "maxCount": 1
+    }
+  ]
+}

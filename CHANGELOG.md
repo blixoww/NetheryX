@@ -61,6 +61,13 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
   corniches et vitraux de quartz (Citadelle) ; portique à colonnes, obélisques ardents, flamme sommitale et braseros
   (Sanctuaire) ; cimetière clos avec tombes, arbres morts, lanternes et bougies autour d'un mausolée à toit à deux pans
   (Catacombes).
+- **Boss cloisonnés dans leur arène** (Sentinelle, Sorcier, Champion et Cœur du Nether) : ils y retournent s'ils en
+  sortent, y sont ramenés s'ils s'en éloignent trop, abandonnent une cible qui fuit et se soignent hors combat.
+- **Nids de wyverne** : pitons rocheux coiffés d'un nid d'os, avec un œuf garanti et une wyverne sauvage qui le garde
+  (repérables avec la Boussole des âmes) ; des wyvernes sauvages errent aussi dans les Terres cendrées, les deltas de
+  basalte et le Lac de verre en fusion, et s'apprivoisent avec de la viande.
+- **Wyverne alliée en combat** : elle s'envole seule, tourne autour de l'ennemi, crache du feu (créatures enflammées,
+  aucun bloc touché) et pique pour mordre ; montée, elle crache du feu sur ce que le cavalier attaque.
 - **Coffres-forts scellés** : le trésor de chaque donjon est dans un petit coffre-fort dont les six faces sont en
   maçonnerie scellée (indestructible, insensible aux explosions), fermé par une porte de Sceaux du gardien qui ne s'ouvre
   qu'à la mort du boss. Vérifié automatiquement : aucun accès possible avant.
@@ -116,6 +123,8 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - Onglet créatif : tous les objets et blocs (boussole du créateur comprise), armure de carapace regroupée.
 
 ### Corrigé
+- Escaliers du Sanctuaire infernal et des Catacombes : la première marche part du niveau du sol (plus de marche décalée).
+- Wyverne : la tête ne se lève plus au sol (les animations du cou s'ajoutaient deux fois à la pose du modèle).
 - Collision du cube d'onyx (boîte de collision alignée sur le modèle).
 - Les passagers du bateau d'obsidienne ne brûlent plus sur la lave.
 - Animations des boss avec courbes d'accélération (GeckoLib).

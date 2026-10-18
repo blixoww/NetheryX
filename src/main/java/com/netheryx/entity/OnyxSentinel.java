@@ -69,6 +69,8 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     private static final float SLAM_DAMAGE = 10.0F;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    /** Le boss reste cloisonne dans son arene (rayon 11 blocs autour de son point d'apparition). */
+    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(11.0D, 10.0D);
     private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(this.getDisplayName(),
             BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_10).setDarkenScreen(true);
     private int slamCooldown = 60;
@@ -171,6 +173,7 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
+        this.arena.tick(this);
         if (this.slamCooldown > 0) {
             this.slamCooldown--;
         }
@@ -365,6 +368,7 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        this.arena.save(tag);
         tag.putBoolean(TAG_ENRAGED, this.enraged);
         tag.putBoolean("LastStand", this.lastStand);
     }
@@ -372,6 +376,7 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.arena.load(tag);
         this.enraged = tag.getBoolean(TAG_ENRAGED);
         this.lastStand = tag.getBoolean("LastStand");
         if (this.hasCustomName()) {

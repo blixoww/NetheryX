@@ -64,6 +64,8 @@ public class NetherHeart extends Monster implements GeoEntity {
     public static final int AWAKEN_TICKS = 120;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    /** Le boss reste cloisonne dans son arene (rayon 28 blocs autour de son point d'apparition). */
+    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(28.0D, 26.0D, 18.0D);
     private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(this.getDisplayName(),
             BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_12).setDarkenScreen(true).setCreateWorldFog(true);
     private final List<UUID> guards = new ArrayList<>();
@@ -149,6 +151,7 @@ public class NetherHeart extends Monster implements GeoEntity {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
+        this.arena.tick(this);
         float ratio = this.getHealth() / this.getMaxHealth();
         this.bossEvent.setProgress(ratio);
         int awaken = this.getAwakenTicks();
@@ -390,6 +393,7 @@ public class NetherHeart extends Monster implements GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        this.arena.save(tag);
         tag.putInt("GuardWaves", this.guardWaves);
         tag.putInt("Awaken", this.getAwakenTicks());
     }
@@ -397,6 +401,7 @@ public class NetherHeart extends Monster implements GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.arena.load(tag);
         this.guardWaves = tag.getInt("GuardWaves");
         this.entityData.set(AWAKEN, tag.getInt("Awaken"));
         if (this.hasCustomName()) {

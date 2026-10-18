@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "netheryx:wyvern_nest",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 16,
+    "separation": 6,
+    "salt": 418273650,
+    "exclusion_zone": {
+      "other_set": "minecraft:nether_complexes",
+      "chunk_count": 2
+    }
+  }
+}

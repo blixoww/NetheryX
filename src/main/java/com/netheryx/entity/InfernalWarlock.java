@@ -63,6 +63,8 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
     private static final String TAG_SUMMONED = "HasSummoned";
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    /** Le boss reste cloisonne dans son arene (rayon 13 blocs autour de son point d'apparition). */
+    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(13.0D, 7.0D);
     private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(this.getDisplayName(),
             BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.PROGRESS).setCreateWorldFog(true);
     private boolean hasSummoned;
@@ -234,6 +236,7 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
+        this.arena.tick(this);
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
         LivingEntity target = this.getTarget();
         if (--this.novaCooldown <= 0 && target != null && this.distanceToSqr(target) < 20.0D) {
@@ -272,6 +275,7 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        this.arena.save(tag);
         tag.putBoolean(TAG_SUMMONED, this.hasSummoned);
         tag.putInt("SummonWaves", this.summonWaves);
     }
@@ -279,6 +283,7 @@ public class InfernalWarlock extends Monster implements RangedAttackMob, GeoEnti
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        this.arena.load(tag);
         this.hasSummoned = tag.getBoolean(TAG_SUMMONED);
         this.summonWaves = tag.contains("SummonWaves") ? tag.getInt("SummonWaves") : (this.hasSummoned ? 1 : 0);
         if (this.hasCustomName()) {

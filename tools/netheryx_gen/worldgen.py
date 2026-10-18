@@ -495,6 +495,10 @@ def generate_biome_modifiers():
                                       "spawners": [spawner("blaze_pig", 35, 2, 5)]})
     biome_modifier("add_crystal_snails", {"type": "forge:add_spawns", "biomes": [mid("onyx_depths")],
                                           "spawners": [spawner("crystal_snail", 25, 2, 4)]})
+    # Wyvernes sauvages : rares, neutres, apprivoisables avec de la viande
+    biome_modifier("add_wild_wyverns", {"type": "forge:add_spawns", "biomes": [mid("ashen_wastes"), mid("molten_glass_lake"),
+                                                                               "minecraft:basalt_deltas"],
+                                        "spawners": [spawner("ash_wyvern", 2, 1, 1)]})
     biome_modifier("add_basalt_golems", {"type": "forge:add_spawns", "biomes": [mid("magma_rift"), "minecraft:basalt_deltas"],
                                          "spawners": [spawner("basalt_golem", 6, 1, 1)]})
     biome_modifier("add_v120_lizards", {"type": "forge:add_spawns", "biomes": [mid(b) for b in ("magma_rift", "ember_meadow")],
@@ -511,6 +515,7 @@ STRUCTURES = {
     "nether_garden": (10, 4, 192837465, 6, 33, 0, 14, "beard_thin"),
     "hidden_cache": (5, 2, 556172839, 4, 40, 7, 6, "none"),
     "nomad_caravan": (14, 5, 902817364, 6, 33, 0, 20, "beard_thin"),
+    "wyvern_nest": (16, 6, 418273650, 18, 33, 1, 12, "beard_thin"),
 }
 
 PROCESSORS = {

@@ -302,9 +302,10 @@ DUNGEON_INTRO = text(
 entry("structures", "How Dungeons Work", "Fonctionnement des donjons", "netheryx:guardian_seal", [
     DUNGEON_INTRO,
     spot("guardian_seal", "Unbreakable. Breaks by itself when the dungeon boss is defeated; the vault's masonry then turns back into "
-                          "ordinary bricks.",
+                          "ordinary bricks. Bosses never leave their arena: if you flee, they go back and slowly heal.",
          "Indestructible. Se brise tout seul quand le boss du donjon est vaincu ; la maçonnerie du coffre-fort redevient alors de la "
-         "brique ordinaire.", link=False),
+         "brique ordinaire. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.",
+         link=False),
 ], priority=True)
 
 STRUCTURES = [
@@ -813,10 +814,19 @@ entry("creatures", "Basalt Golem (mini-boss)", "Golem de basalte (mini-boss)", "
         "entre en fusion : plus rapide, il enflamme ceux qui le frappent.", 0.4),
 ])
 entry("creatures", "Ash Wyvern (mount)", "Wyverne de cendre (monture)", "netheryx:ash_wyvern_egg", [
-    mob("ash_wyvern", "Hatches from the $(item)Ash Wyvern Egg$() dropped by the Heart of the Nether, and belongs to you.$(li)Right-click: ride."
-                      "$(li)Sneak + right-click: sit / follow.$(li)Meat heals it.",
-        "Éclot de l'$(item)Œuf de wyverne de cendre$() lâché par le Cœur du Nether, et vous appartient.$(li)Clic droit : la monter."
-        "$(li)Accroupi + clic droit : attendre / suivre.$(li)La viande la soigne.", 0.45),
+    mob("ash_wyvern", "Where to find one: $(l)Wyvern Nests$() (rock spires topped with a bone nest, in Ashen Wastes, Basalt Deltas, "
+                      "Molten Glass Lakes, Sulfur Springs and the Hellwood Jungle) hold an $(item)egg$() and a wild wyvern; wild ones "
+                      "also roam these biomes. Tame a wild wyvern with $(item)meat$(), or hatch the egg: it is yours.",
+        "Où la trouver : les $(l)Nids de wyverne$() (pitons rocheux coiffés d'un nid d'os, dans les Terres cendrées, les deltas "
+        "de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) contiennent un $(item)œuf$() "
+        "et une wyverne sauvage ; d'autres errent dans ces biomes. Apprivoisez une wyverne sauvage avec de la $(item)viande$(), "
+        "ou faites éclore l'œuf : elle vous appartient.", 0.3),
+    text("$(li)Right-click: ride it. $(li)Sneak + right-click: sit / follow. $(li)Meat heals it.$(br2)$(l)In combat$(), it takes "
+         "off on its own, circles your enemy, breathes fire (it sets creatures ablaze, never blocks) and dives to bite. While "
+         "you ride it, it breathes fire on what you attack.",
+         "$(li)Clic droit : la monter. $(li)Accroupi + clic droit : attendre / suivre. $(li)La viande la soigne.$(br2)$(l)En "
+         "combat$(), elle s'envole seule, tourne autour de votre ennemi, crache du feu (qui enflamme les créatures, jamais les "
+         "blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que vous attaquez.", "Compagnon"),
     text("$(l)Flying$(): move forward while looking up to take off, look down to dive, release to glide slowly. If you dismount in "
          "the air, you get a few seconds of $(l)Slow Falling$().",
          "$(l)Voler$() : avancez en regardant vers le haut pour décoller, vers le bas pour piquer, relâchez pour planer doucement. "

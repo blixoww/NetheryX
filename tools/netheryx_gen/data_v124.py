@@ -35,6 +35,21 @@ def generate_loot():
     entity_table("ash_wyvern", [{"rolls": 1, "entries": [item("minecraft:phantom_membrane", functions=[count(1, 3)])]}])
 
 
+def generate_nest_loot():
+    from .data import chest_table
+    chest_table("wyvern_nest", [
+        {"rolls": 1, "entries": [item("ash_wyvern_egg")]},
+        {"rolls": {"type": "minecraft:uniform", "min": 2, "max": 4}, "entries": [
+            item("minecraft:bone", weight=20, functions=[count(2, 6)]),
+            item("minecraft:gold_nugget", weight=15, functions=[count(3, 9)]),
+            item("cooked_blaze_pork", weight=10, functions=[count(1, 3)]),
+            item("onyx_shard", weight=8, functions=[count(1, 3)]),
+            item("magma_shell", weight=6),
+            item("minecraft:phantom_membrane", weight=6, functions=[count(1, 2)]),
+            item("minecraft:gold_ingot", weight=4, functions=[count(1, 2)])]},
+    ])
+
+
 def generate_recipes():
     food_cooking("cooked_blaze_pork", "blaze_pork", "cooked_blaze_pork")
     shaped("nether_lantern", [" O ", "MLM", " M "], {"O": "onyx", "M": "molten_shard", "L": "minecraft:soul_lantern"},
@@ -74,6 +89,9 @@ def generate_tags():
     tag("worldgen/biome", MOD_ID, "has_structure/onyx_citadel", m(["petrified_onyx_forest"]))
     tag("worldgen/biome", MOD_ID, "has_structure/infernal_sanctum", m(["molten_glass_lake"]))
     tag("worldgen/biome", mc, "has_structure/nether_fossil", m(["petrified_onyx_forest"]))
+    tag("worldgen/biome", MOD_ID, "has_structure/wyvern_nest", m(["ashen_wastes", "molten_glass_lake", "sulfur_springs",
+                                                                  "hellwood_jungle"]) + ["minecraft:basalt_deltas"])
+    tag("worldgen/structure", MOD_ID, "soul_compass_targets", m(["wyvern_nest"]))
 
 
 def generate_advancements():
@@ -95,6 +113,7 @@ def generate_advancements():
 
 def generate():
     generate_loot()
+    generate_nest_loot()
     generate_recipes()
     generate_tags()
     generate_advancements()

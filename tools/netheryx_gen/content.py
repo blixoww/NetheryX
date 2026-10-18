@@ -621,6 +621,7 @@ EXTRA_LANG = {
     "commands.netheryx.event.started": ("Event started: %s", "Événement lancé : %s"),
     "commands.netheryx.event.stopped": ("Event stopped", "Événement arrêté"),
     "structure.netheryx.nomad_caravan": ("Nomad Caravan (NetheryX)", "Caravane nomade (NetheryX)"),
+    "structure.netheryx.wyvern_nest": ("Wyvern Nest (NetheryX)", "Nid de wyverne (NetheryX)"),
     "advancements.netheryx.lava_trap.title": ("Gone Fishing", "Partie de pêche"),
     "advancements.netheryx.lava_trap.description": ("Catch a Magmafish", "Attraper un poisson de magme"),
     "advancements.netheryx.rime_ice.title": ("Water in Hell", "De l'eau en enfer"),

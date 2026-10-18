@@ -7,9 +7,14 @@
     {
       "type": "patchouli:entity",
       "entity": "netheryx:ash_wyvern",
-      "scale": 0.45,
+      "scale": 0.3,
       "offset": 0.0,
-      "text": "Éclot de l'$(item)Œuf de wyverne de cendre$() lâché par le Cœur du Nether, et vous appartient.$(li)Clic droit : la monter.$(li)Accroupi + clic droit : attendre / suivre.$(li)La viande la soigne."
+      "text": "Où la trouver : les $(l)Nids de wyverne$() (pitons rocheux coiffés d'un nid d'os, dans les Terres cendrées, les deltas de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) contiennent un $(item)œuf$() et une wyverne sauvage ; d'autres errent dans ces biomes. Apprivoisez une wyverne sauvage avec de la $(item)viande$(), ou faites éclore l'œuf : elle vous appartient."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(li)Clic droit : la monter. $(li)Accroupi + clic droit : attendre / suivre. $(li)La viande la soigne.$(br2)$(l)En combat$(), elle s'envole seule, tourne autour de votre ennemi, crache du feu (qui enflamme les créatures, jamais les blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que vous attaquez.",
+      "title": "Compagnon"
     },
     {
       "type": "patchouli:text",

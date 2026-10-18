@@ -12,7 +12,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:guardian_seal",
-      "text": "Indestructible. Se brise tout seul quand le boss du donjon est vaincu ; la maçonnerie du coffre-fort redevient alors de la brique ordinaire.",
+      "text": "Indestructible. Se brise tout seul quand le boss du donjon est vaincu ; la maçonnerie du coffre-fort redevient alors de la brique ordinaire. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.",
       "link_recipe": false
     }
   ],

@@ -1,7 +1,8 @@
 """Wyverne de cendre (monture) : grand modele GeckoLib articule et animations d'ailes a plusieurs segments.
 
 Conventions (format Bedrock / GeckoLib) : +x = cote gauche de la creature, -z = avant, y = haut, unites en pixels.
-Rotations des os en degres. Pour une aile gauche, z negatif la leve et y negatif la replie vers l'arriere ;
+Rotations des os en degres. Les animations GeckoLib s'ajoutent a la pose du modele : leurs valeurs sont des
+ecarts par rapport a cette pose (le cou est deja leve de 28 degres au repos). Pour une aile gauche, z negatif la leve et y negatif la replie vers l'arriere ;
 l'aile droite utilise les signes opposes (symetrie).
 """
 import math
@@ -158,8 +159,8 @@ FOLDED = wing_pose([0, -80, -20], [0, 170, -10], [0, -170, 0], membrane=0.12)
 
 
 def generate_animations():
-    neck_idle = {"neck1": {"rotation": frames(4.0, 8, lambda p: [-28 + 4 * math.sin(2 * math.pi * p), 0, 0])},
-                 "head": {"rotation": frames(4.0, 8, lambda p: [12, 14 * math.sin(2 * math.pi * p * 2), 0])},
+    neck_idle = {"neck1": {"rotation": frames(4.0, 8, lambda p: [6 + 3 * math.sin(2 * math.pi * p), 0, 0])},
+                 "head": {"rotation": frames(4.0, 8, lambda p: [4, 14 * math.sin(2 * math.pi * p * 2), 0])},
                  "body": {"scale": frames(4.0, 8, lambda p: [1, 1 + 0.025 * math.sin(2 * math.pi * p * 2), 1])}}
     idle = dict(FOLDED)
     idle.update(tail_wave(4.0, 6))
@@ -169,13 +170,14 @@ def generate_animations():
     walk.update(legs_walk(1.2, 32))
     walk.update(tail_wave(1.2, 8))
     walk["body"] = {"position": frames(1.2, 12, lambda p: [0, 0.5 * abs(math.sin(2 * math.pi * p)), 0])}
-    walk["neck1"] = {"rotation": frames(1.2, 12, lambda p: [-28 + 5 * math.sin(4 * math.pi * p), 0, 0])}
+    walk["neck1"] = {"rotation": frames(1.2, 12, lambda p: [10 + 4 * math.sin(4 * math.pi * p), 0, 0])}
+    walk["head"] = {"rotation": keys((0, [4, 0, 0]))}
 
     fly = flap_wings(1.1, 38, sweep=4)
     fly.update(tail_wave(1.1, 6, axis=0))
     fly["body"] = {"position": frames(1.1, 16, lambda p: [0, 1.8 * math.cos(2 * math.pi * p), 0]),
                    "rotation": frames(1.1, 16, lambda p: [2 * math.sin(2 * math.pi * p), 0, 0])}
-    fly["neck1"] = {"rotation": frames(1.1, 16, lambda p: [-12 - 4 * math.cos(2 * math.pi * p), 0, 0])}
+    fly["neck1"] = {"rotation": frames(1.1, 16, lambda p: [18 - 4 * math.cos(2 * math.pi * p), 0, 0])}
     fly["neck2"] = {"rotation": keys((0, [8, 0, 0]))}
     for side in ("left", "right"):
         fly[f"thigh_{side}"] = {"rotation": keys((0, [55, 0, 0]))}
@@ -191,7 +193,7 @@ def generate_animations():
         glide[f"shin_{side}"] = {"rotation": keys((0, [30, 0, 0]))}
         glide[f"foot_{side}"] = {"rotation": keys((0, [40, 0, 0]))}
     glide.update(tail_wave(3.0, 4))
-    glide["neck1"] = {"rotation": keys((0, [-12, 0, 0]))}
+    glide["neck1"] = {"rotation": keys((0, [18, 0, 0]))}
     glide["body"] = {"rotation": frames(3.0, 8, lambda p: [0, 0, 3 * math.sin(2 * math.pi * p)])}
 
     sit = dict(FOLDED)
@@ -200,17 +202,27 @@ def generate_animations():
         sit[f"thigh_{side}"] = {"rotation": keys((0, [-70, 0, 0]))}
         sit[f"shin_{side}"] = {"rotation": keys((0, [60, 0, 0]))}
         sit[f"foot_{side}"] = {"rotation": keys((0, [10, 0, 0]))}
-    sit["neck1"] = {"rotation": keys((0, [-5, 0, 0]))}
-    sit["head"] = {"rotation": keys((0, [25, 0, 0]))}
+    sit["neck1"] = {"rotation": keys((0, [24, 0, 0]))}
+    sit["head"] = {"rotation": keys((0, [14, 0, 0]))}
     sit.update(tail_wave(5.0, 4))
 
     roar = dict(FOLDED)
     roar["jaw"] = {"rotation": keys((0, [0, 0, 0]), (0.3, [35, 0, 0]), (1.2, [35, 0, 0]), (1.5, [0, 0, 0]))}
-    roar["neck1"] = {"rotation": keys((0, [-28, 0, 0]), (0.3, [-50, 0, 0]), (1.2, [-50, 0, 0]), (1.5, [-28, 0, 0]))}
-    roar["head"] = {"rotation": keys((0, [12, 0, 0]), (0.3, [-10, 0, 0]), (1.2, [-10, 0, 0]), (1.5, [12, 0, 0]))}
+    roar["neck1"] = {"rotation": keys((0, [0, 0, 0]), (0.3, [-18, 0, 0]), (1.2, [-18, 0, 0]), (1.5, [0, 0, 0]))}
+    roar["head"] = {"rotation": keys((0, [0, 0, 0]), (0.3, [-20, 0, 0]), (1.2, [-20, 0, 0]), (1.5, [0, 0, 0]))}
 
+    # Souffle de feu : cou tendu vers l'avant, gueule grande ouverte, battements courts pour rester sur place
+    breath = {"jaw": {"rotation": keys((0, [0, 0, 0]), (0.2, [40, 0, 0]), (1.3, [40, 0, 0]), (1.5, [0, 0, 0]))},
+              "neck1": {"rotation": keys((0, [0, 0, 0]), (0.25, [26, 0, 0]), (1.3, [26, 0, 0]), (1.5, [0, 0, 0]))},
+              "neck2": {"rotation": keys((0, [0, 0, 0]), (0.25, [-6, 0, 0]), (1.3, [-6, 0, 0]), (1.5, [0, 0, 0]))},
+              "head": {"rotation": keys((0, [0, 0, 0]), (0.25, [-14, 0, 0]), (1.3, [-14, 0, 0]), (1.5, [0, 0, 0]))}}
+    # Pique : ailes plaquees en arriere, corps incline vers l'avant, puis morsure
+    dive = wing_pose([0, -40, -10], [0, 40, 0], [0, -30, 0])
+    dive["body"] = {"rotation": keys((0, [0, 0, 0]), (0.2, [25, 0, 0]), (0.8, [25, 0, 0]), (1.0, [0, 0, 0]))}
+    dive["jaw"] = {"rotation": keys((0, [0, 0, 0]), (0.6, [35, 0, 0]), (0.75, [0, 0, 0]))}
     save_animations(NAME, {"idle": anim(4.0, idle), "walk": anim(1.2, walk), "fly": anim(1.1, fly), "glide": anim(3.0, glide),
-                           "sit": anim(5.0, sit), "roar": anim(1.5, roar, loop=False)})
+                           "sit": anim(5.0, sit), "roar": anim(1.5, roar, loop=False), "breath": anim(1.5, breath, loop=False),
+                           "dive": anim(1.0, dive, loop=False)})
 
 
 def generate():

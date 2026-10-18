@@ -84,6 +84,7 @@ class Template:
 # ------------------------------------------------------------------------------------------------
 # Outils de construction des donjons
 # ------------------------------------------------------------------------------------------------
+import math
 import random
 
 ONYX_WALL = [("onyx_bricks", 70), ("polished_onyx", 8), ("minecraft:polished_blackstone_bricks", 14),
@@ -574,16 +575,17 @@ def infernal_sanctum():
     for (x, z) in ((c, 16), (c, 26)):
         d.hanging_lantern(x, G + 12, z, 4, "minecraft:lantern")
     # Grand escalier (mur ouest du temple) : du rez-de-chaussee (sol y = G) a la nef (sol y = 1)
-    d.stairs_run(range(tx0 + 1, tx0 + 4), 30, G - 1, G - 1, -1, -1, "minecraft:polished_blackstone_brick_stairs", MAGMA_WALL)
-    d.air(tx0 + 1, G, 22, tx0 + 3, G, 30)
-    d.rail(tx0 + 4, G + 1, 22, tx0 + 4, 31, "magma_brick_wall")
-    d.rail(tx0 + 1, G + 1, 21, tx0 + 3, 21, "magma_brick_wall")
+    # La premiere marche est au niveau du sol du temple (y = G), la derniere au niveau du sol de la nef (y = 1)
+    d.stairs_run(range(tx0 + 1, tx0 + 4), 30, G, G, -1, -1, "minecraft:polished_blackstone_brick_stairs", MAGMA_WALL)
+    d.air(tx0 + 1, G, 21, tx0 + 3, G, 29)
+    d.rail(tx0 + 4, G + 1, 21, tx0 + 4, 29, "magma_brick_wall")
+    d.rail(tx0 + 1, G + 1, 20, tx0 + 3, 20, "magma_brick_wall")
 
     # Nef souterraine : arene du Sorcier (sol y = 1, voute y = G)
     nx0, nx1, nz0, nz1 = 6, 34, 8, 34
     d.box(nx0, 1, nz0, nx1, 1, nz1, MAGMA_FLOOR)
     d.air(nx0, 2, nz0, nx1, G - 1, nz1)
-    d.stairs_run(range(tx0 + 1, tx0 + 4), 30, G - 1, G - 1, -1, -1, "minecraft:polished_blackstone_brick_stairs", MAGMA_WALL)
+    d.stairs_run(range(tx0 + 1, tx0 + 4), 30, G, G, -1, -1, "minecraft:polished_blackstone_brick_stairs", MAGMA_WALL)
     for x in range(nx0, nx1 + 1):
         for z in range(nz0, nz1 + 1):
             r2 = (x - c) ** 2 + (z - 21) ** 2
@@ -729,18 +731,16 @@ def withered_catacombs():
     d.hanging_lantern(19, U + 6, 22, 2)
 
     # Escalier crypte superieure -> crypte profonde (descend vers le nord depuis la galerie sud)
-    d.stairs_run(range(18, 21), 29, U - 1, U - 1, -1, -1, "minecraft:polished_blackstone_brick_stairs", CRYPT_WALL)
-    d.air(18, U, 25, 20, U, 29)
+    d.stairs_run(range(18, 21), 29, U, U, -1, -1, "minecraft:polished_blackstone_brick_stairs", CRYPT_WALL)
     d.rail(17, U + 1, 25, 17, 29, "minecraft:polished_blackstone_brick_wall")
     d.rail(21, U + 1, 25, 21, 29, "minecraft:polished_blackstone_brick_wall")
-    d.box(13, U, 25, 25, U, 25, CRYPT_FLOOR)
-    d.air(18, U, 25, 20, U, 29)
+    d.rail(18, U + 1, 24, 20, 24, "minecraft:polished_blackstone_brick_wall")
 
     # --- Crypte profonde : tombeau du Champion (sol y = 1) -------------------------------------
     ax0, ax1, az0, az1 = 12, 26, 15, 26
     d.air(ax0, 2, az0, ax1, 7, az1)
     d.box(ax0, 1, az0, ax1, 1, az1, CRYPT_FLOOR)
-    d.stairs_run(range(18, 21), 29, U - 1, U - 1, -1, -1, "minecraft:polished_blackstone_brick_stairs", CRYPT_WALL)
+    d.stairs_run(range(18, 21), 29, U, U, -1, -1, "minecraft:polished_blackstone_brick_stairs", CRYPT_WALL)
     for (x, z) in ((13, 16), (25, 16), (13, 25), (25, 25)):
         d.pillar(x, z, 2, 7, "minecraft:polished_basalt")
         d.set(x, 2, z, "minecraft:chiseled_polished_blackstone")
@@ -1028,8 +1028,57 @@ def nomad_caravan():
     d.save("nomad_caravan")
 
 
+def wyvern_nest():
+    """Nid de wyverne : piton de basalte et de pierre noire, nid d'os et de bois fletri au sommet, un oeuf dans
+    un coffre et une wyverne sauvage qui le garde (on peut l'apprivoiser avec de la viande)."""
+    d = Dungeon(13, 17, 13, "wyvern_nest")
+    c = 6
+    rock = [("minecraft:basalt", 45), ("minecraft:blackstone", 35), ("minecraft:smooth_basalt", 20)]
+    for y in range(0, 12):
+        radius = 5.2 - y * 0.25 + (0.6 if y < 2 else 0.0)
+        for x in range(13):
+            for z in range(13):
+                r = ((x - c) ** 2 + (z - c) ** 2) ** 0.5
+                if r <= radius + d.rng.uniform(-0.4, 0.4):
+                    block = d.pick(rock)
+                    if "basalt" in block and "smooth" not in block:
+                        d.set(x, y, z, block, axis="y")
+                    else:
+                        d.set(x, y, z, block)
+    # Coupe du nid : couronne d'os et de tiges fletries, fond de cendre
+    for x in range(13):
+        for z in range(13):
+            r = ((x - c) ** 2 + (z - c) ** 2) ** 0.5
+            if r <= 3.0:
+                d.set(x, 11, z, "ash_block")
+                for y in range(12, 15):
+                    d.set(x, y, z, AIR)
+            elif r <= 4.6:
+                d.set(x, 12, z, "minecraft:bone_block" if d.rng.random() < 0.55 else "withered_stem", axis="y")
+                if d.rng.random() < 0.45:
+                    d.set(x, 13, z, "withered_stem" if d.rng.random() < 0.6 else "minecraft:bone_block", axis="x")
+    d.chest(c, 12, c, "wyvern_nest", facing="south")
+    d.set(c - 1, 12, c + 1, "minecraft:skeleton_skull", rotation="3")
+    d.set(c + 1, 12, c - 1, "minecraft:magma_block")
+    # Prises pour grimper : quelques corniches en spirale
+    for k, y in enumerate(range(1, 11, 2)):
+        angle = k * 1.3
+        # Premiere case vide en partant du centre : la prise est toujours collee a la roche
+        reach = 0.0
+        while True:
+            reach += 0.5
+            x = c + round(math.cos(angle) * reach)
+            z = c + round(math.sin(angle) * reach)
+            if (x, y, z) not in d.blocks:
+                break
+        d.set(x, y, z, "minecraft:polished_blackstone_slab", type="top", waterlogged="false")
+    d.guard(c + 2, 12, c, "ash_wyvern")
+    d.save("wyvern_nest")
+
+
 def generate():
     nomad_caravan()
+    wyvern_nest()
     traveler_camp()
     nether_garden()
     hidden_cache()

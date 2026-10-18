@@ -24,7 +24,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
-import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
@@ -59,8 +58,16 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     private static final RawAnimation SIT = NetheryXAnimations.loop(NAME, "sit");
     private static final RawAnimation GLIDE = NetheryXAnimations.loop(NAME, "glide");
     private static final RawAnimation ROAR = NetheryXAnimations.once(NAME, "roar");
+    private static final RawAnimation BREATH = NetheryXAnimations.once(NAME, "breath");
+    private static final RawAnimation DIVE = NetheryXAnimations.once(NAME, "dive");
+    /** En combat aerien (vole seule, sans cavalier) : synchronise pour que le client sache qu'elle ne tombe pas. */
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Boolean> AERIAL =
+            net.minecraft.network.syncher.SynchedEntityData.defineId(AshWyvern.class, net.minecraft.network.syncher.EntityDataSerializers.BOOLEAN);
+    private static final double BREATH_RANGE = 11.0D;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private int breathTicks;
+    private int breathCooldown = 40;
 
     public AshWyvern(EntityType<? extends AshWyvern> type, Level level) {
         super(type, level);
@@ -81,7 +88,7 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
-        this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.2D, true));
+        this.goalSelector.addGoal(2, new WyvernAerialCombatGoal(this));
         this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.1D, 10.0F, 3.0F, false));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
@@ -89,6 +96,20 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
+    }
+
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(AERIAL, false);
+    }
+
+    public boolean isAerial() {
+        return this.entityData.get(AERIAL);
+    }
+
+    void setAerial(boolean aerial) {
+        this.entityData.set(AERIAL, aerial);
     }
 
     @Override
@@ -200,11 +221,89 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
 
     @Override
     public void tick() {
-        this.setNoGravity(this.isVehicle() && !this.onGround());
+        this.setNoGravity((this.isVehicle() && !this.onGround()) || this.isAerial());
         super.tick();
-        if (!this.level().isClientSide && this.isVehicle() && this.getTarget() != null) {
-            this.setTarget(null); // montee, elle obeit au cavalier et ne poursuit plus personne
+        if (this.level() instanceof ServerLevel server) {
+            if (this.breathCooldown > 0) {
+                this.breathCooldown--;
+            }
+            LivingEntity target = this.getTarget();
+            // Montee : elle crache du feu sur ce que son cavalier attaque, s'il est devant elle
+            if (this.isVehicle() && target != null && target.isAlive() && this.breathCooldown <= 0 && this.breathTicks <= 0
+                    && this.distanceTo(target) < BREATH_RANGE + 3.0D && this.isInFront(target)) {
+                this.startBreath();
+            }
+            if (this.breathTicks > 0) {
+                this.breathTicks--;
+                this.tickBreath(server);
+            }
         }
+    }
+
+    // --- Attaques ---------------------------------------------------------------------------------
+
+    boolean canBreath() {
+        return this.breathCooldown <= 0 && this.breathTicks <= 0;
+    }
+
+    void startBreath() {
+        this.breathTicks = 30;
+        this.breathCooldown = 70 + this.random.nextInt(30);
+        this.triggerAnim("action", "breath");
+        this.playSound(SoundEvents.ENDER_DRAGON_SHOOT, 1.2F, 1.2F);
+    }
+
+    boolean isBreathing() {
+        return this.breathTicks > 0;
+    }
+
+    private boolean isInFront(Entity entity) {
+        Vec3 look = Vec3.directionFromRotation(0.0F, this.getYRot());
+        Vec3 to = entity.position().subtract(this.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
+        return look.dot(to) > 0.5D;
+    }
+
+    /** Souffle de feu : un cone devant la gueule. Il embrase les creatures, jamais les blocs. */
+    private void tickBreath(ServerLevel level) {
+        LivingEntity target = this.getTarget();
+        Vec3 mouth = this.position().add(Vec3.directionFromRotation(0.0F, this.getYRot()).scale(3.0D)).add(0.0D, 1.3D, 0.0D);
+        Vec3 dir = target != null ? target.getEyePosition().subtract(mouth).normalize()
+                : Vec3.directionFromRotation(this.getXRot(), this.getYRot());
+        for (int step = 1; step <= 10; step++) {
+            Vec3 p = mouth.add(dir.scale(step * BREATH_RANGE / 10.0D));
+            double spread = 0.15D + step * 0.09D;
+            level.sendParticles(ParticleTypes.FLAME, p.x, p.y, p.z, 3, spread, spread, spread, 0.01D);
+            if (step % 3 == 0) {
+                level.sendParticles(ParticleTypes.LARGE_SMOKE, p.x, p.y, p.z, 1, spread, spread, spread, 0.01D);
+            }
+        }
+        if (this.breathTicks % 4 != 0) {
+            return;
+        }
+        LivingEntity owner = this.getOwner();
+        for (LivingEntity victim : level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(BREATH_RANGE + 2.0D))) {
+            if (victim == this || victim == owner || victim.isPassengerOfSameVehicle(this) || this.hasPassenger(victim)
+                    || (victim instanceof TamableAnimal pet && owner != null && pet.isOwnedBy(owner))
+                    || (victim instanceof Player && victim != target) || victim.isAlliedTo(this)) {
+                continue;
+            }
+            Vec3 to = victim.getBoundingBox().getCenter().subtract(mouth);
+            double distance = to.length();
+            if (distance > BREATH_RANGE || to.normalize().dot(dir) < 0.8D) {
+                continue;
+            }
+            victim.hurt(this.damageSources().mobAttack(this), 4.0F);
+            victim.setSecondsOnFire(5);
+        }
+    }
+
+    void diveHit(LivingEntity target) {
+        this.triggerAnim("action", "dive");
+        target.hurt(this.damageSources().mobAttack(this), (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE) * 1.25F);
+        Vec3 push = target.position().subtract(this.position()).multiply(1.0D, 0.0D, 1.0D).normalize().scale(1.2D);
+        target.setDeltaMovement(push.x, 0.5D, push.z);
+        target.hurtMarked = true;
+        this.playSound(SoundEvents.PHANTOM_BITE, 1.2F, 0.7F);
     }
 
     @Override
@@ -212,7 +311,7 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
         super.aiStep();
         MobParticles.ambient(this, ModParticles.ASH_FLAKE.get(), this.onGround() ? 10 : 2, 1.2D, -0.02D);
         Vec3 motion = this.getDeltaMovement();
-        if (!this.isVehicle() && !this.onGround() && motion.y < 0.0D) {
+        if (!this.isVehicle() && !this.isAerial() && !this.onGround() && motion.y < 0.0D) {
             this.setDeltaMovement(motion.multiply(1.0D, 0.6D, 1.0D)); // plane
         }
     }
@@ -293,7 +392,8 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "movement", 5, this::movementPredicate));
-        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP).triggerableAnim("roar", ROAR));
+        controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP)
+                .triggerableAnim("roar", ROAR).triggerableAnim("breath", BREATH).triggerableAnim("dive", DIVE));
     }
 
     private PlayState movementPredicate(AnimationState<AshWyvern> state) {

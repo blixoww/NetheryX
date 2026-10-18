@@ -1,0 +1,15 @@
+{
+  "type": "netheryx:nether_floor",
+  "biomes": "#netheryx:has_structure/wyvern_nest",
+  "step": "top_layer_modification",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "netheryx:wyvern_nest/start",
+  "size": 1,
+  "max_y": 100,
+  "min_y": 33,
+  "sink": 1,
+  "footprint": 12,
+  "required_air": 18,
+  "max_distance_from_center": 80
+}

@@ -396,10 +396,16 @@ Clic droit avec, **uniquement dans le Nether** : le Cœur du Nether s'éveille a
 
 ### Wyverne de cendre (monture)
 
-- **Wyverne de cendre** : Éclot de l'*Œuf de wyverne de cendre* lâché par le Cœur du Nether, et vous appartient.
-- Clic droit : la monter.
-- Accroupi + clic droit : attendre / suivre.
+- **Wyverne de cendre** : Où la trouver : les **Nids de wyverne** (pitons rocheux coiffés d'un nid d'os, dans les Terres cendrées, les deltas de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) contiennent un *œuf* et une wyverne sauvage ; d'autres errent dans ces biomes. Apprivoisez une wyverne sauvage avec de la *viande*, ou faites éclore l'œuf : elle vous appartient.
+
+**Compagnon**
+
+- Clic droit : la monter. 
+- Accroupi + clic droit : attendre / suivre. 
 - La viande la soigne.
+
+**En combat**, elle s'envole seule, tourne autour de votre ennemi, crache du feu (qui enflamme les créatures, jamais les blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que vous attaquez.
+
 
 **Vol**
 
@@ -432,7 +438,7 @@ Les donjons NetheryX sont bâtis sur plusieurs niveaux : gardes, générateurs e
 La *Boussole des âmes* vous mène aux donjons. Prévoyez armure, nourriture et une *Pierre de rappel* !
 
 
-- **Sceau du gardien** : Indestructible. Se brise tout seul quand le boss du donjon est vaincu ; la maçonnerie du coffre-fort redevient alors de la brique ordinaire.
+- **Sceau du gardien** : Indestructible. Se brise tout seul quand le boss du donjon est vaincu ; la maçonnerie du coffre-fort redevient alors de la brique ordinaire. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.
 
 ### Citadelle d'onyx
 
@@ -1123,7 +1129,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Trouvé dans : butin de Cœur du Nether
 - **Boussole du créateur** (`netheryx:admin_compass`)
 - **Œuf de wyverne de cendre** (`netheryx:ash_wyvern_egg`)
-  - Trouvé dans : butin de Cœur du Nether
+  - Trouvé dans : butin de Cœur du Nether, coffres : wyvern nest
 - **Tubercule d'âme cuit** (`netheryx:baked_soul_tuber`)
   - Feu de camp : Tubercule d'âme → **Tubercule d'âme cuit**
   - Four : Tubercule d'âme → **Tubercule d'âme cuit**
@@ -1159,6 +1165,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Feu de camp : Côtelette de blaze crue → **Côtelette de blaze grillée**
   - Four : Côtelette de blaze crue → **Côtelette de blaze grillée**
   - Fumoir : Côtelette de blaze crue → **Côtelette de blaze grillée**
+  - Trouvé dans : coffres : wyvern nest
 - **Patte de crabe cuite** (`netheryx:cooked_crab_leg`)
   - Feu de camp : Patte de crabe crue → **Patte de crabe cuite**
   - Four : Patte de crabe crue → **Patte de crabe cuite**
@@ -1217,7 +1224,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - **Ragoût infernal** (`netheryx:infernal_stew`)
   - Établi (sans forme) : Bol + Piment de blaze + Tubercule d'âme cuit + Crimson fungus + Warped fungus → **Ragoût infernal**
 - **Carapace de magma** (`netheryx:magma_shell`)
-  - Trouvé dans : butin de Crabe de magma, butin de Golem de basalte, butin de Lézard de cendre
+  - Trouvé dans : butin de Crabe de magma, butin de Golem de basalte, butin de Lézard de cendre, coffres : wyvern nest
 - **Semelles de magma** (`netheryx:magma_treads`)
   - Établi : `M·M` / `M·M` (`M` = Carapace de magma) → **Semelles de magma**
   - Trouvé dans : coffres : infernal sanctum, coffres : infernal sanctum vault, coffres : onyx citadel
@@ -1271,7 +1278,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi : `OOO` / `·R·` / `·R·` (`O` = Onyx, `R` = Bâton de blaze) → **Pioche en onyx**
   - Trouvé dans : coffres : infernal sanctum vault, coffres : onyx citadel vault, coffres : withered catacombs vault
 - **Éclat d'onyx** (`netheryx:onyx_shard`)
-  - Trouvé dans : butin de Cube d'onyx, butin de Escargot de cristal, butin de Fouisseur de basalte, butin de Ghast de feu, butin de Sentinelle d'onyx, butin de Spectre de cendre, coffres : mimic, coffres : nether garden, coffres : nomad caravan, coffres : onyx citadel, coffres : small treasure, coffres : withered catacombs, pêche à la nasse
+  - Trouvé dans : butin de Cube d'onyx, butin de Escargot de cristal, butin de Fouisseur de basalte, butin de Ghast de feu, butin de Sentinelle d'onyx, butin de Spectre de cendre, coffres : mimic, coffres : nether garden, coffres : nomad caravan, coffres : onyx citadel, coffres : small treasure, coffres : withered catacombs, coffres : wyvern nest, pêche à la nasse
 - **Pelle en onyx** (`netheryx:onyx_shovel`)
   - Établi : `O` / `R` / `R` (`O` = Onyx, `R` = Bâton de blaze) → **Pelle en onyx**
 - **Épée en onyx** (`netheryx:onyx_sword`)
@@ -1448,7 +1455,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - Butin : Carapace de basalte, Carapace de magma, Livre, Onyx, Éclat de verre en fusion
 
 ### Wyverne de cendre
-- Apparition : structures, invocation ou objet spécial uniquement
+- Apparition : Deltas de basalte, Lac de verre en fusion, Terres cendrées
 - Butin : Membrane de phantom
 
 ### Luciole de braise

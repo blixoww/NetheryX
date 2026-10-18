@@ -12,7 +12,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:guardian_seal",
-      "text": "Unbreakable. Breaks by itself when the dungeon boss is defeated; the vault's masonry then turns back into ordinary bricks.",
+      "text": "Unbreakable. Breaks by itself when the dungeon boss is defeated; the vault's masonry then turns back into ordinary bricks. Bosses never leave their arena: if you flee, they go back and slowly heal.",
       "link_recipe": false
     }
   ],
