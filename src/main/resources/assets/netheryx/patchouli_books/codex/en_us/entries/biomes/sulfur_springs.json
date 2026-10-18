@@ -2,7 +2,7 @@
   "name": "Sulfur Springs",
   "icon": "netheryx:sulfur_rock",
   "category": "netheryx:biomes",
-  "sortnum": 14,
+  "sortnum": 13,
   "pages": [
     {
       "type": "patchouli:text",

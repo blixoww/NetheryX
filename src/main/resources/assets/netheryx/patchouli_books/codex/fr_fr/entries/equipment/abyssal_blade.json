@@ -1,0 +1,19 @@
+{
+  "name": "Lame abyssale",
+  "icon": "netheryx:abyssal_blade",
+  "category": "netheryx:equipment",
+  "sortnum": 102,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:abyssal_blade",
+      "text": "L'arme ultime : 13 de dégâts, 6000 de durabilité. Chaque coup embrase, inflige Flétrissement II et vous rend un cœur. $(l)Clic droit$() : une vague abyssale de feu devant vous (12 de dégâts, recharge 8 s).",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:abyssal_blade",
+      "text": "2 lingots de netherite, 3 éclats abyssaux, une étoile du Nether, 2 blocs d'onyx et une épée en onyx."
+    }
+  ]
+}

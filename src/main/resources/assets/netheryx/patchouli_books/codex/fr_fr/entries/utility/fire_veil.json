@@ -2,7 +2,7 @@
   "name": "Voile ignifuge",
   "icon": "netheryx:fire_veil",
   "category": "netheryx:utility",
-  "sortnum": 87,
+  "sortnum": 83,
   "pages": [
     {
       "type": "patchouli:spotlight",

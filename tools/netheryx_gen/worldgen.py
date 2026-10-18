@@ -342,6 +342,7 @@ def biome(name, fog, particle, probability, ambient, music, monsters, creatures,
         "spawners": {"monster": monsters, "creature": creatures, "ambient": list(ambient_mobs), "axolotls": [],
                      "underground_water_creature": [], "water_creature": [], "water_ambient": [], "misc": []},
         "spawn_costs": {},
+        "creature_spawn_probability": 0.3,
         "carvers": {"air": "minecraft:nether_cave"},
         "features": features,
     })
@@ -429,24 +430,24 @@ def generate_biomes():
           [mid("quartz_spire")])
     biome("hellwood_jungle", "#6e1c0a", "netheryx:ember_pollen", 0.02, "crimson_forest", "crimson_forest",
           [spawner("ember_stalker", 35, 1, 2), spawner("fire_ghast", 30, 1, 1), spawner("minecraft:zombified_piglin", 10, 2, 3)],
-          [spawner("cinder_hen", 35, 2, 4), spawner("ember_cow", 30, 2, 4), spawner("cinder_lizard", 15, 1, 2), strider],
+          [spawner("cinder_hen", 50, 2, 5), spawner("ember_cow", 45, 2, 5), spawner("cinder_lizard", 20, 1, 3), spawner("blaze_pig", 25, 2, 4), strider],
           vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone"),
           [mid("hell_tree"), mid("hellfern_patch"), mid("hellwood_vegetation"), mid("ember_vines_ceiling")],
-          ambient_mobs=[spawner("soul_moth", 8, 1, 2), spawner("ember_firefly", 25, 3, 6)])
+          ambient_mobs=[spawner("soul_moth", 10, 1, 3), spawner("ember_firefly", 45, 4, 8)])
     biome("molten_glass_lake", "#8a2c08", "netheryx:ember_spark", 0.02, "basalt_deltas", "basalt_deltas",
           [spawner("minecraft:magma_cube", 40, 2, 4), spawner("fire_ghast", 25, 1, 1), spawner("minecraft:blaze", 10, 1, 2),
            spawner("basalt_golem", 3, 1, 1)],
-          [spawner("blaze_pig", 25, 2, 4), spawner("magmafish", 40, 3, 5), strider],
+          [spawner("blaze_pig", 40, 2, 5), spawner("magmafish", 40, 3, 5), strider],
           vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone"),
           [mid("obsidian_delta"), mid("lava_island"), mid("obsidian_spire"), mid("molten_crystal_patch")],
-          ambient_mobs=[spawner("ember_firefly", 10, 2, 4)])
+          ambient_mobs=[spawner("ember_firefly", 25, 3, 6)])
     biome("petrified_onyx_forest", "#241a30", "netheryx:onyx_glint", 0.015, "soul_sand_valley", "soul_sand_valley",
           [spawner("onyx_cube", 30, 1, 3), spawner("ash_wraith", 20, 1, 2), spawner("minecraft:skeleton", 15, 2, 3),
            spawner("minecraft:enderman", 5, 1, 2)],
-          [spawner("crystal_snail", 30, 2, 4), strider],
+          [spawner("crystal_snail", 45, 2, 5), strider],
           vanilla("patch_soul_fire", "ore_gravel_nether", "ore_blackstone") + [mid("ore_onyx_rich")],
           [mid("petrified_tree"), mid("onyx_cluster_patch"), mid("glowcap_patch")],
-          ambient_mobs=[spawner("soul_firefly", 15, 3, 6)])
+          ambient_mobs=[spawner("soul_firefly", 40, 4, 8)])
 
 
 def biome_modifier(name, data):
@@ -470,44 +471,45 @@ def generate_biome_modifiers():
                                                   "features": [mid(f) for f in features], "step": "vegetal_decoration"})
     # Les creatures "standard" (pas les boss) apparaissent ici ou la dans tout le Nether, biomes moddes compris
     biome_modifier("add_netheryx_spawns_everywhere", {"type": "forge:add_spawns", "biomes": "#minecraft:is_nether", "spawners": [
-        spawner("ember_stalker", 8, 1, 2), spawner("ash_wraith", 6, 1, 1), spawner("withered_knight", 6, 1, 2),
-        spawner("fire_ghast", 22, 1, 1), spawner("onyx_cube", 8, 1, 3),
-        spawner("magma_crab", 16, 2, 3), spawner("basalt_beetle", 12, 1, 3), spawner("ember_cow", 22, 2, 4),
-        spawner("cinder_hen", 20, 2, 4), spawner("soul_moth", 6, 1, 3), spawner("magmafish", 10, 2, 4)]})
+        spawner("ember_stalker", 12, 1, 2), spawner("ash_wraith", 9, 1, 2), spawner("withered_knight", 9, 1, 2),
+        spawner("fire_ghast", 24, 1, 1), spawner("onyx_cube", 10, 1, 3),
+        spawner("magma_crab", 26, 2, 4), spawner("basalt_beetle", 20, 2, 4), spawner("ember_cow", 32, 2, 5),
+        spawner("cinder_hen", 32, 2, 5), spawner("soul_moth", 12, 2, 4), spawner("magmafish", 16, 2, 5),
+        spawner("blaze_pig", 12, 2, 4), spawner("ember_firefly", 10, 4, 8)]})
     biome_modifier("add_v120_vanilla_spawns_basalt", {"type": "forge:add_spawns", "biomes": "minecraft:basalt_deltas", "spawners": [
         spawner("basalt_burrower", 15, 1, 1), spawner("cinder_lizard", 6, 1, 2)]})
     biome_modifier("add_v120_vanilla_spawns_soul", {"type": "forge:add_spawns", "biomes": "minecraft:soul_sand_valley", "spawners": [
-        spawner("lantern_bearer", 8, 1, 2)]})
+        spawner("lantern_bearer", 14, 1, 3)]})
     biome_modifier("add_v120_modded_spawns", {"type": "forge:add_spawns", "biomes": [mid(b) for b in ("ashen_wastes", "onyx_depths")],
                                               "spawners": [spawner("basalt_burrower", 12, 1, 1)]})
     biome_modifier("add_v120_lantern_bearers", {"type": "forge:add_spawns", "biomes": [mid(b) for b in ("soulfire_marsh", "withered_forest")],
-                                                "spawners": [spawner("lantern_bearer", 8, 1, 2)]})
+                                                "spawners": [spawner("lantern_bearer", 14, 1, 3)]})
     biome_modifier("add_fireflies_ember", {"type": "forge:add_spawns", "biomes": [mid("ember_grove"), mid("ember_meadow"),
                                                                                   "minecraft:crimson_forest"],
-                                           "spawners": [spawner("ember_firefly", 12, 3, 6)]})
+                                           "spawners": [spawner("ember_firefly", 35, 4, 8)]})
     biome_modifier("add_fireflies_soul", {"type": "forge:add_spawns", "biomes": [mid("soulfire_marsh"), "minecraft:soul_sand_valley",
                                                                                  "minecraft:warped_forest"],
-                                          "spawners": [spawner("soul_firefly", 12, 3, 6)]})
+                                          "spawners": [spawner("soul_firefly", 35, 4, 8)]})
     biome_modifier("add_blaze_pigs", {"type": "forge:add_spawns", "biomes": [mid("magma_rift"), mid("ember_grove"), mid("hellwood_jungle"),
                                                                              "minecraft:nether_wastes"],
-                                      "spawners": [spawner("blaze_pig", 20, 2, 4)]})
+                                      "spawners": [spawner("blaze_pig", 35, 2, 5)]})
     biome_modifier("add_crystal_snails", {"type": "forge:add_spawns", "biomes": [mid("onyx_depths")],
-                                          "spawners": [spawner("crystal_snail", 15, 1, 3)]})
+                                          "spawners": [spawner("crystal_snail", 25, 2, 4)]})
     biome_modifier("add_basalt_golems", {"type": "forge:add_spawns", "biomes": [mid("magma_rift"), "minecraft:basalt_deltas"],
-                                         "spawners": [spawner("basalt_golem", 4, 1, 1)]})
+                                         "spawners": [spawner("basalt_golem", 6, 1, 1)]})
     biome_modifier("add_v120_lizards", {"type": "forge:add_spawns", "biomes": [mid(b) for b in ("magma_rift", "ember_meadow")],
-                                        "spawners": [spawner("cinder_lizard", 8, 1, 2)]})
+                                        "spawners": [spawner("cinder_lizard", 14, 1, 3)]})
 
 
 STRUCTURES = {
     # nom : (espacement, separation, sel, air requis, y min, enfoncement, emprise, adaptation au terrain)
     # Espacements reduits : un donjon tous les ~300 blocs environ, une petite structure tous les ~130 blocs.
-    "onyx_citadel": (20, 8, 761234019, 10, 33, 0, 44, "beard_box"),
-    "infernal_sanctum": (20, 8, 663901247, 10, 33, 0, 40, "beard_box"),
-    "withered_catacombs": (18, 7, 518230457, 8, 45, 12, 38, "beard_box"),
+    "onyx_citadel": (20, 8, 761234019, 14, 33, 0, 44, "beard_box"),
+    "infernal_sanctum": (20, 8, 663901247, 10, 33, 10, 40, "none"),
+    "withered_catacombs": (18, 7, 518230457, 8, 45, 16, 38, "none"),
     "traveler_camp": (9, 3, 734029118, 6, 33, 0, 12, "beard_thin"),
     "nether_garden": (10, 4, 192837465, 6, 33, 0, 14, "beard_thin"),
-    "hidden_cache": (5, 2, 556172839, 4, 40, 6, 6, "beard_thin"),
+    "hidden_cache": (5, 2, 556172839, 4, 40, 7, 6, "none"),
     "nomad_caravan": (14, 5, 902817364, 6, 33, 0, 20, "beard_thin"),
 }
 

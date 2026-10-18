@@ -25,8 +25,8 @@ public final class GuardianSeals {
 
     public static void breakSealsAround(ServerLevel level, BlockPos center) {
         int broken = 0;
-        // Sceaux et maconnerie scellee : la salle au tresor s'ouvre, sa tour comprise (jusqu'a 32 blocs au-dessus)
-        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-RADIUS, -8, -RADIUS), center.offset(RADIUS, 32, RADIUS))) {
+        // Sceaux et maconnerie scellee : la salle au tresor s'ouvre, sa tour comprise (16 blocs sous le boss, 32 au-dessus)
+        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-RADIUS, -16, -RADIUS), center.offset(RADIUS, 32, RADIUS))) {
             BlockState state = level.getBlockState(pos);
             if (state.is(ModBlocks.GUARDIAN_SEAL.get())) {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);

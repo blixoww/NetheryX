@@ -2,7 +2,7 @@
   "name": "Hellwood Jungle",
   "icon": "netheryx:hellfern",
   "category": "netheryx:biomes",
-  "sortnum": 93,
+  "sortnum": 89,
   "pages": [
     {
       "type": "patchouli:text",

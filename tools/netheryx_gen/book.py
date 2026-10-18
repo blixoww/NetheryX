@@ -53,7 +53,7 @@ CATEGORIES = [
     ("onyx", "netheryx:onyx", T("Onyx", "Onyx"),
      T("The black gem stronger than diamond.", "La gemme noire plus solide que le diamant.")),
     ("biomes", "netheryx:ember_nylium", T("Biomes", "Biomes"),
-     T("Twelve new Nether biomes, and changes to the vanilla ones.", "Douze nouveaux biomes du Nether, et les changements des biomes vanilla.")),
+     T("New organic Nether biomes, and changes to the vanilla ones.", "Les nouveaux biomes organiques du Nether, et les changements des biomes vanilla.")),
     ("creatures", "netheryx:ember_stalker_spawn_egg", T("Creatures", "Créatures"),
      T("Friends, foes and bosses of the new Nether.", "Amis, ennemis et boss du nouveau Nether.")),
     ("structures", "netheryx:onyx_bricks", T("Dungeons", "Donjons"),
@@ -77,10 +77,10 @@ def entry(category, name_en, name_fr, icon, pages, priority=False):
 
 # ---------------------------------------------------------------- Premiers pas
 entry("getting_started", "Welcome to NetheryX", "Bienvenue dans NetheryX", "minecraft:book", [
-    text("NetheryX overhauls the Nether: $(l)12 new biomes$(), $(l)19 creatures$() including three bosses, $(l)3 great dungeons$() and small camps, "
+    text("NetheryX overhauls the Nether: $(l)12 organic biomes$(), $(l)26 creatures$() including three dungeon bosses, a mini-boss and a final boss, $(l)3 great dungeons$() and small camps, "
          "the $(item)Onyx$() material, new crops, foods, tools and many useful items.$(br2)"
          "The vanilla biomes change too: new plants and creatures appear everywhere.",
-         "NetheryX transforme le Nether : $(l)12 nouveaux biomes$(), $(l)19 créatures$() dont trois boss, $(l)3 grands donjons$() et de petits campements, "
+         "NetheryX transforme le Nether : $(l)12 biomes organiques$(), $(l)26 créatures$() dont trois boss de donjon, un mini-boss et un boss final, $(l)3 grands donjons$() et de petits campements, "
          "le matériau $(item)Onyx$(), de nouvelles cultures, nourritures, outils et objets utiles.$(br2)"
          "Les biomes vanilla changent aussi : nouvelles plantes et créatures un peu partout.", "NetheryX"),
     text("This codex is given once to every player. Lost it? Craft a new one with a $(item)Book$() and a $(item)Netherrack$() "
@@ -90,20 +90,20 @@ entry("getting_started", "Welcome to NetheryX", "Bienvenue dans NetheryX", "mine
     craft("codex", en="Book + Netherrack.", fr="Livre + Netherrack."),
 ], priority=True)
 entry("getting_started", "Where to Start", "Par où commencer", "minecraft:flint_and_steel", [
-    text("1. Enter the Nether and look for the $(l)coloured biomes$(): orange groves, grey ash, blue marshes...$(br)"
+    text("1. Enter the Nether and look for the $(l)coloured biomes$(): orange groves, grey ash, burning jungles...$(br)"
          "2. Mine $(item)Sulfur$() and $(item)Onyx$() (diamond pickaxe).$(br)"
          "3. Raid a $(item)Nether Fortress$() for blaze rods: Onyx tools use them as handles.$(br)"
          "4. Craft a $(item)Soul Compass$() to find structures.",
-         "1. Entrez dans le Nether et cherchez les $(l)biomes colorés$() : bosquets orange, cendres grises, marais bleus...$(br)"
+         "1. Entrez dans le Nether et cherchez les $(l)biomes colorés$() : bosquets orange, cendres grises, jungles embrasées...$(br)"
          "2. Minez du $(item)Soufre$() et de l'$(item)Onyx$() (pioche en diamant).$(br)"
          "3. Pillez une $(item)Forteresse du Nether$() pour les bâtons de blaze : ils servent de manche aux outils en onyx.$(br)"
          "4. Fabriquez une $(item)Boussole des âmes$() pour trouver les structures."),
     text("Three dungeons, three bosses, from easiest to hardest:$(li)$(l)Infernal Sanctum$(): Infernal Warlock$(li)$(l)Withered "
          "Catacombs$(): Withered Champion$(li)$(l)Onyx Citadel$(): Onyx Sentinel (drops the $(item)Sentinel Core$() for the "
-         "$(item)Infernal Heart$())",
+         "$(item)Infernal Heart$())$(br2)Each boss also drops a trophy: the three together summon the $(l)Heart of the Nether$(), the final boss.",
          "Trois donjons, trois boss, du plus facile au plus difficile :$(li)$(l)Sanctuaire infernal$() : Sorcier infernal$(li)"
          "$(l)Catacombes flétries$() : Champion flétri$(li)$(l)Citadelle d'onyx$() : Sentinelle d'onyx (donne le $(item)Cœur de "
-         "sentinelle$() du $(item)Cœur infernal$())", "Progression"),
+         "sentinelle$() du $(item)Cœur infernal$())$(br2)Chaque boss lâche aussi un trophée : les trois réunis invoquent le $(l)Cœur du Nether$(), le boss final.", "Progression"),
 ])
 entry("getting_started", "Configuration", "Configuration", "minecraft:comparator", [
     text("File $(l)config/netheryx-common.toml$():$(li)biome region weight$(li)Onyx set bonus$(li)hammer 3x3 mining"
@@ -115,9 +115,9 @@ entry("getting_started", "Configuration", "Configuration", "minecraft:comparator
 
 # ---------------------------------------------------------------- Onyx
 entry("onyx", "Onyx Ore", "Minerai d'onyx", "netheryx:onyx_ore", [
-    spot("onyx_ore", "As common as diamond, everywhere in the Nether between Y=5 and Y=56, even more in the $(l)Onyx Depths$(). "
+    spot("onyx_ore", "As common as diamond, everywhere in the Nether between Y=5 and Y=56, even more in the $(l)Petrified Onyx Forest$(). "
                      "Needs a $(item)diamond pickaxe$(). Fortune works.",
-         "Aussi fréquent que le diamant, partout dans le Nether entre Y=5 et Y=56, et plus encore dans les $(l)Profondeurs d'onyx$(). "
+         "Aussi fréquent que le diamant, partout dans le Nether entre Y=5 et Y=56, et plus encore dans la $(l)Forêt pétrifiée d'onyx$(). "
          "Nécessite une $(item)pioche en diamant$(). Fortune fonctionne.", link=False),
     smelt("onyx_from_smelting", "onyx_from_blasting"),
 ], priority=True)
@@ -128,8 +128,8 @@ entry("onyx", "Onyx Gem", "Gemme d'onyx", "netheryx:onyx", [
          "$(item)Cœur infernal$(). Acceptée par les balises."),
     craft("onyx_from_shards", "onyx_block", en="9 Onyx Shards (from Onyx Clusters) also make a gem.",
           fr="9 éclats d'onyx (des amas d'onyx) donnent aussi une gemme."),
-    spot("onyx_cluster", "Glowing crystals of the Onyx Depths. Mine them for $(item)Onyx Shards$() (Silk Touch keeps the cluster).",
-         "Cristaux lumineux des Profondeurs d'onyx. Ils donnent des $(item)éclats d'onyx$() (Toucher de soie garde l'amas).", link=False),
+    spot("onyx_cluster", "Glowing crystals of the Petrified Onyx Forest. Mine them for $(item)Onyx Shards$() (Silk Touch keeps the cluster).",
+         "Cristaux lumineux de la Forêt pétrifiée d'onyx. Ils donnent des $(item)éclats d'onyx$() (Toucher de soie garde l'amas).", link=False),
 ])
 entry("onyx", "Onyx Tools", "Outils en onyx", "netheryx:onyx_pickaxe", [
     text("$(l)Stronger than netherite$(): durability $(l)4500$() (netherite 2031), speed $(l)10$() (9), damage bonus $(l)5$() (4): an onyx sword deals $(l)9$(). The hammer has 7000. Handles are $(item)Blaze Rods$(). "
@@ -179,11 +179,6 @@ BIOME_PAGES = [
      "Dungeon: $(l)Withered Catacombs$().",
      "Dunes de cendre grise sur du basalte, arbustes calcinés et pluie de cendres.$(br2)Créatures : $(l)Spectres de cendre$(), ghasts. "
      "Donjon : $(l)Catacombes flétries$()."),
-    ("Onyx Depths", "Profondeurs d'onyx", "netheryx:onyx_cluster",
-     "A dark biome of blackstone and basalt with glowing $(item)Onyx Clusters$() and plenty of $(item)Onyx Ore$().$(br2)"
-     "Dungeon: the $(l)Onyx Citadel$() and its boss.",
-     "Biome sombre de blackstone et de basalte, $(item)amas d'onyx$() lumineux et beaucoup de $(item)minerai d'onyx$().$(br2)"
-     "Donjon : la $(l)Citadelle d'onyx$() et son boss."),
     ("Ember Meadow", "Prairie de braise", "netheryx:nether_grass_block",
      "The most welcoming place of the Nether: golden $(item)Nether Grass$(), flowers, glowcaps and wild cinder wheat.$(br2)"
      "Creatures: peaceful $(l)Ember Cows$() and $(l)Cinder Hens$(). Ideal to settle a farm!",
@@ -194,21 +189,11 @@ BIOME_PAGES = [
      "Dungeon: $(l)Infernal Sanctum$().",
      "Roche sulfureuse jaune, $(item)minerai de soufre$() et amas de cristaux.$(br2)Créatures : $(l)Crabes de magma$() paisibles. "
      "Donjon : $(l)Sanctuaire infernal$()."),
-    ("Soulfire Marsh", "Marais des âmes", "netheryx:soul_lily",
-     "Soul soil plains lit by blue fire and glowing $(item)Soul Lilies$().$(br2)Creatures: $(l)Soul Moths$(), skeletons. "
-     "Dungeon: $(l)Withered Catacombs$().",
-     "Plaines de terre des âmes éclairées par le feu bleu et des $(item)lys des âmes$() lumineux.$(br2)Créatures : "
-     "$(l)Phalènes des âmes$(), squelettes. Structure : $(l)Ruines des âmes$()."),
     ("Withered Forest", "Forêt flétrie", "netheryx:withered_stem",
      "Grey giant fungi with bone decorations on $(item)Withered Soil$().$(br2)Creatures: $(l)Withered Knights$(), wither skeletons. "
      "Dungeon: $(l)Withered Catacombs$().",
      "Champignons géants gris ornés d'os sur la $(item)terre flétrie$().$(br2)Créatures : $(l)Chevaliers flétris$(), squelettes wither. "
      "Donjon : $(l)Catacombes flétries$()."),
-    ("Magma Rift", "Faille de magma", "minecraft:magma_block",
-     "Lava deltas and magma floors. Watch your step!$(br2)Creatures: $(l)Basalt Beetles$(), blazes, magma cubes. "
-     "Dungeon: the $(l)Infernal Sanctum$().",
-     "Deltas de lave et sols de magma. Attention où vous marchez !$(br2)Créatures : $(l)Scarabées de basalte$(), "
-     "blazes, cubes de magma. Structure : le $(l)Sanctuaire infernal$()."),
 ]
 for en, fr, icon, ten, tfr in BIOME_PAGES:
     entry("biomes", en, fr, icon, [text(ten, tfr, fr if False else None)])
@@ -233,8 +218,8 @@ CREATURES = [
      "Peaceful. Breed with $(item)Fire Berries$(). Drops $(item)Crab Legs$() and sometimes a $(item)Magma Shell$().",
      "Paisible. S'élève avec des $(item)baies de feu$(). Lâche des $(item)pattes de crabe$() et parfois une $(item)carapace de magma$()."),
     ("soul_moth", "Soul Moth", "Phalène des âmes", 1.2,
-     "Harmless glowing insect of the Soulfire Marsh. Drops $(item)Soul Dust$().",
-     "Insecte lumineux et inoffensif du Marais des âmes. Lâche de la $(item)poussière d'âme$()."),
+     "Harmless glowing insect of the soul valleys and forests. Drops $(item)Soul Dust$().",
+     "Insecte lumineux et inoffensif des vallées et forêts du Nether. Lâche de la $(item)poussière d'âme$()."),
     ("basalt_beetle", "Basalt Beetle", "Scarabée de basalte", 0.7,
      "Neutral, heavily armored (30 HP, 10 armor). The whole herd charges if one is hit. Breed with $(item)Magma Cream$(). "
      "Drops $(item)Basalt Carapace$().",
@@ -306,52 +291,58 @@ for eid, en, fr, scale, ten, tfr in CREATURES:
 
 # ---------------------------------------------------------------- Structures
 DUNGEON_INTRO = text(
-    "NetheryX dungeons are multi-room fortresses: guards and monster spawners on the way, side rooms with chests, then the "
-    "$(l)boss arena$(). The treasure room is closed by $(item)Guardian Seals$(), unbreakable blocks that only crumble when "
-    "the boss dies.$(br2)A dungeon lies roughly every 300 blocks: use the $(item)Soul Compass$() to find one. Bring armor, "
-    "food and a $(item)Recall Stone$()!",
-    "Les donjons NetheryX sont des forteresses à plusieurs salles : gardes et générateurs de monstres sur le chemin, salles "
-    "annexes avec coffres, puis l'$(l)arène du boss$(). La salle au trésor est fermée par des $(item)Sceaux du gardien$(), "
-    "des blocs indestructibles qui ne se brisent qu'à la mort du boss.$(br2)Il y a un donjon environ tous les 300 blocs : "
-    "la $(item)Boussole des âmes$() vous y mène. Prévoyez armure, nourriture et une "
-    "$(item)Pierre de rappel$() !", "Donjons")
+    "NetheryX dungeons are built on several levels: guards, spawners and side rooms with chests, then the $(l)boss arena$(). "
+    "The treasure lies in a small $(l)vault$() entirely made of $(item)Warded Masonry$() (unbreakable on all six faces) and closed "
+    "by a door of $(item)Guardian Seals$(): it only opens when the boss dies.$(br2)Use the $(item)Soul Compass$() to find a dungeon. "
+    "Bring armor, food and a $(item)Recall Stone$()!",
+    "Les donjons NetheryX sont bâtis sur plusieurs niveaux : gardes, générateurs et salles annexes avec coffres, puis l'$(l)arène "
+    "du boss$(). Le trésor est dans un petit $(l)coffre-fort$() entièrement en $(item)Maçonnerie scellée$() (indestructible sur ses "
+    "six faces) et fermé par une porte de $(item)Sceaux du gardien$() : il ne s'ouvre qu'à la mort du boss.$(br2)La $(item)Boussole "
+    "des âmes$() vous mène aux donjons. Prévoyez armure, nourriture et une $(item)Pierre de rappel$() !", "Donjons")
 entry("structures", "How Dungeons Work", "Fonctionnement des donjons", "netheryx:guardian_seal", [
     DUNGEON_INTRO,
-    spot("guardian_seal", "Unbreakable. Breaks by itself when the dungeon boss is defeated.",
-         "Indestructible. Se brise tout seul quand le boss du donjon est vaincu.", link=False),
+    spot("guardian_seal", "Unbreakable. Breaks by itself when the dungeon boss is defeated; the vault's masonry then turns back into "
+                          "ordinary bricks.",
+         "Indestructible. Se brise tout seul quand le boss du donjon est vaincu ; la maçonnerie du coffre-fort redevient alors de la "
+         "brique ordinaire.", link=False),
 ], priority=True)
 
 STRUCTURES = [
     ("Onyx Citadel", "Citadelle d'onyx", "netheryx:onyx_bricks", [
-        ("Onyx Depths, Withered Forest, Ashen Wastes, Basalt Deltas, Nether Wastes, Soul Sand Valley. A 45x45 walled fortress. $(l)1.$() The gate is guarded by Withered Knights. $(l)2.$() Four towers "
-         "hold Ash Wraith spawners on the ground floor and a chest upstairs (ladder).",
-         "Profondeurs d'onyx, Forêt flétrie, Terres cendrées, Deltas de basalte, Désolation du Nether, Vallée des âmes. Forteresse de 45x45. $(l)1.$() La porte est gardée par des Chevaliers flétris. "
-         "$(l)2.$() Quatre tours abritent un générateur de Spectres au rez-de-chaussée et un coffre à l'étage (échelle)."),
-        ("$(l)3.$() The keep's great hall: Ember Stalker spawners and two more knights. $(l)4.$() The arena of the $(l)Onyx "
-         "Sentinel$(). $(l)5.$() Behind the seals: three vault chests (enchanted Onyx gear, netherite, Soul Scythe, totem...).",
-         "$(l)3.$() Le grand hall du donjon : générateurs de Traqueurs et deux chevaliers. $(l)4.$() L'arène de la $(l)Sentinelle "
-         "d'onyx$(). $(l)5.$() Derrière les sceaux : trois coffres au trésor (équipement en onyx enchanté, netherite, Faux des âmes, "
-         "totem...)."),
+        ("Petrified Onyx Forest, Withered Forest, Ashen Wastes, Rimefrost Chasm, Quartz Reef and several vanilla biomes. A walled "
+         "fortress whose four towers hold Ash Wraith spawners and chests. In the middle stands a $(l)three-storey keep$() that you climb:",
+         "Forêt pétrifiée d'onyx, Forêt flétrie, Terres cendrées, Gouffre de givre, Récifs de quartz et plusieurs biomes vanilla. Une "
+         "forteresse dont les quatre tours abritent des générateurs de Spectres et des coffres. Au centre se dresse un $(l)donjon à "
+         "trois étages$() qu'on gravit :"),
+        ("$(l)1.$() Great hall: knights and Ember Stalker spawners; stairs along the west wall. $(l)2.$() Armory, library (chests, "
+         "a mimic) and the $(l)sealed vault$() in the centre. $(l)3.$() Under the roof, the arena of the $(l)Onyx Sentinel$(), with "
+         "balconies (wraiths, chests, mimics). Kill it, then go back down to the vault.",
+         "$(l)1.$() Grand hall : chevaliers et générateurs de Traqueurs ; escalier le long du mur ouest. $(l)2.$() Armurerie, "
+         "bibliothèque (coffres, une mimique) et le $(l)coffre-fort scellé$() au centre. $(l)3.$() Sous le toit, l'arène de la "
+         "$(l)Sentinelle d'onyx$(), avec des balcons (spectres, coffres, mimiques). Vainquez-la, puis redescendez au coffre-fort."),
     ]),
     ("Infernal Sanctum", "Sanctuaire infernal", "netheryx:magma_bricks", [
-        ("Magma Rift, Ember Grove, Sulfur Springs, Ember Meadow, Crimson Forest, Nether Wastes. A temple surrounded by a $(l)lava moat$(): cross the bridge, survive the "
-         "Blaze altars and the Ember Stalkers of the courtyard.",
-         "Faille de magma, Bosquet de braise, Sources sulfureuses, Prairie de braise, Forêt carmin, Désolation du Nether. Un temple entouré de $(l)douves de lave$() : traversez le pont, "
-         "survivez aux autels à Blazes et aux Traqueurs de la cour."),
-        ("The antechamber has lava channels and two ritual rooms (Magma Cube and Stalker spawners, chests). Then the arena of the "
-         "$(l)Infernal Warlock$(), and the sealed treasury (Warlock Staff, Magma Treads, netherite...).",
-         "L'antichambre a des canaux de lave et deux salles rituelles (générateurs de cubes de magma et de Traqueurs, coffres). "
-         "Ensuite l'arène du $(l)Sorcier infernal$() et le trésor scellé (Bâton du sorcier, Semelles de magma, netherite...)."),
+        ("Ember Grove, Sulfur Springs, Ember Meadow, Wartvine Tangle, Hellwood Jungle, Molten Glass Lake and vanilla biomes. A temple "
+         "surrounded by a $(l)lava moat$(): cross the bridge and survive the Blaze altars of the courtyard. Inside, two ritual rooms "
+         "(spawners, chests, mimics).",
+         "Bosquet de braise, Sources sulfureuses, Prairie de braise, Enchevêtrement, Jungle infernale, Lac de verre en fusion et biomes "
+         "vanilla. Un temple entouré de $(l)douves de lave$() : traversez le pont et survivez aux autels à Blazes de la cour. À "
+         "l'intérieur, deux salles rituelles (générateurs, coffres, mimiques)."),
+        ("A great staircase $(l)goes down$() to the underground nave lit by lava, where the $(l)Infernal Warlock$() waits. The sealed "
+         "vault opens in the north wall of the nave.",
+         "Un grand escalier $(l)descend$() vers la nef souterraine éclairée par la lave, où attend le $(l)Sorcier infernal$(). Le "
+         "coffre-fort scellé s'ouvre dans le mur nord de la nef."),
     ]),
     ("Withered Catacombs", "Catacombes flétries", "minecraft:wither_skeleton_skull", [
-        ("Withered Forest, Ashen Wastes, Soulfire Marsh, Soul Sand Valley, Warped Forest, Nether Wastes. Only a $(l)mausoleum$() shows on the surface: its "
-         "staircase leads 12 blocks down into the catacombs.",
-         "Forêt flétrie, Terres cendrées, Marais des âmes, Vallée des âmes, Forêt biscornue, Désolation du Nether. Seul un $(l)mausolée$() est visible en surface : son "
-         "escalier descend de 12 blocs dans les catacombes."),
-        ("A ring gallery lined with skulls, patrolled by knights, leads to four crypts (spawners + chests). The tomb in the "
-         "centre holds the $(l)Withered Champion$(); its treasury lies north, behind the seals.",
-         "Une galerie circulaire bordée de crânes et gardée par des chevaliers mène à quatre cryptes (générateurs + coffres). Le "
-         "tombeau central abrite le $(l)Champion flétri$() ; son trésor est au nord, derrière les sceaux."),
+        ("Withered Forest, Ashen Wastes, Marrow Thicket and vanilla biomes. Only a $(l)mausoleum$() shows on the surface. Its stairs "
+         "lead to the $(l)upper crypt$(): a ring gallery lined with skulls, four side crypts and a chapel (spawners, chests, mimics).",
+         "Forêt flétrie, Terres cendrées, Fourré de moelle et biomes vanilla. Seul un $(l)mausolée$() est visible en surface. Son "
+         "escalier mène à la $(l)crypte supérieure$() : une galerie circulaire bordée de crânes, quatre cryptes et une chapelle "
+         "(générateurs, coffres, mimiques)."),
+        ("From the south gallery, a second staircase goes down to the $(l)deep crypt$(): two ossuaries and the tomb of the "
+         "$(l)Withered Champion$(). The sealed vault lies north of the tomb.",
+         "Depuis la galerie sud, un second escalier descend vers la $(l)crypte profonde$() : deux ossuaires et le tombeau du "
+         "$(l)Champion flétri$(). Le coffre-fort scellé est au nord du tombeau."),
     ]),
 ]
 for en, fr, icon, pages in STRUCTURES:
@@ -363,9 +354,6 @@ for en, fr, icon, ten, tfr in [
     ("Nether Garden", "Jardin du Nether", "netheryx:cinder_wheat",
      "Meadows, groves and forests. A fenced vegetable garden with a hut: seeds, food, golden apples and an Onyx hoe.",
      "Prairies, bosquets et forêts. Un potager clôturé avec une cabane : graines, nourriture, pommes d'or et houe en onyx."),
-    ("Hidden Cache", "Cache secrète", "minecraft:soul_lantern",
-     "A small cairn with a soul lantern marks a trapdoor: below, a buried room with two treasure chests.",
-     "Un petit cairn avec une lanterne des âmes signale une trappe : en dessous, une salle enterrée avec deux coffres au trésor."),
 ]:
     entry("structures", en, fr, icon, [text(ten, tfr)])
 entry("structures", "Vanilla Loot", "Butin vanilla", "minecraft:chest", [
@@ -574,10 +562,10 @@ entry("building", "Other Blocks", "Autres blocs", "netheryx:sulfur_block", [
 entry("getting_started", "Nether Events", "Événements du Nether", "netheryx:sulfur", [
     text("Every 20 to 45 minutes, an event shakes the Nether for a few minutes:$(br)"
          "$(li)$(l)Ash fall$(): thick grey fog, Ash Wraiths and Withered Knights grow stronger.$(li)$(l)Sulfur storm$(): sulfur falls "
-         "from the ceiling, pick it up!$(li)$(l)Eruption$(): in Magma Rifts and Basalt Deltas, volcanic bombs, magma and ores rain down.",
+         "from the ceiling, pick it up!$(li)$(l)Eruption$(): in Molten Glass Lakes and Basalt Deltas, volcanic bombs, magma and ores rain down.",
          "Toutes les 20 à 45 minutes, un événement secoue le Nether pendant quelques minutes :$(br)"
          "$(li)$(l)Pluie de cendres$() : épais brouillard gris, Spectres et Chevaliers flétris renforcés.$(li)$(l)Tempête de soufre$() : "
-         "du soufre tombe de la voûte, ramassez-le !$(li)$(l)Éruption$() : dans les Failles de magma et les deltas de basalte, "
+         "du soufre tombe de la voûte, ramassez-le !$(li)$(l)Éruption$() : dans les Lacs de verre en fusion et les deltas de basalte, "
          "bombes volcaniques, magma et minerais pleuvent.", "Événements"),
     text("The full $(item)Wraith armor$() lets you see through the ash fall.$(br2)Server operators can start or stop an event with "
          "$(l)/netheryx event start <type>$() and $(l)/netheryx event stop$(). Events can be disabled in the config.",
@@ -754,19 +742,19 @@ entry("biomes", "Hellwood Jungle", "Jungle infernale", "netheryx:hellfern", [
          "et de Vaches de braise.", "Jungle infernale"),
 ])
 entry("structures", "Warded Masonry", "Maçonnerie scellée", "netheryx:guardian_seal", [
-    text("The walls, floor and ceiling of every $(l)treasure room$() are made of $(item)Warded Masonry$(): glowing runes, "
-         "unbreakable and impossible to dig around. When the dungeon boss dies, the runes fade and the masonry turns back into "
-         "ordinary bricks: no more shortcuts!$(br2)Dungeons also hide $(l)Mimics$() among their chests, including on the citadel balconies.",
-         "Les murs, le sol et le plafond de chaque $(l)salle au trésor$() sont en $(item)Maçonnerie scellée$() : des runes lumineuses, "
-         "indestructibles et impossibles à contourner en creusant. À la mort du boss du donjon, les runes s'éteignent et la maçonnerie "
-         "redevient de la brique ordinaire : fini les raccourcis !$(br2)Les donjons cachent aussi des $(l)Mimiques$() parmi leurs coffres, "
-         "jusque sur les balcons de la citadelle.", "Salles scellées"),
+    text("Each dungeon vault is a small room whose six faces are made of $(item)Warded Masonry$(): bricks marked with a faint rune, "
+         "unbreakable and explosion-proof. No way to dig around it! When the boss dies, the seals of the door vanish and the masonry "
+         "turns back into ordinary bricks.$(br2)Dungeons also hide $(l)Mimics$() among their chests.",
+         "Chaque coffre-fort de donjon est une petite salle dont les six faces sont en $(item)Maçonnerie scellée$() : des briques "
+         "marquées d'une rune discrète, indestructibles et insensibles aux explosions. Impossible de creuser autour ! À la mort du "
+         "boss, les sceaux de la porte disparaissent et la maçonnerie redevient de la brique ordinaire.$(br2)Les donjons cachent "
+         "aussi des $(l)Mimiques$() parmi leurs coffres.", "Coffres-forts"),
 ])
 entry("structures", "Hidden Cache", "Cache secrète", "minecraft:soul_campfire", [
-    text("Small buried treasure rooms, now common. Look for a $(l)column of blue smoke$() rising from a soul campfire, next to a "
-         "small cairn with a lantern: the trapdoor is right beside it. The $(item)Soul Compass$() can also track them.",
+    text("Small buried treasure rooms, now common. Look for a $(l)column of blue smoke$() rising from a soul campfire on a small "
+         "blackstone pavement, next to a cairn with a lantern: the trapdoor is set in the pavement. The $(item)Soul Compass$() can also track them.",
          "Petites salles au trésor enterrées, désormais fréquentes. Cherchez une $(l)colonne de fumée bleue$() qui s'élève d'un feu de "
-         "camp des âmes, à côté d'un petit cairn surmonté d'une lanterne : la trappe est juste à côté. La $(item)Boussole des âmes$() "
+         "camp des âmes posé sur un petit dallage de pierre noire, près d'un cairn surmonté d'une lanterne : la trappe est sertie dans le dallage. La $(item)Boussole des âmes$() "
          "peut aussi les pister.", "Cache secrète"),
 ])
 entry("creatures", "Heart of the Nether (final boss)", "Cœur du Nether (boss final)", "netheryx:sealed_heart", [
@@ -817,10 +805,10 @@ entry("biomes", "Petrified Onyx Forest", "Forêt pétrifiée d'onyx", "netheryx:
          "lucioles des âmes, cubes d'onyx, spectres.", "Forêt pétrifiée"),
 ])
 entry("creatures", "Basalt Golem (mini-boss)", "Golem de basalte (mini-boss)", "netheryx:basalt_golem_spawn_egg", [
-    mob("basalt_golem", "160 HP, roams Magma Rifts and Molten Glass Lakes. A $(l)ground slam$() announced by a cloud of dust, volleys "
+    mob("basalt_golem", "160 HP, roams Basalt Deltas and Molten Glass Lakes. A $(l)ground slam$() announced by a cloud of dust, volleys "
                         "of $(l)magma chunks$() at range, half damage from projectiles. Below 50% its core melts: faster, it sets "
                         "attackers on fire.",
-        "160 PV, rôde dans les Failles de magma et les Lacs de verre en fusion. Une $(l)frappe au sol$() annoncée par un nuage de "
+        "160 PV, rôde dans les deltas de basalte et les Lacs de verre en fusion. Une $(l)frappe au sol$() annoncée par un nuage de "
         "poussière, des salves d'$(l)éclats de magma$() à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur "
         "entre en fusion : plus rapide, il enflamme ceux qui le frappent.", 0.4),
 ])
@@ -856,6 +844,14 @@ entry("creatures", "Crystal Snail", "Escargot de cristal", "netheryx:crystal_sna
                          "few minutes. Breed it with $(item)Glowcaps$().",
         "Lent et cuirassé. Des cristaux d'onyx poussent sur sa coquille : $(l)tondez-le$() pour des éclats d'onyx, ils repoussent en "
         "quelques minutes. S'élève avec des $(item)Luminelles$().", 0.9),
+])
+entry("equipment", "Abyssal Blade", "Lame abyssale", "netheryx:abyssal_blade", [
+    spot("abyssal_blade", "The ultimate weapon: 13 attack damage, 6000 durability. Each hit sets on fire, inflicts Wither II and "
+                          "heals you for one heart. $(l)Right-click$(): an abyssal wave of fire in front of you (12 damage, 8 s cooldown).",
+         "L'arme ultime : 13 de dégâts, 6000 de durabilité. Chaque coup embrase, inflige Flétrissement II et vous rend un cœur. "
+         "$(l)Clic droit$() : une vague abyssale de feu devant vous (12 de dégâts, recharge 8 s)."),
+    craft("abyssal_blade", en="2 netherite ingots, 3 Abyssal Shards, a Nether Star, 2 Onyx Blocks and an Onyx Sword.",
+          fr="2 lingots de netherite, 3 éclats abyssaux, une étoile du Nether, 2 blocs d'onyx et une épée en onyx."),
 ])
 entry("utility", "Nether Lantern", "Lanterne du Nether", "netheryx:nether_lantern", [
     spot("nether_lantern", "Right-click: every ore within $(l)16 blocks$() is outlined $(l)through walls$() for 10 seconds, colored by "

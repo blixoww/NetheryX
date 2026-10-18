@@ -2,14 +2,14 @@
   "name": "Phalène des âmes",
   "icon": "netheryx:soul_moth_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 22,
+  "sortnum": 19,
   "pages": [
     {
       "type": "patchouli:entity",
       "entity": "netheryx:soul_moth",
       "scale": 1.2,
       "offset": 0.0,
-      "text": "Insecte lumineux et inoffensif du Marais des âmes. Lâche de la $(item)poussière d'âme$()."
+      "text": "Insecte lumineux et inoffensif des vallées et forêts du Nether. Lâche de la $(item)poussière d'âme$()."
     }
   ]
 }

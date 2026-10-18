@@ -1,0 +1,19 @@
+{
+  "name": "Abyssal Blade",
+  "icon": "netheryx:abyssal_blade",
+  "category": "netheryx:equipment",
+  "sortnum": 102,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:abyssal_blade",
+      "text": "The ultimate weapon: 13 attack damage, 6000 durability. Each hit sets on fire, inflicts Wither II and heals you for one heart. $(l)Right-click$(): an abyssal wave of fire in front of you (12 damage, 8 s cooldown).",
+      "link_recipe": true
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:abyssal_blade",
+      "text": "2 netherite ingots, 3 Abyssal Shards, a Nether Star, 2 Onyx Blocks and an Onyx Sword."
+    }
+  ]
+}

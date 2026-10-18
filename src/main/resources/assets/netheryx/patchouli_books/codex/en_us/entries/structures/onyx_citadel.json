@@ -2,15 +2,15 @@
   "name": "Onyx Citadel",
   "icon": "netheryx:onyx_bricks",
   "category": "netheryx:structures",
-  "sortnum": 33,
+  "sortnum": 30,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Onyx Depths, Withered Forest, Ashen Wastes, Basalt Deltas, Nether Wastes, Soul Sand Valley. A 45x45 walled fortress. $(l)1.$() The gate is guarded by Withered Knights. $(l)2.$() Four towers hold Ash Wraith spawners on the ground floor and a chest upstairs (ladder)."
+      "text": "Petrified Onyx Forest, Withered Forest, Ashen Wastes, Rimefrost Chasm, Quartz Reef and several vanilla biomes. A walled fortress whose four towers hold Ash Wraith spawners and chests. In the middle stands a $(l)three-storey keep$() that you climb:"
     },
     {
       "type": "patchouli:text",
-      "text": "$(l)3.$() The keep's great hall: Ember Stalker spawners and two more knights. $(l)4.$() The arena of the $(l)Onyx Sentinel$(). $(l)5.$() Behind the seals: three vault chests (enchanted Onyx gear, netherite, Soul Scythe, totem...)."
+      "text": "$(l)1.$() Great hall: knights and Ember Stalker spawners; stairs along the west wall. $(l)2.$() Armory, library (chests, a mimic) and the $(l)sealed vault$() in the centre. $(l)3.$() Under the roof, the arena of the $(l)Onyx Sentinel$(), with balconies (wraiths, chests, mimics). Kill it, then go back down to the vault."
     }
   ]
 }

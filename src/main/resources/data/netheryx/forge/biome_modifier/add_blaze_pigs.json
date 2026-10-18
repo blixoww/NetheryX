@@ -9,9 +9,9 @@
   "spawners": [
     {
       "type": "netheryx:blaze_pig",
-      "weight": 20,
+      "weight": 35,
       "minCount": 2,
-      "maxCount": 4
+      "maxCount": 5
     }
   ]
 }

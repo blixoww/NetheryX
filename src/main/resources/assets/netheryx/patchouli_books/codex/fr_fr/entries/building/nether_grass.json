@@ -2,7 +2,7 @@
   "name": "Herbe du Nether",
   "icon": "netheryx:nether_grass_block",
   "category": "netheryx:building",
-  "sortnum": 64,
+  "sortnum": 60,
   "pages": [
     {
       "type": "patchouli:text",

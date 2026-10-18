@@ -2,7 +2,7 @@
   "name": "Autel des âmes",
   "icon": "netheryx:soul_altar",
   "category": "netheryx:equipment",
-  "sortnum": 84,
+  "sortnum": 80,
   "pages": [
     {
       "type": "patchouli:text",

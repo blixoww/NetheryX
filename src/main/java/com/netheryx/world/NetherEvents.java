@@ -147,7 +147,7 @@ public final class NetherEvents {
             }
             case ERUPTION -> {
                 var biome = level.getBiome(player.blockPosition());
-                if (!biome.is(ModBiomes.MAGMA_RIFT) && !biome.is(Biomes.BASALT_DELTAS)) {
+                if (!biome.is(ModBiomes.MAGMA_RIFT) && !biome.is(ModBiomes.MOLTEN_GLASS_LAKE) && !biome.is(Biomes.BASALT_DELTAS)) {
                     return;
                 }
                 BlockPos drop = belowCeiling(level, player.blockPosition().offset(random.nextInt(33) - 16, 0, random.nextInt(33) - 16));

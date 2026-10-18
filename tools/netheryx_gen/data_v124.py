@@ -40,6 +40,9 @@ def generate_recipes():
     shaped("nether_lantern", [" O ", "MLM", " M "], {"O": "onyx", "M": "molten_shard", "L": "minecraft:soul_lantern"},
            "nether_lantern", 1, "equipment")
     shaped("molten_glass", ["MM", "MM"], {"M": "molten_shard"}, "molten_glass", 1, "building")
+    # Arme ultime : volontairement tres chere (butin du boss final, etoile du Nether, netherite, onyx)
+    shaped("abyssal_blade", ["NAN", "AXA", "OSO"], {"N": "minecraft:netherite_ingot", "A": "abyssal_shard", "X": "minecraft:nether_star",
+                                                  "O": "onyx_block", "S": "onyx_sword"}, "abyssal_blade", 1, "equipment")
 
 
 def generate_tags():
@@ -58,6 +61,8 @@ def generate_tags():
                                               "blaze_pork", "cooked_blaze_pork", "magmafish", "grilled_magmafish"])
         + ["minecraft:porkchop", "minecraft:cooked_porkchop", "minecraft:beef", "minecraft:cooked_beef"])
     tag("items", fg, "raw_meats", m(["blaze_pork"]))
+    tag("items", mc, "swords", m(["abyssal_blade"]))
+    tag("items", fg, "tools/swords", m(["abyssal_blade"]))
     tag("items", fg, "cooked_meats", m(["cooked_blaze_pork"]))
     both(mc, "logs", m(["petrified_log"]))
     biomes = m(["molten_glass_lake", "petrified_onyx_forest"])
@@ -75,6 +80,7 @@ def generate_advancements():
     advancement("ride_wyvern", "ash_wyvern_egg", "challenge", "nether_heart", {"ride": {
         "trigger": "minecraft:started_riding", "conditions": {"player": [{"condition": "minecraft:entity_properties", "entity": "this",
                                                                           "predicate": {"vehicle": {"type": mid("ash_wyvern")}}}]}}})
+    advancement("abyssal_blade", "abyssal_blade", "challenge", "nether_heart", {"blade": has_items("abyssal_blade")})
     advancement("basalt_golem", "basalt_golem_spawn_egg", "goal", "root", {"kill": {
         "trigger": "minecraft:player_killed_entity", "conditions": {"entity": [{"condition": "minecraft:entity_properties",
                                                                                  "entity": "this", "predicate": {"type": mid("basalt_golem")}}]}}})

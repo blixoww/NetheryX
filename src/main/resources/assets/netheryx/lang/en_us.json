@@ -1,4 +1,6 @@
 {
+  "advancements.netheryx.abyssal_blade.description": "Forge the Abyssal Blade",
+  "advancements.netheryx.abyssal_blade.title": "The Last Word",
   "advancements.netheryx.basalt_golem.description": "Defeat a Basalt Golem",
   "advancements.netheryx.basalt_golem.title": "Rock Breaker",
   "advancements.netheryx.ember_harvest.description": "Eat a Blaze Pepper",
@@ -260,6 +262,9 @@
   "item.minecraft.splash_potion.effect.lava_diving": "Splash Potion of Lava Diving",
   "item.minecraft.tipped_arrow.effect.lava_diving": "Arrow of Lava Diving",
   "item.netheryx.abyssal_armor.set_bonus": "Full set: Fire Resistance, Resistance I, immune to Wither, Strength I in the Nether",
+  "item.netheryx.abyssal_blade": "Abyssal Blade",
+  "item.netheryx.abyssal_blade.tooltip": "Each hit burns, withers and heals you for one heart",
+  "item.netheryx.abyssal_blade.tooltip2": "Right-click: abyssal wave (8 s cooldown)",
   "item.netheryx.abyssal_boots": "Abyssal Boots",
   "item.netheryx.abyssal_chestplate": "Abyssal Chestplate",
   "item.netheryx.abyssal_helmet": "Abyssal Helmet",

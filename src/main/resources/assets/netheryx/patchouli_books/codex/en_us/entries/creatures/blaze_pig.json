@@ -2,7 +2,7 @@
   "name": "Blaze Pig",
   "icon": "netheryx:blaze_pig_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 104,
+  "sortnum": 100,
   "pages": [
     {
       "type": "patchouli:entity",

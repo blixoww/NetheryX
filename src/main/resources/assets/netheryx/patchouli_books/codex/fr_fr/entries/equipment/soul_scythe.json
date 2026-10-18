@@ -2,7 +2,7 @@
   "name": "Faux des âmes",
   "icon": "netheryx:soul_scythe",
   "category": "netheryx:equipment",
-  "sortnum": 40,
+  "sortnum": 36,
   "pages": [
     {
       "type": "patchouli:spotlight",

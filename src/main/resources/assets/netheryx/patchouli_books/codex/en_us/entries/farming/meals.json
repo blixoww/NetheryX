@@ -2,7 +2,7 @@
   "name": "Meals",
   "icon": "netheryx:infernal_stew",
   "category": "netheryx:farming",
-  "sortnum": 61,
+  "sortnum": 57,
   "pages": [
     {
       "type": "patchouli:crafting",

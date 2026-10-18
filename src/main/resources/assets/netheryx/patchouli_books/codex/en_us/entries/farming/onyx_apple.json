@@ -2,7 +2,7 @@
   "name": "Onyx Apple",
   "icon": "netheryx:onyx_apple",
   "category": "netheryx:farming",
-  "sortnum": 98,
+  "sortnum": 94,
   "pages": [
     {
       "type": "patchouli:crafting",

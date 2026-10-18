@@ -2,7 +2,7 @@
   "name": "Rimestone",
   "icon": "netheryx:rimestone_bricks",
   "category": "netheryx:building",
-  "sortnum": 92,
+  "sortnum": 88,
   "pages": [
     {
       "type": "patchouli:crafting",

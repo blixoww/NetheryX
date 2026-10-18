@@ -1,0 +1,32 @@
+{
+  "display": {
+    "icon": {
+      "item": "netheryx:abyssal_blade"
+    },
+    "title": {
+      "translate": "advancements.netheryx.abyssal_blade.title"
+    },
+    "description": {
+      "translate": "advancements.netheryx.abyssal_blade.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "blade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "netheryx:abyssal_blade"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "parent": "netheryx:nether_heart"
+}

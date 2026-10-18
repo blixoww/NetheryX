@@ -2,7 +2,7 @@
   "name": "Lame flétrie",
   "icon": "netheryx:withered_blade",
   "category": "netheryx:equipment",
-  "sortnum": 41,
+  "sortnum": 37,
   "pages": [
     {
       "type": "patchouli:spotlight",

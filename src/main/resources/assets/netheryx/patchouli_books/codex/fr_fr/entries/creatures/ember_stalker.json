@@ -2,7 +2,7 @@
   "name": "Traqueur de braise",
   "icon": "netheryx:ember_stalker_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 19,
+  "sortnum": 16,
   "pages": [
     {
       "type": "patchouli:entity",

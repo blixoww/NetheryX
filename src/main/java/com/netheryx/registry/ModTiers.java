@@ -20,6 +20,12 @@ public final class ModTiers {
                     () -> Ingredient.of(ModItems.ONYX.get())),
             NetheryX.id("onyx"), List.<Object>of(Tiers.NETHERITE), List.<Object>of());
 
+    /** Palier de la Lame abyssale (arme ultime, fabriquee avec le butin du Coeur du Nether). */
+    public static final Tier ABYSSAL = TierSortingRegistry.registerTier(
+            new ForgeTier(4, 6000, 12.0F, 7.0F, 22, ModTags.Blocks.NEEDS_ONYX_TOOL,
+                    () -> Ingredient.of(ModItems.ABYSSAL_SHARD.get())),
+            NetheryX.id("abyssal"), List.<Object>of(ONYX), List.<Object>of());
+
     private ModTiers() {
     }
 

@@ -2,17 +2,17 @@
   "name": "Fonctionnement des donjons",
   "icon": "netheryx:guardian_seal",
   "category": "netheryx:structures",
-  "sortnum": 32,
+  "sortnum": 29,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Les donjons NetheryX sont des forteresses à plusieurs salles : gardes et générateurs de monstres sur le chemin, salles annexes avec coffres, puis l'$(l)arène du boss$(). La salle au trésor est fermée par des $(item)Sceaux du gardien$(), des blocs indestructibles qui ne se brisent qu'à la mort du boss.$(br2)Il y a un donjon environ tous les 300 blocs : la $(item)Boussole des âmes$() vous y mène. Prévoyez armure, nourriture et une $(item)Pierre de rappel$() !",
+      "text": "Les donjons NetheryX sont bâtis sur plusieurs niveaux : gardes, générateurs et salles annexes avec coffres, puis l'$(l)arène du boss$(). Le trésor est dans un petit $(l)coffre-fort$() entièrement en $(item)Maçonnerie scellée$() (indestructible sur ses six faces) et fermé par une porte de $(item)Sceaux du gardien$() : il ne s'ouvre qu'à la mort du boss.$(br2)La $(item)Boussole des âmes$() vous mène aux donjons. Prévoyez armure, nourriture et une $(item)Pierre de rappel$() !",
       "title": "Donjons"
     },
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:guardian_seal",
-      "text": "Indestructible. Se brise tout seul quand le boss du donjon est vaincu.",
+      "text": "Indestructible. Se brise tout seul quand le boss du donjon est vaincu ; la maçonnerie du coffre-fort redevient alors de la brique ordinaire.",
       "link_recipe": false
     }
   ],

@@ -2,7 +2,7 @@
   "name": "Fire Ghast",
   "icon": "netheryx:fire_ghast_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 28,
+  "sortnum": 25,
   "pages": [
     {
       "type": "patchouli:entity",

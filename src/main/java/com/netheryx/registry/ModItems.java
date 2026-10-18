@@ -16,6 +16,7 @@ import com.netheryx.item.OnyxBowItem;
 import com.netheryx.item.OnyxHammerItem;
 import com.netheryx.item.RecallStoneItem;
 import com.netheryx.item.SealedHeartItem;
+import com.netheryx.item.AbyssalBladeItem;
 import com.netheryx.item.WyvernEggItem;
 import com.netheryx.item.NetherLanternItem;
 import com.netheryx.item.SoulCompassItem;
@@ -274,6 +275,8 @@ public final class ModItems {
     }
 
     // --- Creatures, biomes et outils de la 1.2.0 (suite) ------------------------------------------
+    public static final RegistryObject<Item> ABYSSAL_BLADE = register("abyssal_blade",
+            () -> new AbyssalBladeItem(ModTiers.ABYSSAL, 5, -2.4F, new Item.Properties().fireResistant().rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> BLAZE_PORK = register("blaze_pork",
             () -> new Item(new Item.Properties().food(ModFoods.BLAZE_PORK)));
     public static final RegistryObject<Item> COOKED_BLAZE_PORK = register("cooked_blaze_pork",

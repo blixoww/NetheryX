@@ -2,7 +2,7 @@
   "name": "Vanilla Biomes",
   "icon": "minecraft:netherrack",
   "category": "netheryx:biomes",
-  "sortnum": 18,
+  "sortnum": 15,
   "pages": [
     {
       "type": "patchouli:text",

@@ -2,15 +2,15 @@
   "name": "Withered Catacombs",
   "icon": "minecraft:wither_skeleton_skull",
   "category": "netheryx:structures",
-  "sortnum": 35,
+  "sortnum": 32,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Withered Forest, Ashen Wastes, Soulfire Marsh, Soul Sand Valley, Warped Forest, Nether Wastes. Only a $(l)mausoleum$() shows on the surface: its staircase leads 12 blocks down into the catacombs."
+      "text": "Withered Forest, Ashen Wastes, Marrow Thicket and vanilla biomes. Only a $(l)mausoleum$() shows on the surface. Its stairs lead to the $(l)upper crypt$(): a ring gallery lined with skulls, four side crypts and a chapel (spawners, chests, mimics)."
     },
     {
       "type": "patchouli:text",
-      "text": "A ring gallery lined with skulls, patrolled by knights, leads to four crypts (spawners + chests). The tomb in the centre holds the $(l)Withered Champion$(); its treasury lies north, behind the seals."
+      "text": "From the south gallery, a second staircase goes down to the $(l)deep crypt$(): two ossuaries and the tomb of the $(l)Withered Champion$(). The sealed vault lies north of the tomb."
     }
   ]
 }

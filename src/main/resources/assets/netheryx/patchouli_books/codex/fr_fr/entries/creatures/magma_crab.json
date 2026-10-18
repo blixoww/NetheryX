@@ -2,7 +2,7 @@
   "name": "Crabe de magma",
   "icon": "netheryx:magma_crab_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 21,
+  "sortnum": 18,
   "pages": [
     {
       "type": "patchouli:entity",

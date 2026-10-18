@@ -2,7 +2,7 @@
   "name": "Wyverne de cendre (monture)",
   "icon": "netheryx:ash_wyvern_egg",
   "category": "netheryx:creatures",
-  "sortnum": 102,
+  "sortnum": 98,
   "pages": [
     {
       "type": "patchouli:entity",

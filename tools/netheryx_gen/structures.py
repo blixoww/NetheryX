@@ -167,29 +167,62 @@ class Dungeon(Template):
     def seal(self, x0, y0, z0, x1, y1, z1):
         self.box(x0, y0, z0, x1, y1, z1, "guardian_seal")
 
-    KEEP_UNWARDED = ("chest", "ladder", "lantern", "chain", "guardian_seal", "air", "fire", "netherrack", "cluster", "ember_lamp",
-                     "skull", "barrel", "cobweb")
-
-    def ward(self, x0, y0, z0, x1, y1, z1, variant):
-        """Enveloppe indestructible : la maconnerie de la zone devient de la maconnerie scellee (sauf les objets utiles)."""
-        for x in range(min(x0, x1), max(x0, x1) + 1):
-            for y in range(min(y0, y1), max(y0, y1) + 1):
-                for z in range(min(z0, z1), max(z0, z1) + 1):
-                    current = self.blocks.get((x, y, z))
-                    if current and not any(k in current[0] for k in self.KEEP_UNWARDED):
+    def vault(self, x0, y0, z0, x1, y1, z1, variant, door):
+        """Coffre-fort du donjon : coque de maconnerie scellee sur les 6 faces, sans aucune exception, et une porte de
+        Sceaux du gardien (door = x0, y0, z0, x1, y1, z1). Rien ne peut y entrer avant la mort du boss."""
+        for x in range(x0, x1 + 1):
+            for y in range(y0, y1 + 1):
+                for z in range(z0, z1 + 1):
+                    if x in (x0, x1) or y in (y0, y1) or z in (z0, z1):
                         self.set(x, y, z, "warded_bricks", variant=variant)
+                    else:
+                        self.set(x, y, z, AIR)
+        self.seal(*door)
+
+    def stairs_run(self, xs, z0, y0, steps, dz, dy, block, fill):
+        """Escalier droit le long de z (dz = +1/-1), montant (dy = +1) ou descendant (dy = -1) ; colonnes xs.
+        Les marches sont pleines dessous et degagees sur 4 blocs au-dessus."""
+        ascend = "south" if (dz > 0) == (dy > 0) else "north"
+        for i in range(steps):
+            z, y = z0 + i * dz, y0 + i * dy
+            for x in xs:
+                self.stair(x, y, z, block, ascend)
+                for yy in range(y + 1, y + 5):
+                    self.set(x, yy, z, AIR)
+                for yy in range(min(y0, y0 + (steps - 1) * dy) - 1, y):
+                    self.set(x, yy, z, self.pick(fill))
+
+    def stairs_run_x(self, x0, zs, y0, steps, dx, block, fill):
+        """Escalier droit montant le long de x (dx = +1 vers l'est)."""
+        ascend = "east" if dx > 0 else "west"
+        for i in range(steps):
+            x, y = x0 + i * dx, y0 + i
+            for z in zs:
+                self.stair(x, y, z, block, ascend)
+                for yy in range(y + 1, y + 5):
+                    self.set(x, yy, z, AIR)
+                for yy in range(y0 - 1, y):
+                    self.set(x, yy, z, self.pick(fill))
+
+    def rail(self, x0, y, z0, x1, z1, block):
+        for x in range(min(x0, x1), max(x0, x1) + 1):
+            for z in range(min(z0, z1), max(z0, z1) + 1):
+                self.set(x, y, z, block, up="true")
 
     def guard(self, x, y, z, entity):
         self.entity(x + 0.5, y, z + 0.5, entity)
 
 
 # ------------------------------------------------------------------------------------------------
-# Citadelle d'onyx : remparts, tours a generateurs, donjon, arene de la Sentinelle, salle au tresor
+# Citadelle d'onyx : remparts et tours, puis un donjon a trois etages qu'on gravit.
+#   Etage 1 : grand hall gardé.  Etage 2 : armurerie, bibliotheque et coffre-fort scelle.
+#   Etage 3 : arene de la Sentinelle sous le toit, avec balcons.
 # ------------------------------------------------------------------------------------------------
 
 def onyx_citadel():
     S = 45
-    d = Dungeon(S, 32, S, "onyx_citadel")
+    c = S // 2
+    d = Dungeon(S, 31, S, "onyx_citadel")
     d.box(0, 0, 0, S - 1, 0, S - 1, ONYX_FLOOR)
     d.air(2, 1, 2, S - 3, 13, S - 3)
 
@@ -212,17 +245,14 @@ def onyx_citadel():
         if (tx + tz) % 2 == 0:
             d.guard(tx + 4, 8, tz + 2, "mimic")
         d.lantern(tx + 4, 8, tz + 4, "onyx_lantern")
-        d.hanging_lantern(tx + 4, 7, tz + 1, 1)
         for k in range(0, 9, 2):
             for (x, z) in ((tx + k, tz), (tx + k, tz + 8), (tx, tz + k), (tx + 8, tz + k)):
                 d.set(x, 16, z, "onyx_brick_wall", up="true")
         d.set(tx + 4, 16, tz + 4, "onyx_lantern", hanging="false", waterlogged="false")
-        # Porte vers la cour
         door_x = tx + 8 if tx == 0 else tx
         d.air(door_x, 1, tz + 3, door_x, 3, tz + 5)
 
     # Porte d'entree (sud) et ses gardes
-    c = S // 2
     d.air(c - 2, 1, S - 2, c + 2, 5, S - 1)
     for x in (c - 3, c + 3):
         d.pillar(x, S - 1, 1, 7, cap="onyx_lantern")
@@ -230,332 +260,354 @@ def onyx_citadel():
     d.guard(c - 4, 1, S - 5, "withered_knight")
     d.guard(c + 4, 1, S - 5, "withered_knight")
 
-    # Cour : allee, bassins de lave, lampadaires, champignons
+    # Cour : allee, bassins de lave, lampadaires, amas d'onyx
     d.box(c - 2, 0, 33, c + 2, 0, S - 3, "polished_onyx")
     for bx in (3, S - 10):
         d.box(bx, 1, 30, bx + 6, 1, 35, "onyx_brick_slab", type="bottom", waterlogged="false")
         d.box(bx + 1, 1, 31, bx + 5, 1, 34, AIR)
         d.box(bx + 1, 0, 31, bx + 5, 0, 34, "minecraft:lava", level="0")
-    for (x, z) in ((c - 4, 36), (c + 4, 36), (c - 4, 40), (c + 4, 40), (5, 20), (S - 6, 20), (c, 3)):
+    for (x, z) in ((c - 4, 36), (c + 4, 36), (c - 4, 40), (c + 4, 40), (5, 20), (S - 6, 20), (c, 4)):
         d.box(x, 1, z, x, 3, z, "onyx_brick_wall", up="true")
         d.lantern(x, 4, z, "onyx_lantern")
     for (x, z) in ((4, 14), (S - 5, 14), (4, 26), (S - 5, 26), (14, 4), (30, 4)):
         d.set(x, 1, z, "onyx_cluster", facing="up", waterlogged="false")
-    d.spawner(c, 1, 4, "ember_stalker")
+    d.spawner(c - 3, 1, 4, "ember_stalker")
 
-    # Donjon central
-    kx0, kx1, kz0, kz1 = 11, 33, 6, 32
-    d.hall(kx0, 0, kz0, kx1, 16, kz1, ONYX_WALL, ONYX_FLOOR)
+    # Donjon : trois etages (sols a y = 0, 8 et 16), toit a y = 28
+    kx0, kx1, kz0, kz1 = 11, 33, 8, 32
+    d.hall(kx0, 0, kz0, kx1, 28, kz1, ONYX_WALL, ONYX_FLOOR, "polished_onyx")
+    d.box(kx0 + 1, 8, kz0 + 1, kx1 - 1, 8, kz1 - 1, ONYX_FLOOR)
+    d.box(kx0 + 1, 16, kz0 + 1, kx1 - 1, 16, kz1 - 1, ONYX_FLOOR)
     for k in range(kx0, kx1 + 1, 2):
-        d.set(k, 17, kz0, "onyx_brick_wall", up="true")
-        d.set(k, 17, kz1, "onyx_brick_wall", up="true")
+        d.set(k, 29, kz0, "onyx_brick_wall", up="true")
+        d.set(k, 29, kz1, "onyx_brick_wall", up="true")
     for k in range(kz0, kz1 + 1, 2):
-        d.set(kx0, 17, k, "onyx_brick_wall", up="true")
-        d.set(kx1, 17, k, "onyx_brick_wall", up="true")
+        d.set(kx0, 29, k, "onyx_brick_wall", up="true")
+        d.set(kx1, 29, k, "onyx_brick_wall", up="true")
     for (x, z) in ((kx0, kz0), (kx1, kz0), (kx0, kz1), (kx1, kz1)):
-        d.pillar(x, z, 1, 17, cap="onyx_lantern")
+        d.pillar(x, z, 1, 29, cap="onyx_lantern")
+    # Meurtrieres a chaque etage
+    for y in (4, 12, 22):
+        for z in (14, 20, 26):
+            d.set(kx0, y, z, "minecraft:iron_bars", north="true", south="true", east="false", west="false", waterlogged="false")
+            d.set(kx1, y, z, "minecraft:iron_bars", north="true", south="true", east="false", west="false", waterlogged="false")
     d.air(c - 1, 1, kz1, c + 1, 4, kz1)
     d.stair(c - 2, 4, kz1, "onyx_brick_stairs", "west", "top")
     d.stair(c + 2, 4, kz1, "onyx_brick_stairs", "east", "top")
 
-    # Grand hall : piliers, generateurs de traqueurs, gardes
-    hz0 = 27
-    d.walls(kx0, 1, hz0 - 1, kx1, 15, hz0 - 1, ONYX_WALL)
-    d.box(kx0 + 1, 1, hz0 - 1, kx1 - 1, 15, hz0 - 1, ONYX_WALL)
-    d.air(c - 1, 1, hz0 - 1, c + 1, 5, hz0 - 1)
-    for x in (14, 18, 26, 30):
-        d.pillar(x, 29, 1, 6, cap="onyx_lantern")
-    d.box(c - 1, 0, hz0, c + 1, 0, kz1 - 1, "polished_onyx")
-    d.spawner(kx0 + 1, 1, kz1 - 1, "ember_stalker")
-    d.spawner(kx1 - 1, 1, kz1 - 1, "ember_stalker")
-    d.guard(c - 3, 1, 28, "withered_knight")
-    d.guard(c + 3, 1, 28, "withered_knight")
+    # Etage 1 : grand hall, piliers, generateurs de traqueurs, chevaliers
+    for (x, z) in ((16, 13), (28, 13), (16, 20), (28, 20), (16, 27), (28, 27)):
+        d.pillar(x, z, 1, 7, "minecraft:polished_basalt")
+    for (x, z) in ((19, 12), (25, 12), (19, 24), (25, 24), (c, 18)):
+        d.hanging_lantern(x, 8, z, 1, "onyx_lantern")
+    d.box(c - 1, 0, 12, c + 1, 0, kz1 - 1, "polished_onyx")
+    d.spawner(kx1 - 2, 1, kz0 + 2, "ember_stalker")
+    d.spawner(c, 1, kz0 + 2, "ember_stalker")
+    d.guard(c - 3, 1, 29, "withered_knight")
+    d.guard(c + 3, 1, 29, "withered_knight")
+    # Escalier etage 1 -> 2 (mur ouest, vers le nord)
+    d.stairs_run(range(kx0 + 1, kx0 + 4), 28, 1, 8, -1, 1, "onyx_brick_stairs", ONYX_WALL)
+    d.air(kx0 + 1, 8, 22, kx0 + 3, 8, 28)
+    d.rail(kx0 + 4, 9, 22, kx0 + 4, 29, "onyx_brick_wall")
+    d.rail(kx0 + 1, 9, 29, kx0 + 3, 29, "onyx_brick_wall")
 
-    # Arene de la Sentinelle
-    az0, az1 = 12, hz0 - 2
-    for (x, z) in ((15, 14), (29, 14), (15, 23), (29, 23)):
-        d.box(x, 1, z, x + 1, 12, z + 1, "polished_onyx")
-        d.set(x, 13, z, "ember_lamp")
+    # Etage 2 : noyau central contenant le coffre-fort, couloir circulaire, armurerie et bibliotheque
+    d.box(18, 9, 14, 26, 15, 22, ONYX_WALL)
+    d.vault(19, 9, 15, 25, 14, 21, "onyx", (21, 10, 21, 23, 12, 22))
+    for x in (21, 23):
+        d.chest(x, 10, 16, "onyx_citadel_vault", facing="south")
+    d.set(22, 10, 16, "onyx_cluster", facing="up", waterlogged="false")
+    d.lantern(20, 10, 16, "onyx_lantern")
+    d.lantern(24, 10, 16, "onyx_lantern")
+    for x in (20, 24):
+        d.pillar(x, 22, 9, 15, "minecraft:polished_basalt")
+    d.set(c, 13, 22, "ember_lamp")
+    d.guard(c - 2, 9, 25, "withered_knight")
+    d.guard(c + 2, 9, 25, "withered_knight")
+    # Armurerie (ouest)
+    d.chest(kx0 + 1, 9, 10, "onyx_citadel", facing="east")
+    d.guard(kx0 + 2, 9, 12, "mimic")
+    for z in (14, 16, 18):
+        d.set(kx0 + 1, 9, z, "minecraft:polished_blackstone_slab", type="bottom", waterlogged="false")
+        d.skull(kx0 + 1, 10, z, wither=z == 16)
+    # Bibliotheque (est) et generateurs
+    for z in range(19, 31):
+        for y in (9, 10, 11):
+            d.set(kx1 - 1, y, z, "minecraft:bookshelf")
+    d.chest(kx1 - 2, 9, 24, "onyx_citadel", facing="west")
+    d.spawner(28, 9, 26, "ash_wraith")
+    d.spawner(c, 9, 10, "ember_stalker")
+    for (x, z) in ((14, 11), (30, 22), (c, 30), (14, 24)):
+        d.hanging_lantern(x, 16, z, 1, "onyx_lantern")
+    # Escalier etage 2 -> 3 (mur est, vers le sud)
+    d.stairs_run(range(kx1 - 3, kx1), 10, 9, 8, 1, 1, "onyx_brick_stairs", ONYX_WALL)
+    d.air(kx1 - 3, 16, 10, kx1 - 1, 16, 16)
+    d.rail(kx1 - 4, 17, 9, kx1 - 4, 16, "onyx_brick_wall")
+    d.rail(kx1 - 3, 17, 9, kx1 - 1, 9, "onyx_brick_wall")
+
+    # Etage 3 : arene de la Sentinelle
     for x in range(kx0 + 1, kx1):
-        for z in range(az0, az1 + 1):
-            if (x - c) ** 2 + (z - 18.5) ** 2 <= 20:
-                d.set(x, 0, z, "onyx_bricks")
-            elif (x - c) ** 2 + (z - 18.5) ** 2 <= 30:
-                d.set(x, 0, z, "minecraft:crying_obsidian")
-    for (x, z) in ((kx0 + 1, az0), (kx1 - 1, az0), (kx0 + 1, az1), (kx1 - 1, az1)):
-        d.set(x, 1, z, "onyx_cluster", facing="up", waterlogged="false")
-    for x in (16, c, 28):
-        d.hanging_lantern(x, 16, 18, 3, "onyx_lantern")
-    d.guard(c, 1, 18, "onyx_sentinel")
-
-    # Balcons au-dessus de l'arene : des spectres y apparaissent et harcelent les joueurs d'en haut
-    for (bx0, bx1, rail) in ((kx0 + 1, kx0 + 3, kx0 + 3), (kx1 - 3, kx1 - 1, kx1 - 3)):
-        d.box(bx0, 6, az0, bx1, 6, az1, "polished_onyx")
-        for z in range(az0, az1 + 1):
-            d.set(rail, 7, z, "onyx_brick_wall", up="true")
-        d.spawner((bx0 + bx1) // 2, 7, (az0 + az1) // 2, "ash_wraith")
+        for z in range(kz0 + 1, kz1):
+            r2 = (x - c) ** 2 + (z - 21) ** 2
+            if r2 <= 20:
+                d.set(x, 16, z, "onyx_bricks")
+            elif r2 <= 30:
+                d.set(x, 16, z, "minecraft:crying_obsidian")
+    for (x, z) in ((16, 14), (27, 14), (16, 27), (27, 27)):
+        d.box(x, 17, z, x + 1, 27, z + 1, "polished_onyx")
+        d.set(x, 22, z, "ember_lamp")
+        d.set(x + 1, 22, z + 1, "ember_lamp")
+    for (x, z) in ((16, 21), (c, 13), (c, 29), (28, 21)):
+        d.hanging_lantern(x, 28, z, 3, "onyx_lantern")
+    d.guard(c, 17, 21, "onyx_sentinel")
+    # Balcons au-dessus de l'arene : spectres, coffre et mimique de chaque cote
+    for (bx0, bx1, rail_x) in ((kx0 + 1, kx0 + 3, kx0 + 3), (kx1 - 3, kx1 - 1, kx1 - 3)):
+        d.box(bx0, 22, kz0 + 1, bx1, 22, kz1 - 1, "polished_onyx")
+        d.rail(rail_x, 23, kz0 + 1, rail_x, kz1 - 2, "onyx_brick_wall")
+        d.spawner((bx0 + bx1) // 2, 23, 20, "ash_wraith")
         ladder_x = bx0 if bx0 == kx0 + 1 else bx1
-        d.air(ladder_x, 6, az1, ladder_x, 6, az1)
-        for y in range(1, 7):
-            d.set(ladder_x, y, az1, "minecraft:ladder", facing="north", waterlogged="false")
-        d.hanging_lantern((bx0 + bx1) // 2, 16, az0 + 2, 2, "onyx_lantern")
-        d.hanging_lantern((bx0 + bx1) // 2, 16, az1 - 3, 2, "onyx_lantern")
-        chest_x = bx1 - 1 if bx0 == kx0 + 1 else bx0 + 1
-        d.chest(chest_x, 7, az0, "onyx_citadel", facing="south")
-        d.guard(chest_x, 7, az0 + 2, "mimic")
-
-    # Salle scellee : un puits mene a la tour du tresor, au-dessus du donjon
-    d.box(kx0 + 1, 1, kz0 + 1, kx1 - 1, 15, az0 - 1, ONYX_WALL)
-    d.air(17, 1, kz0 + 1, 27, 5, az0 - 2)
-    d.box(16, 0, kz0 + 1, 28, 0, az0 - 2, "minecraft:gilded_blackstone")
-    d.seal(c - 2, 1, az0 - 1, c + 2, 4, az0 - 1)
-    for x in (17, 27):
-        d.lantern(x, 1, kz0 + 1, "onyx_lantern")
-    shaft_x = 18
-    d.air(shaft_x, 6, kz0 + 1, shaft_x, 16, kz0 + 1)
-    for y in range(1, 17):
-        d.set(shaft_x, y, kz0 + 1, "minecraft:ladder", facing="south", waterlogged="false")
-
-    # Tour du tresor : posee sur le toit du donjon, fenetres, creneaux, salle aux deux coffres
-    tx0, tx1, tz0, tz1, ty0, ty1 = 16, 28, kz0, kz0 + 7, 16, 27
-    d.walls(tx0, ty0 + 1, tz0, tx1, ty1 - 1, tz1, ONYX_WALL)
-    d.box(tx0, ty1, tz0, tx1, ty1, tz1, "polished_onyx")
-    d.air(tx0 + 1, ty0 + 1, tz0 + 1, tx1 - 1, ty1 - 1, tz1 - 1)
-    d.box(tx0 + 1, ty0, tz0 + 1, tx1 - 1, ty0, tz1 - 1, "minecraft:gilded_blackstone")
-    d.set(shaft_x, ty0, kz0 + 1, "minecraft:ladder", facing="south", waterlogged="false")
-    for k in range(tx0, tx1 + 1, 2):
-        d.set(k, ty1 + 1, tz0, "onyx_brick_wall", up="true")
-        d.set(k, ty1 + 1, tz1, "onyx_brick_wall", up="true")
-    for k in range(tz0, tz1 + 1, 2):
-        d.set(tx0, ty1 + 1, k, "onyx_brick_wall", up="true")
-        d.set(tx1, ty1 + 1, k, "onyx_brick_wall", up="true")
-    for (x, z) in ((tx0, tz0), (tx1, tz0), (tx0, tz1), (tx1, tz1)):
-        d.pillar(x, z, ty0 + 1, ty1 + 1, cap="onyx_lantern")
-    for x in (tx0 + 3, c, tx1 - 3):
-        d.set(x, ty0 + 3, tz1, "minecraft:iron_bars", north="false", south="false", east="true", west="true", waterlogged="false")
-        d.set(x, ty0 + 4, tz1, "minecraft:iron_bars", north="false", south="false", east="true", west="true", waterlogged="false")
-    for x in (c - 2, c + 2):
-        d.chest(x, ty0 + 1, tz1 - 1, "onyx_citadel_vault", facing="north")
-    d.set(c, ty0 + 1, tz1 - 1, "onyx_cluster", facing="up", waterlogged="false")
-    d.hanging_lantern(c, ty1, tz0 + 3, 2, "onyx_lantern")
-    # La salle scellee et sa tour sont indestructibles tant que la Sentinelle vit
-    d.ward(kx0, 0, kz0, kx1, 16, az0 - 1, "onyx")
-    d.ward(tx0, ty0, tz0, tx1, ty1 + 2, tz1, "onyx")
+        d.set(ladder_x, 22, kz1 - 1, AIR)
+        d.set(rail_x, 23, kz1 - 1, AIR)
+        for y in range(17, 23):
+            d.set(ladder_x, y, kz1 - 1, "minecraft:ladder", facing="north", waterlogged="false")
+        chest_x = (bx0 + bx1) // 2
+        d.chest(chest_x, 23, kz0 + 1, "onyx_citadel", facing="south")
+        d.guard(chest_x, 23, kz0 + 3, "mimic")
+        d.hanging_lantern(chest_x, 28, 14, 2, "onyx_lantern")
+        d.hanging_lantern(chest_x, 28, 27, 2, "onyx_lantern")
     d.save("onyx_citadel")
 
 
 # ------------------------------------------------------------------------------------------------
-# Sanctuaire infernal : douves de lave, cour des blazes, temple, arene du Sorcier, tresor scelle
+# Sanctuaire infernal : douves de lave et temple en surface, puis un grand escalier descend vers la nef
+# souterraine ou attend le Sorcier ; le coffre-fort scelle s'ouvre dans le mur nord de la nef.
 # ------------------------------------------------------------------------------------------------
+
+SANCTUM_SINK = 10
+
 
 def infernal_sanctum():
     S = 41
     c = S // 2
-    d = Dungeon(S, 31, S, "infernal_sanctum")
+    G = SANCTUM_SINK  # y du sol du Nether dans le gabarit
+    d = Dungeon(S, G + 18, S, "infernal_sanctum")
+    # Sous-sol massif : la nef ne communique pas avec les grottes alentour
+    d.box(0, 0, 0, S - 1, G - 1, S - 1, MAGMA_WALL)
     for x in range(S):
         for z in range(S):
             edge = min(x, z, S - 1 - x, S - 1 - z)
             if edge == 0:
-                d.set(x, 0, z, d.pick(MAGMA_WALL))
-                d.set(x, 1, z, "magma_brick_wall", up="true")
+                d.set(x, G, z, d.pick(MAGMA_WALL))
+                d.set(x, G + 1, z, "magma_brick_wall", up="true")
             elif edge <= 3:
-                d.set(x, 0, z, "minecraft:lava", level="0")
+                d.set(x, G, z, "minecraft:lava", level="0")
             else:
-                d.set(x, 0, z, d.pick(MAGMA_FLOOR))
-            for y in range(2 if edge == 0 else 1, 15):
+                d.set(x, G, z, d.pick(MAGMA_FLOOR))
+            for y in range(G + (2 if edge == 0 else 1), G + 15):
                 d.set(x, y, z, AIR)
     # Pont d'entree (sud)
-    d.box(c - 2, 0, S - 4, c + 2, 0, S - 1, "magma_bricks")
-    d.air(c - 2, 1, S - 1, c + 2, 1, S - 1)
-    for z in range(S - 4, S):
-        d.set(c - 3, 1, z, "magma_brick_wall", up="true")
-        d.set(c + 3, 1, z, "magma_brick_wall", up="true")
-    d.set(c - 3, 2, S - 4, "minecraft:lantern", hanging="false", waterlogged="false")
-    d.set(c + 3, 2, S - 4, "minecraft:lantern", hanging="false", waterlogged="false")
+    d.box(c - 2, G, S - 4, c + 2, G, S - 1, "magma_bricks")
+    d.air(c - 2, G + 1, S - 1, c + 2, G + 1, S - 1)
+    d.rail(c - 3, G + 1, S - 4, c - 3, S - 1, "magma_brick_wall")
+    d.rail(c + 3, G + 1, S - 4, c + 3, S - 1, "magma_brick_wall")
+    d.set(c - 3, G + 2, S - 4, "minecraft:lantern", hanging="false", waterlogged="false")
+    d.set(c + 3, G + 2, S - 4, "minecraft:lantern", hanging="false", waterlogged="false")
 
     # Cour exterieure : autels a blazes, braseros
     for (x, z) in ((7, 7), (S - 8, 7)):
-        d.box(x - 1, 1, z - 1, x + 1, 1, z + 1, "magma_bricks")
-        d.spawner(x, 2, z, "minecraft:blaze")
+        d.box(x - 1, G + 1, z - 1, x + 1, G + 1, z + 1, "magma_bricks")
+        d.spawner(x, G + 2, z, "minecraft:blaze")
     for (x, z) in ((6, 20), (S - 7, 20), (6, S - 8), (S - 7, S - 8)):
-        d.pillar(x, z, 1, 4, "magma_bricks")
-        d.set(x, 5, z, "minecraft:netherrack")
-        d.set(x, 6, z, "minecraft:fire", age="0", east="false", north="false", south="false", up="false", west="false")
-    d.guard(c - 5, 1, S - 7, "ember_stalker")
-    d.guard(c + 5, 1, S - 7, "ember_stalker")
+        d.pillar(x, z, G + 1, G + 4, "magma_bricks")
+        d.set(x, G + 5, z, "minecraft:netherrack")
+        d.set(x, G + 6, z, "minecraft:fire", age="0", east="false", north="false", south="false", up="false", west="false")
+    d.guard(c - 5, G + 1, S - 7, "ember_stalker")
+    d.guard(c + 5, G + 1, S - 7, "ember_stalker")
 
-    # Temple
+    # Temple (rez-de-chaussee) : salles rituelles laterales, nef de magma, escalier vers le sous-sol
     tx0, tx1, tz0, tz1 = 9, 31, 8, 33
-    d.hall(tx0, 0, tz0, tx1, 14, tz1, MAGMA_WALL, MAGMA_FLOOR)
+    d.hall(tx0, G, tz0, tx1, G + 12, tz1, MAGMA_WALL, MAGMA_FLOOR)
     for step, inset in enumerate((1, 3, 5)):
-        d.box(tx0 + inset, 15 + step, tz0 + inset, tx1 - inset, 15 + step, tz1 - inset, MAGMA_WALL)
+        d.box(tx0 + inset, G + 13 + step, tz0 + inset, tx1 - inset, G + 13 + step, tz1 - inset, MAGMA_WALL)
     for (x, z) in ((tx0, tz0), (tx1, tz0), (tx0, tz1), (tx1, tz1)):
-        d.pillar(x, z, 1, 15, "minecraft:polished_basalt")
-        d.set(x, 16, z, "ember_lamp")
-    d.set(c, 18, 20, "ember_lamp")
-    d.air(c - 1, 1, tz1, c + 1, 4, tz1)
+        d.pillar(x, z, G + 1, G + 13, "minecraft:polished_basalt")
+        d.set(x, G + 14, z, "ember_lamp")
+    d.set(c, G + 16, 20, "ember_lamp")
+    d.air(c - 1, G + 1, tz1, c + 1, G + 4, tz1)
+    for z in range(20, tz1 - 1):
+        for x in (17, 23):
+            d.set(x, G, z, "minecraft:magma_block")
+    for side, (wx, rx0, rx1, mob) in {"west": (16, tx0 + 1, 15, "minecraft:magma_cube"),
+                                      "east": (24, 25, tx1 - 1, "ember_stalker")}.items():
+        d.box(wx, G + 1, tz0 + 1, wx, G + 11, 18, MAGMA_WALL)
+        d.box(rx0, G + 1, 18, rx1, G + 11, 18, MAGMA_WALL)
+        d.air(wx, G + 1, 12, wx, G + 3, 13)
+        d.box(rx0, G, tz0 + 1, rx1, G, 17, "minecraft:polished_blackstone")
+        d.spawner((rx0 + rx1) // 2, G + 1, 13, mob)
+        d.chest((rx0 + rx1) // 2, G + 1, tz0 + 1, "infernal_sanctum", facing="south")
+        d.guard((rx0 + rx1) // 2 + (2 if side == "east" else -2), G + 1, tz0 + 1, "mimic")
+        d.hanging_lantern((rx0 + rx1) // 2, G + 12, 14, 4, "minecraft:lantern")
+    d.spawner(c, G + 1, 12, "ember_stalker")
+    for (x, z) in ((c, 16), (c, 26)):
+        d.hanging_lantern(x, G + 12, z, 4, "minecraft:lantern")
+    # Grand escalier (mur ouest du temple) : du rez-de-chaussee (sol y = G) a la nef (sol y = 1)
+    d.stairs_run(range(tx0 + 1, tx0 + 4), 30, G - 1, G - 1, -1, -1, "minecraft:polished_blackstone_brick_stairs", MAGMA_WALL)
+    d.air(tx0 + 1, G, 22, tx0 + 3, G, 30)
+    d.rail(tx0 + 4, G + 1, 22, tx0 + 4, 31, "magma_brick_wall")
+    d.rail(tx0 + 1, G + 1, 21, tx0 + 3, 21, "magma_brick_wall")
 
-    # Antichambre : canaux de lave, salles rituelles laterales
-    az = 27
-    d.box(tx0 + 1, 1, az - 1, tx1 - 1, 13, az - 1, MAGMA_WALL)
-    d.air(c - 1, 1, az - 1, c + 1, 5, az - 1)
+    # Nef souterraine : arene du Sorcier (sol y = 1, voute y = G)
+    nx0, nx1, nz0, nz1 = 6, 34, 8, 34
+    d.box(nx0, 1, nz0, nx1, 1, nz1, MAGMA_FLOOR)
+    d.air(nx0, 2, nz0, nx1, G - 1, nz1)
+    d.stairs_run(range(tx0 + 1, tx0 + 4), 30, G - 1, G - 1, -1, -1, "minecraft:polished_blackstone_brick_stairs", MAGMA_WALL)
+    for x in range(nx0, nx1 + 1):
+        for z in range(nz0, nz1 + 1):
+            r2 = (x - c) ** 2 + (z - 21) ** 2
+            if r2 <= 14:
+                d.set(x, 1, z, "onyx_bricks")
+            elif r2 <= 26:
+                d.set(x, 1, z, "minecraft:magma_block")
+    for x in (nx0 + 1, nx1 - 1):
+        d.box(x, 1, nz0 + 2, x, 1, nz1 - 2, "minecraft:lava", level="0")
+    for (x, z) in ((13, 13), (27, 13), (13, 29), (27, 29)):
+        d.box(x, 2, z, x + 1, G - 1, z + 1, "magma_bricks")
+        d.set(x, 5, z, "ember_lamp")
+        d.set(x + 1, 5, z + 1, "ember_lamp")
+    for (x, z) in ((c, 13), (c, 29), (13, 21), (28, 21)):
+        d.hanging_lantern(x, G, z, 2, "minecraft:lantern")
+    for (x, z) in ((nx1 - 2, nz1 - 2), (nx1 - 2, nz0 + 2)):
+        d.spawner(x, 2, z, "minecraft:magma_cube")
+    d.guard(c, 2, 21, "infernal_warlock")
+
+    # Coffre-fort scelle : dans le mur nord de la nef
+    d.vault(15, 1, 1, 25, 7, 7, "magma", (19, 2, 7, 21, 4, 7))
+    for x in (18, 22):
+        d.chest(x, 2, 2, "infernal_sanctum_vault", facing="south")
+    d.set(c, 2, 2, "minecraft:gold_block")
+    d.lantern(16, 2, 2, "minecraft:lantern")
+    d.lantern(24, 2, 2, "minecraft:lantern")
     for x in (17, 23):
-        d.box(x, 0, az + 1, x, 0, tz1 - 2, "minecraft:lava", level="0")
-    for side, (wx, rx0, rx1, mob, loot) in {"west": (15, tx0 + 1, 14, "minecraft:magma_cube", "infernal_sanctum"),
-                                              "east": (25, 26, tx1 - 1, "ember_stalker", "infernal_sanctum")}.items():
-        d.box(wx, 1, az, wx, 13, tz1 - 1, MAGMA_WALL)
-        d.air(wx, 1, 29, wx, 3, 30)
-        d.box(rx0, 0, az, rx1, 0, tz1 - 1, "minecraft:polished_blackstone")
-        d.spawner((rx0 + rx1) // 2, 1, 30, mob)
-        d.chest((rx0 + rx1) // 2, 1, tz1 - 1, loot, facing="north")
-        d.guard((rx0 + rx1) // 2 + (2 if side == "east" else -2), 1, tz1 - 1, "mimic")
-        d.hanging_lantern((rx0 + rx1) // 2, 13, 29, 4, "minecraft:lantern")
-    d.spawner(c, 1, 30, "ember_stalker")
-
-    # Arene du Sorcier
-    rz0, rz1 = 13, az - 2
-    for (x, z) in ((12, 15), (28, 15), (12, 23), (28, 23)):
-        d.box(x, 1, z, x + 1, 11, z + 1, "magma_bricks")
-        d.set(x, 6, z, "ember_lamp")
-        d.set(x + 1, 6, z + 1, "ember_lamp")
-    for x in range(tx0 + 1, tx1):
-        for z in range(rz0, rz1 + 1):
-            r2 = (x - c) ** 2 + (z - 19) ** 2
-            if r2 <= 12:
-                d.set(x, 0, z, "onyx_bricks")
-            elif r2 <= 20:
-                d.set(x, 0, z, "minecraft:magma_block")
-    for (x, z) in ((tx0 + 1, rz0), (tx1 - 2, rz0)):
-        d.box(x, 0, z, x + 1, 0, z + 1, "minecraft:lava", level="0")
-    d.guard(c, 1, 19, "infernal_warlock")
-
-    # Antichambre scellee : une echelle grimpe jusqu'a la fleche du temple, ou se trouve le tresor
-    d.box(tx0 + 1, 1, tz0 + 1, tx1 - 1, 13, rz0 - 1, MAGMA_WALL)
-    d.air(14, 1, tz0 + 1, 26, 5, rz0 - 2)
-    d.box(14, 0, tz0 + 1, 26, 0, rz0 - 2, "minecraft:gilded_blackstone")
-    d.seal(c - 2, 1, rz0 - 1, c + 2, 4, rz0 - 1)
-    for x in (16, 24):
-        d.set(x, 1, tz0 + 1, "ember_lamp")
-    ladder = (14, tz0 + 2)
-    d.air(ladder[0], 6, ladder[1], ladder[0], 16, ladder[1])
-    for y in range(1, 17):
-        d.set(ladder[0], y, ladder[1], "minecraft:ladder", facing="east", waterlogged="false")
-
-    # Fleche du temple : 4 niveaux plus haut, balcon de pierre noire, braseros et tresor
-    sx0, sx1, sz0, sz1, sy0, sy1 = 11, 18, tz0 + 1, tz0 + 8, 16, 28
-    d.walls(sx0, sy0, sz0, sx1, sy1 - 1, sz1, MAGMA_WALL)
-    d.air(sx0 + 1, sy0 + 1, sz0 + 1, sx1 - 1, sy1 - 1, sz1 - 1)
-    d.box(sx0 + 1, sy0, sz0 + 1, sx1 - 1, sy0, sz1 - 1, "minecraft:polished_blackstone_bricks")
-    d.set(ladder[0], sy0, ladder[1], "minecraft:ladder", facing="east", waterlogged="false")
-    for step, inset in enumerate((0, 1, 2)):
-        d.box(sx0 + inset, sy1 + step, sz0 + inset, sx1 - inset, sy1 + step, sz1 - inset, MAGMA_WALL)
-    d.set((sx0 + sx1) // 2, sy1 + 2, (sz0 + sz1) // 2, "ember_lamp")
-    for (x, z) in ((sx0, sz0), (sx1, sz0), (sx0, sz1), (sx1, sz1)):
-        d.pillar(x, z, sy0 + 1, sy1 - 1, "minecraft:polished_basalt")
-    for z in (sz0 + 2, sz1 - 2):
-        for y in (sy0 + 2, sy0 + 3):
-            d.set(sx1, y, z, "minecraft:iron_bars", north="true", south="true", east="false", west="false", waterlogged="false")
-    for z in (sz0 + 2, sz0 + 5):
-        d.chest(sx0 + 1, sy0 + 1, z, "infernal_sanctum_vault", facing="east")
-    d.set(sx1 - 1, sy0 + 1, sz1 - 1, "minecraft:netherrack")
-    d.set(sx1 - 1, sy0 + 2, sz1 - 1, "minecraft:fire", age="0", east="false", north="false", south="false", up="false", west="false")
-    d.hanging_lantern((sx0 + sx1) // 2, sy1 - 1, (sz0 + sz1) // 2, 2, "minecraft:lantern")
-    d.ward(tx0, 0, tz0, tx1, 14, rz0 - 1, "magma")
-    d.ward(sx0, 14, sz0, sx1, sy1 + 2, sz1, "magma")
+        d.pillar(x, nz0, 2, G - 1, "minecraft:polished_basalt")
+    d.set(c, 6, nz0, "ember_lamp")
     d.save("infernal_sanctum")
 
 
 # ------------------------------------------------------------------------------------------------
-# Catacombes fletries : mausolee en surface, escalier, galeries, cryptes, tombeau du Champion
+# Catacombes fletries : mausolee en surface, crypte superieure (galerie, cryptes laterales), puis un
+# escalier descend vers la crypte profonde : ossuaires, tombeau du Champion et coffre-fort scelle.
 # ------------------------------------------------------------------------------------------------
 
-CATACOMB_SINK = 12
+CATACOMB_SINK = 16
 
 
 def withered_catacombs():
     S = 39
     G = CATACOMB_SINK  # y du sol du Nether dans le gabarit
+    U = 9              # sol de la crypte superieure
     d = Dungeon(S, G + 10, S, "withered_catacombs")
     # Roche massive : rien ne doit communiquer avec les grottes alentour
     d.box(0, 0, 0, S - 1, G - 1, S - 1, CRYPT_WALL)
 
-    # Galerie circulaire (3 de large)
+    # --- Crypte superieure : galerie circulaire (3 de large) -----------------------------------
     for (x0, z0, x1, z1) in ((7, 7, 31, 9), (7, 29, 31, 31), (7, 7, 9, 31), (29, 7, 31, 31)):
-        d.air(x0, 1, z0, x1, 5, z1)
-        d.box(x0, 0, z0, x1, 0, z1, CRYPT_FLOOR)
+        d.air(x0, U + 1, z0, x1, U + 5, z1)
+        d.box(x0, U, z0, x1, U, z1, CRYPT_FLOOR)
     for k in range(7, 32, 3):
         for (x, z) in ((k, 6), (k, 32), (6, k), (32, k)):
-            d.set(x, 2, z, "minecraft:air")
+            d.set(x, U + 2, z, AIR)
             if d.rng.random() < 0.6:
-                d.skull(x, 2, z, wither=d.rng.random() < 0.15)
+                d.skull(x, U + 2, z, wither=d.rng.random() < 0.15)
             else:
-                d.set(x, 2, z, "minecraft:bone_block", axis="y")
+                d.set(x, U + 2, z, "minecraft:bone_block", axis="y")
     for (x, z) in ((8, 8), (30, 8), (8, 30), (30, 30), (19, 8), (8, 19), (30, 19)):
-        d.hanging_lantern(x, 6, z, 1)
+        d.hanging_lantern(x, U + 6, z, 1)
     for (x, z) in ((12, 8), (26, 30), (8, 24), (30, 13)):
-        d.set(x, 4, z, "minecraft:cobweb")
-    d.guard(8, 1, 15, "withered_knight")
-    d.guard(30, 1, 24, "withered_knight")
-    d.guard(19, 1, 8, "withered_knight")
-
-    # Cryptes (generateur + coffre + sarcophages)
+        d.set(x, U + 4, z, "minecraft:cobweb")
+    d.guard(8, U + 1, 15, "withered_knight")
+    d.guard(30, U + 1, 24, "withered_knight")
+    d.guard(19, U + 1, 8, "withered_knight")
+    # Cryptes laterales (generateur, coffre, sarcophages)
     rooms = [((1, 15, 5, 23), (6, 18, 6, 20), "withered_knight"),
              ((33, 15, 37, 23), (32, 18, 32, 20), "ash_wraith"),
              ((15, 1, 23, 5), (18, 6, 20, 6), "withered_knight"),
              ((1, 33, 12, 37), (8, 32, 8, 32), "ash_wraith")]
     for (x0, z0, x1, z1), (dx0, dz0, dx1, dz1), mob in rooms:
-        d.air(x0, 1, z0, x1, 5, z1)
-        d.box(x0, 0, z0, x1, 0, z1, CRYPT_FLOOR)
-        d.air(dx0, 1, dz0, dx1, 3, dz1)
+        d.air(x0, U + 1, z0, x1, U + 5, z1)
+        d.box(x0, U, z0, x1, U, z1, CRYPT_FLOOR)
+        d.air(dx0, U + 1, dz0, dx1, U + 3, dz1)
         cx, cz = (x0 + x1) // 2, (z0 + z1) // 2
-        d.spawner(cx, 1, cz, mob)
-        d.chest(x0, 1, z0, "withered_catacombs", facing="south")
+        d.spawner(cx, U + 1, cz, mob)
+        d.chest(x0, U + 1, z0, "withered_catacombs", facing="south")
         if (x0, z0) in ((1, 15), (1, 33)):
-            d.guard(x0 + 2, 1, z0, "mimic")
-        d.box(x1, 1, z1, x1, 1, z1 - 2 if z1 - z0 > 4 else z1, "minecraft:polished_blackstone_slab",
+            d.guard(x0 + 2, U + 1, z0, "mimic")
+        d.box(x1, U + 1, z1, x1, U + 1, z1 - 2 if z1 - z0 > 4 else z1, "minecraft:polished_blackstone_slab",
               type="bottom", waterlogged="false")
-        d.skull(x1, 2, z1)
-        d.hanging_lantern(cx, 6, cz + 1, 1)
-        d.set(x0 + 1, 4, z1, "minecraft:cobweb")
+        d.skull(x1, U + 2, z1)
+        d.hanging_lantern(cx, U + 6, cz + 1, 1)
+        d.set(x0 + 1, U + 4, z1, "minecraft:cobweb")
+    # Chapelle centrale de la crypte superieure (au-dessus du tombeau)
+    d.air(13, U + 1, 13, 25, U + 5, 25)
+    d.box(13, U, 13, 25, U, 25, CRYPT_FLOOR)
+    d.air(18, U + 1, 10, 20, U + 3, 12)
+    d.air(18, U + 1, 26, 20, U + 3, 28)
+    for (x, z) in ((14, 14), (24, 14), (14, 24), (24, 24)):
+        d.pillar(x, z, U + 1, U + 5, "minecraft:polished_basalt")
+    d.spawner(19, U + 1, 19, "ash_wraith")
+    d.hanging_lantern(19, U + 6, 16, 2)
+    d.hanging_lantern(19, U + 6, 22, 2)
 
-    # Tombeau du Champion
+    # Escalier crypte superieure -> crypte profonde (descend vers le nord depuis la galerie sud)
+    d.stairs_run(range(18, 21), 29, U - 1, U - 1, -1, -1, "minecraft:polished_blackstone_brick_stairs", CRYPT_WALL)
+    d.air(18, U, 25, 20, U, 29)
+    d.rail(17, U + 1, 25, 17, 29, "minecraft:polished_blackstone_brick_wall")
+    d.rail(21, U + 1, 25, 21, 29, "minecraft:polished_blackstone_brick_wall")
+    d.box(13, U, 25, 25, U, 25, CRYPT_FLOOR)
+    d.air(18, U, 25, 20, U, 29)
+
+    # --- Crypte profonde : tombeau du Champion (sol y = 1) -------------------------------------
     ax0, ax1, az0, az1 = 12, 26, 15, 26
-    d.air(ax0, 1, az0, ax1, 8, az1)
-    d.box(ax0, 0, az0, ax1, 0, az1, CRYPT_FLOOR)
-    d.air(18, 1, 27, 20, 4, 28)
+    d.air(ax0, 2, az0, ax1, 7, az1)
+    d.box(ax0, 1, az0, ax1, 1, az1, CRYPT_FLOOR)
+    d.stairs_run(range(18, 21), 29, U - 1, U - 1, -1, -1, "minecraft:polished_blackstone_brick_stairs", CRYPT_WALL)
     for (x, z) in ((13, 16), (25, 16), (13, 25), (25, 25)):
-        d.pillar(x, z, 1, 8, "minecraft:polished_basalt")
-        d.set(x, 1, z, "minecraft:chiseled_polished_blackstone")
+        d.pillar(x, z, 2, 7, "minecraft:polished_basalt")
+        d.set(x, 2, z, "minecraft:chiseled_polished_blackstone")
     for (x, z) in ((15, 18), (23, 18), (15, 23), (23, 23)):
-        d.set(x, 0, z, "minecraft:soul_soil")
-        d.set(x, 1, z, "minecraft:soul_fire")
+        d.set(x, 1, z, "minecraft:soul_soil")
+        d.set(x, 2, z, "minecraft:soul_fire")
     for x in (16, 22):
-        d.box(x, 1, 20, x + 1, 1, 21, "minecraft:polished_blackstone_slab", type="bottom", waterlogged="false")
-        d.skull(x, 2, 20, wither=True)
-    d.box(18, 0, 19, 20, 0, 22, "withered_planks")
-    d.hanging_lantern(19, 9, 20, 3)
-    d.guard(19, 1, 21, "withered_champion")
+        d.box(x, 2, 20, x + 1, 2, 21, "minecraft:polished_blackstone_slab", type="bottom", waterlogged="false")
+        d.skull(x, 3, 20, wither=True)
+    d.box(18, 1, 19, 20, 1, 22, "withered_planks")
+    d.hanging_lantern(19, 8, 18, 2)
+    d.guard(19, 2, 20, "withered_champion")
+    # Ossuaires lateraux (generateurs, coffres, mimique)
+    for (ox0, ox1, door_x, mob) in ((3, 10, 11, "withered_knight"), (28, 35, 27, "ash_wraith")):
+        d.air(ox0, 2, 17, ox1, 6, 24)
+        d.box(ox0, 1, 17, ox1, 1, 24, CRYPT_FLOOR)
+        d.air(door_x, 2, 20, door_x, 4, 21)
+        d.spawner((ox0 + ox1) // 2, 2, 20, mob)
+        d.chest(ox0, 2, 17, "withered_catacombs", facing="east")
+        d.guard(ox0, 2, 19, "mimic")
+        for z in range(17, 25, 2):
+            d.set(ox1 if ox0 == 3 else ox0, 3, z, "minecraft:bone_block", axis="y")
+            d.skull(ox1 if ox0 == 3 else ox0, 4, z)
+        d.hanging_lantern((ox0 + ox1) // 2, 7, 22, 1)
+    # Coffre-fort scelle (au nord du tombeau)
+    d.vault(14, 1, 8, 24, 7, 13, "blackstone", (18, 2, 13, 20, 4, 13))
+    d.air(18, 2, 14, 20, 4, 14)
+    for x in (16, 22):
+        d.chest(x, 2, 9, "withered_catacombs_vault", facing="south")
+    d.set(19, 2, 9, "minecraft:gilded_blackstone")
+    d.lantern(15, 2, 9)
+    d.lantern(23, 2, 9)
 
-    # Tresor scelle (au nord du tombeau)
-    d.air(15, 1, 11, 23, 4, 13)
-    d.box(15, 0, 11, 23, 0, 13, "minecraft:gilded_blackstone")
-    d.seal(17, 1, 14, 21, 4, 14)
-    for x in (17, 21):
-        d.chest(x, 1, 11, "withered_catacombs_vault", facing="south")
-    d.lantern(15, 1, 11)
-    d.lantern(23, 1, 11)
-    d.ward(14, 0, 10, 24, 5, 14, "blackstone")
-
-    # Escalier vers la surface (descend vers l'ouest)
-    for i in range(G):
-        x = 20 + i
-        d.air(x, i + 1, 33, x, i + 5, 35)
-        for z in (33, 34, 35):
-            d.stair(x, i + 1, z, "minecraft:polished_blackstone_brick_stairs", "east")
-            d.box(x, 0, z, x, i, z, CRYPT_WALL)
-    d.air(17, 1, 33, 19, 4, 35)
-    d.air(18, 1, 32, 20, 4, 32)
-    d.hanging_lantern(19, 5, 34, 1)
+    # --- Acces depuis la surface ----------------------------------------------------------------
+    d.air(18, U + 1, 32, 23, U + 4, 35)
+    d.box(18, U, 32, 23, U, 35, CRYPT_FLOOR)
+    d.stairs_run_x(24, (33, 34, 35), U + 1, G - U, 1, "minecraft:polished_blackstone_brick_stairs", CRYPT_WALL)
+    d.hanging_lantern(20, U + 5, 34, 1)
 
     # Mausolee en surface
     mx0, mx1, mz0, mz1 = 26, 37, 30, 38
@@ -567,10 +619,7 @@ def withered_catacombs():
     for (x, z) in ((mx0, mz0), (mx1, mz0), (mx0, mz1), (mx1, mz1)):
         d.pillar(x, z, G + 1, G + 8, "withered_stem")
         d.skull(x, G + 9, z, wither=True)
-    d.air(mx0 + 1, G, 33, 31, G, 35)
-    for i in range(6, G):
-        for z in (33, 34, 35):
-            d.stair(20 + i, i + 1, z, "minecraft:polished_blackstone_brick_stairs", "east")
+    d.stairs_run_x(24, (33, 34, 35), U + 1, G - U, 1, "minecraft:polished_blackstone_brick_stairs", CRYPT_WALL)
     d.air(33, G + 1, mz1, 35, G + 3, mz1)
     d.lantern(32, G + 1, mz1 - 1)
     d.lantern(36, G + 1, mz1 - 1)
@@ -658,15 +707,17 @@ def nether_garden():
 
 
 def hidden_cache():
-    """Cache secrete : une trappe et une echelle menent a une petite salle au tresor enterree."""
-    G = 6
+    """Cache secrete : une trappe sertie dans un petit dallage mene, par une echelle, a une salle au tresor enterree."""
+    G = 6  # y du sol du Nether dans le gabarit (la structure est enfoncee de G + 1 blocs)
     d = Dungeon(7, G + 3, 7, "hidden_cache")
     d.box(0, 0, 0, 6, G - 1, 6, CRYPT_WALL)
     d.air(1, 1, 1, 5, 3, 5)
     d.box(1, 0, 1, 5, 0, 5, "minecraft:polished_blackstone_bricks")
     for y in range(1, G):
         d.set(3, y, 5, "minecraft:ladder", facing="north", waterlogged="false")
-    # La trappe affleure au niveau du sol
+    # Dallage au ras du sol : la trappe y est sertie, elle ne flotte jamais au-dessus du terrain
+    d.box(0, G, 0, 6, G, 6, [("minecraft:polished_blackstone_bricks", 60), ("minecraft:cracked_polished_blackstone_bricks", 30),
+                             ("minecraft:blackstone", 10)])
     d.set(3, G, 5, "withered_trapdoor", facing="north", half="top", open="false", powered="false", waterlogged="false")
     d.chest(1, 1, 1, "small_treasure", facing="south")
     d.chest(5, 1, 1, "small_treasure", facing="south")
@@ -674,10 +725,9 @@ def hidden_cache():
     d.lantern(3, 2, 1, "onyx_lantern")
     d.set(1, 1, 4, "minecraft:barrel", facing="up", open="false")
     d.skull(5, 1, 4)
-    # Repere en surface bien visible : un feu de camp des ames sur une botte de foin (colonne de fumee haute,
-    # visible de loin) et un cairn avec une lanterne des ames
-    d.set(2, G, 2, "minecraft:hay_block", axis="y")
-    d.set(2, G + 1, 2, "minecraft:soul_campfire", facing="north", lit="true", signal_fire="true", waterlogged="false")
+    # Reperes bien visibles : feu de camp des ames sur une botte de foin (haute colonne de fumee) et cairn a lanterne
+    d.set(1, G, 1, "minecraft:hay_block", axis="y")
+    d.set(1, G + 1, 1, "minecraft:soul_campfire", facing="north", lit="true", signal_fire="true", waterlogged="false")
     d.set(5, G + 1, 4, "minecraft:polished_blackstone_brick_wall", up="true")
     d.lantern(5, G + 2, 4)
     d.save("hidden_cache")

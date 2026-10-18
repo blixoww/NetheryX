@@ -7,7 +7,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:onyx_ore",
-      "text": "Aussi fréquent que le diamant, partout dans le Nether entre Y=5 et Y=56, et plus encore dans les $(l)Profondeurs d'onyx$(). Nécessite une $(item)pioche en diamant$(). Fortune fonctionne.",
+      "text": "Aussi fréquent que le diamant, partout dans le Nether entre Y=5 et Y=56, et plus encore dans la $(l)Forêt pétrifiée d'onyx$(). Nécessite une $(item)pioche en diamant$(). Fortune fonctionne.",
       "link_recipe": false
     },
     {

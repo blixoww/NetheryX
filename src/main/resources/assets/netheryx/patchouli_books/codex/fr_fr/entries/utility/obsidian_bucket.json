@@ -2,7 +2,7 @@
   "name": "Seau d'obsidienne",
   "icon": "netheryx:obsidian_bucket",
   "category": "netheryx:utility",
-  "sortnum": 48,
+  "sortnum": 44,
   "pages": [
     {
       "type": "patchouli:spotlight",

@@ -7,7 +7,7 @@
   "spawners": [
     {
       "type": "netheryx:basalt_golem",
-      "weight": 4,
+      "weight": 6,
       "minCount": 1,
       "maxCount": 1
     }

@@ -2,7 +2,7 @@
   "name": "Champion flétri (boss)",
   "icon": "netheryx:withered_champion_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 30,
+  "sortnum": 27,
   "pages": [
     {
       "type": "patchouli:entity",

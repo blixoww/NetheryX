@@ -2,7 +2,7 @@
   "name": "Glimmer Elixir",
   "icon": "netheryx:glimmer_elixir",
   "category": "netheryx:utility",
-  "sortnum": 50,
+  "sortnum": 46,
   "pages": [
     {
       "type": "patchouli:spotlight",

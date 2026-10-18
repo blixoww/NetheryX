@@ -2,7 +2,7 @@
   "name": "Piglin Merchant",
   "icon": "netheryx:piglin_merchant_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 79,
+  "sortnum": 75,
   "pages": [
     {
       "type": "patchouli:entity",

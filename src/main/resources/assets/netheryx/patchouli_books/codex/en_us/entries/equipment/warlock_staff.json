@@ -2,7 +2,7 @@
   "name": "Warlock Staff",
   "icon": "netheryx:warlock_staff",
   "category": "netheryx:equipment",
-  "sortnum": 42,
+  "sortnum": 38,
   "pages": [
     {
       "type": "patchouli:spotlight",

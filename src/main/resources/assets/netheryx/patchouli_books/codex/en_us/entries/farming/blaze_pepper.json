@@ -2,7 +2,7 @@
   "name": "Blaze Pepper",
   "icon": "netheryx:blaze_pepper",
   "category": "netheryx:farming",
-  "sortnum": 54,
+  "sortnum": 50,
   "pages": [
     {
       "type": "patchouli:spotlight",

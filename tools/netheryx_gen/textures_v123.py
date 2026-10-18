@@ -284,18 +284,16 @@ def blazing_grass():
 
 
 def warded_runes():
-    """Calque de runes lumineuses pose sur les briques scellees (indestructibles tant que le gardien vit)."""
+    """Calque discret pose sur les briques du coffre-fort : une petite rune centrale a peine lumineuse et un liseré sombre."""
     img = new()
-    rune = hexc("#ff9a3a", 220)
-    glow = hexc("#ffd06a", 255)
-    pattern = ["................", "................", "..#.#......#.#..", "...#........#...", "..#.#......#.#..",
-               "................", "................", "......####......", "......#..#......", "......####......",
-               "................", "................", "..#.#......#.#..", "...#........#...", "..#.#......#.#..",
-               "................"]
-    for y, row in enumerate(pattern):
-        for x, ch in enumerate(row):
+    glyph = ["..#..", ".#.#.", "#.#.#", ".#.#.", "..#.."]
+    for dy, row in enumerate(glyph):
+        for dx, ch in enumerate(row):
             if ch == "#":
-                img.putpixel((x, y), glow if (x + y) % 3 == 0 else rune)
+                img.putpixel((5 + dx, 5 + dy), hexc("#ffb050", 150 if (dx + dy) % 2 else 200))
+    for k in range(16):
+        for (x, y) in ((k, 0), (k, 15), (0, k), (15, k)):
+            img.putpixel((x, y), hexc("#1a0a04", 70))
     return img
 
 

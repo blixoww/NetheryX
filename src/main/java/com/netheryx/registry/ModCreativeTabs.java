@@ -35,6 +35,7 @@ public final class ModCreativeTabs {
                         .filter(item -> item instanceof ForgeSpawnEggItem).forEach(event::accept);
             } else if (event.getTabKey() == CreativeModeTabs.COMBAT) {
                 event.accept(ModItems.ONYX_SWORD);
+                event.accept(ModItems.ABYSSAL_BLADE);
                 event.accept(ModItems.ONYX_BOW);
                 event.accept(ModItems.ONYX_HELMET);
                 event.accept(ModItems.ONYX_CHESTPLATE);

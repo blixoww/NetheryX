@@ -2,7 +2,7 @@
   "name": "Lézard de cendre",
   "icon": "netheryx:cinder_lizard_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 76,
+  "sortnum": 72,
   "pages": [
     {
       "type": "patchouli:entity",

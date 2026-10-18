@@ -2,7 +2,7 @@
   "name": "Onyx Sentinel (boss)",
   "icon": "netheryx:onyx_sentinel_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 31,
+  "sortnum": 28,
   "pages": [
     {
       "type": "patchouli:entity",

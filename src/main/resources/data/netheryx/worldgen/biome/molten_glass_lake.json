@@ -61,9 +61,9 @@
     "creature": [
       {
         "type": "netheryx:blaze_pig",
-        "weight": 25,
+        "weight": 40,
         "minCount": 2,
-        "maxCount": 4
+        "maxCount": 5
       },
       {
         "type": "netheryx:magmafish",
@@ -81,9 +81,9 @@
     "ambient": [
       {
         "type": "netheryx:ember_firefly",
-        "weight": 10,
-        "minCount": 2,
-        "maxCount": 4
+        "weight": 25,
+        "minCount": 3,
+        "maxCount": 6
       }
     ],
     "axolotls": [],
@@ -93,6 +93,7 @@
     "misc": []
   },
   "spawn_costs": {},
+  "creature_spawn_probability": 0.3,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

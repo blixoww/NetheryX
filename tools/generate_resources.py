@@ -11,7 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from netheryx_gen import book, common, data, entities, models, particles, structures, textures, worldgen  # noqa: E402
+from netheryx_gen import book, common, data, docs, entities, models, particles, structures, textures, worldgen  # noqa: E402
 
 
 def main():
@@ -26,6 +26,7 @@ def main():
     worldgen.generate()
     structures.generate()
     book.generate()
+    docs.generate()
     print(f"NetheryX : {common.written_count()} fichiers JSON generes + textures et structures.")
 
 

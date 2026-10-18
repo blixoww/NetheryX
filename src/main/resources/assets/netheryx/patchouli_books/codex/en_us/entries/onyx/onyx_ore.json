@@ -7,7 +7,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:onyx_ore",
-      "text": "As common as diamond, everywhere in the Nether between Y=5 and Y=56, even more in the $(l)Onyx Depths$(). Needs a $(item)diamond pickaxe$(). Fortune works.",
+      "text": "As common as diamond, everywhere in the Nether between Y=5 and Y=56, even more in the $(l)Petrified Onyx Forest$(). Needs a $(item)diamond pickaxe$(). Fortune works.",
       "link_recipe": false
     },
     {

@@ -152,7 +152,7 @@ BLOCKS_WITHOUT_ITEM = {"blaze_pepper_crop", "soul_tuber_crop", "fire_berry_bush"
                             "ember_fungus", "withered_fungus")}
 
 HANDHELD_ITEMS = ["onyx_sword", "onyx_pickaxe", "onyx_axe", "onyx_shovel", "onyx_hoe", "onyx_hammer", "soul_scythe",
-                  "withered_blade", "warlock_staff"]
+                  "withered_blade", "warlock_staff", "abyssal_blade"]
 GENERATED_ITEMS = [
     "onyx", "onyx_shard", "sulfur", "wraith_essence", "magma_shell", "sentinel_core",
     "onyx_helmet", "onyx_chestplate", "onyx_leggings", "onyx_boots", "magma_treads",
@@ -442,6 +442,7 @@ NAMES = {
     "blaze_pork": ("Raw Blaze Pork", "Côtelette de blaze crue"),
     "cooked_blaze_pork": ("Grilled Blaze Pork", "Côtelette de blaze grillée"),
     "molten_shard": ("Molten Glass Shard", "Éclat de verre en fusion"),
+    "abyssal_blade": ("Abyssal Blade", "Lame abyssale"),
     "nether_lantern": ("Nether Lantern", "Lanterne du Nether"),
     "ash_wyvern_egg": ("Ash Wyvern Egg", "Œuf de wyverne de cendre"),
     "ember_firefly_jar": ("Ember Firefly Jar", "Bocal de lucioles de braise"),
@@ -658,8 +659,12 @@ EXTRA_LANG = {
     "item.netheryx.nether_lantern.tooltip": ("Right-click: reveals ores within 16 blocks through walls for 10 s",
                                              "Clic droit : révèle les minerais à 16 blocs à travers les murs pendant 10 s"),
     "item.netheryx.nether_lantern.tooltip2": ("30 s cooldown. Repaired with Molten Glass Shards", "Recharge de 30 s. Se répare avec des éclats de verre en fusion"),
+    "item.netheryx.abyssal_blade.tooltip": ("Each hit burns, withers and heals you for one heart", "Chaque coup embrase, flétrit et vous rend un cœur"),
+    "item.netheryx.abyssal_blade.tooltip2": ("Right-click: abyssal wave (8 s cooldown)", "Clic droit : vague abyssale (recharge 8 s)"),
     "item.netheryx.ash_wyvern_egg.tooltip": ("Place it on the ground: it hatches into your own Ash Wyvern", "Posez-le au sol : il éclot en une Wyverne de cendre qui vous appartient"),
     "item.netheryx.ash_wyvern_egg.tooltip2": ("Ride it and steer with your gaze to fly", "Montez-la et dirigez-la du regard pour voler"),
+    "advancements.netheryx.abyssal_blade.title": ("The Last Word", "Le dernier mot"),
+    "advancements.netheryx.abyssal_blade.description": ("Forge the Abyssal Blade", "Forger la Lame abyssale"),
     "advancements.netheryx.ride_wyvern.title": ("Dragon Rider", "Chevaucheur de dragon"),
     "advancements.netheryx.ride_wyvern.description": ("Ride an Ash Wyvern", "Chevaucher une Wyverne de cendre"),
     "advancements.netheryx.basalt_golem.title": ("Rock Breaker", "Briseur de roche"),

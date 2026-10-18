@@ -2,7 +2,7 @@
   "name": "Petrified Onyx Forest",
   "icon": "netheryx:onyx_crystal_leaves",
   "category": "netheryx:biomes",
-  "sortnum": 100,
+  "sortnum": 96,
   "pages": [
     {
       "type": "patchouli:text",

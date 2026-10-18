@@ -2,7 +2,7 @@
   "name": "Chevalier flétri",
   "icon": "netheryx:withered_knight_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 24,
+  "sortnum": 21,
   "pages": [
     {
       "type": "patchouli:entity",

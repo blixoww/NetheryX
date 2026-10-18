@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "NAN",
+    "AXA",
+    "OSO"
+  ],
+  "key": {
+    "N": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "A": {
+      "item": "netheryx:abyssal_shard"
+    },
+    "X": {
+      "item": "minecraft:nether_star"
+    },
+    "O": {
+      "item": "netheryx:onyx_block"
+    },
+    "S": {
+      "item": "netheryx:onyx_sword"
+    }
+  },
+  "result": {
+    "item": "netheryx:abyssal_blade",
+    "count": 1
+  }
+}

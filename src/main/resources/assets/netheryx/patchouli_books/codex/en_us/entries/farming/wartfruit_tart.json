@@ -2,7 +2,7 @@
   "name": "Wartfruit Tart",
   "icon": "netheryx:wartfruit_tart",
   "category": "netheryx:farming",
-  "sortnum": 89,
+  "sortnum": 85,
   "pages": [
     {
       "type": "patchouli:crafting",

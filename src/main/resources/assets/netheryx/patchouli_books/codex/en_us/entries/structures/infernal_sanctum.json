@@ -2,15 +2,15 @@
   "name": "Infernal Sanctum",
   "icon": "netheryx:magma_bricks",
   "category": "netheryx:structures",
-  "sortnum": 34,
+  "sortnum": 31,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Magma Rift, Ember Grove, Sulfur Springs, Ember Meadow, Crimson Forest, Nether Wastes. A temple surrounded by a $(l)lava moat$(): cross the bridge, survive the Blaze altars and the Ember Stalkers of the courtyard."
+      "text": "Ember Grove, Sulfur Springs, Ember Meadow, Wartvine Tangle, Hellwood Jungle, Molten Glass Lake and vanilla biomes. A temple surrounded by a $(l)lava moat$(): cross the bridge and survive the Blaze altars of the courtyard. Inside, two ritual rooms (spawners, chests, mimics)."
     },
     {
       "type": "patchouli:text",
-      "text": "The antechamber has lava channels and two ritual rooms (Magma Cube and Stalker spawners, chests). Then the arena of the $(l)Infernal Warlock$(), and the sealed treasury (Warlock Staff, Magma Treads, netherite...)."
+      "text": "A great staircase $(l)goes down$() to the underground nave lit by lava, where the $(l)Infernal Warlock$() waits. The sealed vault opens in the north wall of the nave."
     }
   ]
 }

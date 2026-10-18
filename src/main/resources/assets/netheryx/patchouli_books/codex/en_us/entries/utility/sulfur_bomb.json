@@ -2,7 +2,7 @@
   "name": "Sulfur Bomb",
   "icon": "netheryx:sulfur_bomb",
   "category": "netheryx:utility",
-  "sortnum": 52,
+  "sortnum": 48,
   "pages": [
     {
       "type": "patchouli:spotlight",

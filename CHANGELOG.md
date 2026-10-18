@@ -53,8 +53,13 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - **Pomme d'onyx** : Régénération II, Absorption II, Résistance et longue résistance au feu.
 - **Jungle infernale** : nouveau biome forestier, arbres infernaux géants à contreforts et cimes embrasées,
   **fougères infernales** (2 blocs), **herbe ardente** et **lianes de braise** lumineuses et grimpables.
-- **Maçonnerie scellée** : les salles au trésor sont entièrement entourées de briques runiques indestructibles
-  (impossible de contourner le boss en creusant) ; elles redeviennent des briques normales à la mort du boss.
+- **Donjons repensés sur plusieurs niveaux** :
+  - Citadelle d'onyx : donjon central à trois étages (grand hall, armurerie et bibliothèque, arène de la Sentinelle sous le toit).
+  - Sanctuaire infernal : temple en surface et grand escalier vers une nef souterraine où attend le Sorcier.
+  - Catacombes flétries : crypte supérieure (galerie, cryptes, chapelle) et crypte profonde (ossuaires, tombeau du Champion).
+- **Coffres-forts scellés** : le trésor de chaque donjon est dans un petit coffre-fort dont les six faces sont en
+  maçonnerie scellée (indestructible, insensible aux explosions), fermé par une porte de Sceaux du gardien qui ne s'ouvre
+  qu'à la mort du boss. Vérifié automatiquement : aucun accès possible avant.
 - **6 nouvelles créatures** (GeckoLib) :
   - **Golem de basalte** (mini-boss, 160 PV, barre de boss) : frappe au sol annoncée, salves d'éclats de magma,
     résiste aux projectiles, cœur en fusion sous 50 % (Failles de magma, deltas de basalte, Lac de verre en fusion).
@@ -70,6 +75,11 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
   - **Forêt pétrifiée d'onyx** : arbres en **bois pétrifié** couronnés de **feuillage cristallisé** et d'amas d'onyx.
 - **Lanterne du Nether** : révèle à travers les murs les minerais à 16 blocs pendant 10 s (contours colorés par type).
 - 3 progrès (wyverne, golem, bocal de lucioles) et pages du Codex.
+- **Lame abyssale** : arme ultime (13 de dégâts, 6000 de durabilité), embrase, flétrit et soigne à chaque coup ; clic droit :
+  vague abyssale en cône. Recette très chère (netherite, éclats abyssaux, étoile du Nether, blocs d'onyx, épée en onyx).
+- **Documentation complète** (`docs/DOCUMENTATION.md`), générée à partir des données du mod : chaque page du Codex, chaque
+  bloc et objet avec sa recette et ses sources, chaque créature avec ses biomes d'apparition et son butin, les options de
+  configuration.
 - **Coffres mimiques dans chaque donjon** (dont les balcons de la Citadelle, qui ont aussi chacun un coffre).
 
 ### Modifié
@@ -78,9 +88,14 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - **Biomes plus fréquents** : poids de région **33** par défaut (nouvelle clé `netherRegionWeightV2`) et deux points
   climatiques par biome.
 - **Biomes plus organiques** : rochers et troncs couchés propres à chaque biome, sol de la Jungle varié.
-- **Apparitions augmentées** : vaches de braise, poules de cendre, crabes de magma, scarabées de basalte, ghasts de feu.
+- **Apparitions augmentées** : lucioles, vaches de braise, poules de cendre, cochons de blaze, escargots, crabes de magma,
+  scarabées de basalte, lézards, porteurs de lanterne, ghasts de feu, traqueurs, spectres et chevaliers ; probabilité
+  d'apparition des animaux à la génération des chunks triplée dans les biomes NetheryX.
+- **Biomes trop proches du vanilla retirés de la génération** : Profondeurs d'onyx, Marais des âmes et Faille de magma
+  (remplacés par la Forêt pétrifiée d'onyx, la Vallée des âmes et le Lac de verre en fusion ; toujours enregistrés pour
+  que les anciens mondes se chargent).
 - **Champion flétri** : ses coups infligent Lenteur, Faiblesse et Cécité.
-- **Cache secrète** beaucoup plus fréquente, signalée par une colonne de fumée bleue (feu de camp des âmes) et
+- **Cache secrète** : trappe sertie dans un dallage au ras du sol (elle ne flotte plus), beaucoup plus fréquente, signalée par une colonne de fumée bleue (feu de camp des âmes) et
   repérable avec la Boussole des âmes.
 - **Boussoles** (des âmes et du créateur) : pagination adaptée à la taille de l'écran, défilement à la molette.
 - Citadelle d'onyx : lanternes des balcons accrochées au plafond, plus de blocs d'onyx dans la salle du boss.

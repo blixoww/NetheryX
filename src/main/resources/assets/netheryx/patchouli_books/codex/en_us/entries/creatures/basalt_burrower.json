@@ -2,7 +2,7 @@
   "name": "Basalt Burrower",
   "icon": "netheryx:basalt_burrower_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 78,
+  "sortnum": 74,
   "pages": [
     {
       "type": "patchouli:entity",

@@ -2,7 +2,7 @@
   "name": "Other Blocks",
   "icon": "netheryx:sulfur_block",
   "category": "netheryx:building",
-  "sortnum": 69,
+  "sortnum": 65,
   "pages": [
     {
       "type": "patchouli:crafting",

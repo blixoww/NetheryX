@@ -2,11 +2,11 @@
   "name": "Événements du Nether",
   "icon": "netheryx:sulfur",
   "category": "netheryx:getting_started",
-  "sortnum": 70,
+  "sortnum": 66,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Toutes les 20 à 45 minutes, un événement secoue le Nether pendant quelques minutes :$(br)$(li)$(l)Pluie de cendres$() : épais brouillard gris, Spectres et Chevaliers flétris renforcés.$(li)$(l)Tempête de soufre$() : du soufre tombe de la voûte, ramassez-le !$(li)$(l)Éruption$() : dans les Failles de magma et les deltas de basalte, bombes volcaniques, magma et minerais pleuvent.",
+      "text": "Toutes les 20 à 45 minutes, un événement secoue le Nether pendant quelques minutes :$(br)$(li)$(l)Pluie de cendres$() : épais brouillard gris, Spectres et Chevaliers flétris renforcés.$(li)$(l)Tempête de soufre$() : du soufre tombe de la voûte, ramassez-le !$(li)$(l)Éruption$() : dans les Lacs de verre en fusion et les deltas de basalte, bombes volcaniques, magma et minerais pleuvent.",
       "title": "Événements"
     },
     {

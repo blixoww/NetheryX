@@ -2,7 +2,7 @@
   "name": "Recall Stone",
   "icon": "netheryx:recall_stone",
   "category": "netheryx:utility",
-  "sortnum": 46,
+  "sortnum": 42,
   "pages": [
     {
       "type": "patchouli:spotlight",

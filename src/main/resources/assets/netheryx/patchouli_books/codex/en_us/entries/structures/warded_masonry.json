@@ -2,12 +2,12 @@
   "name": "Warded Masonry",
   "icon": "netheryx:guardian_seal",
   "category": "netheryx:structures",
-  "sortnum": 94,
+  "sortnum": 90,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "The walls, floor and ceiling of every $(l)treasure room$() are made of $(item)Warded Masonry$(): glowing runes, unbreakable and impossible to dig around. When the dungeon boss dies, the runes fade and the masonry turns back into ordinary bricks: no more shortcuts!$(br2)Dungeons also hide $(l)Mimics$() among their chests, including on the citadel balconies.",
-      "title": "Salles scellées"
+      "text": "Each dungeon vault is a small room whose six faces are made of $(item)Warded Masonry$(): bricks marked with a faint rune, unbreakable and explosion-proof. No way to dig around it! When the boss dies, the seals of the door vanish and the masonry turns back into ordinary bricks.$(br2)Dungeons also hide $(l)Mimics$() among their chests.",
+      "title": "Coffres-forts"
     }
   ]
 }

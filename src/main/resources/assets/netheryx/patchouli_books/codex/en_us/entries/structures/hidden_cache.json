@@ -2,11 +2,11 @@
   "name": "Hidden Cache",
   "icon": "minecraft:soul_campfire",
   "category": "netheryx:structures",
-  "sortnum": 95,
+  "sortnum": 91,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Small buried treasure rooms, now common. Look for a $(l)column of blue smoke$() rising from a soul campfire, next to a small cairn with a lantern: the trapdoor is right beside it. The $(item)Soul Compass$() can also track them.",
+      "text": "Small buried treasure rooms, now common. Look for a $(l)column of blue smoke$() rising from a soul campfire on a small blackstone pavement, next to a cairn with a lantern: the trapdoor is set in the pavement. The $(item)Soul Compass$() can also track them.",
       "title": "Cache secrète"
     }
   ]

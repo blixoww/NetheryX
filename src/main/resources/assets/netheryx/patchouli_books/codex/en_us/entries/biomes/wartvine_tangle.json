@@ -2,7 +2,7 @@
   "name": "Wartvine Tangle",
   "icon": "netheryx:wartfruit",
   "category": "netheryx:biomes",
-  "sortnum": 73,
+  "sortnum": 69,
   "pages": [
     {
       "type": "patchouli:text",

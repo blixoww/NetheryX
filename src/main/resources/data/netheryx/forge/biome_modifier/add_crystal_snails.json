@@ -6,9 +6,9 @@
   "spawners": [
     {
       "type": "netheryx:crystal_snail",
-      "weight": 15,
-      "minCount": 1,
-      "maxCount": 3
+      "weight": 25,
+      "minCount": 2,
+      "maxCount": 4
     }
   ]
 }

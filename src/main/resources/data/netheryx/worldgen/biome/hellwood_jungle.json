@@ -55,21 +55,27 @@
     "creature": [
       {
         "type": "netheryx:cinder_hen",
-        "weight": 35,
+        "weight": 50,
         "minCount": 2,
-        "maxCount": 4
+        "maxCount": 5
       },
       {
         "type": "netheryx:ember_cow",
-        "weight": 30,
+        "weight": 45,
         "minCount": 2,
-        "maxCount": 4
+        "maxCount": 5
       },
       {
         "type": "netheryx:cinder_lizard",
-        "weight": 15,
+        "weight": 20,
         "minCount": 1,
-        "maxCount": 2
+        "maxCount": 3
+      },
+      {
+        "type": "netheryx:blaze_pig",
+        "weight": 25,
+        "minCount": 2,
+        "maxCount": 4
       },
       {
         "type": "minecraft:strider",
@@ -81,15 +87,15 @@
     "ambient": [
       {
         "type": "netheryx:soul_moth",
-        "weight": 8,
+        "weight": 10,
         "minCount": 1,
-        "maxCount": 2
+        "maxCount": 3
       },
       {
         "type": "netheryx:ember_firefly",
-        "weight": 25,
-        "minCount": 3,
-        "maxCount": 6
+        "weight": 45,
+        "minCount": 4,
+        "maxCount": 8
       }
     ],
     "axolotls": [],
@@ -99,6 +105,7 @@
     "misc": []
   },
   "spawn_costs": {},
+  "creature_spawn_probability": 0.3,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

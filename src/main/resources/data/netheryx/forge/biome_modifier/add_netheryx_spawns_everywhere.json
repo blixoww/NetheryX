@@ -4,69 +4,81 @@
   "spawners": [
     {
       "type": "netheryx:ember_stalker",
-      "weight": 8,
+      "weight": 12,
       "minCount": 1,
       "maxCount": 2
     },
     {
       "type": "netheryx:ash_wraith",
-      "weight": 6,
+      "weight": 9,
       "minCount": 1,
-      "maxCount": 1
+      "maxCount": 2
     },
     {
       "type": "netheryx:withered_knight",
-      "weight": 6,
+      "weight": 9,
       "minCount": 1,
       "maxCount": 2
     },
     {
       "type": "netheryx:fire_ghast",
-      "weight": 22,
+      "weight": 24,
       "minCount": 1,
       "maxCount": 1
     },
     {
       "type": "netheryx:onyx_cube",
-      "weight": 8,
+      "weight": 10,
       "minCount": 1,
       "maxCount": 3
     },
     {
       "type": "netheryx:magma_crab",
-      "weight": 16,
-      "minCount": 2,
-      "maxCount": 3
-    },
-    {
-      "type": "netheryx:basalt_beetle",
-      "weight": 12,
-      "minCount": 1,
-      "maxCount": 3
-    },
-    {
-      "type": "netheryx:ember_cow",
-      "weight": 22,
+      "weight": 26,
       "minCount": 2,
       "maxCount": 4
     },
     {
-      "type": "netheryx:cinder_hen",
+      "type": "netheryx:basalt_beetle",
       "weight": 20,
       "minCount": 2,
       "maxCount": 4
     },
     {
+      "type": "netheryx:ember_cow",
+      "weight": 32,
+      "minCount": 2,
+      "maxCount": 5
+    },
+    {
+      "type": "netheryx:cinder_hen",
+      "weight": 32,
+      "minCount": 2,
+      "maxCount": 5
+    },
+    {
       "type": "netheryx:soul_moth",
-      "weight": 6,
-      "minCount": 1,
-      "maxCount": 3
+      "weight": 12,
+      "minCount": 2,
+      "maxCount": 4
     },
     {
       "type": "netheryx:magmafish",
-      "weight": 10,
+      "weight": 16,
+      "minCount": 2,
+      "maxCount": 5
+    },
+    {
+      "type": "netheryx:blaze_pig",
+      "weight": 12,
       "minCount": 2,
       "maxCount": 4
+    },
+    {
+      "type": "netheryx:ember_firefly",
+      "weight": 10,
+      "minCount": 4,
+      "maxCount": 8
     }
   ]
 }

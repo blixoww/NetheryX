@@ -19,7 +19,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:onyx_cluster",
-      "text": "Glowing crystals of the Onyx Depths. Mine them for $(item)Onyx Shards$() (Silk Touch keeps the cluster).",
+      "text": "Glowing crystals of the Petrified Onyx Forest. Mine them for $(item)Onyx Shards$() (Silk Touch keeps the cluster).",
       "link_recipe": false
     }
   ]

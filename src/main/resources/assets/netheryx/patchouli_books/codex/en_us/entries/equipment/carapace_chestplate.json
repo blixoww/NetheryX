@@ -2,7 +2,7 @@
   "name": "Carapace Chestplate",
   "icon": "netheryx:carapace_chestplate",
   "category": "netheryx:equipment",
-  "sortnum": 44,
+  "sortnum": 40,
   "pages": [
     {
       "type": "patchouli:spotlight",

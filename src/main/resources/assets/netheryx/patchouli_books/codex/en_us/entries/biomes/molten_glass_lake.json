@@ -2,7 +2,7 @@
   "name": "Molten Glass Lake",
   "icon": "netheryx:molten_glass",
   "category": "netheryx:biomes",
-  "sortnum": 99,
+  "sortnum": 95,
   "pages": [
     {
       "type": "patchouli:text",

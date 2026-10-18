@@ -2,7 +2,7 @@
   "name": "Scarabée de basalte",
   "icon": "netheryx:basalt_beetle_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 23,
+  "sortnum": 20,
   "pages": [
     {
       "type": "patchouli:entity",

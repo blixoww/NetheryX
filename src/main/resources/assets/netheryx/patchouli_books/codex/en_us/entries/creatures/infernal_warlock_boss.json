@@ -2,7 +2,7 @@
   "name": "Infernal Warlock (boss)",
   "icon": "netheryx:infernal_warlock_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 25,
+  "sortnum": 22,
   "pages": [
     {
       "type": "patchouli:entity",

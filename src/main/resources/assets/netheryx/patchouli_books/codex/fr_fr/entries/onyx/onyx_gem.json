@@ -19,7 +19,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:onyx_cluster",
-      "text": "Cristaux lumineux des Profondeurs d'onyx. Ils donnent des $(item)éclats d'onyx$() (Toucher de soie garde l'amas).",
+      "text": "Cristaux lumineux de la Forêt pétrifiée d'onyx. Ils donnent des $(item)éclats d'onyx$() (Toucher de soie garde l'amas).",
       "link_recipe": false
     }
   ]

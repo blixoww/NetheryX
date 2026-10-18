@@ -2,7 +2,7 @@
   "name": "Soufre",
   "icon": "netheryx:sulfur",
   "category": "netheryx:utility",
-  "sortnum": 51,
+  "sortnum": 47,
   "pages": [
     {
       "type": "patchouli:spotlight",

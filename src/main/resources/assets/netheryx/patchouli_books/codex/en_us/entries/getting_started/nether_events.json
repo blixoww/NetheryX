@@ -2,11 +2,11 @@
   "name": "Nether Events",
   "icon": "netheryx:sulfur",
   "category": "netheryx:getting_started",
-  "sortnum": 70,
+  "sortnum": 66,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Every 20 to 45 minutes, an event shakes the Nether for a few minutes:$(br)$(li)$(l)Ash fall$(): thick grey fog, Ash Wraiths and Withered Knights grow stronger.$(li)$(l)Sulfur storm$(): sulfur falls from the ceiling, pick it up!$(li)$(l)Eruption$(): in Magma Rifts and Basalt Deltas, volcanic bombs, magma and ores rain down.",
+      "text": "Every 20 to 45 minutes, an event shakes the Nether for a few minutes:$(br)$(li)$(l)Ash fall$(): thick grey fog, Ash Wraiths and Withered Knights grow stronger.$(li)$(l)Sulfur storm$(): sulfur falls from the ceiling, pick it up!$(li)$(l)Eruption$(): in Molten Glass Lakes and Basalt Deltas, volcanic bombs, magma and ores rain down.",
       "title": "Événements"
     },
     {

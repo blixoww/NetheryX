@@ -2,7 +2,7 @@
   "name": "Quartz Reef",
   "icon": "netheryx:rich_quartz_ore",
   "category": "netheryx:biomes",
-  "sortnum": 74,
+  "sortnum": 70,
   "pages": [
     {
       "type": "patchouli:text",

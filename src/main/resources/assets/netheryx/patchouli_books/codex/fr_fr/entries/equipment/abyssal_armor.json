@@ -2,7 +2,7 @@
   "name": "Armure abyssale",
   "icon": "netheryx:abyssal_chestplate",
   "category": "netheryx:equipment",
-  "sortnum": 97,
+  "sortnum": 93,
   "pages": [
     {
       "type": "patchouli:text",

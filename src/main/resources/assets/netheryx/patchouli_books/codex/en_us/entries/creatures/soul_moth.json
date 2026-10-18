@@ -2,14 +2,14 @@
   "name": "Soul Moth",
   "icon": "netheryx:soul_moth_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 22,
+  "sortnum": 19,
   "pages": [
     {
       "type": "patchouli:entity",
       "entity": "netheryx:soul_moth",
       "scale": 1.2,
       "offset": 0.0,
-      "text": "Harmless glowing insect of the Soulfire Marsh. Drops $(item)Soul Dust$()."
+      "text": "Harmless glowing insect of the soul valleys and forests. Drops $(item)Soul Dust$()."
     }
   ]
 }

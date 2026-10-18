@@ -2,7 +2,7 @@
   "name": "Magma Bricks",
   "icon": "netheryx:magma_bricks",
   "category": "netheryx:building",
-  "sortnum": 67,
+  "sortnum": 63,
   "pages": [
     {
       "type": "patchouli:text",

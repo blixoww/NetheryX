@@ -2,7 +2,7 @@
   "name": "Rimefrost Chasm",
   "icon": "netheryx:rime_ice",
   "category": "netheryx:biomes",
-  "sortnum": 72,
+  "sortnum": 68,
   "pages": [
     {
       "type": "patchouli:text",

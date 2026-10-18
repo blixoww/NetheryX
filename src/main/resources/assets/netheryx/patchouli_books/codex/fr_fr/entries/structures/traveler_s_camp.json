@@ -2,7 +2,7 @@
   "name": "Campement de voyageur",
   "icon": "minecraft:campfire",
   "category": "netheryx:structures",
-  "sortnum": 36,
+  "sortnum": 33,
   "pages": [
     {
       "type": "patchouli:text",

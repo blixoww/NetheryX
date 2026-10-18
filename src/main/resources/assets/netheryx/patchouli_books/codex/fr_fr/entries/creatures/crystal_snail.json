@@ -2,7 +2,7 @@
   "name": "Escargot de cristal",
   "icon": "netheryx:crystal_snail_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 105,
+  "sortnum": 101,
   "pages": [
     {
       "type": "patchouli:entity",

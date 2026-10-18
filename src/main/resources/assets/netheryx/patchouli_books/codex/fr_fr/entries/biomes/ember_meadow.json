@@ -2,7 +2,7 @@
   "name": "Prairie de braise",
   "icon": "netheryx:nether_grass_block",
   "category": "netheryx:biomes",
-  "sortnum": 13,
+  "sortnum": 12,
   "pages": [
     {
       "type": "patchouli:text",

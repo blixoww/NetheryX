@@ -2,12 +2,12 @@
   "name": "Maçonnerie scellée",
   "icon": "netheryx:guardian_seal",
   "category": "netheryx:structures",
-  "sortnum": 94,
+  "sortnum": 90,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Les murs, le sol et le plafond de chaque $(l)salle au trésor$() sont en $(item)Maçonnerie scellée$() : des runes lumineuses, indestructibles et impossibles à contourner en creusant. À la mort du boss du donjon, les runes s'éteignent et la maçonnerie redevient de la brique ordinaire : fini les raccourcis !$(br2)Les donjons cachent aussi des $(l)Mimiques$() parmi leurs coffres, jusque sur les balcons de la citadelle.",
-      "title": "Salles scellées"
+      "text": "Chaque coffre-fort de donjon est une petite salle dont les six faces sont en $(item)Maçonnerie scellée$() : des briques marquées d'une rune discrète, indestructibles et insensibles aux explosions. Impossible de creuser autour ! À la mort du boss, les sceaux de la porte disparaissent et la maçonnerie redevient de la brique ordinaire.$(br2)Les donjons cachent aussi des $(l)Mimiques$() parmi leurs coffres.",
+      "title": "Coffres-forts"
     }
   ]
 }

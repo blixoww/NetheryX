@@ -2,7 +2,7 @@
   "name": "Bateau d'obsidienne",
   "icon": "netheryx:obsidian_boat",
   "category": "netheryx:utility",
-  "sortnum": 47,
+  "sortnum": 43,
   "pages": [
     {
       "type": "patchouli:spotlight",

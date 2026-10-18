@@ -2,7 +2,7 @@
   "name": "Lucioles",
   "icon": "netheryx:ember_firefly_jar",
   "category": "netheryx:creatures",
-  "sortnum": 103,
+  "sortnum": 99,
   "pages": [
     {
       "type": "patchouli:entity",

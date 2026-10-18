@@ -2,7 +2,7 @@
   "name": "Jardin du Nether",
   "icon": "netheryx:cinder_wheat",
   "category": "netheryx:structures",
-  "sortnum": 37,
+  "sortnum": 34,
   "pages": [
     {
       "type": "patchouli:text",

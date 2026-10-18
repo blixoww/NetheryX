@@ -2,7 +2,7 @@
   "name": "Magma Treads",
   "icon": "netheryx:magma_treads",
   "category": "netheryx:equipment",
-  "sortnum": 43,
+  "sortnum": 39,
   "pages": [
     {
       "type": "patchouli:spotlight",

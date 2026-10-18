@@ -2,7 +2,7 @@
   "name": "Infusions d'onyx",
   "icon": "netheryx:onyx_infusion_template",
   "category": "netheryx:equipment",
-  "sortnum": 83,
+  "sortnum": 79,
   "pages": [
     {
       "type": "patchouli:text",

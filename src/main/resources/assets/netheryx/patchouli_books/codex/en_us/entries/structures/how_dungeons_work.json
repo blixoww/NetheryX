@@ -2,17 +2,17 @@
   "name": "How Dungeons Work",
   "icon": "netheryx:guardian_seal",
   "category": "netheryx:structures",
-  "sortnum": 32,
+  "sortnum": 29,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "NetheryX dungeons are multi-room fortresses: guards and monster spawners on the way, side rooms with chests, then the $(l)boss arena$(). The treasure room is closed by $(item)Guardian Seals$(), unbreakable blocks that only crumble when the boss dies.$(br2)A dungeon lies roughly every 300 blocks: use the $(item)Soul Compass$() to find one. Bring armor, food and a $(item)Recall Stone$()!",
+      "text": "NetheryX dungeons are built on several levels: guards, spawners and side rooms with chests, then the $(l)boss arena$(). The treasure lies in a small $(l)vault$() entirely made of $(item)Warded Masonry$() (unbreakable on all six faces) and closed by a door of $(item)Guardian Seals$(): it only opens when the boss dies.$(br2)Use the $(item)Soul Compass$() to find a dungeon. Bring armor, food and a $(item)Recall Stone$()!",
       "title": "Donjons"
     },
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:guardian_seal",
-      "text": "Unbreakable. Breaks by itself when the dungeon boss is defeated.",
+      "text": "Unbreakable. Breaks by itself when the dungeon boss is defeated; the vault's masonry then turns back into ordinary bricks.",
       "link_recipe": false
     }
   ],

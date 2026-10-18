@@ -2,7 +2,7 @@
   "name": "Vache de braise",
   "icon": "netheryx:ember_cow_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 26,
+  "sortnum": 23,
   "pages": [
     {
       "type": "patchouli:entity",

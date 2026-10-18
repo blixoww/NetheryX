@@ -2,7 +2,7 @@
   "name": "Infernal Cauldron",
   "icon": "netheryx:infernal_cauldron",
   "category": "netheryx:utility",
-  "sortnum": 86,
+  "sortnum": 82,
   "pages": [
     {
       "type": "patchouli:spotlight",

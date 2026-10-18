@@ -3,6 +3,7 @@ cotelettes de blaze, eclat de verre en fusion, Lanterne du Nether et oeuf de wyv
 from .pixels import Shape, hexc, new, rng, shade
 from .textures import bark, crystals, lantern_item, lantern_texture, rings_top, save
 from .textures_v120 import translucent
+from .textures_v121 import tool_image
 from .textures_v123 import gem, sprite
 
 
@@ -73,6 +74,25 @@ def wyvern_egg():
     return shape.render(outline=hexc("#140c0a"))
 
 
+def greatsword(u, v):
+    """Lame abyssale : lame large, arete incandescente au centre, garde en croissant."""
+    if -3 <= u <= 11 and 12 <= v <= 17:
+        if u >= 10 and v in (12, 17):
+            return None
+        if u == 11 and v in (13, 16):
+            return None
+        if v in (14, 15):
+            return "w" if (u + v) % 3 else "h"
+        return {12: "h", 13: "l", 16: "m", 17: "d"}[v]
+    if u == 12 and v in (14, 15):
+        return "h"
+    if u in (-5, -4) and 9 <= v <= 20:
+        return "h" if v <= 11 else "l" if v < 15 else "m" if v < 18 else "d"
+    if u == -6 and v in (9, 20):
+        return "h"
+    return None
+
+
 def generate():
     save(firefly_jar("#c8d0d4", "#ffb020", "#fff0a0"), "block", "ember_firefly_jar.png")
     save(firefly_jar("#c8d0d4", "#ffb020", "#fff0a0", item=True), "item", "ember_firefly_jar.png")
@@ -89,3 +109,4 @@ def generate():
     save(molten_shard(), "item", "molten_shard.png")
     save(nether_lantern(), "item", "nether_lantern.png")
     save(wyvern_egg(), "item", "ash_wyvern_egg.png")
+    save(tool_image(greatsword, -7, "abyssal"), "item", "abyssal_blade.png")

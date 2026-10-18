@@ -2,7 +2,7 @@
   "name": "Soul Tuber",
   "icon": "netheryx:soul_tuber",
   "category": "netheryx:farming",
-  "sortnum": 55,
+  "sortnum": 51,
   "pages": [
     {
       "type": "patchouli:spotlight",

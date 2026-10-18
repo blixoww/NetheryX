@@ -2,7 +2,7 @@
   "name": "Cinder Hen",
   "icon": "netheryx:cinder_hen_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 27,
+  "sortnum": 24,
   "pages": [
     {
       "type": "patchouli:entity",

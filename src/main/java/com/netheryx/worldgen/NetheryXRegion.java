@@ -44,16 +44,19 @@ public class NetheryXRegion extends Region {
         add(mapper, 0.4F, 0.0F, 0.05F, ModBiomes.EMBER_GROVE);
         add(mapper, -0.4F, -0.4F, 0.1F, ModBiomes.ASHEN_WASTES);
         add(mapper, -0.1F, -0.6F, 0.05F, ModBiomes.ASHEN_WASTES);
-        add(mapper, -0.6F, 0.5F, 0.2F, ModBiomes.ONYX_DEPTHS);
-        add(mapper, -0.3F, 0.25F, 0.15F, ModBiomes.ONYX_DEPTHS);
+        // Profondeurs d'onyx, Marais des ames et Faille de magma (trop proches des biomes vanilla) ne sont plus generes :
+        // leurs places reviennent a la Foret petrifiee, a la Vallee des ames vanilla et au Lac de verre en fusion.
+        // Leurs fichiers restent enregistres pour que les mondes existants se chargent sans erreur.
+        add(mapper, -0.6F, 0.5F, 0.2F, ModBiomes.PETRIFIED_ONYX_FOREST);
+        add(mapper, -0.3F, 0.25F, 0.15F, ModBiomes.PETRIFIED_ONYX_FOREST);
         add(mapper, 0.35F, -0.7F, 0.1F, ModBiomes.SULFUR_SPRINGS);
         add(mapper, 0.6F, -0.5F, 0.05F, ModBiomes.SULFUR_SPRINGS);
-        add(mapper, -0.2F, 0.8F, 0.1F, ModBiomes.SOULFIRE_MARSH);
-        add(mapper, 0.0F, -0.5F, 0.0F, ModBiomes.SOULFIRE_MARSH);
+        add(mapper, -0.2F, 0.8F, 0.1F, Biomes.SOUL_SAND_VALLEY);
+        add(mapper, 0.0F, -0.5F, 0.0F, ModBiomes.SULFUR_SPRINGS);
         add(mapper, -0.8F, -0.1F, 0.15F, ModBiomes.WITHERED_FOREST);
         add(mapper, -0.6F, -0.7F, 0.1F, ModBiomes.WITHERED_FOREST);
-        add(mapper, 0.9F, -0.3F, 0.2F, ModBiomes.MAGMA_RIFT);
-        add(mapper, 0.85F, 0.0F, 0.15F, ModBiomes.MAGMA_RIFT);
+        add(mapper, 0.9F, -0.3F, 0.2F, ModBiomes.MOLTEN_GLASS_LAKE);
+        add(mapper, 0.85F, 0.0F, 0.15F, ModBiomes.HELLWOOD_JUNGLE);
         add(mapper, -0.5F, 0.95F, 0.15F, ModBiomes.MARROW_THICKET);
         add(mapper, -0.75F, 0.75F, 0.1F, ModBiomes.MARROW_THICKET);
         add(mapper, -0.95F, 0.4F, 0.2F, ModBiomes.RIMEFROST_CHASM);

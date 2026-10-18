@@ -2,7 +2,7 @@
   "name": "Soul Scythe",
   "icon": "netheryx:soul_scythe",
   "category": "netheryx:equipment",
-  "sortnum": 40,
+  "sortnum": 36,
   "pages": [
     {
       "type": "patchouli:spotlight",

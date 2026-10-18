@@ -2,7 +2,7 @@
   "name": "Spectre de cendre",
   "icon": "netheryx:ash_wraith_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 20,
+  "sortnum": 17,
   "pages": [
     {
       "type": "patchouli:entity",

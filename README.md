@@ -17,7 +17,7 @@ grille), objets, blocs, créatures (modèle 3D animé), biomes, structures, outi
 première connexion et se fabrique avec **un livre + un bloc de netherrack**.
 
 ### En chiffres
-15 biomes · 26 créatures (dont 3 boss, 1 mini-boss et 1 boss final) · 3 grands donjons + 4 petites structures · 4 bois complets · ~50 blocs · ~50 objets · ~110 recettes.
+12 biomes · 26 créatures (dont 3 boss, 1 mini-boss et 1 boss final) · 3 grands donjons + 4 petites structures · 4 bois complets · ~50 blocs · ~50 objets · ~110 recettes.
 Les 5 biomes vanilla sont aussi décorés (plantes, créatures) : le Nether a un aspect différent partout.
 
 ### L'Onyx

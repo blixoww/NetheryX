@@ -2,7 +2,7 @@
   "name": "Onyx Cube",
   "icon": "netheryx:onyx_cube_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 29,
+  "sortnum": 26,
   "pages": [
     {
       "type": "patchouli:entity",
