@@ -19,6 +19,7 @@ def generate_loot():
         item("onyx_shard", conditions=[{"condition": "minecraft:table_bonus", "enchantment": "minecraft:fortune",
                                         "chances": [0.08, 0.12, 0.18, 0.25]}])]}]}])
     entity_table("basalt_golem", [
+        {"rolls": 1, "entries": [item("basalt_heartstone")], "conditions": [KILLED_BY_PLAYER]},
         {"rolls": 1, "entries": [item("basalt_carapace", functions=[count(2, 4), LOOTING])]},
         {"rolls": 1, "entries": [item("molten_shard", functions=[count(2, 5), LOOTING])]},
         {"rolls": 1, "entries": [item("magma_shell", functions=[count(1, 2)])]},

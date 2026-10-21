@@ -170,6 +170,20 @@ def rich_quartz_overlay():
     return img
 
 
+def basalt_heartstone():
+    """Trophee du Golem de basalte : un bloc de basalte taille, fendu sur un coeur de magma incandescent."""
+    shape = Shape()
+    shape.ellipse(8, 8.5, 6, 5.5, hexc("#3a3a42"))
+    shape.ellipse(8, 8.5, 4.2, 3.8, hexc("#4c4c56"))
+    shape.disc(8, 8.5, 2.6, hexc("#ff7a1a"))
+    shape.disc(8, 8.5, 1.3, hexc("#ffe27a"), shaded=False)
+    for (x0, y0, x1, y1) in ((8, 3, 7, 6), (3, 8, 5, 9), (13, 10, 10, 9), (9, 14, 8, 11)):
+        shape.line(x0, y0, x1, y1, hexc("#e0601a"))
+    for (x, y) in ((4, 5), (12, 5), (5, 13)):
+        shape.put(x, y, hexc("#6a6a74"))
+    return shape.render(outline=hexc("#101014"))
+
+
 def generate():
     save(firefly_jar("#c8d0d4", "#ffb020", "#fff0a0"), "block", "ember_firefly_jar.png")
     save(firefly_jar("#c8d0d4", "#ffb020", "#fff0a0", item=True), "item", "ember_firefly_jar.png")
@@ -189,5 +203,6 @@ def generate():
     save(tool_image(greatsword, -7, "abyssal"), "item", "abyssal_blade.png")
     save(wyvern_whistle(), "item", "wyvern_whistle.png")
     save(magma_bricks_v2(), "block", "magma_bricks.png")
+    save(basalt_heartstone(), "item", "basalt_heartstone.png")
     save(rich_quartz_overlay(), "block", "rich_quartz_ore_overlay.png")
     save(crystals("#c8bcb0", "#ece6de", "#ffffff", "quartz_cluster"), "block", "quartz_cluster.png")

@@ -113,6 +113,16 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - **Coffres mimiques dans chaque donjon** (dont les balcons de la Citadelle, qui ont aussi chacun un coffre).
 
 ### Modifié
+- **Jet de flammes de la wyverne** : un vrai flot de feu continu, façon « boule de feu suprême ». Nouvelles particules
+  (`dragon_flame`, `dragon_flame_core`, `dragon_smoke`) : grandes bouffées qui gonflent, tournoient et rougissent sur un
+  cœur blanc incandescent, dessinées en mélange additif (elles brillent), qui s'écrasent contre les murs en gerbe de feu
+  et laissent une fumée épaisse.
+- **Golem de basalte** : lâche désormais un trophée unique, la **Pierre-cœur de basalte**, nécessaire au **Cœur scellé**
+  (recette `OCO` / `SXW` / `OHO`, quatre trophées de boss).
+- **Jardin du Nether** refait pour s'y promener : parc ouvert de 27 x 27 avec haie basse et quatre entrées sous arches,
+  allée de ronde, allées en croix sous pergolas, place centrale autour de la fontaine, serre ouverte sur deux côtés et
+  carrés de culture au ras du sol.
+- Infobulle du **Cœur de sentinelle** : il sert à fabriquer le Cœur infernal.
 - **Onyx plus fort que la netherite** : bonus de dégâts 5 (épée : 9), vitesse 10 ; armure 4/9/7/4, robustesse 4.
   L'armure complète donne aussi la **résistance au feu**.
 - **Biomes plus fréquents** : poids de région **33** par défaut (nouvelle clé `netherRegionWeightV2`) et deux points

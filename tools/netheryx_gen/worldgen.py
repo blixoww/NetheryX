@@ -525,7 +525,7 @@ STRUCTURES = {
     "infernal_sanctum": (20, 8, 663901247, 10, 33, 10, 40, "none"),
     "withered_catacombs": (18, 7, 518230457, 8, 45, 16, 38, "none"),
     "traveler_camp": (9, 3, 734029118, 6, 33, 0, 12, "beard_thin"),
-    "nether_garden": (10, 4, 192837465, 7, 33, 0, 21, "beard_thin"),
+    "nether_garden": (10, 4, 192837465, 7, 33, 0, 27, "beard_thin"),
     "hidden_cache": (5, 2, 556172839, 4, 40, 7, 6, "none"),
     "nomad_caravan": (14, 5, 902817364, 7, 33, 0, 25, "beard_thin"),
     "basalt_forge": (18, 6, 640918273, 12, 33, 0, 25, "beard_thin"),

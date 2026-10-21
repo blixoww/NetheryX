@@ -37,8 +37,9 @@ En survie, ou en créatif en vérifiant dans JEI que chaque recette existe et fa
 - [ ] Objets utiles : Boussole des âmes, Pierre de rappel, Lanterne du Nether, Voile ignifuge, Nasse à magma,
       Chaudron infernal, Autel des âmes, Lanterne de garde, Sifflet de wyverne.
 - [ ] Table de forgeron : infusions d'onyx, **armure abyssale** (gabarit + pièce en onyx + éclat abyssal).
-- [ ] Recettes de fin de jeu : **Cœur scellé** (3 trophées de boss), **Lame abyssale** (très chère).
-- Astuce : `/give @s netheryx:sentinel_eye`, `netheryx:warlock_sigil`, `netheryx:champion_crown` pour tester le Cœur scellé.
+- [ ] Recettes de fin de jeu : **Cœur scellé** (4 trophées de boss), **Lame abyssale** (très chère).
+- Astuce : `/give @s netheryx:sentinel_eye`, `netheryx:warlock_sigil`, `netheryx:champion_crown`, `netheryx:basalt_heartstone`
+  pour tester le Cœur scellé.
 
 ## 3. Biomes
 
@@ -77,7 +78,8 @@ Pour chaque donjon, **en survie** (`/gamemode survival`) avec une bonne armure :
 - [ ] Cache secrète : trappe au ras du dallage, fumée bleue visible de loin.
 - [ ] Nid de wyverne : la gardienne attaque ; vaincue, elle laisse son œuf (qui brille) ; prises pour grimper.
 - [ ] Forge de basalte : le Golem de basalte y monte la garde et ne la quitte pas ; coffre de la forge.
-- [ ] Campement nomade et Jardin du Nether : tentes, chariot, enclos, serre, carrés de culture.
+- [ ] Campement nomade : tentes, chariot, enclos.
+- [ ] Jardin du Nether : on entre par les quatre côtés et on se promène partout (allées, place, serre, carrés de culture).
 
 Butins sans explorer : `/loot give @s loot netheryx:chests/onyx_citadel_vault` (et les autres tables du dossier
 `data/netheryx/loot_tables/chests`).
@@ -90,7 +92,7 @@ Invoquez-les avec leurs œufs (onglet NetheryX) ou `/summon netheryx:<nom>` :
       `cinder_lizard` (apprivoiser avec des baies de feu, puis selle).
 - [ ] Lucioles `ember_firefly` / `soul_firefly` : clic droit avec une fiole vide → bocal qui éclaire.
 - [ ] Hostiles : `ember_stalker`, `ash_wraith`, `withered_knight`, `fire_ghast`, `onyx_cube`, `basalt_burrower`, `mimic`.
-- [ ] Mini-boss `basalt_golem` : frappe au sol, éclats de magma, phase en fusion sous 50 %.
+- [ ] Mini-boss `basalt_golem` : frappe au sol, éclats de magma, phase en fusion sous 50 % ; lâche la Pierre-cœur de basalte.
 - [ ] Marchand piglin (`piglin_merchant`) : échanges.
 
 ## 6. Wyverne de cendre
@@ -102,7 +104,7 @@ Invoquez-les avec leurs œufs (onglet NetheryX) ou `/summon netheryx:<nom>` :
 - [ ] Accroupi + clic droit : attendre / suivre. Éloignez-vous, montez en hauteur ou volez : elle suit en volant.
 - [ ] Une seule wyverne : un second œuf refuse d'éclore tant que la première est en vie.
 - [ ] Combat : `/summon netheryx:ember_stalker ~5 ~ ~` puis frappez-le : elle décolle, tourne, crache du feu
-      (aucun bloc ne brûle), pique pour mordre, puis se repose.
+      (vrai jet de flammes continu qui brille, aucun bloc ne brûle), pique pour mordre, puis se repose.
 - [ ] Montée : frappez une créature devant vous → elle crache du feu dessus.
 - [ ] Prenez un portail du Nether : elle vous suit dans l'autre dimension.
 - [ ] Éloignez-vous de 2 000 blocs (`/tp`), puis utilisez le **Sifflet** : elle revient.

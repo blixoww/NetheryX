@@ -84,3 +84,93 @@ def generate():
             frame(rows, colors).save(path)
             textures.append(f"netheryx:{name}_{i}")
         write_json(asset_path("particles", f"{name}.json"), {"textures": textures})
+    generate_flames()
+
+
+# ------------------------------------------------------------------------------------------------
+# Jet de flammes de la wyverne : grandes bouffees de feu (32 x 32) qui gonflent et se dechirent au fil de leur vie.
+# Les couleurs sont dans la texture ; la particule les affiche en melange additif (elles brillent).
+# ------------------------------------------------------------------------------------------------
+import math
+import random
+
+
+def _fbm(seed, size, octaves=4):
+    """Bruit fractal lisse (non tuilable), valeurs dans [0, 1]."""
+    r = random.Random(seed)
+    layers = []
+    for o in range(octaves):
+        cells = 3 * (2 ** o)
+        grid = [[r.random() for _ in range(cells + 2)] for _ in range(cells + 2)]
+        layers.append((cells, grid, 0.5 ** o))
+    norm = sum(w for _, _, w in layers)
+
+    def sample(x, y):
+        total = 0.0
+        for cells, grid, w in layers:
+            fx, fy = x / size * cells, y / size * cells
+            ix, iy = int(fx), int(fy)
+            tx, ty = fx - ix, fy - iy
+            tx, ty = tx * tx * (3 - 2 * tx), ty * ty * (3 - 2 * ty)
+            a = grid[iy][ix] + (grid[iy][ix + 1] - grid[iy][ix]) * tx
+            b = grid[iy + 1][ix] + (grid[iy + 1][ix + 1] - grid[iy + 1][ix]) * tx
+            total += (a + (b - a) * ty) * w
+        return total / norm
+    return sample
+
+
+def _ramp(stops, t):
+    t = max(0.0, min(1.0, t))
+    for (t0, c0), (t1, c1) in zip(stops, stops[1:]):
+        if t <= t1:
+            k = (t - t0) / (t1 - t0) if t1 > t0 else 0.0
+            return tuple(int(round(c0[i] + (c1[i] - c0[i]) * k)) for i in range(4))
+    return stops[-1][1]
+
+
+def _billow(name, i, n, stops, hole, size=32):
+    """Une bouffee : disque deforme par le bruit, plus dechiquete et plus creux a mesure que t avance."""
+    t = i / max(1, n - 1)
+    noise = _fbm(f"{name}_{i}", size)
+    swirl = _fbm(f"{name}_swirl_{i}", size, 3)
+    img = new(size)
+    c = (size - 1) / 2.0
+    for y in range(size):
+        for x in range(size):
+            dx, dy = (x - c) / c, (y - c) / c
+            d = math.hypot(dx, dy)
+            n1 = noise(x, y)
+            radius = 0.8 + 0.34 * (n1 - 0.5) * (1.0 + 1.6 * t) + 0.1 * (swirl(x, y) - 0.5)
+            edge = 1.0 - d / max(0.05, radius)
+            if edge <= 0:
+                continue
+            heat = edge ** (0.5 + 0.7 * t) * (0.8 + 0.5 * n1) * (1.0 - 0.38 * t)
+            heat -= hole * t * max(0.0, 0.55 - n1) * 2.2
+            if heat <= 0.02:
+                continue
+            col = _ramp(stops, heat)
+            alpha = int(col[3] * min(1.0, heat * 2.6) * (1.0 - 0.35 * t))
+            img.putpixel((x, y), (col[0], col[1], col[2], max(0, min(255, alpha))))
+    return img
+
+
+FLAME_STOPS = [(0.0, (120, 18, 4, 0)), (0.18, (200, 40, 8, 170)), (0.4, (255, 110, 20, 230)), (0.62, (255, 180, 50, 255)),
+               (0.82, (255, 232, 140, 255)), (1.0, (255, 252, 230, 255))]
+CORE_STOPS = [(0.0, (255, 150, 40, 0)), (0.3, (255, 210, 90, 220)), (0.7, (255, 245, 190, 255)), (1.0, (255, 255, 255, 255))]
+SMOKE_STOPS = [(0.0, (28, 24, 22, 0)), (0.2, (46, 40, 36, 190)), (0.6, (66, 58, 52, 235)), (1.0, (88, 76, 68, 245))]
+FLAMES = {
+    "dragon_flame": (8, FLAME_STOPS, 0.9),
+    "dragon_flame_core": (4, CORE_STOPS, 0.2),
+    "dragon_smoke": (6, SMOKE_STOPS, 0.7),
+}
+
+
+def generate_flames():
+    for name, (n, stops, hole) in FLAMES.items():
+        textures = []
+        for i in range(n):
+            path = asset_path("textures", "particle", f"{name}_{i}.png")
+            path.parent.mkdir(parents=True, exist_ok=True)
+            _billow(name, i, n, stops, hole).save(path)
+            textures.append(f"netheryx:{name}_{i}")
+        write_json(asset_path("particles", f"{name}.json"), {"textures": textures})

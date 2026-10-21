@@ -53,7 +53,7 @@ public final class ModItems {
     public static final RegistryObject<Item> WRAITH_ESSENCE = register("wraith_essence", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> MAGMA_SHELL = register("magma_shell", () -> new Item(new Item.Properties().fireResistant()));
     public static final RegistryObject<Item> SENTINEL_CORE = register("sentinel_core",
-            () -> new Item(new Item.Properties().fireResistant().rarity(Rarity.EPIC)));
+            () -> new TooltipItem(new Item.Properties().fireResistant().rarity(Rarity.EPIC)));
 
     public static final RegistryObject<Item> SOUL_DUST = register("soul_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> WITHERED_BONE = register("withered_bone", () -> new Item(new Item.Properties()));
@@ -223,6 +223,8 @@ public final class ModItems {
     public static final RegistryObject<Item> WARLOCK_SIGIL = register("warlock_sigil",
             () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
     public static final RegistryObject<Item> CHAMPION_CROWN = register("champion_crown",
+            () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
+    public static final RegistryObject<Item> BASALT_HEARTSTONE = register("basalt_heartstone",
             () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
     public static final RegistryObject<Item> SEALED_HEART = register("sealed_heart",
             () -> new SealedHeartItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));

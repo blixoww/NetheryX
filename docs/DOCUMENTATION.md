@@ -381,18 +381,18 @@ Créatures : **Escargots de cristal**, lucioles des âmes, cubes d'onyx, spectre
 
 **Boss final**
 
-Chacun des trois boss de donjon lâche un trophée unique : l'*Œil de sentinelle* (Sentinelle d'onyx), le *Sceau du sorcier* (Sorcier infernal) et la *Couronne du champion* (Champion flétri). Ensemble, ils forment le *Cœur scellé*.
+Quatre boss lâchent chacun un trophée unique : l'*Œil de sentinelle* (Sentinelle d'onyx), le *Sceau du sorcier* (Sorcier infernal), la *Couronne du champion* (Champion flétri) et la *Pierre-cœur de basalte* (Golem de basalte). Ensemble, ils forment le *Cœur scellé*.
 
 Clic droit avec, **uniquement dans le Nether** : le Cœur du Nether s'éveille au-dessus de vous.
 
 
-- Établi : `OCO` / `SXW` / `OCO` (`O` = Bloc d'onyx, `C` = Obsidienne pleureuse, `S` = Œil de la Sentinelle, `X` = Couronne du Champion, `W` = Sceau du Sorcier) → **Cœur scellé**
+- Établi : `OCO` / `SXW` / `OHO` (`O` = Bloc d'onyx, `C` = Obsidienne pleureuse, `S` = Œil de la Sentinelle, `X` = Couronne du Champion, `W` = Sceau du Sorcier, `H` = Pierre-cœur de basalte) → **Cœur scellé**
 
 - **Cœur du Nether** : 600 PV, vole. Salves de boules de feu, une **pulsation** ardente qui repousse, des **pluies de météores** annoncées. À 66 % et 33 %, il invoque des gardes et s'abrite derrière un bouclier tant qu'ils vivent. Dernière phase : **geysers de lave**.
 
 ### Golem de basalte (mini-boss)
 
-- **Golem de basalte** : 160 PV, rôde dans les deltas de basalte et les Lacs de verre en fusion. Une **frappe au sol** annoncée par un nuage de poussière, des salves d'**éclats de magma** à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur entre en fusion : plus rapide, il enflamme ceux qui le frappent.
+- **Golem de basalte** : 160 PV, rôde dans les deltas de basalte et les Lacs de verre en fusion. Une **frappe au sol** annoncée par un nuage de poussière, des salves d'**éclats de magma** à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur entre en fusion : plus rapide, il enflamme ceux qui le frappent. Lâche la *Pierre-cœur de basalte*, nécessaire au Cœur scellé.
 
 ### Wyverne de cendre (monture)
 
@@ -481,7 +481,7 @@ Partout dans le Nether. Une tente, un feu de camp, un coffre et un tonneau : ony
 
 ### Jardin du Nether
 
-Prairies, bosquets et forêts. Un potager clôturé avec une cabane : graines, nourriture, pommes d'or et houe en onyx.
+Prairies, bosquets et forêts. Un parc ouvert avec arches, pergolas, fontaine de givre, carrés de culture et une serre (coffre) : graines, nourriture, pommes d'or et houe en onyx.
 
 
 ### Butin vanilla
@@ -1155,6 +1155,8 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Fumoir : Tubercule d'âme → **Tubercule d'âme cuit**
 - **Carapace de basalte** (`netheryx:basalt_carapace`)
   - Trouvé dans : butin de Golem de basalte, butin de Scarabée de basalte, coffres : basalt forge
+- **Pierre-cœur de basalte** (`netheryx:basalt_heartstone`)
+  - Trouvé dans : butin de Golem de basalte
 - **Piment de blaze** (`netheryx:blaze_pepper`)
 - **Graines de piment de blaze** (`netheryx:blaze_pepper_seeds`)
   - Établi (sans forme) : Piment de blaze → **Graines de piment de blaze** ×2
@@ -1310,7 +1312,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - **Éclat de givre** (`netheryx:rime_shard`)
   - Trouvé dans : coffres : nomad caravan
 - **Cœur scellé** (`netheryx:sealed_heart`)
-  - Établi : `OCO` / `SXW` / `OCO` (`O` = Bloc d'onyx, `C` = Obsidienne pleureuse, `S` = Œil de la Sentinelle, `X` = Couronne du Champion, `W` = Sceau du Sorcier) → **Cœur scellé**
+  - Établi : `OCO` / `SXW` / `OHO` (`O` = Bloc d'onyx, `C` = Obsidienne pleureuse, `S` = Œil de la Sentinelle, `X` = Couronne du Champion, `W` = Sceau du Sorcier, `H` = Pierre-cœur de basalte) → **Cœur scellé**
 - **Cœur de sentinelle** (`netheryx:sentinel_core`)
   - Trouvé dans : butin de Sentinelle d'onyx, coffres : onyx citadel vault
 - **Œil de la Sentinelle** (`netheryx:sentinel_eye`)
@@ -1474,7 +1476,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 
 ### Golem de basalte
 - Apparition : Deltas de basalte, Lac de verre en fusion
-- Butin : Carapace de basalte, Carapace de magma, Livre, Onyx, Éclat de verre en fusion
+- Butin : Carapace de basalte, Carapace de magma, Livre, Onyx, Pierre-cœur de basalte, Éclat de verre en fusion
 
 ### Wyverne de cendre
 - Apparition : Deltas de basalte, Lac de verre en fusion, Terres cendrées

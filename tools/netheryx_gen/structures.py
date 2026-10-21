@@ -940,71 +940,105 @@ def traveler_camp():
 
 
 def nether_garden():
-    """Jardin du Nether : enclos de haies de verrue, allees en croix sous une pergola, quatre carres de culture
-    sureleves, fontaine de glace de givre, massifs de fleurs, serre en verre de quartz et cabane du jardinier."""
-    S = 21
-    c = S // 2
-    d = Dungeon(S, 9, S, "nether_garden")
-    d.air(0, 1, 0, S - 1, 8, S - 1)
+    """Jardin du Nether : un parc ouvert ou l'on se promene librement. Haie basse percee de quatre entrees sous des
+    arches, allee de ronde, allees en croix sous des pergolas, place centrale autour d'une fontaine de givre, serre
+    ouverte sur deux cotes et trois carres de culture au ras du sol (on marche entre les plants)."""
+    S, c = 27, 13
+    d = Dungeon(S, 10, S, "nether_garden")
+    d.air(0, 1, 0, S - 1, 9, S - 1)
     d.box(0, 0, 0, S - 1, 0, S - 1, "nether_grass_block")
-    # Haie d'enceinte (deux blocs de haut), creneaux de lanternes, porche au sud
+    path = [("minecraft:polished_blackstone_bricks", 70), ("minecraft:cracked_polished_blackstone_bricks", 12),
+            ("minecraft:polished_blackstone", 18)]
+    flowers = [("ember_bloom", 3), ("ash_daisy", 3), ("crimson_bellflower", 3), ("sulfur_tulip", 3), ("glowcap", 2),
+               ("blazing_grass", 2), ("hellfern", 1)]
+
+    def flower(x, z):
+        f = d.pick(flowers)
+        if f == "hellfern":
+            d.set(x, 1, z, f, half="lower")
+            d.set(x, 2, z, f, half="upper")
+        else:
+            d.set(x, 1, z, f)
+
+    def post(x, z, top=2):
+        d.set(x, 1, z, "ember_stem", axis="y")
+        for y in range(2, top + 1):
+            d.set(x, y, z, "ember_fence")
+        d.lantern(x, top + 1, z, "minecraft:lantern")
+
+    # Allee de ronde et allees en croix (3 blocs de large, ouvertes jusqu'aux quatre entrees)
+    d.box(2, 0, 2, S - 3, 0, S - 3, path)
+    d.box(3, 0, 3, S - 4, 0, S - 4, "nether_grass_block")
+    d.box(c - 1, 0, 0, c + 1, 0, S - 1, path)
+    d.box(0, 0, c - 1, S - 1, 0, c + 1, path)
+    # Haie basse (on voit par-dessus), poteaux a lanternes et quatre arches d'entree
     for k in range(S):
         for (x, z) in ((k, 0), (k, S - 1), (0, k), (S - 1, k)):
-            d.box(x, 1, z, x, 2, z, "ember_wart_block")
-            if k % 5 == 0:
-                d.set(x, 3, z, "ember_fence")
-                d.lantern(x, 4, z, "minecraft:lantern")
-    d.air(c - 1, 1, S - 1, c + 1, 3, S - 1)
-    for x in (c - 2, c + 2):
-        d.pillar(x, S - 1, 1, 4, "ember_stem")
-    d.box(c - 2, 5, S - 1, c + 2, 5, S - 1, "ember_slab", type="bottom", waterlogged="false")
-    d.set(c, 4, S - 1, "minecraft:lantern", hanging="true", waterlogged="false")
-    # Allees en croix et pergola
-    d.box(c - 1, 0, 1, c + 1, 0, S - 2, "minecraft:polished_blackstone_bricks")
-    d.box(1, 0, c - 1, S - 2, 0, c + 1, "minecraft:polished_blackstone_bricks")
-    for z in range(3, S - 2, 4):
-        if abs(z - c) > 2:
-            for x in (c - 2, c + 2):
-                d.pillar(x, z, 1, 3, "ember_stem")
-            d.box(c - 2, 4, z, c + 2, 4, z, "ember_slab", type="bottom", waterlogged="false")
-            d.set(c, 3, z, "ember_firefly_jar", hanging="true", waterlogged="false")
-    # Fontaine de givre au centre
+            if abs(k - c) <= 1:
+                continue
+            if k in (0, 7, S - 8, S - 1):
+                post(x, z)
+            else:
+                d.set(x, 1, z, "ember_wart_block")
+    for side in range(4):
+        for k in (c - 2, c + 2):
+            x, z = [(k, 0), (k, S - 1), (0, k), (S - 1, k)][side]
+            d.pillar(x, z, 1, 3, "ember_stem")
+        for k in range(c - 2, c + 3):
+            x, z = [(k, 0), (k, S - 1), (0, k), (S - 1, k)][side]
+            d.set(x, 4, z, "ember_slab", type="bottom", waterlogged="false")
+        x, z = [(c, 0), (c, S - 1), (0, c), (S - 1, c)][side]
+        d.lantern(x, 3, z, "minecraft:lantern", hanging=True)
+    # Bordure fleurie le long de la haie
+    for k in range(1, S - 1):
+        for (x, z) in ((k, 1), (k, S - 2), (1, k), (S - 2, k)):
+            if abs(k - c) > 1 and d.rng.random() < 0.6:
+                flower(x, z)
+    # Pergolas au-dessus des allees en croix (hors de la place)
+    for t in (3, 7, S - 8, S - 4):
+        for u in (c - 2, c + 2):
+            d.pillar(u, t, 1, 3, "ember_stem")
+            d.pillar(t, u, 1, 3, "ember_stem")
+        for u in range(c - 2, c + 3):
+            d.set(u, 4, t, "ember_slab", type="bottom", waterlogged="false")
+            d.set(t, 4, u, "ember_slab", type="bottom", waterlogged="false")
+        d.set(c, 3, t, "ember_firefly_jar", hanging="true", waterlogged="false")
+        d.set(t, 3, c, "ember_firefly_jar", hanging="true", waterlogged="false")
+    # Place centrale (9 x 9) et fontaine de givre : on en fait le tour par une allee de 2 blocs
+    d.box(c - 4, 0, c - 4, c + 4, 0, c + 4, path)
+    for (x, z) in ((c - 4, c - 4), (c - 4, c + 4), (c + 4, c - 4), (c + 4, c + 4)):
+        post(x, z)
     d.box(c - 2, 1, c - 2, c + 2, 1, c + 2, "rimestone_brick_wall", up="true")
     d.box(c - 1, 1, c - 1, c + 1, 1, c + 1, "rime_ice")
     d.pillar(c, c, 2, 3, "rimestone_bricks")
     d.set(c, 4, c, "quartz_lamp")
     for (x, z) in ((c - 1, c - 1), (c + 1, c + 1), (c - 1, c + 1), (c + 1, c - 1)):
         d.set(x, 2, z, "rime_crystal", facing="up", waterlogged="false")
-    # Quatre carres de culture sureleves, bordes de troncs
-    beds = [((c + 3, 2), "cinder_wheat_crop", "nether_grass_block"), ((2, c + 3), "soul_tuber_crop", "minecraft:soul_soil"),
-            ((c + 3, c + 3), "blaze_pepper_crop", "minecraft:soul_soil")]
+    # Bancs tournes vers la fontaine, au bord de la place
+    for k in (c - 3, c + 3):
+        d.stair(c - 4, 1, k, "ember_stairs", "west")
+        d.stair(c + 4, 1, k, "ember_stairs", "east")
+        d.stair(k, 1, c - 4, "ember_stairs", "north")
+        d.stair(k, 1, c + 4, "ember_stairs", "south")
+    # Carres de culture au ras du sol, bordes de troncs couches, une lanterne a chaque coin
+    beds = [((S - 9, 3), "cinder_wheat_crop", "nether_grass_block"), ((3, S - 9), "soul_tuber_crop", "minecraft:soul_soil"),
+            ((S - 9, S - 9), "blaze_pepper_crop", "minecraft:soul_soil")]
     for (x0, z0), crop, soil in beds:
         x1, z1 = x0 + 5, z0 + 5
         for x in range(x0, x1 + 1):
             for z in range(z0, z1 + 1):
                 if x in (x0, x1) or z in (z0, z1):
-                    d.set(x, 1, z, "ember_stem", axis="x" if z in (z0, z1) else "z")
+                    d.set(x, 0, z, "ember_stem", axis="x" if z in (z0, z1) else "z")
                 else:
-                    d.set(x, 1, z, soil)
-                    # Le carre des piments alterne avec des rangs de baies de feu
-                    if crop == "blaze_pepper_crop" and z % 2 == 0:
-                        d.set(x, 2, z, "fire_berry_bush", age="3")
+                    d.set(x, 0, z, soil)
+                    if crop == "blaze_pepper_crop" and x == x0 + 2:
+                        d.set(x, 1, z, "fire_berry_bush", age="3")
                     else:
-                        d.set(x, 2, z, crop, age=str(d.rng.randrange(2, 4)))
-    # Massifs de fleurs le long de la haie
-    flowers = [("ember_bloom", 3), ("ash_daisy", 3), ("crimson_bellflower", 3), ("sulfur_tulip", 3), ("glowcap", 2),
-               ("blazing_grass", 2), ("hellfern", 1)]
-    for k in range(1, S - 1):
-        for (x, z) in ((k, 1), (1, k), (S - 2, k)):
-            if d.blocks.get((x, 1, z), ("minecraft:air",))[0].endswith(":air") and d.rng.random() < 0.55:
-                f = d.pick(flowers)
-                if f == "hellfern":
-                    d.set(x, 1, z, f, half="lower")
-                    d.set(x, 2, z, f, half="upper")
-                else:
-                    d.set(x, 1, z, f)
-    # Serre en verre de quartz (quart nord-ouest) : luminelles, coffre et composteur
-    gx0, gx1, gz0, gz1 = 2, 7, 2, 7
+                        d.set(x, 1, z, crop, age=str(d.rng.randrange(2, 4)))
+        for (x, z) in ((x0, z0), (x1, z1)):
+            post(x, z, top=1)
+    # Serre en verre de quartz (quart nord-ouest), ouverte vers l'allee est et vers le sud
+    gx0, gx1, gz0, gz1 = 3, 8, 3, 8
     for x in range(gx0, gx1 + 1):
         for z in range(gz0, gz1 + 1):
             d.set(x, 0, z, "minecraft:soul_soil")
@@ -1013,24 +1047,29 @@ def nether_garden():
                 if edge_x and edge_z:
                     d.set(x, y, z, "ember_stem", axis="y")
                 elif edge_z:
-                    d.set(x, y, z, "quartz_glass_pane", east="true", west="true", north="false", south="false", waterlogged="false")
+                    d.window_x(x, y, y, z, "quartz_glass_pane")
                 elif edge_x:
-                    d.set(x, y, z, "quartz_glass_pane", north="true", south="true", east="false", west="false", waterlogged="false")
+                    d.window_z(x, y, y, z, "quartz_glass_pane")
                 else:
                     d.set(x, y, z, AIR)
             d.set(x, 4, z, "ember_stem" if edge_x and edge_z else "quartz_glass")
-            if not (edge_x or edge_z):
-                d.set(x, 1, z, d.pick([("glowcap", 3), ("crimson_bellflower", 1), ("soul_lily", 1)]))
-    d.air(gx1, 1, 5, gx1, 2, 5)
-    d.box(gx1 + 1, 0, 5, c - 2, 0, 5, "minecraft:polished_blackstone_bricks")
+    d.air(gx1, 1, 5, gx1, 2, 6)
+    d.air(5, 1, gz1, 6, 2, gz1)
+    d.box(gx0 + 1, 0, gz0 + 1, gx1 - 1, 0, gz1 - 1, path)
+    for (x, z) in ((4, 5), (4, 6), (5, 4), (6, 4)):
+        d.set(x, 1, z, d.pick([("glowcap", 3), ("crimson_bellflower", 1), ("soul_lily", 1)]))
+        d.set(x, 0, z, "minecraft:soul_soil")
     d.chest(gx0 + 1, 1, gz0 + 1, "nether_garden", facing="south")
-    d.set(gx0 + 1, 1, gz1 - 1, "minecraft:composter", level="4")
-    d.set(4, 3, 4, "soul_firefly_jar", hanging="true", waterlogged="false")
-    # Banc et pots de fleurs le long de l'allee
-    for x in (c + 3, c + 4):
-        d.stair(x, 1, c - 2, "ember_stairs", "south")
-    for (x, z) in ((c + 6, c - 2), (c - 6, c + 2)):
-        d.set(x, 1, z, "potted_" + d.pick([("ember_bloom", 1), ("glowcap", 1), ("soul_lily", 1)]))
+    d.set(gx1 - 1, 1, gz0 + 1, "minecraft:composter", level="4")
+    d.set(gx0 + 1, 1, gz1 - 1, "potted_glowcap")
+    d.set(5, 3, 5, "soul_firefly_jar", hanging="true", waterlogged="false")
+    d.set(gx1 - 1, 1, gz1 - 1, "potted_soul_lily")
+    # Fleurs semees dans les pelouses (elles ne genent pas le passage)
+    for x in range(3, S - 3):
+        for z in range(3, S - 3):
+            if d.blocks.get((x, 0, z), ("",))[0].endswith("nether_grass_block") \
+                    and d.blocks[(x, 1, z)][0].endswith(":air") and d.rng.random() < 0.18:
+                flower(x, z)
     d.connect_fences()
     d.save("nether_garden")
 

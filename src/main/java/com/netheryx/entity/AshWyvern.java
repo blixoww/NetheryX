@@ -31,8 +31,11 @@ import net.minecraft.world.entity.ai.goal.target.OwnerHurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.OwnerHurtTargetGoal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -397,22 +400,36 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
         Vec3 mouth = this.position().add(Vec3.directionFromRotation(0.0F, this.getYRot()).scale(2.6D)).add(0.0D, 1.25D, 0.0D);
         Vec3 dir = target != null ? target.getEyePosition().subtract(mouth).normalize()
                 : Vec3.directionFromRotation(this.getXRot(), this.getYRot());
-        // Jet de flammes : chaque particule part de la gueule avec une vitesse propre, en cone, comme un vrai crachat
-        for (int i = 0; i < 18; i++) {
-            Vec3 jet = dir.add(this.random.nextGaussian() * 0.08D, this.random.nextGaussian() * 0.08D, this.random.nextGaussian() * 0.08D)
-                    .normalize();
-            double speed = 0.55D + this.random.nextDouble() * 0.45D;
-            level.sendParticles(i % 6 == 0 ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.FLAME, mouth.x, mouth.y, mouth.z, 0,
-                    jet.x, jet.y, jet.z, speed);
+        // Jet de flammes : un flot continu de grandes bouffees de feu qui gonflent en avancant, sur un coeur blanc
+        // incandescent ; la fumee monte au bout du jet. Les particules ralentissent et s'ecrasent contre les obstacles.
+        for (int i = 0; i < 9; i++) {
+            Vec3 jet = this.spread(dir, 0.055D);
+            level.sendParticles(ModParticles.DRAGON_FLAME.get(), mouth.x, mouth.y, mouth.z, 0, jet.x, jet.y, jet.z,
+                    0.95D + this.random.nextDouble() * 0.4D);
         }
-        for (int i = 0; i < 4; i++) {
-            Vec3 jet = dir.add(this.random.nextGaussian() * 0.15D, this.random.nextGaussian() * 0.1D, this.random.nextGaussian() * 0.15D);
-            level.sendParticles(ModParticles.EMBER_SPARK.get(), mouth.x, mouth.y, mouth.z, 0, jet.x, jet.y, jet.z, 0.7D);
+        for (int i = 0; i < 3; i++) {
+            Vec3 jet = this.spread(dir, 0.025D);
+            level.sendParticles(ModParticles.DRAGON_FLAME_CORE.get(), mouth.x, mouth.y, mouth.z, 0, jet.x, jet.y, jet.z,
+                    0.7D + this.random.nextDouble() * 0.25D);
         }
-        level.sendParticles(ParticleTypes.LARGE_SMOKE, mouth.x, mouth.y, mouth.z, 0, dir.x, dir.y + 0.1D, dir.z, 0.25D);
-        // Impact : gerbe de flammes la ou le souffle touche
-        Vec3 impact = mouth.add(dir.scale(BREATH_RANGE * 0.85D));
-        level.sendParticles(ParticleTypes.FLAME, impact.x, impact.y, impact.z, 6, 0.6D, 0.4D, 0.6D, 0.04D);
+        for (int i = 0; i < 3; i++) {
+            Vec3 jet = this.spread(dir, 0.18D);
+            level.sendParticles(ModParticles.EMBER_SPARK.get(), mouth.x, mouth.y, mouth.z, 0, jet.x, jet.y, jet.z, 0.8D);
+        }
+        // Impact : la ou le jet touche un bloc ou la cible, le feu se brise en gerbe et fume
+        Vec3 end = mouth.add(dir.scale(BREATH_RANGE));
+        BlockHitResult hit = level.clip(new ClipContext(mouth, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
+        Vec3 impact = hit.getType() == HitResult.Type.MISS ? (target != null && target.distanceTo(this) < BREATH_RANGE + 2.0D
+                ? target.getBoundingBox().getCenter() : end) : hit.getLocation().subtract(dir.scale(0.4D));
+        for (int i = 0; i < 3; i++) {
+            Vec3 burst = new Vec3(this.random.nextGaussian(), this.random.nextDouble() * 0.8D, this.random.nextGaussian()).normalize();
+            level.sendParticles(ModParticles.DRAGON_FLAME.get(), impact.x, impact.y, impact.z, 0, burst.x, burst.y, burst.z, 0.25D);
+        }
+        if (this.breathTicks % 2 == 0) {
+            level.sendParticles(ModParticles.DRAGON_SMOKE.get(), impact.x, impact.y + 0.5D, impact.z, 0, 0.0D, 1.0D, 0.0D, 0.06D);
+            Vec3 tail = mouth.add(dir.scale(BREATH_RANGE * 0.6D));
+            level.sendParticles(ModParticles.DRAGON_SMOKE.get(), tail.x, tail.y, tail.z, 0, dir.x, dir.y + 0.4D, dir.z, 0.12D);
+        }
         if (this.breathTicks % 6 == 0) {
             this.playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 0.6F + this.random.nextFloat() * 0.2F);
         }
@@ -434,6 +451,11 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
             victim.hurt(this.damageSources().mobAttack(this), 4.0F);
             victim.setSecondsOnFire(5);
         }
+    }
+
+    private Vec3 spread(Vec3 dir, double amount) {
+        return dir.add(this.random.nextGaussian() * amount, this.random.nextGaussian() * amount, this.random.nextGaussian() * amount)
+                .normalize();
     }
 
     void diveHit(LivingEntity target) {

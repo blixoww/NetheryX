@@ -32,6 +32,12 @@ public final class ModParticles {
     public static final RegistryObject<SimpleParticleType> FROST_MOTE = register("frost_mote");
     /** Eclat de quartz : scintillement blanc (Recifs de quartz). */
     public static final RegistryObject<SimpleParticleType> QUARTZ_GLINT = register("quartz_glint");
+    /** Jet de flammes de la wyverne : grande bouffee de feu qui gonfle et tournoie (melange additif). */
+    public static final RegistryObject<SimpleParticleType> DRAGON_FLAME = register("dragon_flame");
+    /** Coeur blanc incandescent du jet, a la sortie de la gueule. */
+    public static final RegistryObject<SimpleParticleType> DRAGON_FLAME_CORE = register("dragon_flame_core");
+    /** Fumee epaisse qui monte au bout du jet et a l'impact. */
+    public static final RegistryObject<SimpleParticleType> DRAGON_SMOKE = register("dragon_smoke");
 
     private ModParticles() {
     }

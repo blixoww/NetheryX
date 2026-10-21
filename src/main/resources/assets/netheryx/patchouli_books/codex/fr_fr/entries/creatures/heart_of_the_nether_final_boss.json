@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Chacun des trois boss de donjon lâche un trophée unique : l'$(item)Œil de sentinelle$() (Sentinelle d'onyx), le $(item)Sceau du sorcier$() (Sorcier infernal) et la $(item)Couronne du champion$() (Champion flétri). Ensemble, ils forment le $(item)Cœur scellé$().$(br2)Clic droit avec, $(l)uniquement dans le Nether$() : le Cœur du Nether s'éveille au-dessus de vous.",
+      "text": "Quatre boss lâchent chacun un trophée unique : l'$(item)Œil de sentinelle$() (Sentinelle d'onyx), le $(item)Sceau du sorcier$() (Sorcier infernal), la $(item)Couronne du champion$() (Champion flétri) et la $(item)Pierre-cœur de basalte$() (Golem de basalte). Ensemble, ils forment le $(item)Cœur scellé$().$(br2)Clic droit avec, $(l)uniquement dans le Nether$() : le Cœur du Nether s'éveille au-dessus de vous.",
       "title": "Boss final"
     },
     {

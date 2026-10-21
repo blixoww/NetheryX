@@ -9,7 +9,7 @@
       "entity": "netheryx:basalt_golem",
       "scale": 0.4,
       "offset": 0.0,
-      "text": "160 PV, rôde dans les deltas de basalte et les Lacs de verre en fusion. Une $(l)frappe au sol$() annoncée par un nuage de poussière, des salves d'$(l)éclats de magma$() à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur entre en fusion : plus rapide, il enflamme ceux qui le frappent."
+      "text": "160 PV, rôde dans les deltas de basalte et les Lacs de verre en fusion. Une $(l)frappe au sol$() annoncée par un nuage de poussière, des salves d'$(l)éclats de magma$() à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur entre en fusion : plus rapide, il enflamme ceux qui le frappent. Lâche la $(item)Pierre-cœur de basalte$(), nécessaire au Cœur scellé."
     }
   ]
 }

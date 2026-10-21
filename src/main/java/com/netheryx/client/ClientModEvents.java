@@ -1,6 +1,7 @@
 package com.netheryx.client;
 
 import com.netheryx.NetheryX;
+import com.netheryx.client.particle.DragonFlameParticle;
 import com.netheryx.client.particle.NetheryXParticle;
 import com.netheryx.client.renderer.FireGhastRenderer;
 import com.netheryx.client.renderer.ObsidianBoatRenderer;
@@ -145,6 +146,14 @@ public final class ClientModEvents {
         particle(event, ModParticles.WITHER_SPORE, NetheryXParticle.Style.SPORE);
         particle(event, ModParticles.FROST_MOTE, NetheryXParticle.Style.ASH);
         particle(event, ModParticles.QUARTZ_GLINT, NetheryXParticle.Style.GLINT);
+        flame(event, ModParticles.DRAGON_FLAME, DragonFlameParticle.Kind.FLAME);
+        flame(event, ModParticles.DRAGON_FLAME_CORE, DragonFlameParticle.Kind.CORE);
+        flame(event, ModParticles.DRAGON_SMOKE, DragonFlameParticle.Kind.SMOKE);
+    }
+
+    private static void flame(RegisterParticleProvidersEvent event, RegistryObject<SimpleParticleType> type,
+                              DragonFlameParticle.Kind kind) {
+        event.registerSpriteSet(type.get(), sprites -> new DragonFlameParticle.Provider(sprites, kind));
     }
 
     private static void particle(RegisterParticleProvidersEvent event, RegistryObject<SimpleParticleType> type,

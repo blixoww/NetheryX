@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Each of the three dungeon bosses drops a unique trophy: the $(item)Sentinel Eye$() (Onyx Sentinel), the $(item)Warlock Sigil$() (Infernal Warlock) and the $(item)Champion Crown$() (Withered Champion). Together they make the $(item)Sealed Heart$().$(br2)Right-click it $(l)in the Nether only$(): the Heart of the Nether awakens above you.",
+      "text": "Four bosses each drop a unique trophy: the $(item)Sentinel Eye$() (Onyx Sentinel), the $(item)Warlock Sigil$() (Infernal Warlock), the $(item)Champion Crown$() (Withered Champion) and the $(item)Basalt Heartstone$() (Basalt Golem). Together they make the $(item)Sealed Heart$().$(br2)Right-click it $(l)in the Nether only$(): the Heart of the Nether awakens above you.",
       "title": "Boss final"
     },
     {

@@ -103,8 +103,10 @@ def generate_final_boss():
         {"rolls": 1, "entries": [item("minecraft:netherite_ingot")]},
         {"rolls": 1, "entries": [item("ash_wyvern_egg")]},
     ])
-    shaped("sealed_heart", ["OCO", "SXW", "OCO"], {"O": "onyx_block", "C": "minecraft:crying_obsidian", "S": "sentinel_eye",
-                                                  "X": "champion_crown", "W": "warlock_sigil"}, "sealed_heart", 1)
+    # Les quatre trophees : Sentinelle, Sorcier, Champion et Golem de basalte
+    shaped("sealed_heart", ["OCO", "SXW", "OHO"], {"O": "onyx_block", "C": "minecraft:crying_obsidian", "S": "sentinel_eye",
+                                                  "X": "champion_crown", "W": "warlock_sigil", "H": "basalt_heartstone"},
+           "sealed_heart", 1)
     shaped("onyx_apple", ["SSS", "SAS", "SSS"], {"S": "onyx_shard", "A": "minecraft:golden_apple"}, "onyx_apple", 1, "food")
     shaped("abyssal_upgrade_template", ["#T#", "#O#", "###"], {"#": "onyx_shard", "T": "abyssal_upgrade_template", "O": "abyssal_shard"},
            "abyssal_upgrade_template", 2)

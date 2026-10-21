@@ -353,8 +353,10 @@ for en, fr, icon, ten, tfr in [
      "Anywhere in the Nether. A tent, a campfire, a chest and a barrel: Onyx, tools, diamonds, food and golden apples.",
      "Partout dans le Nether. Une tente, un feu de camp, un coffre et un tonneau : onyx, outils, diamants, nourriture et pommes d'or."),
     ("Nether Garden", "Jardin du Nether", "netheryx:cinder_wheat",
-     "Meadows, groves and forests. A fenced vegetable garden with a hut: seeds, food, golden apples and an Onyx hoe.",
-     "Prairies, bosquets et forêts. Un potager clôturé avec une cabane : graines, nourriture, pommes d'or et houe en onyx."),
+     "Meadows, groves and forests. An open park with arches, pergolas, a frost fountain, crop beds and a greenhouse "
+     "(chest): seeds, food, golden apples and an Onyx hoe.",
+     "Prairies, bosquets et forêts. Un parc ouvert avec arches, pergolas, fontaine de givre, carrés de culture et une serre "
+     "(coffre) : graines, nourriture, pommes d'or et houe en onyx."),
 ]:
     entry("structures", en, fr, icon, [text(ten, tfr)])
 entry("structures", "Vanilla Loot", "Butin vanilla", "minecraft:chest", [
@@ -759,12 +761,14 @@ entry("structures", "Hidden Cache", "Cache secrète", "minecraft:soul_campfire",
          "peut aussi les pister.", "Cache secrète"),
 ])
 entry("creatures", "Heart of the Nether (final boss)", "Cœur du Nether (boss final)", "netheryx:sealed_heart", [
-    text("Each of the three dungeon bosses drops a unique trophy: the $(item)Sentinel Eye$() (Onyx Sentinel), the "
-         "$(item)Warlock Sigil$() (Infernal Warlock) and the $(item)Champion Crown$() (Withered Champion). Together they make the "
-         "$(item)Sealed Heart$().$(br2)Right-click it $(l)in the Nether only$(): the Heart of the Nether awakens above you.",
-         "Chacun des trois boss de donjon lâche un trophée unique : l'$(item)Œil de sentinelle$() (Sentinelle d'onyx), le "
-         "$(item)Sceau du sorcier$() (Sorcier infernal) et la $(item)Couronne du champion$() (Champion flétri). Ensemble, ils forment le "
-         "$(item)Cœur scellé$().$(br2)Clic droit avec, $(l)uniquement dans le Nether$() : le Cœur du Nether s'éveille au-dessus de vous.",
+    text("Four bosses each drop a unique trophy: the $(item)Sentinel Eye$() (Onyx Sentinel), the $(item)Warlock Sigil$() "
+         "(Infernal Warlock), the $(item)Champion Crown$() (Withered Champion) and the $(item)Basalt Heartstone$() (Basalt Golem). "
+         "Together they make the $(item)Sealed Heart$().$(br2)Right-click it $(l)in the Nether only$(): the Heart of the Nether "
+         "awakens above you.",
+         "Quatre boss lâchent chacun un trophée unique : l'$(item)Œil de sentinelle$() (Sentinelle d'onyx), le $(item)Sceau du "
+         "sorcier$() (Sorcier infernal), la $(item)Couronne du champion$() (Champion flétri) et la $(item)Pierre-cœur de basalte$() "
+         "(Golem de basalte). Ensemble, ils forment le $(item)Cœur scellé$().$(br2)Clic droit avec, $(l)uniquement dans le Nether$() : "
+         "le Cœur du Nether s'éveille au-dessus de vous.",
          "Boss final"),
     craft("sealed_heart"),
     mob("nether_heart", "600 HP, flies. Fireball volleys, a fiery $(l)pulse$() that throws you back, telegraphed $(l)meteor rains$(). "
@@ -808,10 +812,11 @@ entry("biomes", "Petrified Onyx Forest", "Forêt pétrifiée d'onyx", "netheryx:
 entry("creatures", "Basalt Golem (mini-boss)", "Golem de basalte (mini-boss)", "netheryx:basalt_golem_spawn_egg", [
     mob("basalt_golem", "160 HP, roams Basalt Deltas and Molten Glass Lakes. A $(l)ground slam$() announced by a cloud of dust, volleys "
                         "of $(l)magma chunks$() at range, half damage from projectiles. Below 50% its core melts: faster, it sets "
-                        "attackers on fire.",
+                        "attackers on fire. Drops the $(item)Basalt Heartstone$(), needed for the Sealed Heart.",
         "160 PV, rôde dans les deltas de basalte et les Lacs de verre en fusion. Une $(l)frappe au sol$() annoncée par un nuage de "
         "poussière, des salves d'$(l)éclats de magma$() à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur "
-        "entre en fusion : plus rapide, il enflamme ceux qui le frappent.", 0.4),
+        "entre en fusion : plus rapide, il enflamme ceux qui le frappent. Lâche la $(item)Pierre-cœur de basalte$(), nécessaire au "
+        "Cœur scellé.", 0.4),
 ])
 entry("creatures", "Ash Wyvern (mount)", "Wyverne de cendre (monture)", "netheryx:ash_wyvern_egg", [
     mob("ash_wyvern", "Where to find one: $(l)Wyvern Nests$() (rock spires topped with a bone nest, in Ashen Wastes, Basalt Deltas, "

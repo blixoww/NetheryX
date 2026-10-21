@@ -4,7 +4,7 @@
   "pattern": [
     "OCO",
     "SXW",
-    "OCO"
+    "OHO"
   ],
   "key": {
     "O": {
@@ -21,6 +21,9 @@
     },
     "W": {
       "item": "netheryx:warlock_sigil"
+    },
+    "H": {
+      "item": "netheryx:basalt_heartstone"
     }
   },
   "result": {

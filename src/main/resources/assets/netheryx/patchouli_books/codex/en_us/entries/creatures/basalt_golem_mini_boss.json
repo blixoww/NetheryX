@@ -9,7 +9,7 @@
       "entity": "netheryx:basalt_golem",
       "scale": 0.4,
       "offset": 0.0,
-      "text": "160 HP, roams Basalt Deltas and Molten Glass Lakes. A $(l)ground slam$() announced by a cloud of dust, volleys of $(l)magma chunks$() at range, half damage from projectiles. Below 50% its core melts: faster, it sets attackers on fire."
+      "text": "160 HP, roams Basalt Deltas and Molten Glass Lakes. A $(l)ground slam$() announced by a cloud of dust, volleys of $(l)magma chunks$() at range, half damage from projectiles. Below 50% its core melts: faster, it sets attackers on fire. Drops the $(item)Basalt Heartstone$(), needed for the Sealed Heart."
     }
   ]
 }

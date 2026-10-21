@@ -6,6 +6,20 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "name": "netheryx:basalt_heartstone"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:killed_by_player"
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
           "name": "netheryx:basalt_carapace",
           "functions": [
             {
