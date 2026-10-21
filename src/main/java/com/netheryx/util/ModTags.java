@@ -22,6 +22,11 @@ public final class ModTags {
         public static final TagKey<Block> MAGMA_CRAB_SPAWNABLE_ON = mod("magma_crab_spawnable_on");
         public static final TagKey<Block> BASALT_BEETLE_SPAWNABLE_ON = mod("basalt_beetle_spawnable_on");
         public static final TagKey<Block> CINDER_WHEAT_SOIL = mod("cinder_wheat_soil");
+        /** Houppiers sous lesquels poussent les figues de braise et les prunes fletries. */
+        public static final TagKey<Block> EMBER_FIG_CANOPY = mod("ember_fig_canopy");
+        /** Tresors que le lezard de cendre apprivoise sait flairer. */
+        public static final TagKey<Block> CINDER_LIZARD_SCENTS = mod("cinder_lizard_scents");
+        public static final TagKey<Block> WITHERED_PLUM_CANOPY = mod("withered_plum_canopy");
         /** Sols sur lesquels les animaux NetheryX (vaches, poules) peuvent apparaitre. */
         public static final TagKey<Block> NETHER_ANIMALS_SPAWNABLE_ON = mod("nether_animals_spawnable_on");
         /** Cultures accelerees par le soufre. */

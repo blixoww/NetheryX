@@ -65,7 +65,7 @@ public class NetherHeart extends Monster implements GeoEntity {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     /** Le boss reste cloisonne dans son arene (rayon 28 blocs autour de son point d'apparition). */
-    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(28.0D, 26.0D, 18.0D);
+    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(28.0D, 26.0D, 18.0D).noRegeneration();
     private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(this.getDisplayName(),
             BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_12).setDarkenScreen(true).setCreateWorldFog(true);
     private final List<UUID> guards = new ArrayList<>();

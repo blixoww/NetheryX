@@ -2,7 +2,7 @@
   "name": "Onyx Anvil",
   "icon": "netheryx:onyx_anvil",
   "category": "netheryx:building",
-  "sortnum": 61,
+  "sortnum": 62,
   "pages": [
     {
       "type": "patchouli:spotlight",

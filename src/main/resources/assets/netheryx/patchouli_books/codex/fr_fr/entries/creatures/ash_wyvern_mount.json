@@ -2,7 +2,7 @@
   "name": "Wyverne de cendre (monture)",
   "icon": "netheryx:ash_wyvern_egg",
   "category": "netheryx:creatures",
-  "sortnum": 98,
+  "sortnum": 99,
   "pages": [
     {
       "type": "patchouli:entity",
@@ -15,6 +15,11 @@
       "type": "patchouli:text",
       "text": "$(li)Clic droit : la monter. $(li)Accroupi + clic droit : attendre / suivre. $(li)La viande la soigne ; apprivoisée, elle a $(l)160 PV$() et se régénère.$(br2)$(l)En combat$(), elle s'envole seule, tourne autour de votre ennemi, crache du feu (qui enflamme les créatures, jamais les blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que vous attaquez.",
       "title": "Compagnon"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Ses attaques :$(li)$(l)Jet de flammes$() : un flot de feu continu.$(li)$(l)Grande boule de feu$() quand l'ennemi est loin : elle prend son souffle, puis crache une sphère de feu qui explose à l'impact.$(li)$(l)Rafale d'ailes$() de près : deux battements immenses repoussent et ralentissent les ennemis.$(li)$(l)Coup de queue$() : un tour complet qui frappe tout autour.$(li)$(l)Piqué$() pour mordre. Aucune ne vous blesse, ni vos compagnons, ni les blocs.",
+      "title": "Attaques"
     },
     {
       "type": "patchouli:text",

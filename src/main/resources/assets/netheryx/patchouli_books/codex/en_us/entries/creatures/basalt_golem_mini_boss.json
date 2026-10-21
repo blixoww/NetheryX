@@ -2,7 +2,7 @@
   "name": "Basalt Golem (mini-boss)",
   "icon": "netheryx:basalt_golem_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 97,
+  "sortnum": 98,
   "pages": [
     {
       "type": "patchouli:entity",
@@ -10,6 +10,11 @@
       "scale": 0.4,
       "offset": 0.0,
       "text": "160 HP, roams Basalt Deltas and Molten Glass Lakes. A $(l)ground slam$() announced by a cloud of dust, volleys of $(l)magma chunks$() at range, half damage from projectiles. Below 50% its core melts: faster, it sets attackers on fire. Drops the $(item)Basalt Heartstone$(), needed for the Sealed Heart."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Every attack is announced and can be countered:$(li)$(l)Ground slam$(): a shockwave rolls outward; $(l)jump$() over it.$(li)$(l)Charge$(): he rears up and roars, then rushes in a straight line. Dodge sideways: if he hits a wall he is $(l)stunned$() and takes more damage.$(li)$(l)Eruptions$(): bubbling magma circles appear under you, then columns of fire burst out: move!$(li)$(l)Magma chunks$() at range.",
+      "title": "Attaques"
     }
   ]
 }

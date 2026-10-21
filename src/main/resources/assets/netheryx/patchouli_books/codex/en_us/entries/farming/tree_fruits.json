@@ -1,0 +1,25 @@
+{
+  "name": "Tree Fruits",
+  "icon": "netheryx:ember_fig",
+  "category": "netheryx:farming",
+  "sortnum": 52,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:ember_fig",
+      "text": "$(l)Ember Figs$() hang under the canopy of Ember trees (Ember Grove, Hellwood Jungle). Ripe, they glow: right-click to pick them, they grow back. Eating one grants $(item)Fire Resistance$() (15 s).",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:withered_plum",
+      "text": "$(l)Withered Plums$() hang under Withered trees. Eating one $(l)cures Wither$() and heals a little: precious against Withered Knights and the Champion.",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Plant a fruit under a matching wart block (also vanilla Nether or Warped Wart Blocks) to grow your own clusters; bone meal speeds them up. Breaking a canopy block may also drop a fruit.",
+      "title": "Cultiver"
+    }
+  ]
+}

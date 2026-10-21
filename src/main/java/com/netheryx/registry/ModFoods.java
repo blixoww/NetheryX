@@ -9,6 +9,16 @@ public final class ModFoods {
             .nutrition(2).saturationMod(0.2F).fast()
             .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 100), 1.0F)
             .build();
+    /** Figue de braise : sucree et chaude, elle protege un moment des flammes. */
+    public static final FoodProperties EMBER_FIG = new FoodProperties.Builder()
+            .nutrition(4).saturationMod(0.5F)
+            .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 300), 1.0F)
+            .build();
+    /** Prune fletrie : guerit le fletrissement (voir FruitItem) et soigne un peu. */
+    public static final FoodProperties WITHERED_PLUM = new FoodProperties.Builder()
+            .nutrition(3).saturationMod(0.4F).alwaysEat()
+            .effect(() -> new MobEffectInstance(MobEffects.REGENERATION, 60), 1.0F)
+            .build();
     public static final FoodProperties BLAZE_PEPPER = new FoodProperties.Builder()
             .nutrition(3).saturationMod(0.4F)
             .effect(() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 600), 1.0F)

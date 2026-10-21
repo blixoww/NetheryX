@@ -6,6 +6,7 @@ import com.netheryx.network.NetheryXNetwork;
 import com.netheryx.registry.ModBlockEntities;
 import com.netheryx.registry.ModBlocks;
 import com.netheryx.registry.ModCreativeTabs;
+import com.netheryx.registry.ModMenus;
 import com.netheryx.registry.ModEffects;
 import com.netheryx.registry.ModEnchantments;
 import com.netheryx.registry.ModFeatures;
@@ -47,6 +48,7 @@ public final class NetheryX {
         ModBlocks.BLOCKS.register(modBus);
         ModItems.ITEMS.register(modBus);
         ModBlockEntities.BLOCK_ENTITIES.register(modBus);
+        ModMenus.MENUS.register(modBus);
         ModEntities.ENTITY_TYPES.register(modBus);
         ModCreativeTabs.TABS.register(modBus);
         ModStructureTypes.STRUCTURE_TYPES.register(modBus);

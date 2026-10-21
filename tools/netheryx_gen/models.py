@@ -296,6 +296,14 @@ def gen_aged(name, parent, texture_prefix, key="crop"):
     blockstate(name, variants)
 
 
+def gen_hanging_fruit(name):
+    variants = {}
+    for age in range(3):
+        m = model(f"{name}_stage{age}", "minecraft:block/cross", {"cross": block_tex(f"{name}_stage{age}")}, CUTOUT)
+        variants[f"age={age}"] = v(m)
+    blockstate(name, variants)
+
+
 # --- 1.2.0 ----------------------------------------------------------------------------------------
 
 def gen_vines(name, tex, item):
@@ -479,6 +487,8 @@ def generate_blocks():
             gen_aged(name, "minecraft:block/crop", extra, "crop")
         elif kind == "bush":
             gen_aged(name, "minecraft:block/cross", extra, "cross")
+        elif kind == "hanging_fruit":
+            gen_hanging_fruit(name)
         elif kind == "vines_head":
             gen_vines(name, extra, True)
         elif kind == "vines_body":

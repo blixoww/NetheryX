@@ -2,7 +2,7 @@
   "name": "Cache secrète",
   "icon": "minecraft:soul_campfire",
   "category": "netheryx:structures",
-  "sortnum": 91,
+  "sortnum": 92,
   "pages": [
     {
       "type": "patchouli:text",

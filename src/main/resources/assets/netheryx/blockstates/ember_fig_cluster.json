@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "netheryx:block/ember_fig_cluster_stage0"
+    },
+    "age=1": {
+      "model": "netheryx:block/ember_fig_cluster_stage1"
+    },
+    "age=2": {
+      "model": "netheryx:block/ember_fig_cluster_stage2"
+    }
+  }
+}

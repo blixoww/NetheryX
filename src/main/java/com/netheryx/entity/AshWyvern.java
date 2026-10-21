@@ -11,6 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
@@ -61,6 +62,13 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     private static final RawAnimation GLIDE = NetheryXAnimations.loop(NAME, "glide");
     private static final RawAnimation ROAR = NetheryXAnimations.once(NAME, "roar");
     private static final RawAnimation BREATH = NetheryXAnimations.once(NAME, "breath");
+    private static final RawAnimation FIREBALL = NetheryXAnimations.once(NAME, "fireball");
+    private static final RawAnimation GUST = NetheryXAnimations.once(NAME, "gust");
+    private static final RawAnimation TAIL_SWEEP = NetheryXAnimations.once(NAME, "tail_sweep");
+    private static final int FIREBALL_CHARGE = 16;
+    private static final int GUST_TICKS = 24;
+    private static final double GUST_RANGE = 9.0D;
+    private static final double SWEEP_RANGE = 4.5D;
     private static final RawAnimation DIVE = NetheryXAnimations.once(NAME, "dive");
     /** En combat aerien (vole seule, sans cavalier) : synchronise pour que le client sache qu'elle ne tombe pas. */
     private static final net.minecraft.network.syncher.EntityDataAccessor<Boolean> AERIAL =
@@ -70,6 +78,12 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     private int breathTicks;
     private int breathCooldown = 40;
+    private int fireballCharge;
+    private int fireballCooldown = 100;
+    private int gustTicks;
+    private int gustCooldown = 80;
+    private int sweepTicks;
+    private int sweepCooldown = 40;
 
     public AshWyvern(EntityType<? extends AshWyvern> type, Level level) {
         super(type, level);
@@ -345,6 +359,11 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
         this.setNoGravity((this.isVehicle() && !this.onGround()) || this.isAerial());
         super.tick();
         if (this.level() instanceof ServerLevel server) {
+            // Grande et lourde, elle peut se retrouver coincee dans un bloc : elle s'en degage vers le haut
+            if (this.tickCount % 10 == 0 && this.isInWall()) {
+                this.setPos(this.getX(), Math.floor(this.getY()) + 1.0D, this.getZ());
+                this.setDeltaMovement(this.getDeltaMovement().multiply(0.5D, 0.0D, 0.5D));
+            }
             if (this.nestGuardian && !this.isTame()) {
                 this.nestArena.tick(this);
             }
@@ -358,11 +377,37 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
             if (this.breathCooldown > 0) {
                 this.breathCooldown--;
             }
+            if (this.fireballCooldown > 0) {
+                this.fireballCooldown--;
+            }
+            if (this.gustCooldown > 0) {
+                this.gustCooldown--;
+            }
+            if (this.sweepCooldown > 0) {
+                this.sweepCooldown--;
+            }
             LivingEntity target = this.getTarget();
             // Montee : elle crache du feu sur ce que son cavalier attaque, s'il est devant elle
             if (this.isVehicle() && target != null && target.isAlive() && this.breathCooldown <= 0 && this.breathTicks <= 0
                     && this.distanceTo(target) < BREATH_RANGE + 3.0D && this.isInFront(target)) {
                 this.startBreath();
+            } else if (this.isVehicle() && target != null && target.isAlive() && this.canFireball()
+                    && this.distanceTo(target) >= BREATH_RANGE + 3.0D && this.distanceTo(target) < 40.0D && this.isInFront(target)) {
+                // Cible trop lointaine pour le souffle : grande boule de feu
+                this.startFireball();
+            } else if (this.isVehicle() && target != null && target.isAlive() && this.canTailSweep() && this.distanceTo(target) < 5.0D
+                    && !this.isInFront(target)) {
+                // Cible sur le cote ou derriere : coup de queue
+                this.startTailSweep();
+            }
+            if (this.fireballCharge > 0) {
+                this.tickFireball(server);
+            }
+            if (this.gustTicks > 0) {
+                this.tickGust(server);
+            }
+            if (this.sweepTicks > 0) {
+                this.tickSweep(server);
             }
             if (this.breathTicks > 0) {
                 this.breathTicks--;
@@ -371,10 +416,19 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
         }
     }
 
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        // Jamais blessee par un mur ou un sol brulant : elle s'en degage seule (voir tick)
+        if (source.is(DamageTypes.IN_WALL) || source.is(DamageTypes.HOT_FLOOR)) {
+            return false;
+        }
+        return super.hurt(source, amount);
+    }
+
     // --- Attaques ---------------------------------------------------------------------------------
 
     boolean canBreath() {
-        return this.breathCooldown <= 0 && this.breathTicks <= 0;
+        return this.breathCooldown <= 0 && !this.isBusyAttacking();
     }
 
     void startBreath() {
@@ -397,7 +451,7 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     /** Souffle de feu : un cone devant la gueule. Il embrase les creatures, jamais les blocs. */
     private void tickBreath(ServerLevel level) {
         LivingEntity target = this.getTarget();
-        Vec3 mouth = this.position().add(Vec3.directionFromRotation(0.0F, this.getYRot()).scale(2.6D)).add(0.0D, 1.25D, 0.0D);
+        Vec3 mouth = this.mouthPosition();
         Vec3 dir = target != null ? target.getEyePosition().subtract(mouth).normalize()
                 : Vec3.directionFromRotation(this.getXRot(), this.getYRot());
         // Jet de flammes : un flot continu de grandes bouffees de feu qui gonflent en avancant, sur un coeur blanc
@@ -450,6 +504,142 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
             }
             victim.hurt(this.damageSources().mobAttack(this), 4.0F);
             victim.setSecondsOnFire(5);
+        }
+    }
+
+    /** Position de la gueule (devant et au-dessus du corps). */
+    Vec3 mouthPosition() {
+        return this.position().add(Vec3.directionFromRotation(0.0F, this.getYRot()).scale(2.6D)).add(0.0D, 1.25D, 0.0D);
+    }
+
+    /** Ce qu'une attaque de zone doit epargner : elle-meme, son cavalier, son maitre, les compagnons du maitre. */
+    private boolean spares(LivingEntity victim) {
+        LivingEntity owner = this.getOwner();
+        return victim == this || victim == owner || this.hasPassenger(victim) || victim.isAlliedTo(this)
+                || (victim instanceof TamableAnimal pet && owner != null && pet.isOwnedBy(owner))
+                || (victim instanceof Player && victim != this.getTarget() && this.isTame());
+    }
+
+    // --- Grande boule de feu : elle prend son souffle (flammes aspirees vers la gueule) puis crache une sphere de feu
+
+    boolean canFireball() {
+        return this.fireballCooldown <= 0 && this.fireballCharge <= 0 && this.breathTicks <= 0;
+    }
+
+    void startFireball() {
+        this.fireballCharge = FIREBALL_CHARGE;
+        this.fireballCooldown = 140 + this.random.nextInt(60);
+        this.triggerAnim("action", "fireball");
+        this.playSound(SoundEvents.ENDER_DRAGON_GROWL, 1.0F, 1.4F);
+    }
+
+    boolean isBusyAttacking() {
+        return this.breathTicks > 0 || this.fireballCharge > 0 || this.gustTicks > 0 || this.sweepTicks > 0;
+    }
+
+    private void tickFireball(ServerLevel level) {
+        this.fireballCharge--;
+        Vec3 mouth = this.mouthPosition();
+        for (int i = 0; i < 4; i++) {
+            Vec3 from = mouth.add(this.random.nextGaussian() * 1.6D, this.random.nextGaussian() * 1.2D, this.random.nextGaussian() * 1.6D);
+            Vec3 pull = mouth.subtract(from);
+            level.sendParticles(ParticleTypes.FLAME, from.x, from.y, from.z, 0, pull.x, pull.y, pull.z, 0.12D);
+        }
+        level.sendParticles(ModParticles.DRAGON_FLAME_CORE.get(), mouth.x, mouth.y, mouth.z, 0, 0.0D, 0.0D, 0.0D, 0.0D);
+        if (this.fireballCharge > 0) {
+            return;
+        }
+        LivingEntity target = this.getTarget();
+        Vec3 dir = target != null ? target.getBoundingBox().getCenter().subtract(mouth).normalize()
+                : Vec3.directionFromRotation(this.getXRot(), this.getYRot());
+        WyvernFireball fireball = new WyvernFireball(level, this, dir);
+        fireball.setPos(mouth.x, mouth.y - 0.5D, mouth.z);
+        fireball.setDeltaMovement(dir.scale(0.6D));
+        level.addFreshEntity(fireball);
+        this.playSound(SoundEvents.ENDER_DRAGON_SHOOT, 1.6F, 0.7F);
+        this.playSound(SoundEvents.BLAZE_SHOOT, 1.2F, 0.5F);
+    }
+
+    // --- Rafale d'ailes : deux battements immenses qui repoussent tout ce qui est devant elle, dans un nuage de cendres
+
+    boolean canGust() {
+        return this.gustCooldown <= 0 && !this.isBusyAttacking();
+    }
+
+    void startGust() {
+        this.gustTicks = GUST_TICKS;
+        this.gustCooldown = 160 + this.random.nextInt(60);
+        this.triggerAnim("action", "gust");
+        this.playSound(SoundEvents.ENDER_DRAGON_FLAP, 2.0F, 0.6F);
+    }
+
+    private void tickGust(ServerLevel level) {
+        this.gustTicks--;
+        int beat = GUST_TICKS - this.gustTicks;
+        if (beat != 6 && beat != 16) {
+            return;
+        }
+        this.playSound(SoundEvents.ENDER_DRAGON_FLAP, 2.5F, 0.5F);
+        Vec3 forward = Vec3.directionFromRotation(0.0F, this.getYRot());
+        Vec3 origin = this.position().add(0.0D, 1.0D, 0.0D);
+        for (int i = 0; i < 30; i++) {
+            Vec3 dir = forward.add(this.random.nextGaussian() * 0.35D, this.random.nextGaussian() * 0.2D, this.random.nextGaussian() * 0.35D);
+            level.sendParticles(ModParticles.ASH_FLAKE.get(), origin.x, origin.y, origin.z, 0, dir.x, dir.y, dir.z, 0.9D);
+            if (i % 3 == 0) {
+                level.sendParticles(ParticleTypes.CLOUD, origin.x, origin.y, origin.z, 0, dir.x, dir.y, dir.z, 0.6D);
+            }
+        }
+        for (LivingEntity victim : level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(GUST_RANGE))) {
+            if (this.spares(victim)) {
+                continue;
+            }
+            Vec3 to = victim.position().subtract(this.position());
+            double distance = to.length();
+            if (distance > GUST_RANGE || to.multiply(1.0D, 0.0D, 1.0D).normalize().dot(forward) < 0.3D) {
+                continue;
+            }
+            double strength = 1.6D * (1.0D - distance / (GUST_RANGE + 2.0D));
+            Vec3 push = to.multiply(1.0D, 0.0D, 1.0D).normalize().scale(strength);
+            victim.setDeltaMovement(push.x, 0.35D + strength * 0.2D, push.z);
+            victim.hurtMarked = true;
+            victim.hurt(this.damageSources().mobAttack(this), 3.0F);
+            victim.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 1));
+            victim.clearFire();
+        }
+    }
+
+    // --- Coup de queue : un tour complet sur elle-meme qui balaie tout autour
+
+    boolean canTailSweep() {
+        return this.sweepCooldown <= 0 && !this.isBusyAttacking();
+    }
+
+    void startTailSweep() {
+        this.sweepTicks = 16;
+        this.sweepCooldown = 70 + this.random.nextInt(30);
+        this.triggerAnim("action", "tail_sweep");
+        this.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 1.5F, 0.5F);
+    }
+
+    private void tickSweep(ServerLevel level) {
+        this.sweepTicks--;
+        if (this.sweepTicks != 9) {
+            return;
+        }
+        this.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 2.0F, 0.6F);
+        for (int i = 0; i < 24; i++) {
+            double angle = Math.PI * 2.0D * i / 24.0D;
+            level.sendParticles(ParticleTypes.SWEEP_ATTACK, this.getX() + Math.cos(angle) * 3.0D, this.getY() + 0.8D,
+                    this.getZ() + Math.sin(angle) * 3.0D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        }
+        for (LivingEntity victim : level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(SWEEP_RANGE, 1.5D, SWEEP_RANGE))) {
+            if (this.spares(victim) || victim.distanceTo(this) > SWEEP_RANGE + 1.5D) {
+                continue;
+            }
+            victim.hurt(this.damageSources().mobAttack(this), 8.0F);
+            Vec3 push = victim.position().subtract(this.position()).multiply(1.0D, 0.0D, 1.0D).normalize().scale(1.3D);
+            victim.setDeltaMovement(push.x, 0.5D, push.z);
+            victim.hurtMarked = true;
         }
     }
 
@@ -554,7 +744,8 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "movement", 5, this::movementPredicate));
         controllers.add(new AnimationController<>(this, "action", 0, state -> PlayState.STOP)
-                .triggerableAnim("roar", ROAR).triggerableAnim("breath", BREATH).triggerableAnim("dive", DIVE));
+                .triggerableAnim("roar", ROAR).triggerableAnim("breath", BREATH).triggerableAnim("dive", DIVE)
+                .triggerableAnim("fireball", FIREBALL).triggerableAnim("gust", GUST).triggerableAnim("tail_sweep", TAIL_SWEEP));
     }
 
     private PlayState movementPredicate(AnimationState<AshWyvern> state) {

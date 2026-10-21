@@ -844,3 +844,5 @@ def generate():
     generate_loot_modifiers()
     from . import data_v120
     data_v120.generate()
+    from . import data_v130
+    data_v130.generate()

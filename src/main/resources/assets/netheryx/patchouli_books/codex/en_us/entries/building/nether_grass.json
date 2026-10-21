@@ -2,7 +2,7 @@
   "name": "Nether Grass",
   "icon": "netheryx:nether_grass_block",
   "category": "netheryx:building",
-  "sortnum": 60,
+  "sortnum": 61,
   "pages": [
     {
       "type": "patchouli:text",

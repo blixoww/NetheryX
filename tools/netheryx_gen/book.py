@@ -466,6 +466,22 @@ entry("farming", "Soul Tuber", "Tubercule d'âme", "netheryx:soul_tuber", [
          "Se plante sur le $(item)sable$() ou la $(item)terre des âmes$(). Pousse à l'état sauvage dans la Vallée des âmes. À cuire !", link=False),
     smelt("baked_soul_tuber_from_smelting"),
 ])
+entry("farming", "Tree Fruits", "Fruits des arbres", "netheryx:ember_fig", [
+    spot("ember_fig", "$(l)Ember Figs$() hang under the canopy of Ember trees (Ember Grove, Hellwood Jungle). Ripe, they glow: "
+                      "right-click to pick them, they grow back. Eating one grants $(item)Fire Resistance$() (15 s).",
+         "Les $(l)Figues de braise$() pendent sous le houppier des arbres de braise (Bosquet, Jungle infernale). Mûres, elles "
+         "luisent : clic droit pour les cueillir, elles repoussent. En manger une donne la $(item)Résistance au feu$() (15 s).",
+         link=False),
+    spot("withered_plum", "$(l)Withered Plums$() hang under Withered trees. Eating one $(l)cures Wither$() and heals a little: "
+                          "precious against Withered Knights and the Champion.",
+         "Les $(l)Prunes flétries$() pendent sous les arbres flétris. En manger une $(l)guérit le flétrissement$() et soigne un "
+         "peu : précieux contre les Chevaliers flétris et le Champion.", link=False),
+    text("Plant a fruit under a matching wart block (also vanilla Nether or Warped Wart Blocks) to grow your own clusters; "
+         "bone meal speeds them up. Breaking a canopy block may also drop a fruit.",
+         "Plantez un fruit sous un bloc de verrue correspondant (ou sous les blocs de verrue vanilla carmin et biscornu) pour faire "
+         "pousser vos propres grappes ; la poudre d'os accélère la maturation. Casser un bloc de houppier peut aussi donner un fruit.",
+         "Cultiver"),
+])
 entry("farming", "Fire Berries", "Baies de feu", "netheryx:fire_berries", [
     spot("fire_berries", "Bush that grows on most Nether soils. Harvest with right click. Feeds and breeds Magma Crabs.",
          "Buisson qui pousse sur la plupart des sols du Nether. Récolte au clic droit. Nourrit et fait se reproduire les crabes de magma.",
@@ -625,6 +641,13 @@ entry("creatures", "Cinder Lizard", "Lézard de cendre", "netheryx:cinder_lizard
                          "It walks on lava and runs even faster on basalt and blackstone.",
         "Une $(l)monture$() du Nether. Apprivoisez-le avec des $(item)Baies de feu$(), sellez-le et chevauchez-le. "
         "Il marche sur la lave et court encore plus vite sur le basalte et la pierre noire.", 0.7),
+    text("A tamed lizard is more than a mount:$(li)$(l)Scent$(): now and then it sniffs out $(item)Ancient Debris$() (first) or "
+         "$(item)Onyx Ore$() within 14 blocks and shows the way with a trail of sparks.$(li)$(l)Fireproof rider$(): while you ride "
+         "it you cannot burn, even across lava lakes.$(li)$(l)Molting$(): it sometimes drops a $(item)Magma Shell$().",
+         "Apprivoisé, le lézard est plus qu'une monture :$(li)$(l)Flair$() : de temps en temps, il renifle les $(item)débris "
+         "antiques$() (en priorité) ou le $(item)minerai d'onyx$() à 14 blocs et montre le chemin par une traînée d'étincelles."
+         "$(li)$(l)Cavalier ignifugé$() : en selle, vous ne brûlez pas, même en traversant un lac de lave.$(li)$(l)Mue$() : il "
+         "laisse parfois tomber une $(item)carapace de magma$().", "Services"),
 ])
 entry("creatures", "Lantern Bearer", "Porteur de lanterne", "netheryx:lantern_bearer_spawn_egg", [
     mob("lantern_bearer", "Its soul lantern truly $(l)lights up$() the area. Tame it with $(item)Glowcaps$(): it follows you and "
@@ -677,12 +700,14 @@ entry("equipment", "Onyx Infusions", "Infusions d'onyx", "netheryx:onyx_infusion
           fr="Les gabarits se trouvent dans les donjons, bastions et caravanes, puis se dupliquent."),
 ])
 entry("equipment", "Soul Altar", "Autel des âmes", "netheryx:soul_altar", [
-    text("Place an item (or a book) on the altar, light at least $(l)2 soul flames$() nearby (soul fire, torches, lanterns or "
-         "campfires), then right-click with an offering. Each level costs 5 experience levels.$(br)"
+    text("Right-click the altar to open it. Put the item (or a book) in the top slot and the offering below, with at least "
+         "$(l)2 soul flames$() nearby (soul fire, torches, lanterns or campfires), then press $(l)Infuse$(). The screen tells "
+         "you what is missing. Each level costs 5 experience levels.$(br)"
          "$(li)2 $(item)Magma Shells$(): $(l)Ember Stride$() (boots).$(li)4 $(item)Soul Dust$(): $(l)Soul Harvest$() (weapons)."
          "$(li)2 $(item)Basalt Carapaces$(): $(l)Anchoring$() (chest, legs).",
-         "Posez un objet (ou un livre) sur l'autel, allumez au moins $(l)2 flammes des âmes$() à proximité (feu, torches, lanternes ou "
-         "feux de camp des âmes), puis clic droit avec une offrande. Chaque niveau coûte 5 niveaux d'expérience.$(br)"
+         "Clic droit sur l'autel pour l'ouvrir. Mettez l'objet (ou un livre) en haut et l'offrande en dessous, avec au moins "
+         "$(l)2 flammes des âmes$() autour (feu, torches, lanternes ou feux de camp des âmes), puis appuyez sur $(l)Infuser$(). "
+         "L'écran indique ce qui manque. Chaque niveau coûte 5 niveaux d'expérience.$(br)"
          "$(li)2 $(item)Carapaces de magma$() : $(l)Pas de braise$() (bottes).$(li)4 $(item)Poussières d'âme$() : $(l)Récolte d'âmes$() (armes)."
          "$(li)2 $(item)Carapaces de basalte$() : $(l)Ancrage$() (plastron, jambières).", "Autel des âmes"),
     craft("soul_altar"),
@@ -817,6 +842,14 @@ entry("creatures", "Basalt Golem (mini-boss)", "Golem de basalte (mini-boss)", "
         "poussière, des salves d'$(l)éclats de magma$() à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur "
         "entre en fusion : plus rapide, il enflamme ceux qui le frappent. Lâche la $(item)Pierre-cœur de basalte$(), nécessaire au "
         "Cœur scellé.", 0.4),
+    text("Every attack is announced and can be countered:$(li)$(l)Ground slam$(): a shockwave rolls outward; $(l)jump$() over "
+         "it.$(li)$(l)Charge$(): he rears up and roars, then rushes in a straight line. Dodge sideways: if he hits a wall he is "
+         "$(l)stunned$() and takes more damage.$(li)$(l)Eruptions$(): bubbling magma circles appear under you, then columns of fire "
+         "burst out: move!$(li)$(l)Magma chunks$() at range.",
+         "Chaque attaque est annoncée et se contre :$(li)$(l)Frappe au sol$() : une onde de choc part en anneau ; $(l)sautez$() "
+         "par-dessus.$(li)$(l)Charge$() : il se cabre et rugit, puis fonce en ligne droite. Esquivez sur le côté : s'il percute un "
+         "mur, il est $(l)étourdi$() et encaisse davantage.$(li)$(l)Éruptions$() : des cercles de magma bouillonnent sous vos "
+         "pieds, puis des colonnes de feu jaillissent : bougez !$(li)$(l)Éclats de magma$() à distance.", "Attaques"),
 ])
 entry("creatures", "Ash Wyvern (mount)", "Wyverne de cendre (monture)", "netheryx:ash_wyvern_egg", [
     mob("ash_wyvern", "Where to find one: $(l)Wyvern Nests$() (rock spires topped with a bone nest, in Ashen Wastes, Basalt Deltas, "
@@ -834,6 +867,14 @@ entry("creatures", "Ash Wyvern (mount)", "Wyverne de cendre (monture)", "nethery
          "$(l)160 PV$() et se régénère.$(br2)$(l)En combat$(), elle s'envole seule, tourne autour de votre ennemi, crache du feu "
          "(qui enflamme les créatures, jamais les blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que "
          "vous attaquez.", "Compagnon"),
+    text("Her attacks:$(li)$(l)Flame jet$(): a continuous stream of fire.$(li)$(l)Great fireball$() when the enemy is far: she "
+         "draws in her breath, then spits a sphere of fire that bursts on impact.$(li)$(l)Wing gust$() up close: two huge wing "
+         "beats blow enemies away and slow them.$(li)$(l)Tail sweep$(): a full spin that hits everything around.$(li)$(l)Dive$() "
+         "to bite. None of them harm you, your pets or blocks.",
+         "Ses attaques :$(li)$(l)Jet de flammes$() : un flot de feu continu.$(li)$(l)Grande boule de feu$() quand l'ennemi est "
+         "loin : elle prend son souffle, puis crache une sphère de feu qui explose à l'impact.$(li)$(l)Rafale d'ailes$() de près : "
+         "deux battements immenses repoussent et ralentissent les ennemis.$(li)$(l)Coup de queue$() : un tour complet qui frappe "
+         "tout autour.$(li)$(l)Piqué$() pour mordre. Aucune ne vous blesse, ni vos compagnons, ni les blocs.", "Attaques"),
     text("$(l)Impossible to lose$():$(li)it follows you through portals to other dimensions (unless it is sitting);"
          "$(li)the $(item)Wyvern Whistle$() calls all your wyverns back, from anywhere, even unloaded areas or another dimension;"
          "$(li)if it dies, its $(item)egg$() comes back to you with its name: hatch it again.",

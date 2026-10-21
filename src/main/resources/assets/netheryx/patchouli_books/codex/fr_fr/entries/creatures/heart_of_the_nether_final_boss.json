@@ -2,7 +2,7 @@
   "name": "Cœur du Nether (boss final)",
   "icon": "netheryx:sealed_heart",
   "category": "netheryx:creatures",
-  "sortnum": 92,
+  "sortnum": 93,
   "pages": [
     {
       "type": "patchouli:text",

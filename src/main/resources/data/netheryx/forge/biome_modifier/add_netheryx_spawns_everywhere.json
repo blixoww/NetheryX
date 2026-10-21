@@ -76,9 +76,9 @@
     },
     {
       "type": "netheryx:ember_firefly",
-      "weight": 16,
-      "minCount": 6,
-      "maxCount": 10
+      "weight": 25,
+      "minCount": 8,
+      "maxCount": 14
     }
   ]
 }

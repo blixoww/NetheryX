@@ -2,7 +2,7 @@
   "name": "Enchevêtrement de verrues",
   "icon": "netheryx:wartfruit",
   "category": "netheryx:biomes",
-  "sortnum": 69,
+  "sortnum": 70,
   "pages": [
     {
       "type": "patchouli:text",

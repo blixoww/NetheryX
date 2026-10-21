@@ -2,7 +2,7 @@
   "name": "Ward Lantern",
   "icon": "netheryx:ward_lantern",
   "category": "netheryx:utility",
-  "sortnum": 84,
+  "sortnum": 85,
   "pages": [
     {
       "type": "patchouli:spotlight",

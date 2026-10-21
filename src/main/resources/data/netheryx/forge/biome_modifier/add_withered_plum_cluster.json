@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "netheryx:withered_forest"
+  ],
+  "features": [
+    "netheryx:withered_plum_cluster"
+  ],
+  "step": "vegetal_decoration"
+}

@@ -81,9 +81,9 @@
     "ambient": [
       {
         "type": "netheryx:ember_firefly",
-        "weight": 35,
-        "minCount": 5,
-        "maxCount": 8
+        "weight": 56,
+        "minCount": 8,
+        "maxCount": 14
       }
     ],
     "axolotls": [],

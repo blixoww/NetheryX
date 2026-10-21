@@ -2,7 +2,7 @@
   "name": "Lantern Bearer",
   "icon": "netheryx:lantern_bearer_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 73,
+  "sortnum": 74,
   "pages": [
     {
       "type": "patchouli:entity",

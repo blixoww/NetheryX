@@ -15,6 +15,7 @@ import com.netheryx.entity.EmberStalker;
 import com.netheryx.entity.MagmaCrab;
 import com.netheryx.entity.OnyxSentinel;
 import com.netheryx.entity.SulfurBombEntity;
+import com.netheryx.entity.WyvernFireball;
 import com.netheryx.entity.ObsidianBoat;
 import com.netheryx.entity.BasaltBurrower;
 import com.netheryx.entity.CinderLizard;
@@ -67,6 +68,9 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<SulfurBombEntity>> SULFUR_BOMB = register("sulfur_bomb",
             EntityType.Builder.<SulfurBombEntity>of(SulfurBombEntity::new, MobCategory.MISC).sized(0.25F, 0.25F)
                     .clientTrackingRange(4).updateInterval(10));
+    public static final RegistryObject<EntityType<WyvernFireball>> WYVERN_FIREBALL = register("wyvern_fireball",
+            EntityType.Builder.<WyvernFireball>of(WyvernFireball::new, MobCategory.MISC).sized(1.0F, 1.0F)
+                    .clientTrackingRange(6).updateInterval(2));
     public static final RegistryObject<EntityType<ObsidianBoat>> OBSIDIAN_BOAT = register("obsidian_boat",
             EntityType.Builder.<ObsidianBoat>of(ObsidianBoat::new, MobCategory.MISC).sized(1.375F, 0.5625F).fireImmune()
                     .clientTrackingRange(10));

@@ -234,7 +234,7 @@ def generate():
 
     lines += ['<a id="creatures-detail"></a>', "## Créatures : apparitions et butin", ""]
     for ent in ENTITIES:
-        if ent in ("sulfur_bomb", "obsidian_boat"):
+        if ent in ("sulfur_bomb", "obsidian_boat", "wyvern_fireball"):
             continue
         ident = f"{MOD_ID}:{ent}"
         lines.append(f"### {name_of(ident)}")

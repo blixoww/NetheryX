@@ -75,9 +75,9 @@
     "ambient": [
       {
         "type": "netheryx:soul_firefly",
-        "weight": 55,
-        "minCount": 6,
-        "maxCount": 10
+        "weight": 88,
+        "minCount": 8,
+        "maxCount": 14
       }
     ],
     "axolotls": [],

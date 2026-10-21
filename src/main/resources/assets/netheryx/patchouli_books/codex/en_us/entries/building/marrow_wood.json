@@ -2,7 +2,7 @@
   "name": "Marrow Wood",
   "icon": "netheryx:marrow_planks",
   "category": "netheryx:building",
-  "sortnum": 86,
+  "sortnum": 87,
   "pages": [
     {
       "type": "patchouli:crafting",

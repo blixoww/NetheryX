@@ -1,6 +1,7 @@
 package com.netheryx.registry;
 
 import com.netheryx.NetheryX;
+import com.netheryx.block.HangingFruitBlock;
 import com.netheryx.block.HangingVinesBlock;
 import com.netheryx.block.HangingVinesPlantBlock;
 import com.netheryx.block.InfernalCauldronBlock;
@@ -33,6 +34,7 @@ import com.netheryx.block.OnyxFurnaceBlock;
 import com.netheryx.block.SoulLilyBlock;
 import com.netheryx.block.SoulTuberCropBlock;
 import com.netheryx.block.StrippableLogBlock;
+import com.netheryx.util.ModTags;
 import com.netheryx.worldgen.ModFeatureKeys;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -235,6 +237,12 @@ public final class ModBlocks {
     public static final RegistryObject<Block> FIRE_BERRY_BUSH = BLOCKS.register("fire_berry_bush",
             () -> new FireBerryBushBlock(BlockBehaviour.Properties.copy(Blocks.SWEET_BERRY_BUSH)
                     .mapColor(MapColor.COLOR_RED).lightLevel(FireBerryBushBlock::lightLevel)));
+    // Fruits des arbres du Nether : grappes suspendues sous les houppiers (le fruit les replante)
+    public static final RegistryObject<Block> EMBER_FIG_CLUSTER = BLOCKS.register("ember_fig_cluster",
+            () -> new HangingFruitBlock(fruitCluster(MapColor.COLOR_ORANGE), ModTags.Blocks.EMBER_FIG_CANOPY, () -> ModItems.EMBER_FIG.get()));
+    public static final RegistryObject<Block> WITHERED_PLUM_CLUSTER = BLOCKS.register("withered_plum_cluster",
+            () -> new HangingFruitBlock(fruitCluster(MapColor.COLOR_PURPLE), ModTags.Blocks.WITHERED_PLUM_CANOPY,
+                    () -> ModItems.WITHERED_PLUM.get()));
 
     // --- Prairie de braise : herbe, fleurs, cultures --------------------------------------------
     public static final RegistryObject<Block> NETHER_GRASS_BLOCK = register("nether_grass_block",
@@ -551,5 +559,10 @@ public final class ModBlocks {
         RegistryObject<T> registered = BLOCKS.register(name, block);
         ModItems.ITEMS.register(name, () -> itemFactory.apply(registered.get()));
         return registered;
+    }
+
+    private static BlockBehaviour.Properties fruitCluster(MapColor color) {
+        return BlockBehaviour.Properties.of().mapColor(color).noCollission().randomTicks().instabreak()
+                .sound(SoundType.CAVE_VINES).lightLevel(HangingFruitBlock::lightLevel).pushReaction(PushReaction.DESTROY);
     }
 }

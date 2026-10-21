@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "netheryx:block/withered_plum_cluster_stage2"
+  },
+  "render_type": "minecraft:cutout"
+}

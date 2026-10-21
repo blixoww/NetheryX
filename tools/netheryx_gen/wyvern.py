@@ -7,7 +7,7 @@ l'aile droite utilise les signes opposes (symetrie).
 """
 import math
 
-from .entities import Cube, Model, anim, eyes, keys, save_animations, save_model
+from .entities import Cube, Model, anim, ekeys, eyes, keys, save_animations, save_model
 
 NAME = "ash_wyvern"
 
@@ -121,10 +121,10 @@ def wing_pose(left, mid, tip, membrane=1.0):
     return out
 
 
-def flap_wings(length, amplitude, sweep=0.0):
+def flap_wings(length, amplitude, sweep=0.0, cycles=1):
     """Battement : l'epaule mene, l'avant-bras et le doigt suivent avec un retard ; au relevement le bout se replie."""
     out = {}
-    w = 2 * math.pi
+    w = 2 * math.pi * cycles
     for side, sign in (("left", 1), ("right", -1)):
         out[f"wing_{side}"] = {"rotation": frames(length, 16, lambda p: [
             0, sign * (-sweep - 6 * math.sin(w * p)), sign * (-amplitude * math.cos(w * p) - 5)])}
@@ -220,9 +220,26 @@ def generate_animations():
     dive = wing_pose([0, -40, -10], [0, 40, 0], [0, -30, 0])
     dive["body"] = {"rotation": keys((0, [0, 0, 0]), (0.2, [25, 0, 0]), (0.8, [25, 0, 0]), (1.0, [0, 0, 0]))}
     dive["jaw"] = {"rotation": keys((0, [0, 0, 0]), (0.6, [35, 0, 0]), (0.75, [0, 0, 0]))}
+    # Grande boule de feu : le cou se rejette en arriere pour prendre son souffle, puis se detend d'un coup
+    fireball = {"neck1": {"rotation": keys((0, [0, 0, 0]), (0.8, [-30, 0, 0]), (0.95, [32, 0, 0]), (1.2, [28, 0, 0]), (1.5, [0, 0, 0]))},
+                "neck2": {"rotation": keys((0, [0, 0, 0]), (0.8, [-10, 0, 0]), (0.95, [-6, 0, 0]), (1.5, [0, 0, 0]))},
+                "head": {"rotation": keys((0, [0, 0, 0]), (0.8, [-25, 0, 0]), (0.95, [-16, 0, 0]), (1.5, [0, 0, 0]))},
+                "jaw": {"rotation": keys((0, [0, 0, 0]), (0.8, [8, 0, 0]), (0.92, [48, 0, 0]), (1.25, [40, 0, 0]), (1.5, [0, 0, 0]))},
+                "body": {"rotation": keys((0, [0, 0, 0]), (0.8, [-8, 0, 0]), (0.95, [6, 0, 0]), (1.5, [0, 0, 0]))}}
+    # Rafale : deux battements immenses vers l'avant, le corps se cabre
+    gust = flap_wings(1.2, 75, sweep=-20, cycles=2)
+    gust["body"] = {"rotation": keys((0, [0, 0, 0]), (0.2, [-22, 0, 0]), (1.0, [-22, 0, 0]), (1.2, [0, 0, 0]))}
+    gust["neck1"] = {"rotation": keys((0, [0, 0, 0]), (0.2, [20, 0, 0]), (1.0, [20, 0, 0]), (1.2, [0, 0, 0]))}
+    gust["jaw"] = {"rotation": keys((0, [0, 0, 0]), (0.25, [30, 0, 0]), (1.0, [30, 0, 0]), (1.2, [0, 0, 0]))}
+    # Coup de queue : tour complet sur elle-meme, la queue fouette en retard
+    sweep = {"body": {"rotation": ekeys((0, [0, 0, 0], None), (0.15, [0, -20, 0], "easeOutQuad"), (0.65, [0, 360, 0], "easeInOutCubic"),
+                                        (0.66, [0, 0, 0], None))}}
+    for i in range(1, 5):
+        sweep[f"tail{i}"] = {"rotation": keys((0, [0, 0, 0]), (0.15, [0, 10 * i, 0]), (0.45, [0, -18 * i, 0]), (0.8, [0, 0, 0]))}
     save_animations(NAME, {"idle": anim(4.0, idle), "walk": anim(1.2, walk), "fly": anim(1.1, fly), "glide": anim(3.0, glide),
                            "sit": anim(5.0, sit), "roar": anim(1.5, roar, loop=False), "breath": anim(1.5, breath, loop=False),
-                           "dive": anim(1.0, dive, loop=False)})
+                           "dive": anim(1.0, dive, loop=False), "fireball": anim(1.5, fireball, loop=False),
+                           "gust": anim(1.2, gust, loop=False), "tail_sweep": anim(0.8, sweep, loop=False)})
 
 
 def generate():

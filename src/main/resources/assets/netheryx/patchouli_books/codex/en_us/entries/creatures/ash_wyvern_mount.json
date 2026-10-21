@@ -2,7 +2,7 @@
   "name": "Ash Wyvern (mount)",
   "icon": "netheryx:ash_wyvern_egg",
   "category": "netheryx:creatures",
-  "sortnum": 98,
+  "sortnum": 99,
   "pages": [
     {
       "type": "patchouli:entity",
@@ -15,6 +15,11 @@
       "type": "patchouli:text",
       "text": "$(li)Right-click: ride it. $(li)Sneak + right-click: sit / follow. $(li)Meat heals it; tamed, it has $(l)160 HP$() and regenerates.$(br2)$(l)In combat$(), it takes off on its own, circles your enemy, breathes fire (it sets creatures ablaze, never blocks) and dives to bite. While you ride it, it breathes fire on what you attack.",
       "title": "Compagnon"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Her attacks:$(li)$(l)Flame jet$(): a continuous stream of fire.$(li)$(l)Great fireball$() when the enemy is far: she draws in her breath, then spits a sphere of fire that bursts on impact.$(li)$(l)Wing gust$() up close: two huge wing beats blow enemies away and slow them.$(li)$(l)Tail sweep$(): a full spin that hits everything around.$(li)$(l)Dive$() to bite. None of them harm you, your pets or blocks.",
+      "title": "Attaques"
     },
     {
       "type": "patchouli:text",

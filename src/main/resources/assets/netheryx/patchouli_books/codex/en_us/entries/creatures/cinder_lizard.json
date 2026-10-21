@@ -2,7 +2,7 @@
   "name": "Cinder Lizard",
   "icon": "netheryx:cinder_lizard_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 72,
+  "sortnum": 73,
   "pages": [
     {
       "type": "patchouli:entity",
@@ -10,6 +10,11 @@
       "scale": 0.7,
       "offset": 0.0,
       "text": "A Nether $(l)mount$(). Tame it with $(item)Fire Berries$(), put a $(item)Saddle$() on it and ride it. It walks on lava and runs even faster on basalt and blackstone."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A tamed lizard is more than a mount:$(li)$(l)Scent$(): now and then it sniffs out $(item)Ancient Debris$() (first) or $(item)Onyx Ore$() within 14 blocks and shows the way with a trail of sparks.$(li)$(l)Fireproof rider$(): while you ride it you cannot burn, even across lava lakes.$(li)$(l)Molting$(): it sometimes drops a $(item)Magma Shell$().",
+      "title": "Services"
     }
   ]
 }

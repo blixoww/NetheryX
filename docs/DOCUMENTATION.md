@@ -361,6 +361,14 @@ Créatures : **Escargots de cristal**, lucioles des âmes, cubes d'onyx, spectre
 
 - **Lézard de cendre** : Une **monture** du Nether. Apprivoisez-le avec des *Baies de feu*, sellez-le et chevauchez-le. Il marche sur la lave et court encore plus vite sur le basalte et la pierre noire.
 
+**Services**
+
+Apprivoisé, le lézard est plus qu'une monture :
+- **Flair** : de temps en temps, il renifle les *débris antiques* (en priorité) ou le *minerai d'onyx* à 14 blocs et montre le chemin par une traînée d'étincelles.
+- **Cavalier ignifugé** : en selle, vous ne brûlez pas, même en traversant un lac de lave.
+- **Mue** : il laisse parfois tomber une *carapace de magma*.
+
+
 ### Porteur de lanterne
 
 - **Porteur de lanterne** : Sa lanterne des âmes **éclaire vraiment** les alentours. Apprivoisez-le avec des *Luminelles* : il vous suit et éclaire votre chemin. Clic droit pour qu'il reste sur place.
@@ -394,6 +402,15 @@ Clic droit avec, **uniquement dans le Nether** : le Cœur du Nether s'éveille a
 
 - **Golem de basalte** : 160 PV, rôde dans les deltas de basalte et les Lacs de verre en fusion. Une **frappe au sol** annoncée par un nuage de poussière, des salves d'**éclats de magma** à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur entre en fusion : plus rapide, il enflamme ceux qui le frappent. Lâche la *Pierre-cœur de basalte*, nécessaire au Cœur scellé.
 
+**Attaques**
+
+Chaque attaque est annoncée et se contre :
+- **Frappe au sol** : une onde de choc part en anneau ; **sautez** par-dessus.
+- **Charge** : il se cabre et rugit, puis fonce en ligne droite. Esquivez sur le côté : s'il percute un mur, il est **étourdi** et encaisse davantage.
+- **Éruptions** : des cercles de magma bouillonnent sous vos pieds, puis des colonnes de feu jaillissent : bougez !
+- **Éclats de magma** à distance.
+
+
 ### Wyverne de cendre (monture)
 
 - **Wyverne de cendre** : Où la trouver : les **Nids de wyverne** (pitons rocheux coiffés d'un nid d'os, dans les Terres cendrées, les deltas de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) sont gardés par une wyverne farouche : **vainquez-la** et elle laisse son *œuf*. Faites-le éclore : la wyverne est à vous. Des wyvernes sauvages errent aussi et s'apprivoisent avec de la *viande*. **Une seule wyverne par joueur.**
@@ -405,6 +422,16 @@ Clic droit avec, **uniquement dans le Nether** : le Cœur du Nether s'éveille a
 - La viande la soigne ; apprivoisée, elle a **160 PV** et se régénère.
 
 **En combat**, elle s'envole seule, tourne autour de votre ennemi, crache du feu (qui enflamme les créatures, jamais les blocs) et pique pour mordre. Quand vous la montez, elle crache du feu sur ce que vous attaquez.
+
+
+**Attaques**
+
+Ses attaques :
+- **Jet de flammes** : un flot de feu continu.
+- **Grande boule de feu** quand l'ennemi est loin : elle prend son souffle, puis crache une sphère de feu qui explose à l'impact.
+- **Rafale d'ailes** de près : deux battements immenses repoussent et ralentissent les ennemis.
+- **Coup de queue** : un tour complet qui frappe tout autour.
+- **Piqué** pour mordre. Aucune ne vous blesse, ni vos compagnons, ni les blocs.
 
 
 **Fidélité**
@@ -567,7 +594,7 @@ Terres cendrées, deltas de basalte et Lacs de verre en fusion. Un cercle de col
 
 **Autel des âmes**
 
-Posez un objet (ou un livre) sur l'autel, allumez au moins **2 flammes des âmes** à proximité (feu, torches, lanternes ou feux de camp des âmes), puis clic droit avec une offrande. Chaque niveau coûte 5 niveaux d'expérience.
+Clic droit sur l'autel pour l'ouvrir. Mettez l'objet (ou un livre) en haut et l'offrande en dessous, avec au moins **2 flammes des âmes** autour (feu, torches, lanternes ou feux de camp des âmes), puis appuyez sur **Infuser**. L'écran indique ce qui manque. Chaque niveau coûte 5 niveaux d'expérience.
 
 - 2 *Carapaces de magma* : **Pas de braise** (bottes).
 - 4 *Poussières d'âme* : **Récolte d'âmes** (armes).
@@ -708,6 +735,17 @@ La pierre retient les **8 derniers portails** par lesquels vous êtes arrivé, d
 - **Tubercule d'âme** : Se plante sur le *sable* ou la *terre des âmes*. Pousse à l'état sauvage dans la Vallée des âmes. À cuire !
 
 - Four : Tubercule d'âme → **Tubercule d'âme cuit**
+
+### Fruits des arbres
+
+- **Figue de braise** : Les **Figues de braise** pendent sous le houppier des arbres de braise (Bosquet, Jungle infernale). Mûres, elles luisent : clic droit pour les cueillir, elles repoussent. En manger une donne la *Résistance au feu* (15 s).
+
+- **Prune flétrie** : Les **Prunes flétries** pendent sous les arbres flétris. En manger une **guérit le flétrissement** et soigne un peu : précieux contre les Chevaliers flétris et le Champion.
+
+**Cultiver**
+
+Plantez un fruit sous un bloc de verrue correspondant (ou sous les blocs de verrue vanilla carmin et biscornu) pour faire pousser vos propres grappes ; la poudre d'os accélère la maturation. Casser un bloc de houppier peut aussi donner un fruit.
+
 
 ### Baies de feu
 
@@ -1213,6 +1251,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi : `#·#` / `###` / `###` (`#` = Carapace de magma) → **Plastron de braise**
 - **Œuf de braise** (`netheryx:ember_egg`)
   - Trouvé dans : butin de Poule de cendre
+- **Figue de braise** (`netheryx:ember_fig`)
 - **Casque de braise** (`netheryx:ember_helmet`)
   - Établi : `###` / `#·#` (`#` = Carapace de magma) → **Casque de braise**
 - **Jambières de braise** (`netheryx:ember_leggings`)
@@ -1348,6 +1387,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Trouvé dans : butin de Champion flétri, butin de Chevalier flétri, coffres : withered catacombs vault
 - **Os flétri** (`netheryx:withered_bone`)
   - Trouvé dans : butin de Champion flétri, butin de Chevalier flétri, coffres : withered catacombs
+- **Prune flétrie** (`netheryx:withered_plum`)
 - **Bottes spectrales** (`netheryx:wraith_boots`)
   - Établi : `#·#` / `#·#` (`#` = Étoffe spectrale) → **Bottes spectrales**
 - **Étoffe spectrale** (`netheryx:wraith_cloth`)

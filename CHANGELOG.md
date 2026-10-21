@@ -113,6 +113,25 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - **Coffres mimiques dans chaque donjon** (dont les balcons de la Citadelle, qui ont aussi chacun un coffre).
 
 ### Modifié
+- **Autel des âmes** : nouvelle interface, comme une machine : emplacement de l'objet et de l'offrande, guide des
+  offrandes (l'offrande reconnue est surlignée), compteur de flammes des âmes, coût, message clair sur ce qui manque,
+  bouton « Infuser » et rituel de 3 secondes avec jauge (rien n'est consommé s'il est interrompu).
+- **Golem de basalte** : attaques revues, toutes annoncées et contrables : onde de choc qui se propage (on saute
+  par-dessus), charge en ligne droite (il reste étourdi et vulnérable s'il percute un mur), éruptions de magma sous les
+  joueurs, éclats de magma à distance.
+- **Wyverne** : trois nouvelles attaques : grande boule de feu (elle prend son souffle puis crache une sphère de feu qui
+  explose sans casser de blocs), rafale d'ailes (repousse et ralentit) et coup de queue (tour complet). Montée, elle
+  lance la boule de feu sur les cibles lointaines et balaie de la queue ce qui est sur ses flancs.
+- **Fruits des arbres** : figues de braise (arbres de braise, résistance au feu) et prunes flétries (arbres flétris,
+  guérissent le flétrissement) pendent sous les houppiers, mûrissent, se cueillent d'un clic droit et repoussent ; un
+  fruit se replante sous un bloc de verrue, et casser un houppier peut en donner un.
+- **Lézard de cendre** apprivoisé : flaire les débris antiques et le minerai d'onyx (traînée d'étincelles et message),
+  protège son cavalier du feu, mue en laissant parfois une carapace de magma.
+- **Lucioles** : nouveau modèle (tête, antennes, élytres, ailes, pattes, lanterne qui pulse) et beaucoup plus nombreuses
+  (essaims de 8 à 14, avec des compagnes à l'apparition).
+- **Enclume d'onyx** : nouvelles textures (onyx poli brossé, veines violettes, gemme incrustée sur la table).
+- **Cœur du Nether** : ne régénère plus sa vie.
+
 - **Jet de flammes de la wyverne** : un vrai flot de feu continu, façon « boule de feu suprême ». Nouvelles particules
   (`dragon_flame`, `dragon_flame_core`, `dragon_smoke`) : grandes bouffées qui gonflent, tournoient et rougissent sur un
   cœur blanc incandescent, dessinées en mélange additif (elles brillent), qui s'écrasent contre les murs en gerbe de feu
@@ -150,6 +169,8 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - Onglet créatif : tous les objets et blocs (boussole du créateur comprise), armure de carapace regroupée.
 
 ### Corrigé
+- **Nid de wyverne** : la gardienne n'apparaît plus coincée dans les blocs (bloc de magma retiré, centre du nid dégagé) ;
+  une wyverne coincée dans un bloc s'en dégage seule et ne subit plus de dégâts de suffocation ni de sol brûlant.
 - La wyverne suit son maître et le rejoint dans une autre dimension de façon fiable.
 - Escaliers du Sanctuaire infernal et des Catacombes : la première marche part du niveau du sol (plus de marche décalée).
 - Wyverne : la tête ne se lève plus au sol (les animations du cou s'ajoutaient deux fois à la pose du modèle).

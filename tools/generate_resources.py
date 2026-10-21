@@ -11,7 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from netheryx_gen import book, common, data, docs, entities, models, particles, structures, textures, worldgen  # noqa: E402
+from netheryx_gen import book, common, data, docs, entities, gui, models, particles, structures, textures, worldgen  # noqa: E402
 
 
 def main():
@@ -19,6 +19,7 @@ def main():
         if generated.exists():
             shutil.rmtree(generated)
     textures.generate()
+    gui.generate()
     models.generate()
     entities.generate()
     particles.generate()

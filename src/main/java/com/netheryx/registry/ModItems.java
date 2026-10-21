@@ -1,5 +1,6 @@
 package com.netheryx.registry;
 
+import net.minecraft.world.effect.MobEffects;
 import com.netheryx.NetheryX;
 import com.netheryx.item.AdminCompassItem;
 import com.netheryx.item.FireVeilItem;
@@ -8,6 +9,7 @@ import com.netheryx.item.InfernalHeartItem;
 import com.netheryx.item.MagmaTreadsItem;
 import com.netheryx.item.MarrowMealItem;
 import com.netheryx.item.SetBonusArmorItem;
+import com.netheryx.item.FruitItem;
 import com.netheryx.item.TooltipItem;
 import com.netheryx.item.ObsidianBoatItem;
 import com.netheryx.item.ObsidianBucketItem;
@@ -118,6 +120,11 @@ public final class ModItems {
     // --- Cultures et nourriture --------------------------------------------------------------
     public static final RegistryObject<Item> FIRE_BERRIES = register("fire_berries",
             () -> new ItemNameBlockItem(ModBlocks.FIRE_BERRY_BUSH.get(), new Item.Properties().food(ModFoods.FIRE_BERRIES)));
+    public static final RegistryObject<Item> EMBER_FIG = register("ember_fig",
+            () -> new FruitItem(ModBlocks.EMBER_FIG_CLUSTER.get(), new Item.Properties().food(ModFoods.EMBER_FIG), null));
+    public static final RegistryObject<Item> WITHERED_PLUM = register("withered_plum",
+            () -> new FruitItem(ModBlocks.WITHERED_PLUM_CLUSTER.get(), new Item.Properties().food(ModFoods.WITHERED_PLUM),
+                    () -> MobEffects.WITHER));
     public static final RegistryObject<Item> BLAZE_PEPPER_SEEDS = register("blaze_pepper_seeds",
             () -> new ItemNameBlockItem(ModBlocks.BLAZE_PEPPER_CROP.get(), new Item.Properties()));
     public static final RegistryObject<Item> BLAZE_PEPPER = register("blaze_pepper",

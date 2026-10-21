@@ -1,0 +1,25 @@
+{
+  "name": "Fruits des arbres",
+  "icon": "netheryx:ember_fig",
+  "category": "netheryx:farming",
+  "sortnum": 52,
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:ember_fig",
+      "text": "Les $(l)Figues de braise$() pendent sous le houppier des arbres de braise (Bosquet, Jungle infernale). Mûres, elles luisent : clic droit pour les cueillir, elles repoussent. En manger une donne la $(item)Résistance au feu$() (15 s).",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:spotlight",
+      "item": "netheryx:withered_plum",
+      "text": "Les $(l)Prunes flétries$() pendent sous les arbres flétris. En manger une $(l)guérit le flétrissement$() et soigne un peu : précieux contre les Chevaliers flétris et le Champion.",
+      "link_recipe": false
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Plantez un fruit sous un bloc de verrue correspondant (ou sous les blocs de verrue vanilla carmin et biscornu) pour faire pousser vos propres grappes ; la poudre d'os accélère la maturation. Casser un bloc de houppier peut aussi donner un fruit.",
+      "title": "Cultiver"
+    }
+  ]
+}

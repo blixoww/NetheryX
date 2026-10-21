@@ -2,7 +2,7 @@
   "name": "Basalt Forge",
   "icon": "minecraft:blast_furnace",
   "category": "netheryx:structures",
-  "sortnum": 99,
+  "sortnum": 100,
   "pages": [
     {
       "type": "patchouli:text",

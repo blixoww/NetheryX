@@ -2,7 +2,7 @@
   "name": "Jungle infernale",
   "icon": "netheryx:hellfern",
   "category": "netheryx:biomes",
-  "sortnum": 89,
+  "sortnum": 90,
   "pages": [
     {
       "type": "patchouli:text",

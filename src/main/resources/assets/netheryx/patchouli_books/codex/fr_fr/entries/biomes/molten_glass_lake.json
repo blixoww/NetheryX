@@ -2,7 +2,7 @@
   "name": "Lac de verre en fusion",
   "icon": "netheryx:molten_glass",
   "category": "netheryx:biomes",
-  "sortnum": 95,
+  "sortnum": 96,
   "pages": [
     {
       "type": "patchouli:text",

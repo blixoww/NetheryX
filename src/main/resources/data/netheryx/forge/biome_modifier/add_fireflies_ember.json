@@ -8,9 +8,9 @@
   "spawners": [
     {
       "type": "netheryx:ember_firefly",
-      "weight": 50,
-      "minCount": 6,
-      "maxCount": 10
+      "weight": 80,
+      "minCount": 8,
+      "maxCount": 14
     }
   ]
 }

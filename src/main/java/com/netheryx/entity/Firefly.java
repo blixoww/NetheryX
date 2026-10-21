@@ -6,15 +6,19 @@ import com.netheryx.registry.ModParticles;
 import com.netheryx.util.MobParticles;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
@@ -28,7 +32,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -78,6 +84,33 @@ public class Firefly extends PathfinderMob implements GeoEntity {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.8D));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomFlyingGoal(this, 1.0D));
+    }
+
+    /** Apparition naturelle : la luciole arrive en essaim, quelques compagnes l'accompagnent. */
+    @Override
+    public @Nullable SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
+                                                  @Nullable SpawnGroupData data, @Nullable CompoundTag tag) {
+        if ((reason == MobSpawnType.NATURAL || reason == MobSpawnType.CHUNK_GENERATION) && !(data instanceof Swarm)) {
+            int extra = 3 + this.random.nextInt(4);
+            for (int i = 0; i < extra; i++) {
+                Firefly mate = (Firefly) this.getType().create(level.getLevel());
+                if (mate == null) {
+                    break;
+                }
+                double x = this.getX() + this.random.nextGaussian() * 2.0D;
+                double y = this.getY() + this.random.nextDouble() * 2.0D;
+                double z = this.getZ() + this.random.nextGaussian() * 2.0D;
+                mate.moveTo(x, y, z, this.random.nextFloat() * 360.0F, 0.0F);
+                if (level.noCollision(mate)) {
+                    mate.finalizeSpawn(level, difficulty, reason, new Swarm(), null);
+                    level.addFreshEntityWithPassengers(mate);
+                }
+            }
+        }
+        return super.finalizeSpawn(level, difficulty, reason, data, tag);
+    }
+
+    private static final class Swarm implements SpawnGroupData {
     }
 
     @Override

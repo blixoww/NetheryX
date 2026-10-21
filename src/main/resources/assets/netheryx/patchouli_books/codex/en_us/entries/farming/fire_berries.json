@@ -2,7 +2,7 @@
   "name": "Fire Berries",
   "icon": "netheryx:fire_berries",
   "category": "netheryx:farming",
-  "sortnum": 52,
+  "sortnum": 53,
   "pages": [
     {
       "type": "patchouli:spotlight",

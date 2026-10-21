@@ -8,8 +8,9 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 
 /**
- * Combat aerien de la Wyverne de cendre (sans cavalier) : elle decolle seule, tourne autour de la cible, crache son
- * souffle de feu et pique pour mordre, puis revient se poser quand le combat est fini.
+ * Combat aerien de la Wyverne de cendre (sans cavalier) : elle decolle seule et tourne autour de la cible, puis
+ * varie ses attaques selon la distance : jet de flammes, grande boule de feu de loin, rafale d'ailes et coup de queue
+ * de pres, piques pour mordre. Elle revient se poser quand le combat est fini.
  */
 class WyvernAerialCombatGoal extends Goal {
     private enum Phase { CIRCLE, BREATH, DIVE }
@@ -80,7 +81,7 @@ class WyvernAerialCombatGoal extends Goal {
                 desired = target.position().add(this.wyvern.position().subtract(target.position()).multiply(1.0D, 0.0D, 1.0D)
                         .normalize().scale(7.0D)).add(0.0D, 4.0D, 0.0D);
                 speed = 0.25D;
-                if (!this.wyvern.isBreathing() && this.phaseTicks > 5) {
+                if (!this.wyvern.isBusyAttacking() && this.phaseTicks > 5) {
                     this.switchTo(Phase.CIRCLE);
                 }
             }
@@ -101,8 +102,17 @@ class WyvernAerialCombatGoal extends Goal {
                 desired = target.position().add(Mth.cos(this.angle) * 8.0D, 5.0D + Mth.sin(this.angle * 2.0F) * 1.5D,
                         Mth.sin(this.angle) * 8.0D);
                 speed = 0.6D;
-                if (this.wyvern.canBreath() && distance < 14.0D && this.wyvern.hasLineOfSight(target)) {
+                boolean sight = this.wyvern.hasLineOfSight(target);
+                if (distance < 5.5D && this.wyvern.canTailSweep()) {
+                    this.wyvern.startTailSweep();
+                } else if (distance < 8.0D && sight && this.wyvern.canGust()) {
+                    this.wyvern.startGust();
+                    this.switchTo(Phase.BREATH);
+                } else if (this.wyvern.canBreath() && distance < 14.0D && sight) {
                     this.wyvern.startBreath();
+                    this.switchTo(Phase.BREATH);
+                } else if (distance >= 12.0D && sight && this.wyvern.canFireball()) {
+                    this.wyvern.startFireball();
                     this.switchTo(Phase.BREATH);
                 } else if (this.diveCooldown <= 0 && this.wyvern.hasLineOfSight(target)) {
                     this.switchTo(Phase.DIVE);

@@ -2,7 +2,7 @@
   "name": "Forge de basalte",
   "icon": "minecraft:blast_furnace",
   "category": "netheryx:structures",
-  "sortnum": 99,
+  "sortnum": 100,
   "pages": [
     {
       "type": "patchouli:text",

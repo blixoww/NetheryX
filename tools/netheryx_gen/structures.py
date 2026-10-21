@@ -1282,9 +1282,14 @@ def wyvern_nest():
                 d.set(x, 12, z, "minecraft:bone_block" if d.rng.random() < 0.55 else "withered_stem", axis="y")
                 if d.rng.random() < 0.45:
                     d.set(x, 13, z, "withered_stem" if d.rng.random() < 0.6 else "minecraft:bone_block", axis="x")
-    d.chest(c, 12, c, "wyvern_nest", facing="south")
-    d.set(c - 1, 12, c + 1, "minecraft:skeleton_skull", rotation="3")
-    d.set(c + 1, 12, c - 1, "minecraft:magma_block")
+    # Coffre et crane au bord de la coupe : le centre reste libre pour la wyverne (2,4 x 1,9 blocs)
+    d.chest(c - 2, 12, c - 1, "wyvern_nest", facing="east")
+    d.set(c - 2, 12, c + 1, "minecraft:skeleton_skull", rotation="4")
+    for y in range(12, 17):
+        for x in range(13):
+            for z in range(13):
+                if ((x - c) ** 2 + (z - c) ** 2) ** 0.5 <= 2.0 and (x, y, z) != (c - 2, 12, c - 1):
+                    d.set(x, y, z, AIR)
     # Prises pour grimper : quelques corniches en spirale
     for k, y in enumerate(range(1, 11, 2)):
         angle = k * 1.3
@@ -1298,7 +1303,7 @@ def wyvern_nest():
                 break
         d.set(x, y, z, "minecraft:polished_blackstone_slab", type="top", waterlogged="false")
     # Le gardien du nid : il faut le vaincre pour obtenir son oeuf
-    d.entity(c + 2.5, 12, c + 0.5, "ash_wyvern", extra={"NestGuardian": Byte(1)})
+    d.entity(c + 0.5, 12, c + 0.5, "ash_wyvern", extra={"NestGuardian": Byte(1)})
     d.save("wyvern_nest")
 
 

@@ -4,13 +4,13 @@
     {
       "description": {
         "identifier": "geometry.soul_firefly",
-        "texture_width": 32,
-        "texture_height": 16,
-        "visible_bounds_width": 0.5,
-        "visible_bounds_height": 0.5,
+        "texture_width": 64,
+        "texture_height": 32,
+        "visible_bounds_width": 0.8,
+        "visible_bounds_height": 0.8,
         "visible_bounds_offset": [
           0,
-          0.25,
+          0.4,
           0
         ]
       },
@@ -27,40 +27,136 @@
           "name": "body",
           "pivot": [
             0,
-            2.5,
+            3,
             0
           ],
           "parent": "root",
           "cubes": [
             {
               "origin": [
-                -1,
-                2,
-                -2
+                -1.5,
+                2.5,
+                -2.5
               ],
               "size": [
+                3,
                 2,
-                2,
-                2
+                3
               ],
               "uv": [
-                10,
+                42,
                 0
               ]
             },
             {
               "origin": [
+                -1.5,
+                4.4,
+                -3
+              ],
+              "size": [
+                3,
+                0.5,
+                1
+              ],
+              "uv": [
+                32,
+                12
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "pivot": [
+            0,
+            3.2,
+            -2.5
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
                 -1,
-                1.5,
-                0
+                2.6,
+                -4
               ],
               "size": [
                 2,
-                2,
-                3
+                1.5,
+                1.5
               ],
               "uv": [
+                36,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "name": "antenna_left",
+          "pivot": [
+            0.5,
+            4,
+            -3.8
+          ],
+          "parent": "head",
+          "cubes": [
+            {
+              "origin": [
+                0.25,
+                4,
+                -6.5
+              ],
+              "size": [
+                0.5,
+                0.5,
+                2.7
+              ],
+              "uv": [
+                44,
+                7
+              ],
+              "rotation": [
+                -35,
+                20,
+                0
+              ],
+              "pivot": [
+                0.5,
+                4,
+                -3.8
+              ]
+            }
+          ]
+        },
+        {
+          "name": "elytron_left",
+          "pivot": [
+            0.2,
+            4.5,
+            -2
+          ],
+          "parent": "body",
+          "rotation": [
+            0,
+            -12,
+            14
+          ],
+          "cubes": [
+            {
+              "origin": [
                 0,
+                4.5,
+                -2
+              ],
+              "size": [
+                1.7,
+                0.5,
+                4.5
+              ],
+              "uv": [
+                14,
                 0
               ]
             }
@@ -69,25 +165,205 @@
         {
           "name": "wing_left",
           "pivot": [
-            1,
-            4,
+            0.4,
+            4.7,
+            -1.5
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
+                0.4,
+                4.7,
+                -1.5
+              ],
+              "size": [
+                4.5,
+                0.2,
+                3.5
+              ],
+              "uv": [
+                0,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_left_0",
+          "pivot": [
+            1.3,
+            2.6,
+            -2
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
+                1.05,
+                1,
+                -2.25
+              ],
+              "size": [
+                0.5,
+                1.6,
+                0.5
+              ],
+              "uv": [
+                8,
+                12
+              ],
+              "rotation": [
+                0,
+                0,
+                25
+              ],
+              "pivot": [
+                1.3,
+                2.6,
+                -2
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_left_1",
+          "pivot": [
+            1.3,
+            2.6,
             -1
           ],
           "parent": "body",
           "cubes": [
             {
               "origin": [
+                1.05,
                 1,
-                4,
-                -1.5
+                -1.25
               ],
               "size": [
-                3,
                 0.5,
-                2
+                1.6,
+                0.5
               ],
               "uv": [
-                18,
+                12,
+                12
+              ],
+              "rotation": [
+                0,
+                0,
+                25
+              ],
+              "pivot": [
+                1.3,
+                2.6,
+                -1
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_left_2",
+          "pivot": [
+            1.3,
+            2.6,
+            0
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
+                1.05,
+                1,
+                -0.25
+              ],
+              "size": [
+                0.5,
+                1.6,
+                0.5
+              ],
+              "uv": [
+                16,
+                12
+              ],
+              "rotation": [
+                0,
+                0,
+                25
+              ],
+              "pivot": [
+                1.3,
+                2.6,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "antenna_right",
+          "pivot": [
+            -0.5,
+            4,
+            -3.8
+          ],
+          "parent": "head",
+          "cubes": [
+            {
+              "origin": [
+                -0.75,
+                4,
+                -6.5
+              ],
+              "size": [
+                0.5,
+                0.5,
+                2.7
+              ],
+              "uv": [
+                52,
+                7
+              ],
+              "rotation": [
+                -35,
+                -20,
+                0
+              ],
+              "pivot": [
+                -0.5,
+                4,
+                -3.8
+              ]
+            }
+          ]
+        },
+        {
+          "name": "elytron_right",
+          "pivot": [
+            -0.2,
+            4.5,
+            -2
+          ],
+          "parent": "body",
+          "rotation": [
+            0,
+            12,
+            -14
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1.7,
+                4.5,
+                -2
+              ],
+              "size": [
+                1.7,
+                0.5,
+                4.5
+              ],
+              "uv": [
+                28,
                 0
               ]
             }
@@ -96,26 +372,180 @@
         {
           "name": "wing_right",
           "pivot": [
-            -1,
-            4,
+            -0.4,
+            4.7,
+            -1.5
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
+                -4.9,
+                4.7,
+                -1.5
+              ],
+              "size": [
+                4.5,
+                0.2,
+                3.5
+              ],
+              "uv": [
+                18,
+                7
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_right_0",
+          "pivot": [
+            -1.3,
+            2.6,
+            -2
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
+                -1.55,
+                1,
+                -2.25
+              ],
+              "size": [
+                0.5,
+                1.6,
+                0.5
+              ],
+              "uv": [
+                20,
+                12
+              ],
+              "rotation": [
+                0,
+                0,
+                -25
+              ],
+              "pivot": [
+                -1.3,
+                2.6,
+                -2
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_right_1",
+          "pivot": [
+            -1.3,
+            2.6,
             -1
           ],
           "parent": "body",
           "cubes": [
             {
               "origin": [
-                -4,
-                4,
-                -1.5
+                -1.55,
+                1,
+                -1.25
+              ],
+              "size": [
+                0.5,
+                1.6,
+                0.5
+              ],
+              "uv": [
+                24,
+                12
+              ],
+              "rotation": [
+                0,
+                0,
+                -25
+              ],
+              "pivot": [
+                -1.3,
+                2.6,
+                -1
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_right_2",
+          "pivot": [
+            -1.3,
+            2.6,
+            0
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
+                -1.55,
+                1,
+                -0.25
+              ],
+              "size": [
+                0.5,
+                1.6,
+                0.5
+              ],
+              "uv": [
+                28,
+                12
+              ],
+              "rotation": [
+                0,
+                0,
+                -25
+              ],
+              "pivot": [
+                -1.3,
+                2.6,
+                0
+              ]
+            }
+          ]
+        },
+        {
+          "name": "lantern",
+          "pivot": [
+            0,
+            3.2,
+            0.5
+          ],
+          "parent": "body",
+          "cubes": [
+            {
+              "origin": [
+                -1.5,
+                2,
+                0.5
               ],
               "size": [
                 3,
-                0.5,
-                2
+                2.5,
+                3.5
               ],
               "uv": [
                 0,
-                5
+                0
+              ]
+            },
+            {
+              "origin": [
+                -1,
+                2.3,
+                4
+              ],
+              "size": [
+                2,
+                1.8,
+                1.2
+              ],
+              "uv": [
+                0,
+                12
               ]
             }
           ]

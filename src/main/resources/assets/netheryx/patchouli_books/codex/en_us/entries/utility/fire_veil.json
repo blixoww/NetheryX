@@ -2,7 +2,7 @@
   "name": "Fire Veil",
   "icon": "netheryx:fire_veil",
   "category": "netheryx:utility",
-  "sortnum": 83,
+  "sortnum": 84,
   "pages": [
     {
       "type": "patchouli:spotlight",

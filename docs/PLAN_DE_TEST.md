@@ -76,7 +76,8 @@ Pour chaque donjon, **en survie** (`/gamemode survival`) avec une bonne armure :
 - [ ] Le boss **reste dans son arène** : fuyez, il doit y retourner et se soigner lentement.
 - [ ] À la mort du boss : les sceaux disparaissent, la maçonnerie redevient de la brique, le trophée tombe.
 - [ ] Cache secrète : trappe au ras du dallage, fumée bleue visible de loin.
-- [ ] Nid de wyverne : la gardienne attaque ; vaincue, elle laisse son œuf (qui brille) ; prises pour grimper.
+- [ ] Nid de wyverne : la gardienne attaque sans être coincée ni blessée par le nid ; vaincue, elle laisse son œuf (qui
+      brille) ; prises pour grimper.
 - [ ] Forge de basalte : le Golem de basalte y monte la garde et ne la quitte pas ; coffre de la forge.
 - [ ] Campement nomade : tentes, chariot, enclos.
 - [ ] Jardin du Nether : on entre par les quatre côtés et on se promène partout (allées, place, serre, carrés de culture).
@@ -90,9 +91,13 @@ Invoquez-les avec leurs œufs (onglet NetheryX) ou `/summon netheryx:<nom>` :
 - [ ] Animaux : `ember_cow` (se trait), `cinder_hen` (pond), `blaze_pig` (poudre de blaze), `crystal_snail` (cisailles),
       `magma_crab`, `basalt_beetle`, `magmafish` (dans la lave), `lantern_bearer` (apprivoiser avec une luminelle),
       `cinder_lizard` (apprivoiser avec des baies de feu, puis selle).
-- [ ] Lucioles `ember_firefly` / `soul_firefly` : clic droit avec une fiole vide → bocal qui éclaire.
+- [ ] Lézard apprivoisé : posez `/setblock ~5 ~-1 ~ minecraft:ancient_debris` près de lui : il le flaire (étincelles
+      + message) ; en selle sur la lave, vous ne brûlez pas.
+- [ ] Lucioles `ember_firefly` / `soul_firefly` : nouveau modèle animé, essaims nombreux ; clic droit avec une fiole vide
+      → bocal qui éclaire.
 - [ ] Hostiles : `ember_stalker`, `ash_wraith`, `withered_knight`, `fire_ghast`, `onyx_cube`, `basalt_burrower`, `mimic`.
-- [ ] Mini-boss `basalt_golem` : frappe au sol, éclats de magma, phase en fusion sous 50 % ; lâche la Pierre-cœur de basalte.
+- [ ] Mini-boss `basalt_golem` : onde de choc (sautez par-dessus), charge (esquivez : contre un mur il est étourdi),
+      éruptions de magma sous vos pieds, éclats de magma ; phase en fusion sous 50 % ; lâche la Pierre-cœur de basalte.
 - [ ] Marchand piglin (`piglin_merchant`) : échanges.
 
 ## 6. Wyverne de cendre
@@ -105,6 +110,7 @@ Invoquez-les avec leurs œufs (onglet NetheryX) ou `/summon netheryx:<nom>` :
 - [ ] Une seule wyverne : un second œuf refuse d'éclore tant que la première est en vie.
 - [ ] Combat : `/summon netheryx:ember_stalker ~5 ~ ~` puis frappez-le : elle décolle, tourne, crache du feu
       (vrai jet de flammes continu qui brille, aucun bloc ne brûle), pique pour mordre, puis se repose.
+- [ ] Nouvelles attaques : reculez à 15 blocs → grande boule de feu ; approchez → rafale d'ailes et coup de queue.
 - [ ] Montée : frappez une créature devant vous → elle crache du feu dessus.
 - [ ] Prenez un portail du Nether : elle vous suit dans l'autre dimension.
 - [ ] Éloignez-vous de 2 000 blocs (`/tp`), puis utilisez le **Sifflet** : elle revient.
@@ -119,16 +125,21 @@ Invoquez-les avec leurs œufs (onglet NetheryX) ou `/summon netheryx:<nom>` :
 /summon netheryx:withered_champion
 ```
 - [ ] Attaques annoncées visuellement, barres de boss, trophée lâché.
-- [ ] Cœur scellé (dans le Nether uniquement) → Cœur du Nether : réveil, vagues de gardes avec bouclier, geysers.
+- [ ] Cœur scellé (dans le Nether uniquement) → Cœur du Nether : réveil, vagues de gardes avec bouclier, geysers ;
+      il ne régénère pas sa vie.
 - [ ] Butin : œuf de wyverne, gabarit et éclats abyssaux → armure abyssale (bonus d'ensemble) et Lame abyssale
       (clic droit : vague abyssale).
 
 ## 8. Objets et mécaniques
 
+- [ ] Fruits : sous les arbres de braise et flétris, grappes de figues et de prunes ; clic droit sur une grappe mûre ;
+      replanter un fruit sous un bloc de verrue ; poudre d'os.
+- [ ] Enclume d'onyx : nouvelle texture.
 - [ ] Lanterne du Nether : contours des minerais à travers les murs pendant 10 s.
 - [ ] Voile ignifuge dans l'inventaire : effet de résistance au feu et plus de flammes à l'écran.
 - [ ] Pierre de rappel, Bateau et Seau d'obsidienne (naviguer sur la lave sans brûler).
-- [ ] Autel des âmes (flammes des âmes autour, offrande) → enchantements du Nether.
+- [ ] Autel des âmes : clic droit ouvre l'interface ; objet + offrande, flammes des âmes autour, bouton « Infuser »,
+      la jauge se remplit puis l'enchantement est appliqué. Retirez une flamme : le message l'indique.
 - [ ] Nasse à magma dans un lac de lave, Chaudron infernal (potion + chaleur dessous + soufre).
 - [ ] Événements : `/netheryx event start ashfall` (puis `sulfur_storm`, `eruption`) et `/netheryx event stop`.
 - [ ] Progrès : onglet NetheryX des progrès (`L`).

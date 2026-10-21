@@ -1126,6 +1126,34 @@ def basalt_golem():
         "punch": anim(0.6, {
             "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.2, [-90, -15, 0], "easeOutBack"), (0.6, [0, 0, 0], "easeInOutSine"))},
         }, loop=False),
+        # Charge : il se cabre et rugit (1 s), puis fonce tete baissee, bras rejetes en arriere
+        "charge": anim(2.5, {
+            "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.6, [-14, 0, 0], "easeOutBack"), (1.0, [-10, 0, 0], None),
+                                       (1.15, [28, 0, 0], "easeInExpo"), (2.3, [28, 0, 0], None), (2.5, [0, 0, 0], "easeInOutSine"))},
+            "head": {"rotation": ekeys((0, [0, 0, 0], None), (0.6, [-20, 0, 0], "easeOutBack"), (1.15, [10, 0, 0], None),
+                                       (2.5, [0, 0, 0], None))},
+            "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.6, [-120, 0, -20], "easeOutBack"), (1.15, [50, 0, -10], "easeInExpo"),
+                                           (2.3, [50, 0, -10], None), (2.5, [0, 0, 0], None))},
+            "arm_right": {"rotation": ekeys((0, [0, 0, 0], None), (0.6, [-120, 0, 20], "easeOutBack"), (1.15, [50, 0, 10], "easeInExpo"),
+                                            (2.3, [50, 0, 10], None), (2.5, [0, 0, 0], None))},
+        }, loop=False),
+        # Etourdi apres avoir percute un mur : affaisse, la tete qui dodeline
+        "stun": anim(2.5, {
+            "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.3, [20, 0, 8], "easeOutBounce"), (2.2, [20, 0, -6], None),
+                                       (2.5, [0, 0, 0], "easeInOutSine"))},
+            "head": {"rotation": keys((0, [0, 0, 0]), (0.6, [15, 0, 15]), (1.2, [15, 0, -15]), (1.8, [15, 0, 15]), (2.5, [0, 0, 0]))},
+            "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.3, [-10, 0, -25], "easeOutBounce"), (2.5, [0, 0, 0], None))},
+            "arm_right": {"rotation": ekeys((0, [0, 0, 0], None), (0.3, [-10, 0, 25], "easeOutBounce"), (2.5, [0, 0, 0], None))},
+        }, loop=False),
+        # Eruption : poings leves puis plonges dans le sol
+        "summon": anim(1.4, {
+            "arm_left": {"rotation": ekeys((0, [0, 0, 0], None), (0.5, [-170, 0, -25], "easeOutBack"), (0.7, [-20, 0, -5], "easeInExpo"),
+                                           (1.4, [0, 0, 0], "easeInOutSine"))},
+            "arm_right": {"rotation": ekeys((0, [0, 0, 0], None), (0.5, [-170, 0, 25], "easeOutBack"), (0.7, [-20, 0, 5], "easeInExpo"),
+                                            (1.4, [0, 0, 0], "easeInOutSine"))},
+            "body": {"rotation": ekeys((0, [0, 0, 0], None), (0.5, [-10, 0, 0], None), (0.7, [25, 0, 0], "easeInExpo"),
+                                       (1.4, [0, 0, 0], "easeInOutSine"))},
+        }, loop=False),
     })
 
 
@@ -1135,22 +1163,54 @@ def ash_wyvern():
 
 
 def firefly(name, body, glow_colors, eye):
-    m = Model(name, 32, 16, (0.5, 0.5))
+    """Luciole : petit coleoptere (tete, antennes, elytres entrouverts, ailes membraneuses, six pattes) dont
+    l'abdomen est une lanterne qui pulse."""
+    m = Model(name, 64, 32, (0.8, 0.8))
     m.bone("root", [0, 0, 0])
-    m.bone("body", [0, 2.5, 0], "root", cubes=[
-        Cube([-1, 2, -2], [2, 2, 2], "body", detail=eyes(eye, y_frac=0.0, spacing=0.3)),
-        Cube([-1, 1.5, 0], [2, 2, 3], "glow"),
+    m.bone("body", [0, 3, 0], "root", cubes=[
+        Cube([-1.5, 2.5, -2.5], [3, 2, 3], "shell"),
+        Cube([-1.5, 4.4, -3], [3, 0.5, 1], "shell"),
     ])
-    m.bone("wing_left", [1, 4, -1], "body", cubes=[Cube([1, 4, -1.5], [3, 0.5, 2], "wing")])
-    m.bone("wing_right", [-1, 4, -1], "body", cubes=[Cube([-4, 4, -1.5], [3, 0.5, 2], "wing")])
+    m.bone("head", [0, 3.2, -2.5], "body", cubes=[
+        Cube([-1, 2.6, -4], [2, 1.5, 1.5], "head", detail=eyes(eye, y_frac=0.1, spacing=0.3)),
+    ])
+    for side, sx in (("left", 1), ("right", -1)):
+        m.bone(f"antenna_{side}", [0.5 * sx, 4, -3.8], "head", cubes=[
+            Cube([0.5 * sx - 0.25, 4, -6.5], [0.5, 0.5, 2.7], "leg", rotation=[-35, 20 * sx, 0], pivot=[0.5 * sx, 4, -3.8])])
+        x0 = 0 if sx > 0 else -1.7
+        m.bone(f"elytron_{side}", [0.2 * sx, 4.5, -2], "body", rotation=[0, -12 * sx, 14 * sx], cubes=[
+            Cube([x0, 4.5, -2], [1.7, 0.5, 4.5], "shell")])
+        wx = 0.4 if sx > 0 else -4.9
+        m.bone(f"wing_{side}", [0.4 * sx, 4.7, -1.5], "body", cubes=[
+            Cube([wx, 4.7, -1.5], [4.5, 0.2, 3.5], "wing")])
+        for k, z in enumerate((-2, -1, 0)):
+            m.bone(f"leg_{side}_{k}", [1.3 * sx, 2.6, z], "body", cubes=[
+                Cube([1.3 * sx - 0.25, 1, z - 0.25], [0.5, 1.6, 0.5], "leg", rotation=[0, 0, 25 * sx], pivot=[1.3 * sx, 2.6, z])])
+    m.bone("lantern", [0, 3.2, 0.5], "body", cubes=[
+        Cube([-1.5, 2, 0.5], [3, 2.5, 3.5], "glow"),
+        Cube([-1, 2.3, 4], [2, 1.8, 1.2], "glow"),
+    ])
     save_model(m, {
-        "body": {"colors": body},
-        "glow": {"colors": glow_colors, "glow": True},
-        "wing": {"colors": ["#d8d0c8", "#f0ece8"], "glow": True},
+        "shell": {"colors": body, "pattern": "plates", "edge": False},
+        "head": {"colors": body},
+        "leg": {"colors": [body[0]], "edge": False},
+        "glow": {"colors": glow_colors, "glow": True, "edge": False},
+        "wing": {"colors": ["#d8d0c8", "#f0ece8"], "glow": True, "edge": False},
     })
-    save_animations(name, {"fly": anim(0.2, {
-        "wing_left": {"rotation": wave(0.2, 50, axis=2)}, "wing_right": {"rotation": wave(0.2, 50, math.pi, axis=2)},
-        "body": {"position": wave(0.2, 0.3, axis=1)}})})
+    def flaps(sign):
+        # 10 battements rapides sur la duree de l'animation (1,6 s), pour boucler avec la pulsation de la lanterne
+        return {f"{round(i * 0.04, 4)}": [0.0, 0.0, round(sign * (10 + 55 * math.sin(i * math.pi / 2)), 3)] for i in range(41)}
+
+    save_animations(name, {"fly": anim(1.6, {
+        "wing_left": {"rotation": flaps(1)},
+        "wing_right": {"rotation": flaps(-1)},
+        "body": {"position": wave(1.6, 0.4, axis=1), "rotation": wave(1.6, 4, axis=0)},
+        "antenna_left": {"rotation": wave(0.8, 10, axis=0)},
+        "antenna_right": {"rotation": wave(0.8, 10, math.pi / 2, axis=0)},
+        # La lanterne pulse comme une vraie luciole
+        "lantern": {"scale": ekeys((0, [1, 1, 1], None), (0.5, [1.15, 1.15, 1.1], "easeInOutSine"),
+                                   (0.8, [1, 1, 1], "easeInOutSine"), (1.6, [1, 1, 1], None))},
+    })})
 
 
 def blaze_pig():

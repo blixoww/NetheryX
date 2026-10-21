@@ -2,7 +2,7 @@
   "name": "Produits animaux",
   "icon": "netheryx:cooked_infernal_beef",
   "category": "netheryx:farming",
-  "sortnum": 56,
+  "sortnum": 57,
   "pages": [
     {
       "type": "patchouli:smelting",

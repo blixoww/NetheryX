@@ -2,7 +2,7 @@
   "name": "Bois de verrutige",
   "icon": "netheryx:wartstalk_planks",
   "category": "netheryx:building",
-  "sortnum": 87,
+  "sortnum": 88,
   "pages": [
     {
       "type": "patchouli:crafting",

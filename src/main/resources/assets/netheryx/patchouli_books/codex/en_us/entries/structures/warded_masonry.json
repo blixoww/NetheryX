@@ -2,7 +2,7 @@
   "name": "Warded Masonry",
   "icon": "netheryx:guardian_seal",
   "category": "netheryx:structures",
-  "sortnum": 90,
+  "sortnum": 91,
   "pages": [
     {
       "type": "patchouli:text",

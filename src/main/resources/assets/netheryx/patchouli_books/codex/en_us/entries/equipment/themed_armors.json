@@ -2,7 +2,7 @@
   "name": "Themed Armors",
   "icon": "netheryx:ember_chestplate",
   "category": "netheryx:equipment",
-  "sortnum": 78,
+  "sortnum": 79,
   "pages": [
     {
       "type": "patchouli:spotlight",

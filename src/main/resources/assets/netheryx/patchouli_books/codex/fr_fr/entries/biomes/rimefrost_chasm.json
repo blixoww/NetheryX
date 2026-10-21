@@ -2,7 +2,7 @@
   "name": "Gouffre de givre",
   "icon": "netheryx:rime_ice",
   "category": "netheryx:biomes",
-  "sortnum": 68,
+  "sortnum": 69,
   "pages": [
     {
       "type": "patchouli:text",

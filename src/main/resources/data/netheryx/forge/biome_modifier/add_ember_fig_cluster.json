@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_features",
+  "biomes": [
+    "netheryx:ember_grove",
+    "netheryx:hellwood_jungle",
+    "netheryx:ember_meadow"
+  ],
+  "features": [
+    "netheryx:ember_fig_cluster"
+  ],
+  "step": "vegetal_decoration"
+}

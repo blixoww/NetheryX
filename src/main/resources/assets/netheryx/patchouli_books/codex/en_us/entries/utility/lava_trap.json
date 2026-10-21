@@ -2,7 +2,7 @@
   "name": "Lava Trap",
   "icon": "netheryx:lava_trap",
   "category": "netheryx:utility",
-  "sortnum": 81,
+  "sortnum": 82,
   "pages": [
     {
       "type": "patchouli:spotlight",

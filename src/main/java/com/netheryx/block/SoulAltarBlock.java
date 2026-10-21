@@ -1,8 +1,10 @@
 package com.netheryx.block;
 
 import com.netheryx.blockentity.SoulAltarBlockEntity;
+import com.netheryx.registry.ModBlockEntities;
 import com.netheryx.registry.ModParticles;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
@@ -15,17 +17,20 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Autel des ames : on y pose un objet, puis on le nourrit d'offrandes du Nether pour lui conferer
- * un enchantement unique (Pas de braise, Recolte d'ames, Ancrage). L'autel doit etre entoure d'au moins
- * deux flammes des ames (feu des ames, torches, lanternes ou feux de camp des ames) et coute de l'experience.
+ * Autel des ames : son interface accueille un objet et une offrande du Nether pour lui conferer un enchantement
+ * unique (Pas de braise, Recolte d'ames, Ancrage). L'autel doit etre entoure d'au moins deux flammes des ames
+ * (feu des ames, torches, lanternes ou feux de camp des ames) et l'infusion coute de l'experience.
  */
 public class SoulAltarBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE = Shapes.or(box(1.0D, 0.0D, 1.0D, 15.0D, 4.0D, 15.0D),
@@ -55,9 +60,17 @@ public class SoulAltarBlock extends BaseEntityBlock {
     @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.getBlockEntity(pos) instanceof SoulAltarBlockEntity altar) {
-            return altar.interact(player, hand);
+            if (player instanceof ServerPlayer serverPlayer) {
+                NetworkHooks.openScreen(serverPlayer, altar, pos);
+            }
+            return InteractionResult.sidedSuccess(level.isClientSide);
         }
         return InteractionResult.PASS;
+    }
+
+    @Override
+    public <T extends BlockEntity> @Nullable BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide ? null : createTickerHelper(type, ModBlockEntities.SOUL_ALTAR.get(), SoulAltarBlockEntity::serverTick);
     }
 
     @Override
@@ -73,8 +86,8 @@ public class SoulAltarBlock extends BaseEntityBlock {
     @SuppressWarnings("deprecation")
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
         if (!state.is(newState.getBlock())) {
-            if (level.getBlockEntity(pos) instanceof SoulAltarBlockEntity altar && !altar.getItem().isEmpty()) {
-                Containers.dropItemStack(level, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, altar.getItem());
+            if (level.getBlockEntity(pos) instanceof SoulAltarBlockEntity altar) {
+                Containers.dropContents(level, pos, altar.getInventory());
             }
             super.onRemove(state, level, pos, newState, moved);
         }

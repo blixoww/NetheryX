@@ -2,7 +2,7 @@
   "name": "Golem de basalte (mini-boss)",
   "icon": "netheryx:basalt_golem_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 97,
+  "sortnum": 98,
   "pages": [
     {
       "type": "patchouli:entity",
@@ -10,6 +10,11 @@
       "scale": 0.4,
       "offset": 0.0,
       "text": "160 PV, rôde dans les deltas de basalte et les Lacs de verre en fusion. Une $(l)frappe au sol$() annoncée par un nuage de poussière, des salves d'$(l)éclats de magma$() à distance, moitié moins de dégâts des projectiles. Sous 50 %, son cœur entre en fusion : plus rapide, il enflamme ceux qui le frappent. Lâche la $(item)Pierre-cœur de basalte$(), nécessaire au Cœur scellé."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Chaque attaque est annoncée et se contre :$(li)$(l)Frappe au sol$() : une onde de choc part en anneau ; $(l)sautez$() par-dessus.$(li)$(l)Charge$() : il se cabre et rugit, puis fonce en ligne droite. Esquivez sur le côté : s'il percute un mur, il est $(l)étourdi$() et encaisse davantage.$(li)$(l)Éruptions$() : des cercles de magma bouillonnent sous vos pieds, puis des colonnes de feu jaillissent : bougez !$(li)$(l)Éclats de magma$() à distance.",
+      "title": "Attaques"
     }
   ]
 }

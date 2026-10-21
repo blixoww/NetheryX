@@ -1,12 +1,14 @@
 package com.netheryx.entity;
 
 import com.netheryx.registry.ModEntities;
+import com.netheryx.registry.ModItems;
 import com.netheryx.registry.ModParticles;
 import com.netheryx.util.MobParticles;
 import com.netheryx.util.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -18,6 +20,8 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -39,6 +43,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FluidState;
@@ -56,6 +61,13 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 /**
  * Lezard de cendre : monture du Nether. On l'apprivoise avec des baies de feu, on le selle, puis on le dirige
  * comme un cheval. Il marche sur la lave et court encore plus vite sur le basalte et la pierre noire.
+ * Apprivoise, il rend aussi service :
+ * <ul>
+ * <li>Flair : de temps en temps, il renifle les debris antiques et le minerai d'onyx proches et montre la direction du
+ * filon par une trainee d'etincelles.</li>
+ * <li>Son cavalier ne craint pas le feu tant qu'il est en selle (traversee des lacs de lave en toute securite).</li>
+ * <li>Mue : il laisse parfois tomber une carapace de magma, de quoi forger l'armure de braise sans chasser les crabes.</li>
+ * </ul>
  */
 public class CinderLizard extends Animal implements Saddleable, GeoEntity {
     private static final EntityDataAccessor<Boolean> TAMED = SynchedEntityData.defineId(CinderLizard.class, EntityDataSerializers.BOOLEAN);
@@ -65,6 +77,9 @@ public class CinderLizard extends Animal implements Saddleable, GeoEntity {
     private static final RawAnimation RUN = NetheryXAnimations.loop("cinder_lizard", "run");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private static final int SCENT_RADIUS = 14;
+    private int scentCooldown = 200;
+    private int sheddingTime = 6000;
 
     public CinderLizard(EntityType<? extends CinderLizard> type, Level level) {
         super(type, level);
@@ -227,6 +242,63 @@ public class CinderLizard extends Animal implements Saddleable, GeoEntity {
             // Remonte a la surface comme un arpenteur
             this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.08D, 0.0D));
         }
+        if (this.level() instanceof ServerLevel server && this.isTamed() && !this.isBaby()) {
+            if (this.tickCount % 20 == 0 && this.getFirstPassenger() instanceof Player rider) {
+                rider.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 50, 0, true, false, true));
+                rider.clearFire();
+            }
+            if (--this.scentCooldown <= 0) {
+                this.scentCooldown = 240 + this.random.nextInt(120);
+                this.sniff(server);
+            }
+            if (--this.sheddingTime <= 0) {
+                this.sheddingTime = 6000 + this.random.nextInt(6000);
+                this.spawnAtLocation(ModItems.MAGMA_SHELL.get());
+                this.playSound(SoundEvents.ARMOR_EQUIP_TURTLE, 1.0F, 0.8F);
+            }
+        }
+    }
+
+    /** Flair : cherche le tresor le plus proche (debris antiques en priorite) et montre sa direction. */
+    private void sniff(ServerLevel level) {
+        BlockPos origin = this.blockPosition();
+        BlockPos best = null;
+        double bestScore = Double.MAX_VALUE;
+        for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-SCENT_RADIUS, -SCENT_RADIUS, -SCENT_RADIUS),
+                origin.offset(SCENT_RADIUS, SCENT_RADIUS, SCENT_RADIUS))) {
+            BlockState state = level.getBlockState(pos);
+            if (!state.is(ModTags.Blocks.CINDER_LIZARD_SCENTS)) {
+                continue;
+            }
+            double score = pos.distSqr(origin) * (state.is(Blocks.ANCIENT_DEBRIS) ? 0.25D : 1.0D);
+            if (score < bestScore) {
+                bestScore = score;
+                best = pos.immutable();
+            }
+        }
+        if (best == null) {
+            return;
+        }
+        this.playSound(SoundEvents.SNIFFER_SNIFFING, 1.0F, 1.4F);
+        this.getNavigation().stop();
+        this.getLookControl().setLookAt(best.getX() + 0.5D, best.getY() + 0.5D, best.getZ() + 0.5D);
+        Vec3 from = this.position().add(0.0D, 0.6D, 0.0D);
+        Vec3 to = Vec3.atCenterOf(best);
+        Vec3 dir = to.subtract(from);
+        double length = Math.min(dir.length(), 10.0D);
+        dir = dir.normalize();
+        for (double d = 0.8D; d < length; d += 0.6D) {
+            Vec3 p = from.add(dir.scale(d));
+            level.sendParticles(ModParticles.EMBER_SPARK.get(), p.x, p.y, p.z, 2, 0.05D, 0.05D, 0.05D, 0.0D);
+        }
+        level.sendParticles(new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK, this.getBlockStateOn()),
+                this.getX(), this.getY() + 0.1D, this.getZ(), 12, 0.4D, 0.05D, 0.4D, 0.1D);
+        boolean debris = level.getBlockState(best).is(Blocks.ANCIENT_DEBRIS);
+        int distance = (int) Math.round(Math.sqrt(best.distSqr(origin)));
+        for (Player player : level.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(10.0D))) {
+            player.displayClientMessage(Component.translatable(debris ? "entity.netheryx.cinder_lizard.scent_debris"
+                    : "entity.netheryx.cinder_lizard.scent_onyx", distance), true);
+        }
     }
 
     @Override
@@ -254,6 +326,7 @@ public class CinderLizard extends Animal implements Saddleable, GeoEntity {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
+        tag.putInt("SheddingTime", this.sheddingTime);
         tag.putBoolean("Tamed", this.isTamed());
         tag.putBoolean("Saddled", this.isSaddled());
     }
@@ -261,6 +334,9 @@ public class CinderLizard extends Animal implements Saddleable, GeoEntity {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
+        if (tag.contains("SheddingTime")) {
+            this.sheddingTime = tag.getInt("SheddingTime");
+        }
         this.entityData.set(TAMED, tag.getBoolean("Tamed"));
         this.entityData.set(SADDLED, tag.getBoolean("Saddled"));
     }

@@ -13,7 +13,7 @@ import net.minecraft.world.entity.Mob;
 /**
  * Cloisonne un boss dans son arene : la position ou il apparait devient le centre de l'arene. S'il en sort, il y
  * retourne ; s'il s'en eloigne trop (bond, teleportation, recul), il y est ramene aussitot. Une cible qui quitte
- * l'arene est abandonnee, et le boss se soigne lentement tant que personne ne le combat.
+ * l'arene est abandonnee, et le boss se soigne lentement tant que personne ne le combat (sauf {@link #noRegeneration()}).
  */
 public final class BossArena {
     private static final String TAG = "ArenaHome";
@@ -21,6 +21,7 @@ public final class BossArena {
     private final double radius;
     private final double height;
     private final double depth;
+    private boolean regenerates = true;
     private BlockPos home;
 
     public BossArena(double radius, double height) {
@@ -32,6 +33,12 @@ public final class BossArena {
         this.radius = radius;
         this.height = height;
         this.depth = depth;
+    }
+
+    /** Desactive la regeneration hors combat (boss final : chaque degat compte). */
+    public BossArena noRegeneration() {
+        this.regenerates = false;
+        return this;
     }
 
     public boolean contains(Entity entity) {
@@ -71,7 +78,7 @@ public final class BossArena {
         } else if (distSqr > this.radius * this.radius && boss.tickCount % 10 == 0) {
             boss.getNavigation().moveTo(this.home.getX() + 0.5D, this.home.getY(), this.home.getZ() + 0.5D, 1.2D);
         }
-        if (target == null && boss.tickCount % 20 == 0 && boss.getHealth() < boss.getMaxHealth()) {
+        if (this.regenerates && target == null && boss.tickCount % 20 == 0 && boss.getHealth() < boss.getMaxHealth()) {
             boss.heal(boss.getMaxHealth() * 0.01F);
         }
     }

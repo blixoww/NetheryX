@@ -2,7 +2,7 @@
   "name": "Onyx Furnace",
   "icon": "netheryx:onyx_furnace",
   "category": "netheryx:building",
-  "sortnum": 62,
+  "sortnum": 63,
   "pages": [
     {
       "type": "patchouli:spotlight",

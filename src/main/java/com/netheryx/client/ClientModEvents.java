@@ -4,6 +4,7 @@ import com.netheryx.NetheryX;
 import com.netheryx.client.particle.DragonFlameParticle;
 import com.netheryx.client.particle.NetheryXParticle;
 import com.netheryx.client.renderer.FireGhastRenderer;
+import com.netheryx.client.screen.SoulAltarScreen;
 import com.netheryx.client.renderer.ObsidianBoatRenderer;
 import com.netheryx.client.renderer.NetheryXGeoRenderer;
 import com.netheryx.client.renderer.OnyxCubeRenderer;
@@ -40,7 +41,9 @@ import com.netheryx.entity.OnyxSentinel;
 import com.netheryx.registry.ModEntities;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import com.netheryx.registry.ModItems;
+import com.netheryx.registry.ModMenus;
 import com.netheryx.registry.ModParticles;
+import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.registries.RegistryObject;
@@ -61,6 +64,7 @@ public final class ClientModEvents {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
+            MenuScreens.register(ModMenus.SOUL_ALTAR.get(), SoulAltarScreen::new);
             // Animation de tension de l'arc en onyx (memes predicats que l'arc vanilla)
             ItemProperties.register(ModItems.ONYX_BOW.get(), new ResourceLocation("pull"), (stack, level, entity, seed) ->
                     entity == null || entity.getUseItem() != stack ? 0.0F
@@ -97,6 +101,7 @@ public final class ClientModEvents {
         event.registerEntityRenderer(ModEntities.FIRE_GHAST.get(), FireGhastRenderer::new);
         event.registerEntityRenderer(ModEntities.ONYX_CUBE.get(), OnyxCubeRenderer::new);
         event.registerEntityRenderer(ModEntities.SULFUR_BOMB.get(), ThrownItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.WYVERN_FIREBALL.get(), context -> new ThrownItemRenderer<>(context, 2.5F, true));
         event.registerEntityRenderer(ModEntities.OBSIDIAN_BOAT.get(), ObsidianBoatRenderer::new);
         event.registerEntityRenderer(ModEntities.MAGMAFISH.get(),
                 context -> new NetheryXGeoRenderer<Magmafish>(context, "magmafish", 0.3F, 1.0F).glowing());
@@ -118,9 +123,9 @@ public final class ClientModEvents {
         event.registerEntityRenderer(ModEntities.ASH_WYVERN.get(),
                 context -> new NetheryXGeoRenderer<AshWyvern>(context, "ash_wyvern", 1.6F, 1.0F).glowing());
         event.registerEntityRenderer(ModEntities.EMBER_FIREFLY.get(),
-                context -> new NetheryXGeoRenderer<Firefly>(context, "ember_firefly", 0.0F, 1.8F).glowing());
+                context -> new NetheryXGeoRenderer<Firefly>(context, "ember_firefly", 0.0F, 1.1F).glowing());
         event.registerEntityRenderer(ModEntities.SOUL_FIREFLY.get(),
-                context -> new NetheryXGeoRenderer<Firefly>(context, "soul_firefly", 0.0F, 1.8F).glowing());
+                context -> new NetheryXGeoRenderer<Firefly>(context, "soul_firefly", 0.0F, 1.1F).glowing());
         event.registerEntityRenderer(ModEntities.BLAZE_PIG.get(),
                 context -> new NetheryXGeoRenderer<BlazePig>(context, "blaze_pig", 0.5F, 1.0F).glowing());
         event.registerEntityRenderer(ModEntities.CRYSTAL_SNAIL.get(),

@@ -2,7 +2,7 @@
   "name": "Lights",
   "icon": "netheryx:onyx_lantern",
   "category": "netheryx:building",
-  "sortnum": 64,
+  "sortnum": 65,
   "pages": [
     {
       "type": "patchouli:crafting",

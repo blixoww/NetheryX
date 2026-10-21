@@ -2,7 +2,7 @@
   "name": "Lézard de cendre",
   "icon": "netheryx:cinder_lizard_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 72,
+  "sortnum": 73,
   "pages": [
     {
       "type": "patchouli:entity",
@@ -10,6 +10,11 @@
       "scale": 0.7,
       "offset": 0.0,
       "text": "Une $(l)monture$() du Nether. Apprivoisez-le avec des $(item)Baies de feu$(), sellez-le et chevauchez-le. Il marche sur la lave et court encore plus vite sur le basalte et la pierre noire."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Apprivoisé, le lézard est plus qu'une monture :$(li)$(l)Flair$() : de temps en temps, il renifle les $(item)débris antiques$() (en priorité) ou le $(item)minerai d'onyx$() à 14 blocs et montre le chemin par une traînée d'étincelles.$(li)$(l)Cavalier ignifugé$() : en selle, vous ne brûlez pas, même en traversant un lac de lave.$(li)$(l)Mue$() : il laisse parfois tomber une $(item)carapace de magma$().",
+      "title": "Services"
     }
   ]
 }
