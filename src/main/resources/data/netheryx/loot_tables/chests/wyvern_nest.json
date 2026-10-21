@@ -2,19 +2,10 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": 1,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "netheryx:ash_wyvern_egg"
-        }
-      ]
-    },
-    {
       "rolls": {
         "type": "minecraft:uniform",
-        "min": 2,
-        "max": 4
+        "min": 3,
+        "max": 5
       },
       "entries": [
         {

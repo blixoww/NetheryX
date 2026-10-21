@@ -32,6 +32,9 @@ public class WyvernEggItem extends Item {
         if (player == null) {
             return InteractionResult.PASS;
         }
+        if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && AshWyvern.hasWyvern(serverPlayer)) {
+            return InteractionResult.FAIL; // une seule wyverne par joueur
+        }
         if (context.getLevel() instanceof ServerLevel level) {
             BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
             AshWyvern wyvern = ModEntities.ASH_WYVERN.get().create(level);

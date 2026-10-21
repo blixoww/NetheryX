@@ -1,0 +1,13 @@
+{
+  "name": "Forge de basalte",
+  "icon": "minecraft:blast_furnace",
+  "category": "netheryx:structures",
+  "sortnum": 99,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Terres cendrées, deltas de basalte et Lacs de verre en fusion. Un cercle de colonnes de basalte brisées autour d'une forge antique : bassin de lave, enclume d'onyx, hauts fourneaux et cheminée fumante. C'est le repaire du $(l)Golem de basalte$(), qui ne la quitte jamais. Son coffre contient des éclats de verre en fusion, des carapaces, de l'onyx et parfois de la netherite ou une Lanterne du Nether.",
+      "title": "Forge de basalte"
+    }
+  ]
+}

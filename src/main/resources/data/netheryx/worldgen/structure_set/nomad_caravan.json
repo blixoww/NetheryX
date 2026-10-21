@@ -12,7 +12,7 @@
     "salt": 902817364,
     "exclusion_zone": {
       "other_set": "minecraft:nether_complexes",
-      "chunk_count": 2
+      "chunk_count": 3
     }
   }
 }

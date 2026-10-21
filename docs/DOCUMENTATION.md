@@ -396,7 +396,7 @@ Clic droit avec, **uniquement dans le Nether** : le Cœur du Nether s'éveille a
 
 ### Wyverne de cendre (monture)
 
-- **Wyverne de cendre** : Où la trouver : les **Nids de wyverne** (pitons rocheux coiffés d'un nid d'os, dans les Terres cendrées, les deltas de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) contiennent un *œuf* et une wyverne sauvage ; d'autres errent dans ces biomes. Apprivoisez une wyverne sauvage avec de la *viande*, ou faites éclore l'œuf : elle vous appartient.
+- **Wyverne de cendre** : Où la trouver : les **Nids de wyverne** (pitons rocheux coiffés d'un nid d'os, dans les Terres cendrées, les deltas de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) sont gardés par une wyverne farouche : **vainquez-la** et elle laisse son *œuf*. Faites-le éclore : la wyverne est à vous. Des wyvernes sauvages errent aussi et s'apprivoisent avec de la *viande*. **Une seule wyverne par joueur.**
 
 **Compagnon**
 
@@ -510,6 +510,13 @@ Les donjons cachent aussi des **Mimiques** parmi leurs coffres.
 **Cache secrète**
 
 Petites salles au trésor enterrées, désormais fréquentes. Cherchez une **colonne de fumée bleue** qui s'élève d'un feu de camp des âmes posé sur un petit dallage de pierre noire, près d'un cairn surmonté d'une lanterne : la trappe est sertie dans le dallage. La *Boussole des âmes* peut aussi les pister.
+
+
+### Forge de basalte
+
+**Forge de basalte**
+
+Terres cendrées, deltas de basalte et Lacs de verre en fusion. Un cercle de colonnes de basalte brisées autour d'une forge antique : bassin de lave, enclume d'onyx, hauts fourneaux et cheminée fumante. C'est le repaire du **Golem de basalte**, qui ne la quitte jamais. Son coffre contient des éclats de verre en fusion, des carapaces, de l'onyx et parfois de la netherite ou une Lanterne du Nether.
 
 
 <a id="equipment"></a>
@@ -671,7 +678,7 @@ La pierre retient les **8 derniers portails** par lesquels vous êtes arrivé, d
 
 ### Voile ignifuge
 
-- **Voile ignifuge** : Tant qu'il est **n'importe où dans l'inventaire** (ou porté dans un **emplacement breloque de Curios**), les flammes qui couvrent l'écran quand vous brûlez sont masquées. Purement visuel : vous brûlez toujours, associez-le à la résistance au feu.
+- **Voile ignifuge** : Tant qu'il est **n'importe où dans l'inventaire** (ou porté dans un **emplacement breloque de Curios**), il donne la **résistance au feu** et masque les flammes qui couvrent l'écran.
 
 - Établi : `·C·` / `CMC` / `·C·` (`C` = Étoffe spectrale, `M` = Crème de magma) → **Voile ignifuge**
 
@@ -1087,6 +1094,8 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi : `##` (`#` = Planches de verrutige) → **Plaque de pression de verrutige**
 - **Minerai de quartz riche** (`netheryx:rich_quartz_ore`)
   - Se trouve dans le monde (génération, structures) ou se récupère en le minant.
+- **Amas de quartz** (`netheryx:quartz_cluster`)
+  - Se trouve dans le monde (génération, structures) ou se récupère en le minant.
 - **Verre de quartz** (`netheryx:quartz_glass`)
   - Établi : `·Q·` / `QGQ` / `·Q·` (`Q` = Quartz du Nether, `G` = Verre) → **Verre de quartz** ×4
 - **Vitre de quartz** (`netheryx:quartz_glass_pane`)
@@ -1139,13 +1148,13 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Trouvé dans : butin de Cœur du Nether
 - **Boussole du créateur** (`netheryx:admin_compass`)
 - **Œuf de wyverne de cendre** (`netheryx:ash_wyvern_egg`)
-  - Trouvé dans : butin de Cœur du Nether, coffres : wyvern nest
+  - Trouvé dans : butin de Cœur du Nether
 - **Tubercule d'âme cuit** (`netheryx:baked_soul_tuber`)
   - Feu de camp : Tubercule d'âme → **Tubercule d'âme cuit**
   - Four : Tubercule d'âme → **Tubercule d'âme cuit**
   - Fumoir : Tubercule d'âme → **Tubercule d'âme cuit**
 - **Carapace de basalte** (`netheryx:basalt_carapace`)
-  - Trouvé dans : butin de Golem de basalte, butin de Scarabée de basalte
+  - Trouvé dans : butin de Golem de basalte, butin de Scarabée de basalte, coffres : basalt forge
 - **Piment de blaze** (`netheryx:blaze_pepper`)
 - **Graines de piment de blaze** (`netheryx:blaze_pepper_seeds`)
   - Établi (sans forme) : Piment de blaze → **Graines de piment de blaze** ×2
@@ -1234,7 +1243,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - **Ragoût infernal** (`netheryx:infernal_stew`)
   - Établi (sans forme) : Bol + Piment de blaze + Tubercule d'âme cuit + Crimson fungus + Warped fungus → **Ragoût infernal**
 - **Carapace de magma** (`netheryx:magma_shell`)
-  - Trouvé dans : butin de Crabe de magma, butin de Golem de basalte, butin de Lézard de cendre, coffres : wyvern nest
+  - Trouvé dans : butin de Crabe de magma, butin de Golem de basalte, butin de Lézard de cendre, coffres : basalt forge, coffres : wyvern nest
 - **Semelles de magma** (`netheryx:magma_treads`)
   - Établi : `M·M` / `M·M` (`M` = Carapace de magma) → **Semelles de magma**
   - Trouvé dans : coffres : infernal sanctum, coffres : infernal sanctum vault, coffres : onyx citadel
@@ -1245,9 +1254,10 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - **Farine de moelle** (`netheryx:marrow_meal`)
   - Établi (sans forme) : Chapeau de moelle → **Farine de moelle** ×3
 - **Éclat de verre en fusion** (`netheryx:molten_shard`)
-  - Trouvé dans : butin de Golem de basalte
+  - Trouvé dans : butin de Golem de basalte, coffres : basalt forge
 - **Lanterne du Nether** (`netheryx:nether_lantern`)
   - Établi : `·O·` / `MLM` / `·M·` (`O` = Onyx, `M` = Éclat de verre en fusion, `L` = Lanterne des âmes) → **Lanterne du Nether**
+  - Trouvé dans : coffres : basalt forge
 - **Bateau d'obsidienne** (`netheryx:obsidian_boat`)
   - Établi : `O·O` / `OOO` (`O` = Obsidienne) → **Bateau d'obsidienne**
 - **Seau d'obsidienne** (`netheryx:obsidian_bucket`)
@@ -1258,7 +1268,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi (sans forme) : Bloc d'onyx → **Onyx** ×9
   - Établi : `###` / `###` / `###` (`#` = Éclat d'onyx) → **Onyx**
   - Four : Minerai d'onyx → **Onyx**
-  - Trouvé dans : butin de Champion flétri, butin de Cœur du Nether, butin de Golem de basalte, butin de Sentinelle d'onyx, butin de Sorcier infernal, coffres : infernal sanctum, coffres : infernal sanctum vault, coffres : mimic, coffres : onyx citadel, coffres : onyx citadel vault, coffres : withered catacombs, coffres : withered catacombs vault
+  - Trouvé dans : butin de Champion flétri, butin de Cœur du Nether, butin de Golem de basalte, butin de Sentinelle d'onyx, butin de Sorcier infernal, coffres : basalt forge, coffres : infernal sanctum, coffres : infernal sanctum vault, coffres : mimic, coffres : onyx citadel, coffres : onyx citadel vault, coffres : withered catacombs, coffres : withered catacombs vault
 - **Pomme en onyx** (`netheryx:onyx_apple`)
   - Établi : `SSS` / `SAS` / `SSS` (`S` = Éclat d'onyx, `A` = Pomme dorée) → **Pomme en onyx**
   - Trouvé dans : butin de Cœur du Nether
@@ -1471,7 +1481,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - Butin : Membrane de phantom
 
 ### Luciole de braise
-- Apparition : Bosquet de braise, Forêt carmin, Jungle infernale, Lac de verre en fusion, Prairie de braise, tout le Nether
+- Apparition : Bosquet de braise, Forêt carmin, Jungle infernale, Lac de verre en fusion, Prairie de braise, Récifs de quartz, tout le Nether
 - Butin : Poudre lumineuse
 
 ### Luciole des âmes
@@ -1479,11 +1489,11 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - Butin : Poussière d'âme
 
 ### Cochon de blaze
-- Apparition : Bosquet de braise, Désolation du Nether, Jungle infernale, Lac de verre en fusion, tout le Nether
+- Apparition : Bosquet de braise, Désolation du Nether, Jungle infernale, Lac de verre en fusion, Récifs de quartz, tout le Nether
 - Butin : Côtelette de blaze crue, Poudre de blaze
 
 ### Escargot de cristal
-- Apparition : Forêt pétrifiée d'onyx
+- Apparition : Forêt pétrifiée d'onyx, Récifs de quartz
 - Butin : Éclat d'onyx
 
 <a id="configuration"></a>

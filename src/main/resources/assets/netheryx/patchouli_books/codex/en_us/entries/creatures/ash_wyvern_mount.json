@@ -9,7 +9,7 @@
       "entity": "netheryx:ash_wyvern",
       "scale": 0.3,
       "offset": 0.0,
-      "text": "Where to find one: $(l)Wyvern Nests$() (rock spires topped with a bone nest, in Ashen Wastes, Basalt Deltas, Molten Glass Lakes, Sulfur Springs and the Hellwood Jungle) hold an $(item)egg$() and a wild wyvern; wild ones also roam these biomes. Tame a wild wyvern with $(item)meat$(), or hatch the egg: it is yours."
+      "text": "Where to find one: $(l)Wyvern Nests$() (rock spires topped with a bone nest, in Ashen Wastes, Basalt Deltas, Molten Glass Lakes, Sulfur Springs and the Hellwood Jungle) are guarded by a fierce wyvern: $(l)defeat it$() and it leaves its $(item)egg$(). Hatch it: the wyvern is yours. Wild wyverns also roam and can be tamed with $(item)meat$(). $(l)One wyvern per player.$()"
     },
     {
       "type": "patchouli:text",

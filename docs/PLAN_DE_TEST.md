@@ -62,6 +62,7 @@ Avec la **Boussole des âmes** (structures NetheryX en tête de liste) ou par co
 /locate structure netheryx:infernal_sanctum
 /locate structure netheryx:withered_catacombs
 /locate structure netheryx:wyvern_nest
+/locate structure netheryx:basalt_forge
 /locate structure netheryx:hidden_cache
 /locate structure netheryx:nomad_caravan
 /locate structure netheryx:traveler_camp
@@ -74,7 +75,9 @@ Pour chaque donjon, **en survie** (`/gamemode survival`) avec une bonne armure :
 - [ ] Le boss **reste dans son arène** : fuyez, il doit y retourner et se soigner lentement.
 - [ ] À la mort du boss : les sceaux disparaissent, la maçonnerie redevient de la brique, le trophée tombe.
 - [ ] Cache secrète : trappe au ras du dallage, fumée bleue visible de loin.
-- [ ] Nid de wyverne : coffre avec un œuf, une wyverne sauvage, prises pour grimper.
+- [ ] Nid de wyverne : la gardienne attaque ; vaincue, elle laisse son œuf (qui brille) ; prises pour grimper.
+- [ ] Forge de basalte : le Golem de basalte y monte la garde et ne la quitte pas ; coffre de la forge.
+- [ ] Campement nomade et Jardin du Nether : tentes, chariot, enclos, serre, carrés de culture.
 
 Butins sans explorer : `/loot give @s loot netheryx:chests/onyx_citadel_vault` (et les autres tables du dossier
 `data/netheryx/loot_tables/chests`).
@@ -92,11 +95,12 @@ Invoquez-les avec leurs œufs (onglet NetheryX) ou `/summon netheryx:<nom>` :
 
 ## 6. Wyverne de cendre
 
-1. Trouvez un nid (`/locate structure netheryx:wyvern_nest`) ou `/give @s netheryx:ash_wyvern_egg`.
+1. Trouvez un nid (`/locate structure netheryx:wyvern_nest`) et battez sa gardienne, ou `/give @s netheryx:ash_wyvern_egg`.
 2. Posez l'œuf au sol : la wyverne éclot, apprivoisée.
 - [ ] 160 PV (`/data get entity @e[type=netheryx:ash_wyvern,limit=1,sort=nearest] Health`).
 - [ ] Clic droit : la monter ; avancer en regardant vers le haut → décollage ; vers le bas → piqué ; relâcher → vol plané.
-- [ ] Accroupi + clic droit : attendre / suivre.
+- [ ] Accroupi + clic droit : attendre / suivre. Éloignez-vous, montez en hauteur ou volez : elle suit en volant.
+- [ ] Une seule wyverne : un second œuf refuse d'éclore tant que la première est en vie.
 - [ ] Combat : `/summon netheryx:ember_stalker ~5 ~ ~` puis frappez-le : elle décolle, tourne, crache du feu
       (aucun bloc ne brûle), pique pour mordre, puis se repose.
 - [ ] Montée : frappez une créature devant vous → elle crache du feu dessus.
@@ -120,7 +124,8 @@ Invoquez-les avec leurs œufs (onglet NetheryX) ou `/summon netheryx:<nom>` :
 ## 8. Objets et mécaniques
 
 - [ ] Lanterne du Nether : contours des minerais à travers les murs pendant 10 s.
-- [ ] Pierre de rappel, Voile ignifuge, Bateau et Seau d'obsidienne (naviguer sur la lave sans brûler).
+- [ ] Voile ignifuge dans l'inventaire : effet de résistance au feu et plus de flammes à l'écran.
+- [ ] Pierre de rappel, Bateau et Seau d'obsidienne (naviguer sur la lave sans brûler).
 - [ ] Autel des âmes (flammes des âmes autour, offrande) → enchantements du Nether.
 - [ ] Nasse à magma dans un lac de lave, Chaudron infernal (potion + chaleur dessous + soufre).
 - [ ] Événements : `/netheryx event start ashfall` (puis `sulfur_storm`, `eruption`) et `/netheryx event stop`.

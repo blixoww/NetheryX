@@ -12,8 +12,8 @@ import java.util.List;
 
 /**
  * Voile ignifuge : tant qu'il est dans l'inventaire (ou equipe dans un emplacement « breloque » de Curios API),
- * les flammes qui couvrent l'ecran quand on brule ne sont plus affichees. Purement visuel : on brule toujours.
- * L'effet est gere cote client dans {@code ClientForgeEvents}.
+ * il donne la resistance au feu (voir {@code GameplayEvents}) et masque les flammes qui couvrent l'ecran
+ * (cote client, dans {@code ClientForgeEvents}).
  */
 public class FireVeilItem extends Item {
     public FireVeilItem(Properties properties) {

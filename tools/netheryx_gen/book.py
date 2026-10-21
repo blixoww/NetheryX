@@ -705,10 +705,10 @@ entry("utility", "Infernal Cauldron", "Chaudron infernal", "netheryx:infernal_ca
     craft("infernal_cauldron"),
 ])
 entry("utility", "Fire Veil", "Voile ignifuge", "netheryx:fire_veil", [
-    spot("fire_veil", "While it is $(l)anywhere in your inventory$() (or worn in a $(l)Curios charm slot$()), the flames covering "
-                      "your screen when you burn are hidden. Purely visual: you still burn, so pair it with Fire Resistance.",
-         "Tant qu'il est $(l)n'importe où dans l'inventaire$() (ou porté dans un $(l)emplacement breloque de Curios$()), les flammes qui "
-         "couvrent l'écran quand vous brûlez sont masquées. Purement visuel : vous brûlez toujours, associez-le à la résistance au feu."),
+    spot("fire_veil", "While it is $(l)anywhere in your inventory$() (or worn in a $(l)Curios charm slot$()), it grants $(l)Fire "
+                      "Resistance$() and hides the flames covering your screen.",
+         "Tant qu'il est $(l)n'importe où dans l'inventaire$() (ou porté dans un $(l)emplacement breloque de Curios$()), il donne la "
+         "$(l)résistance au feu$() et masque les flammes qui couvrent l'écran."),
     craft("fire_veil"),
 ])
 entry("utility", "Ward Lantern", "Lanterne de garde", "netheryx:ward_lantern", [
@@ -815,12 +815,13 @@ entry("creatures", "Basalt Golem (mini-boss)", "Golem de basalte (mini-boss)", "
 ])
 entry("creatures", "Ash Wyvern (mount)", "Wyverne de cendre (monture)", "netheryx:ash_wyvern_egg", [
     mob("ash_wyvern", "Where to find one: $(l)Wyvern Nests$() (rock spires topped with a bone nest, in Ashen Wastes, Basalt Deltas, "
-                      "Molten Glass Lakes, Sulfur Springs and the Hellwood Jungle) hold an $(item)egg$() and a wild wyvern; wild ones "
-                      "also roam these biomes. Tame a wild wyvern with $(item)meat$(), or hatch the egg: it is yours.",
+                      "Molten Glass Lakes, Sulfur Springs and the Hellwood Jungle) are guarded by a fierce wyvern: $(l)defeat it$() and it "
+                      "leaves its $(item)egg$(). Hatch it: the wyvern is yours. Wild wyverns also roam and can be tamed with "
+                      "$(item)meat$(). $(l)One wyvern per player.$()",
         "Où la trouver : les $(l)Nids de wyverne$() (pitons rocheux coiffés d'un nid d'os, dans les Terres cendrées, les deltas "
-        "de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) contiennent un $(item)œuf$() "
-        "et une wyverne sauvage ; d'autres errent dans ces biomes. Apprivoisez une wyverne sauvage avec de la $(item)viande$(), "
-        "ou faites éclore l'œuf : elle vous appartient.", 0.3),
+        "de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) sont gardés par une wyverne "
+        "farouche : $(l)vainquez-la$() et elle laisse son $(item)œuf$(). Faites-le éclore : la wyverne est à vous. Des wyvernes "
+        "sauvages errent aussi et s'apprivoisent avec de la $(item)viande$(). $(l)Une seule wyverne par joueur.$()", 0.3),
     text("$(li)Right-click: ride it. $(li)Sneak + right-click: sit / follow. $(li)Meat heals it; tamed, it has $(l)160 HP$() and "
          "regenerates.$(br2)$(l)In combat$(), it takes off on its own, circles your enemy, breathes fire (it sets creatures ablaze, "
          "never blocks) and dives to bite. While you ride it, it breathes fire on what you attack.",
@@ -839,6 +840,15 @@ entry("creatures", "Ash Wyvern (mount)", "Wyverne de cendre (monture)", "nethery
          "the air, you get a few seconds of $(l)Slow Falling$().",
          "$(l)Voler$() : avancez en regardant vers le haut pour décoller, vers le bas pour piquer, relâchez pour planer doucement. "
          "Si vous descendez en plein vol, vous obtenez quelques secondes de $(l)Chute lente$().", "Vol"),
+])
+entry("structures", "Basalt Forge", "Forge de basalte", "minecraft:blast_furnace", [
+    text("Ashen Wastes, Basalt Deltas and Molten Glass Lakes. A ring of broken basalt columns around an ancient forge: lava "
+         "basin, Onyx anvil, blast furnaces and a smoking chimney. It is the lair of the $(l)Basalt Golem$(), which never leaves "
+         "it. Its chest holds Molten Glass Shards, carapaces, onyx and sometimes netherite scrap or a Nether Lantern.",
+         "Terres cendrées, deltas de basalte et Lacs de verre en fusion. Un cercle de colonnes de basalte brisées autour d'une "
+         "forge antique : bassin de lave, enclume d'onyx, hauts fourneaux et cheminée fumante. C'est le repaire du $(l)Golem de "
+         "basalte$(), qui ne la quitte jamais. Son coffre contient des éclats de verre en fusion, des carapaces, de l'onyx et "
+         "parfois de la netherite ou une Lanterne du Nether.", "Forge de basalte"),
 ])
 entry("creatures", "Fireflies", "Lucioles", "netheryx:ember_firefly_jar", [
     mob("ember_firefly", "$(l)Ember Fireflies$() swarm in the Hellwood Jungle, Ember Grove and Meadow; $(l)Soul Fireflies$() in soul "

@@ -66,6 +66,19 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - **Nids de wyverne** : pitons rocheux coiffés d'un nid d'os, avec un œuf garanti et une wyverne sauvage qui le garde
   (repérables avec la Boussole des âmes) ; des wyvernes sauvages errent aussi dans les Terres cendrées, les deltas de
   basalte et le Lac de verre en fusion, et s'apprivoisent avec de la viande.
+- **Nids de wyverne** : l'œuf n'est plus dans le coffre ; il faut vaincre la wyverne gardienne (farouche, 120 PV),
+  qui laisse son œuf en mourant. **Une seule wyverne par joueur.**
+- **Wyverne** : suit son maître au sol ou en vol (elle décolle si on s'éloigne, vole ou monte), téléportée si elle est
+  trop loin ; vrai jet de flammes (particules projetées, braises, fumée, gerbe à l'impact).
+- **Forge de basalte** : nouveau repaire du Golem de basalte (cercle de colonnes, forge antique, coffre), repérable avec
+  la boussole ; le golem reste dans sa forge.
+- **Récifs de quartz** améliorés : amas de quartz au sol et sous la voûte, sols de quartz, briques de quartz et pierre
+  noire polie, plus d'aiguilles, nouvelles créatures et lucioles.
+- **Campement nomade** et **Jardin du Nether** entièrement refaits (tentes à rayures, chariot bâché, enclos, place du feu
+  de camp ; haies, pergola, carrés de culture surélevés, fontaine de givre, serre en verre de quartz).
+- **Voile ignifuge** : donne aussi la résistance au feu.
+- Textures refaites : **briques de magma** (style briques du Nether), **minerai de quartz riche** (proche du vanilla).
+- Lucioles plus grandes et plus nombreuses ; plus d'animaux et de créatures un peu partout.
 - **Wyverne fidèle** : 160 PV une fois apprivoisée (régénération hors combat) ; elle suit son maître à travers les
   portails ; le **Sifflet de wyverne** la rappelle de n'importe où (zone non chargée ou autre dimension comprise) ; à sa
   mort, son œuf revient au maître avec son nom.
@@ -127,6 +140,7 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - Onglet créatif : tous les objets et blocs (boussole du créateur comprise), armure de carapace regroupée.
 
 ### Corrigé
+- La wyverne suit son maître et le rejoint dans une autre dimension de façon fiable.
 - Escaliers du Sanctuaire infernal et des Catacombes : la première marche part du niveau du sol (plus de marche décalée).
 - Wyverne : la tête ne se lève plus au sol (les animations du cou s'ajoutaient deux fois à la pose du modèle).
 - Collision du cube d'onyx (boîte de collision alignée sur le modèle).

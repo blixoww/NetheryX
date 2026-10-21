@@ -82,6 +82,14 @@ public final class GameplayEvents {
             }
             player.removeEffect(net.minecraft.world.effect.MobEffects.WITHER);
         }
+        // Voile ignifuge : dans l'inventaire ou dans une breloque Curios, il donne la resistance au feu
+        if (player.tickCount % 20 == 0) {
+            net.minecraft.world.item.Item veil = com.netheryx.registry.ModItems.FIRE_VEIL.get();
+            if (player.getInventory().contains(new net.minecraft.world.item.ItemStack(veil))
+                    || com.netheryx.util.CuriosCompat.isEquipped(player, veil)) {
+                keep(player, net.minecraft.world.effect.MobEffects.FIRE_RESISTANCE, 0);
+            }
+        }
     }
 
     private static void keep(Player player, net.minecraft.world.effect.MobEffect effect, int amplifier) {

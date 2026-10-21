@@ -13,6 +13,7 @@ SMELT_IF_ON_FIRE = {"function": "minecraft:furnace_smelt", "conditions": [
 
 def generate_loot():
     silk_or("molten_crystal", "molten_shard", [count(2, 4), FORTUNE_ORE, DECAY])
+    silk_or("quartz_cluster", "minecraft:quartz", [count(2, 4), FORTUNE_ORE, DECAY])
     block_table("onyx_crystal_leaves", [{"rolls": 1, "bonus_rolls": 0, "entries": [{"type": "minecraft:alternatives", "children": [
         item("onyx_crystal_leaves", conditions=[SHEARS_OR_SILK]),
         item("onyx_shard", conditions=[{"condition": "minecraft:table_bonus", "enchantment": "minecraft:fortune",
@@ -37,9 +38,9 @@ def generate_loot():
 
 def generate_nest_loot():
     from .data import chest_table
+    # L'oeuf n'est plus dans le coffre : il faut vaincre le gardien du nid
     chest_table("wyvern_nest", [
-        {"rolls": 1, "entries": [item("ash_wyvern_egg")]},
-        {"rolls": {"type": "minecraft:uniform", "min": 2, "max": 4}, "entries": [
+        {"rolls": {"type": "minecraft:uniform", "min": 3, "max": 5}, "entries": [
             item("minecraft:bone", weight=20, functions=[count(2, 6)]),
             item("minecraft:gold_nugget", weight=15, functions=[count(3, 9)]),
             item("cooked_blaze_pork", weight=10, functions=[count(1, 3)]),
@@ -47,6 +48,23 @@ def generate_nest_loot():
             item("magma_shell", weight=6),
             item("minecraft:phantom_membrane", weight=6, functions=[count(1, 2)]),
             item("minecraft:gold_ingot", weight=4, functions=[count(1, 2)])]},
+    ])
+
+
+def generate_forge_loot():
+    from .data import chest_table
+    chest_table("basalt_forge", [
+        {"rolls": {"type": "minecraft:uniform", "min": 4, "max": 6}, "entries": [
+            item("molten_shard", weight=20, functions=[count(2, 6)]),
+            item("basalt_carapace", weight=14, functions=[count(1, 3)]),
+            item("magma_shell", weight=12, functions=[count(1, 2)]),
+            item("onyx", weight=10, functions=[count(1, 3)]),
+            item("minecraft:iron_ingot", weight=10, functions=[count(2, 6)]),
+            item("minecraft:gold_ingot", weight=8, functions=[count(1, 4)]),
+            item("minecraft:netherite_scrap", weight=3),
+            item("nether_lantern", weight=2)]},
+        {"rolls": 1, "entries": [item("minecraft:book", functions=[{"function": "minecraft:enchant_randomly"}])],
+         "conditions": [{"condition": "minecraft:random_chance", "chance": 0.5}]},
     ])
 
 
@@ -64,7 +82,8 @@ def generate_recipes():
 
 def generate_tags():
     mc, fg = "minecraft", "forge"
-    tag("blocks", mc, "mineable/pickaxe", m(["molten_glass", "molten_crystal", "petrified_log"]))
+    tag("blocks", mc, "mineable/pickaxe", m(["molten_glass", "molten_crystal", "petrified_log", "quartz_cluster"]))
+    tag("blocks", mc, "crystal_sound_blocks", m(["quartz_cluster"]))
     tag("blocks", mc, "mineable/hoe", m(["onyx_crystal_leaves"]))
     tag("blocks", mc, "needs_stone_tool", m(["petrified_log"]))
     tag("blocks", mc, "infiniburn_nether", m(["molten_glass"]))
@@ -93,7 +112,8 @@ def generate_tags():
     tag("worldgen/biome", mc, "has_structure/nether_fossil", m(["petrified_onyx_forest"]))
     tag("worldgen/biome", MOD_ID, "has_structure/wyvern_nest", m(["ashen_wastes", "molten_glass_lake", "sulfur_springs",
                                                                   "hellwood_jungle"]) + ["minecraft:basalt_deltas"])
-    tag("worldgen/structure", MOD_ID, "soul_compass_targets", m(["wyvern_nest"]))
+    tag("worldgen/structure", MOD_ID, "soul_compass_targets", m(["wyvern_nest", "basalt_forge"]))
+    tag("worldgen/biome", MOD_ID, "has_structure/basalt_forge", m(["ashen_wastes", "molten_glass_lake"]) + ["minecraft:basalt_deltas"])
 
 
 def generate_advancements():
@@ -116,6 +136,7 @@ def generate_advancements():
 def generate():
     generate_loot()
     generate_nest_loot()
+    generate_forge_loot()
     generate_recipes()
     generate_tags()
     generate_advancements()

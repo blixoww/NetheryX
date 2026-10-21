@@ -1,0 +1,15 @@
+{
+  "type": "netheryx:nether_floor",
+  "biomes": "#netheryx:has_structure/basalt_forge",
+  "step": "top_layer_modification",
+  "spawn_overrides": {},
+  "terrain_adaptation": "beard_thin",
+  "start_pool": "netheryx:basalt_forge/start",
+  "size": 1,
+  "max_y": 100,
+  "min_y": 33,
+  "sink": 0,
+  "footprint": 25,
+  "required_air": 12,
+  "max_distance_from_center": 80
+}

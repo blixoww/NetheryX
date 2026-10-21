@@ -7,7 +7,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:fire_veil",
-      "text": "While it is $(l)anywhere in your inventory$() (or worn in a $(l)Curios charm slot$()), the flames covering your screen when you burn are hidden. Purely visual: you still burn, so pair it with Fire Resistance.",
+      "text": "While it is $(l)anywhere in your inventory$() (or worn in a $(l)Curios charm slot$()), it grants $(l)Fire Resistance$() and hides the flames covering your screen.",
       "link_recipe": true
     },
     {

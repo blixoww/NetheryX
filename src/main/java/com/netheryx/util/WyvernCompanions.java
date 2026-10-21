@@ -70,15 +70,21 @@ public final class WyvernCompanions {
             return;
         }
         List<UUID> followers = FOLLOWERS.remove(player.getUUID());
-        if (followers == null) {
-            return;
-        }
         ServerLevel from = player.server.getLevel(event.getFrom());
         if (from == null) {
             return;
         }
+        if (followers == null) {
+            // Filet de securite : toute wyverne du joueur restee dans l'ancienne dimension et qui ne devait pas attendre
+            followers = new ArrayList<>();
+            for (WyvernRegistry.Entry entry : WyvernRegistry.get(player.server).ownedBy(player.getUUID())) {
+                if (entry.dimension().equals(event.getFrom())) {
+                    followers.add(entry.wyvern());
+                }
+            }
+        }
         for (UUID id : followers) {
-            if (from.getEntity(id) instanceof AshWyvern wyvern) {
+            if (from.getEntity(id) instanceof AshWyvern wyvern && !wyvern.isOrderedToSit()) {
                 bring(wyvern, player);
             }
         }
@@ -125,6 +131,8 @@ public final class WyvernCompanions {
                 bring(wyvern, player);
                 it.remove();
             } else if (--pending.ticksLeft()[0] <= 0) {
+                // Introuvable meme zone chargee : l'entree est perimee, on l'oublie (le joueur pourra en avoir une autre)
+                WyvernRegistry.get(server).remove(pending.entry().wyvern());
                 player.displayClientMessage(Component.translatable("message.netheryx.wyvern_not_found").withStyle(ChatFormatting.GRAY), false);
                 it.remove();
             }

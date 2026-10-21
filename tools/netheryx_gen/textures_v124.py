@@ -110,6 +110,66 @@ def greatsword(u, v):
     return None
 
 
+def magma_bricks_v2():
+    """Briques de magma facon briques du Nether : petites briques biseautees (8 x 4), teinte propre a chaque brique,
+    joints sombres et quelques fissures de magma incandescentes."""
+    img = new()
+    r = rng("magma_bricks_v2")
+    palette = ["#5e1a0e", "#6c2010", "#7a2614", "#882c16", "#963418"]
+    mortar = hexc("#1c0604")
+    for row in range(4):
+        offset = 4 if row % 2 else 0
+        for col in range(-1, 3):
+            x0 = col * 8 + offset
+            base = hexc(r.choice(palette))
+            crack = r.random() < 0.3
+            cx, cy = r.randint(2, 5), r.randint(1, 2)
+            for dy in range(4):
+                for dx in range(8):
+                    x, y = x0 + dx, row * 4 + dy
+                    if not 0 <= x < 16:
+                        continue
+                    if dy == 3 or dx == 7:
+                        img.putpixel((x, y), mortar)
+                        continue
+                    f = 1.0 + (r.random() - 0.5) * 0.12
+                    if dy == 0 or dx == 0:
+                        f += 0.2
+                    elif dy == 2 or dx == 6:
+                        f -= 0.18
+                    img.putpixel((x, y), shade(base, f))
+            if crack:
+                for (dx, dy, col_hex) in ((cx, cy, "#ff8a1a"), (cx + 1, cy, "#ffb040"), (cx + 2, cy + (1 if cy == 1 else -1), "#e0601a")):
+                    x = x0 + dx
+                    if 0 <= x < 16:
+                        img.putpixel((x, row * 4 + dy), hexc(col_hex))
+    return img
+
+
+def rich_quartz_overlay():
+    """Calque du minerai de quartz riche, dans l'esprit du minerai de quartz vanilla (petits eclats blancs ombres
+    de rouge sombre), mais plus dense : on le pose sur la netherrack vanilla."""
+    img = new()
+    tones = {"w": "#ffffff", "h": "#ece6de", "m": "#d4ccc2", "d": "#b0a69c"}
+    shapes = [["hw", "md"], [".h.", "hwm", ".md"], ["hm", "m."], ["wh", ".d"], [".hm", "hwd"]]
+    spots = [(1, 1), (6, 0), (11, 2), (3, 5), (9, 6), (13, 7), (0, 9), (6, 10), (11, 11), (2, 13), (8, 14), (13, 13)]
+    r = rng("rich_quartz_v2")
+    cells = {}
+    for (sx, sy) in spots:
+        shape = r.choice(shapes)
+        for dy, row in enumerate(shape):
+            for dx, ch in enumerate(row):
+                if ch in tones:
+                    cells[((sx + dx) % 16, (sy + dy) % 16)] = hexc(tones[ch])
+    for (x, y) in list(cells):
+        for (sx, sy) in ((x + 1, y + 1), (x, y + 1)):
+            if (sx % 16, sy % 16) not in cells:
+                img.putpixel((sx % 16, sy % 16), hexc("#3a0c0c", 170))
+    for (x, y), col in cells.items():
+        img.putpixel((x, y), col)
+    return img
+
+
 def generate():
     save(firefly_jar("#c8d0d4", "#ffb020", "#fff0a0"), "block", "ember_firefly_jar.png")
     save(firefly_jar("#c8d0d4", "#ffb020", "#fff0a0", item=True), "item", "ember_firefly_jar.png")
@@ -128,3 +188,6 @@ def generate():
     save(wyvern_egg(), "item", "ash_wyvern_egg.png")
     save(tool_image(greatsword, -7, "abyssal"), "item", "abyssal_blade.png")
     save(wyvern_whistle(), "item", "wyvern_whistle.png")
+    save(magma_bricks_v2(), "block", "magma_bricks.png")
+    save(rich_quartz_overlay(), "block", "rich_quartz_ore_overlay.png")
+    save(crystals("#c8bcb0", "#ece6de", "#ffffff", "quartz_cluster"), "block", "quartz_cluster.png")

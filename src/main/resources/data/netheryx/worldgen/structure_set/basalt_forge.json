@@ -1,0 +1,18 @@
+{
+  "structures": [
+    {
+      "structure": "netheryx:basalt_forge",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 18,
+    "separation": 6,
+    "salt": 640918273,
+    "exclusion_zone": {
+      "other_set": "minecraft:nether_complexes",
+      "chunk_count": 3
+    }
+  }
+}

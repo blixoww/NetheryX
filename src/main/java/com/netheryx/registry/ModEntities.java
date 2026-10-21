@@ -92,9 +92,9 @@ public final class ModEntities {
     public static final RegistryObject<EntityType<AshWyvern>> ASH_WYVERN = register("ash_wyvern",
             EntityType.Builder.of(AshWyvern::new, MobCategory.CREATURE).sized(2.4F, 1.9F).fireImmune().clientTrackingRange(10));
     public static final RegistryObject<EntityType<Firefly>> EMBER_FIREFLY = register("ember_firefly",
-            EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.3F, 0.3F).fireImmune().clientTrackingRange(6));
+            EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.5F, 0.5F).fireImmune().clientTrackingRange(6));
     public static final RegistryObject<EntityType<Firefly>> SOUL_FIREFLY = register("soul_firefly",
-            EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.3F, 0.3F).fireImmune().clientTrackingRange(6));
+            EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.5F, 0.5F).fireImmune().clientTrackingRange(6));
     public static final RegistryObject<EntityType<BlazePig>> BLAZE_PIG = register("blaze_pig",
             EntityType.Builder.of(BlazePig::new, MobCategory.CREATURE).sized(0.8F, 0.8F).fireImmune().clientTrackingRange(10));
     public static final RegistryObject<EntityType<CrystalSnail>> CRYSTAL_SNAIL = register("crystal_snail",

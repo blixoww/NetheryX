@@ -7,7 +7,7 @@
   "spawners": [
     {
       "type": "netheryx:cinder_lizard",
-      "weight": 14,
+      "weight": 18,
       "minCount": 1,
       "maxCount": 3
     }

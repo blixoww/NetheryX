@@ -9,7 +9,7 @@
       "entity": "netheryx:ash_wyvern",
       "scale": 0.3,
       "offset": 0.0,
-      "text": "Où la trouver : les $(l)Nids de wyverne$() (pitons rocheux coiffés d'un nid d'os, dans les Terres cendrées, les deltas de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) contiennent un $(item)œuf$() et une wyverne sauvage ; d'autres errent dans ces biomes. Apprivoisez une wyverne sauvage avec de la $(item)viande$(), ou faites éclore l'œuf : elle vous appartient."
+      "text": "Où la trouver : les $(l)Nids de wyverne$() (pitons rocheux coiffés d'un nid d'os, dans les Terres cendrées, les deltas de basalte, les Lacs de verre en fusion, les Sources sulfureuses et la Jungle infernale) sont gardés par une wyverne farouche : $(l)vainquez-la$() et elle laisse son $(item)œuf$(). Faites-le éclore : la wyverne est à vous. Des wyvernes sauvages errent aussi et s'apprivoisent avec de la $(item)viande$(). $(l)Une seule wyverne par joueur.$()"
     },
     {
       "type": "patchouli:text",

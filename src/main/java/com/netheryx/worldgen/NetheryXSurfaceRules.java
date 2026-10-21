@@ -93,9 +93,14 @@ public final class NetheryXSurfaceRules {
 
                 SurfaceRules.ifTrue(SurfaceRules.isBiome(ModBiomes.QUARTZ_REEF), SurfaceRules.sequence(
                         SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, SurfaceRules.sequence(
-                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, 0.25D), state(Blocks.SMOOTH_QUARTZ)),
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, 0.35D), state(Blocks.SMOOTH_QUARTZ)),
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, 0.15D), state(Blocks.QUARTZ_BRICKS)),
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, -0.1D), state(Blocks.POLISHED_BLACKSTONE)),
                                 state(Blocks.BLACKSTONE))),
-                        SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(Blocks.BLACKSTONE)))),
+                        SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(Blocks.BLACKSTONE)),
+                        SurfaceRules.ifTrue(SurfaceRules.ON_CEILING, SurfaceRules.sequence(
+                                SurfaceRules.ifTrue(SurfaceRules.noiseCondition(Noises.NETHERRACK, 0.3D), state(Blocks.SMOOTH_QUARTZ)),
+                                state(Blocks.BLACKSTONE))))),
 
                 state(Blocks.NETHERRACK)
         );

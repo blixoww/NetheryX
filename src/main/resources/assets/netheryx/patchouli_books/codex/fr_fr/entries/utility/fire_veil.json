@@ -7,7 +7,7 @@
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:fire_veil",
-      "text": "Tant qu'il est $(l)n'importe où dans l'inventaire$() (ou porté dans un $(l)emplacement breloque de Curios$()), les flammes qui couvrent l'écran quand vous brûlez sont masquées. Purement visuel : vous brûlez toujours, associez-le à la résistance au feu.",
+      "text": "Tant qu'il est $(l)n'importe où dans l'inventaire$() (ou porté dans un $(l)emplacement breloque de Curios$()), il donne la $(l)résistance au feu$() et masque les flammes qui couvrent l'écran.",
       "link_recipe": true
     },
     {

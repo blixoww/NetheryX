@@ -93,9 +93,9 @@
       },
       {
         "type": "netheryx:ember_firefly",
-        "weight": 45,
-        "minCount": 4,
-        "maxCount": 8
+        "weight": 60,
+        "minCount": 6,
+        "maxCount": 10
       }
     ],
     "axolotls": [],

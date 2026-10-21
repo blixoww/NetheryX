@@ -2,7 +2,7 @@
   "name": "Fireflies",
   "icon": "netheryx:ember_firefly_jar",
   "category": "netheryx:creatures",
-  "sortnum": 99,
+  "sortnum": 100,
   "pages": [
     {
       "type": "patchouli:entity",

@@ -22,7 +22,6 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.FollowOwnerGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.SitWhenOrderedToGoal;
@@ -89,13 +88,15 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(1, new SitWhenOrderedToGoal(this));
         this.goalSelector.addGoal(2, new WyvernAerialCombatGoal(this));
-        this.goalSelector.addGoal(5, new FollowOwnerGoal(this, 1.1D, 10.0F, 3.0F, false));
+        this.goalSelector.addGoal(5, new WyvernFollowOwnerGoal(this));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new OwnerHurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new OwnerHurtTargetGoal(this));
         this.targetSelector.addGoal(3, new HurtByTargetGoal(this));
+        this.targetSelector.addGoal(4, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(this, Player.class, 10,
+                true, false, target -> this.isNestGuardian() && !this.isTame()));
     }
 
     @Override
@@ -105,6 +106,47 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     }
 
     // --- Compagnon : sante, registre, oeuf a la mort ---------------------------------------------------
+
+    /** Gardien d'un nid de wyverne : agressif, impossible a apprivoiser, il laisse son oeuf quand on le bat. */
+    private boolean nestGuardian;
+    private final com.netheryx.util.BossArena nestArena = new com.netheryx.util.BossArena(14.0D, 20.0D, 20.0D);
+
+    public boolean isNestGuardian() {
+        return this.nestGuardian;
+    }
+
+    /** Vrai (et previent le joueur) s'il possede deja une wyverne : une seule par joueur. */
+    public static boolean hasWyvern(net.minecraft.server.level.ServerPlayer player) {
+        if (com.netheryx.util.WyvernRegistry.get(player.server).ownedBy(player.getUUID()).isEmpty()) {
+            return false;
+        }
+        player.displayClientMessage(net.minecraft.network.chat.Component.translatable("message.netheryx.wyvern_already")
+                .withStyle(net.minecraft.ChatFormatting.RED), true);
+        return true;
+    }
+
+    @Override
+    public void addAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("NestGuardian", this.nestGuardian);
+        this.nestArena.save(tag);
+    }
+
+    @Override
+    public void readAdditionalSaveData(net.minecraft.nbt.CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.nestGuardian = tag.getBoolean("NestGuardian");
+        this.nestArena.load(tag);
+        if (this.nestGuardian && !this.isTame()) {
+            var health = this.getAttribute(Attributes.MAX_HEALTH);
+            if (health != null) {
+                health.setBaseValue(120.0D);
+            }
+            if (!tag.contains("Health")) {
+                this.setHealth(this.getMaxHealth());
+            }
+        }
+    }
 
     public static final double WILD_HEALTH = 80.0D;
     public static final double TAMED_HEALTH = 160.0D;
@@ -136,6 +178,15 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
 
     @Override
     public void die(DamageSource source) {
+        if (this.level() instanceof ServerLevel server && this.nestGuardian && !this.isTame()) {
+            ItemStack egg = new ItemStack(com.netheryx.registry.ModItems.ASH_WYVERN_EGG.get());
+            net.minecraft.world.entity.item.ItemEntity drop = this.spawnAtLocation(egg, 1.0F);
+            if (drop != null) {
+                drop.setUnlimitedLifetime();
+                drop.setGlowingTag(true);
+            }
+            server.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, this.getX(), this.getY(1.0D), this.getZ(), 60, 1.0D, 1.0D, 1.0D, 0.3D);
+        }
         if (this.level() instanceof ServerLevel server && this.isTame()) {
             // Elle ne disparait jamais vraiment : son oeuf revient a son maitre (ou tombe a ses pieds), avec son nom
             ItemStack egg = new ItemStack(com.netheryx.registry.ModItems.ASH_WYVERN_EGG.get());
@@ -177,8 +228,14 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (!this.isTame()) {
-            // Wyverne sauvage (oeuf d'apparition) : se laisse apprivoiser avec de la viande
+            if (this.isNestGuardian()) {
+                return InteractionResult.PASS; // le gardien du nid ne se laisse pas apprivoiser : il faut le vaincre
+            }
+            // Wyverne sauvage : se laisse apprivoiser avec de la viande (une seule wyverne par joueur)
             if (this.isFood(stack)) {
+                if (player instanceof net.minecraft.server.level.ServerPlayer serverPlayer && hasWyvern(serverPlayer)) {
+                    return InteractionResult.FAIL;
+                }
                 if (!this.level().isClientSide) {
                     if (!player.getAbilities().instabuild) {
                         stack.shrink(1);
@@ -285,6 +342,9 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
         this.setNoGravity((this.isVehicle() && !this.onGround()) || this.isAerial());
         super.tick();
         if (this.level() instanceof ServerLevel server) {
+            if (this.nestGuardian && !this.isTame()) {
+                this.nestArena.tick(this);
+            }
             if (this.isTame() && this.tickCount % 100 == 0) {
                 this.updateRegistry(server);
             }
@@ -334,16 +394,27 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     /** Souffle de feu : un cone devant la gueule. Il embrase les creatures, jamais les blocs. */
     private void tickBreath(ServerLevel level) {
         LivingEntity target = this.getTarget();
-        Vec3 mouth = this.position().add(Vec3.directionFromRotation(0.0F, this.getYRot()).scale(3.0D)).add(0.0D, 1.3D, 0.0D);
+        Vec3 mouth = this.position().add(Vec3.directionFromRotation(0.0F, this.getYRot()).scale(2.6D)).add(0.0D, 1.25D, 0.0D);
         Vec3 dir = target != null ? target.getEyePosition().subtract(mouth).normalize()
                 : Vec3.directionFromRotation(this.getXRot(), this.getYRot());
-        for (int step = 1; step <= 10; step++) {
-            Vec3 p = mouth.add(dir.scale(step * BREATH_RANGE / 10.0D));
-            double spread = 0.15D + step * 0.09D;
-            level.sendParticles(ParticleTypes.FLAME, p.x, p.y, p.z, 3, spread, spread, spread, 0.01D);
-            if (step % 3 == 0) {
-                level.sendParticles(ParticleTypes.LARGE_SMOKE, p.x, p.y, p.z, 1, spread, spread, spread, 0.01D);
-            }
+        // Jet de flammes : chaque particule part de la gueule avec une vitesse propre, en cone, comme un vrai crachat
+        for (int i = 0; i < 18; i++) {
+            Vec3 jet = dir.add(this.random.nextGaussian() * 0.08D, this.random.nextGaussian() * 0.08D, this.random.nextGaussian() * 0.08D)
+                    .normalize();
+            double speed = 0.55D + this.random.nextDouble() * 0.45D;
+            level.sendParticles(i % 6 == 0 ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.FLAME, mouth.x, mouth.y, mouth.z, 0,
+                    jet.x, jet.y, jet.z, speed);
+        }
+        for (int i = 0; i < 4; i++) {
+            Vec3 jet = dir.add(this.random.nextGaussian() * 0.15D, this.random.nextGaussian() * 0.1D, this.random.nextGaussian() * 0.15D);
+            level.sendParticles(ModParticles.EMBER_SPARK.get(), mouth.x, mouth.y, mouth.z, 0, jet.x, jet.y, jet.z, 0.7D);
+        }
+        level.sendParticles(ParticleTypes.LARGE_SMOKE, mouth.x, mouth.y, mouth.z, 0, dir.x, dir.y + 0.1D, dir.z, 0.25D);
+        // Impact : gerbe de flammes la ou le souffle touche
+        Vec3 impact = mouth.add(dir.scale(BREATH_RANGE * 0.85D));
+        level.sendParticles(ParticleTypes.FLAME, impact.x, impact.y, impact.z, 6, 0.6D, 0.4D, 0.6D, 0.04D);
+        if (this.breathTicks % 6 == 0) {
+            this.playSound(SoundEvents.BLAZE_SHOOT, 1.0F, 0.6F + this.random.nextFloat() * 0.2F);
         }
         if (this.breathTicks % 4 != 0) {
             return;

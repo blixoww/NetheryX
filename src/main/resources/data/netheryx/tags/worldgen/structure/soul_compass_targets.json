@@ -8,6 +8,7 @@
     "minecraft:fortress",
     "netheryx:nomad_caravan",
     "netheryx:hidden_cache",
-    "netheryx:wyvern_nest"
+    "netheryx:wyvern_nest",
+    "netheryx:basalt_forge"
   ]
 }

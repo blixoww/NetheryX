@@ -1,0 +1,13 @@
+{
+  "name": "Basalt Forge",
+  "icon": "minecraft:blast_furnace",
+  "category": "netheryx:structures",
+  "sortnum": 99,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Ashen Wastes, Basalt Deltas and Molten Glass Lakes. A ring of broken basalt columns around an ancient forge: lava basin, Onyx anvil, blast furnaces and a smoking chimney. It is the lair of the $(l)Basalt Golem$(), which never leaves it. Its chest holds Molten Glass Shards, carapaces, onyx and sometimes netherite scrap or a Nether Lantern.",
+      "title": "Forge de basalte"
+    }
+  ]
+}

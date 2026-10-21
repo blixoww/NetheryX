@@ -3,7 +3,7 @@
   "temperature": 2.0,
   "downfall": 0.0,
   "effects": {
-    "fog_color": 3811888,
+    "fog_color": 5916240,
     "sky_color": 3344392,
     "water_color": 4159204,
     "water_fog_color": 329011,
@@ -11,7 +11,7 @@
       "options": {
         "type": "netheryx:quartz_glint"
       },
-      "probability": 0.01
+      "probability": 0.03
     },
     "ambient_sound": "minecraft:ambient.nether_wastes.loop",
     "mood_sound": {
@@ -61,12 +61,24 @@
     "creature": [
       {
         "type": "netheryx:magmafish",
-        "weight": 25,
+        "weight": 30,
         "minCount": 3,
-        "maxCount": 5
+        "maxCount": 6
       },
       {
         "type": "netheryx:magma_crab",
+        "weight": 35,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "netheryx:crystal_snail",
+        "weight": 20,
+        "minCount": 2,
+        "maxCount": 3
+      },
+      {
+        "type": "netheryx:blaze_pig",
         "weight": 15,
         "minCount": 2,
         "maxCount": 3
@@ -78,7 +90,14 @@
         "maxCount": 2
       }
     ],
-    "ambient": [],
+    "ambient": [
+      {
+        "type": "netheryx:ember_firefly",
+        "weight": 30,
+        "minCount": 5,
+        "maxCount": 8
+      }
+    ],
     "axolotls": [],
     "underground_water_creature": [],
     "water_creature": [],
@@ -115,7 +134,9 @@
     ],
     [],
     [
-      "netheryx:quartz_spire"
+      "netheryx:quartz_spire",
+      "netheryx:quartz_cluster_patch",
+      "netheryx:quartz_cluster_ceiling"
     ],
     []
   ]

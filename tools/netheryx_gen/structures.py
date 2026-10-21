@@ -257,6 +257,26 @@ class Dungeon(Template):
             self.stair(x0 - 1, y, z, stairs, "east", "top")
             self.stair(x1 + 1, y, z, stairs, "west", "top")
 
+    def connect_fences(self):
+        """Relie les barrieres a leurs voisines (barrieres, portillons, blocs pleins)."""
+        def solid(pos):
+            b = self.blocks.get(pos)
+            if b is None:
+                return False
+            n = b[0]
+            return not (n.endswith(":air") or any(k in n for k in ("lantern", "carpet", "torch", "chain", "flower", "bloom", "daisy",
+                                                                  "tulip", "glowcap", "crop", "bush", "roots", "sprouts", "grass",
+                                                                  "lily", "fungus", "slab", "stairs", "bed", "campfire")))
+        for (x, y, z), (name, props) in list(self.blocks.items()):
+            if "fence" not in name or "gate" in name:
+                continue
+            p = dict(props)
+            for face, (dx, dz) in (("north", (0, -1)), ("south", (0, 1)), ("east", (1, 0)), ("west", (-1, 0))):
+                nb = self.blocks.get((x + dx, y, z + dz))
+                p[face] = str(nb is not None and ("fence" in nb[0] or solid((x + dx, y, z + dz)))).lower()
+            p["waterlogged"] = "false"
+            self.set(x, y, z, name, nbt=self.block_nbt.get((x, y, z)), **p)
+
     def candle(self, x, y, z, count=None):
         self.set(x, y, z, "minecraft:candle", candles=str(count or self.rng.randint(1, 4)), lit="true", waterlogged="false")
 
@@ -920,42 +940,98 @@ def traveler_camp():
 
 
 def nether_garden():
-    """Jardin du Nether : potager cloture (ble de cendre, piments, baies) et cabane du jardinier."""
-    d = Dungeon(15, 7, 15, "nether_garden")
-    d.air(0, 1, 0, 14, 6, 14)
-    d.box(0, 0, 0, 14, 0, 14, "nether_grass_block")
-    for k in range(15):
-        for (x, z) in ((k, 0), (k, 14), (0, k), (14, k)):
-            d.set(x, 1, z, "ember_fence", north=str(z != 0 and x in (0, 14)).lower(), south=str(z != 14 and x in (0, 14)).lower(),
-                  east=str(x != 14 and z in (0, 14)).lower(), west=str(x != 0 and z in (0, 14)).lower(), waterlogged="false")
-    d.air(7, 1, 14, 7, 1, 14)
-    d.set(7, 1, 14, "ember_fence_gate", facing="south", in_wall="false", open="false", powered="false")
-    # Rangs de cultures
-    for z, crop, soil in ((2, "cinder_wheat_crop", "nether_grass_block"), (4, "blaze_pepper_crop", "minecraft:soul_soil"),
-                          (6, "cinder_wheat_crop", "nether_grass_block"), (8, "soul_tuber_crop", "minecraft:soul_soil")):
-        for x in range(2, 8):
-            d.set(x, 0, z, soil)
-            d.set(x, 1, z, crop, age=str(d.rng.randrange(4)))
-    for x in (2, 4, 6):
-        d.set(x, 1, 11, "fire_berry_bush", age="3")
-    for (x, z) in ((1, 12), (8, 12), (1, 1), (8, 1)):
-        d.set(x, 1, z, d.pick([("ember_bloom", 1), ("ash_daisy", 1), ("crimson_bellflower", 1), ("sulfur_tulip", 1)]))
-    # Cabane
-    d.box(9, 0, 2, 13, 0, 7, "withered_planks")
-    d.walls(9, 1, 2, 13, 3, 7, "withered_planks")
-    d.air(10, 1, 3, 12, 3, 6)
-    for (x, z) in ((9, 2), (13, 2), (9, 7), (13, 7)):
-        d.pillar(x, z, 1, 3, "ember_stem")
-    d.box(9, 4, 2, 13, 4, 7, "ember_slab", type="bottom", waterlogged="false")
-    d.set(11, 1, 7, "ember_door", facing="south", half="lower", hinge="left", open="false", powered="false")
-    d.set(11, 2, 7, "ember_door", facing="south", half="upper", hinge="left", open="false", powered="false")
-    d.set(9, 2, 4, "minecraft:air")
-    d.set(13, 2, 5, "minecraft:air")
-    d.chest(12, 1, 3, "nether_garden", facing="south")
-    d.set(10, 1, 3, "minecraft:composter", level="3")
-    d.set(10, 1, 6, "minecraft:barrel", facing="up", open="false")
-    d.hanging_lantern(11, 4, 5, 1, "minecraft:lantern")
-    d.set(12, 1, 6, "potted_glowcap")
+    """Jardin du Nether : enclos de haies de verrue, allees en croix sous une pergola, quatre carres de culture
+    sureleves, fontaine de glace de givre, massifs de fleurs, serre en verre de quartz et cabane du jardinier."""
+    S = 21
+    c = S // 2
+    d = Dungeon(S, 9, S, "nether_garden")
+    d.air(0, 1, 0, S - 1, 8, S - 1)
+    d.box(0, 0, 0, S - 1, 0, S - 1, "nether_grass_block")
+    # Haie d'enceinte (deux blocs de haut), creneaux de lanternes, porche au sud
+    for k in range(S):
+        for (x, z) in ((k, 0), (k, S - 1), (0, k), (S - 1, k)):
+            d.box(x, 1, z, x, 2, z, "ember_wart_block")
+            if k % 5 == 0:
+                d.set(x, 3, z, "ember_fence")
+                d.lantern(x, 4, z, "minecraft:lantern")
+    d.air(c - 1, 1, S - 1, c + 1, 3, S - 1)
+    for x in (c - 2, c + 2):
+        d.pillar(x, S - 1, 1, 4, "ember_stem")
+    d.box(c - 2, 5, S - 1, c + 2, 5, S - 1, "ember_slab", type="bottom", waterlogged="false")
+    d.set(c, 4, S - 1, "minecraft:lantern", hanging="true", waterlogged="false")
+    # Allees en croix et pergola
+    d.box(c - 1, 0, 1, c + 1, 0, S - 2, "minecraft:polished_blackstone_bricks")
+    d.box(1, 0, c - 1, S - 2, 0, c + 1, "minecraft:polished_blackstone_bricks")
+    for z in range(3, S - 2, 4):
+        if abs(z - c) > 2:
+            for x in (c - 2, c + 2):
+                d.pillar(x, z, 1, 3, "ember_stem")
+            d.box(c - 2, 4, z, c + 2, 4, z, "ember_slab", type="bottom", waterlogged="false")
+            d.set(c, 3, z, "ember_firefly_jar", hanging="true", waterlogged="false")
+    # Fontaine de givre au centre
+    d.box(c - 2, 1, c - 2, c + 2, 1, c + 2, "rimestone_brick_wall", up="true")
+    d.box(c - 1, 1, c - 1, c + 1, 1, c + 1, "rime_ice")
+    d.pillar(c, c, 2, 3, "rimestone_bricks")
+    d.set(c, 4, c, "quartz_lamp")
+    for (x, z) in ((c - 1, c - 1), (c + 1, c + 1), (c - 1, c + 1), (c + 1, c - 1)):
+        d.set(x, 2, z, "rime_crystal", facing="up", waterlogged="false")
+    # Quatre carres de culture sureleves, bordes de troncs
+    beds = [((c + 3, 2), "cinder_wheat_crop", "nether_grass_block"), ((2, c + 3), "soul_tuber_crop", "minecraft:soul_soil"),
+            ((c + 3, c + 3), "blaze_pepper_crop", "minecraft:soul_soil")]
+    for (x0, z0), crop, soil in beds:
+        x1, z1 = x0 + 5, z0 + 5
+        for x in range(x0, x1 + 1):
+            for z in range(z0, z1 + 1):
+                if x in (x0, x1) or z in (z0, z1):
+                    d.set(x, 1, z, "ember_stem", axis="x" if z in (z0, z1) else "z")
+                else:
+                    d.set(x, 1, z, soil)
+                    # Le carre des piments alterne avec des rangs de baies de feu
+                    if crop == "blaze_pepper_crop" and z % 2 == 0:
+                        d.set(x, 2, z, "fire_berry_bush", age="3")
+                    else:
+                        d.set(x, 2, z, crop, age=str(d.rng.randrange(2, 4)))
+    # Massifs de fleurs le long de la haie
+    flowers = [("ember_bloom", 3), ("ash_daisy", 3), ("crimson_bellflower", 3), ("sulfur_tulip", 3), ("glowcap", 2),
+               ("blazing_grass", 2), ("hellfern", 1)]
+    for k in range(1, S - 1):
+        for (x, z) in ((k, 1), (1, k), (S - 2, k)):
+            if d.blocks.get((x, 1, z), ("minecraft:air",))[0].endswith(":air") and d.rng.random() < 0.55:
+                f = d.pick(flowers)
+                if f == "hellfern":
+                    d.set(x, 1, z, f, half="lower")
+                    d.set(x, 2, z, f, half="upper")
+                else:
+                    d.set(x, 1, z, f)
+    # Serre en verre de quartz (quart nord-ouest) : luminelles, coffre et composteur
+    gx0, gx1, gz0, gz1 = 2, 7, 2, 7
+    for x in range(gx0, gx1 + 1):
+        for z in range(gz0, gz1 + 1):
+            d.set(x, 0, z, "minecraft:soul_soil")
+            edge_x, edge_z = x in (gx0, gx1), z in (gz0, gz1)
+            for y in range(1, 4):
+                if edge_x and edge_z:
+                    d.set(x, y, z, "ember_stem", axis="y")
+                elif edge_z:
+                    d.set(x, y, z, "quartz_glass_pane", east="true", west="true", north="false", south="false", waterlogged="false")
+                elif edge_x:
+                    d.set(x, y, z, "quartz_glass_pane", north="true", south="true", east="false", west="false", waterlogged="false")
+                else:
+                    d.set(x, y, z, AIR)
+            d.set(x, 4, z, "ember_stem" if edge_x and edge_z else "quartz_glass")
+            if not (edge_x or edge_z):
+                d.set(x, 1, z, d.pick([("glowcap", 3), ("crimson_bellflower", 1), ("soul_lily", 1)]))
+    d.air(gx1, 1, 5, gx1, 2, 5)
+    d.box(gx1 + 1, 0, 5, c - 2, 0, 5, "minecraft:polished_blackstone_bricks")
+    d.chest(gx0 + 1, 1, gz0 + 1, "nether_garden", facing="south")
+    d.set(gx0 + 1, 1, gz1 - 1, "minecraft:composter", level="4")
+    d.set(4, 3, 4, "soul_firefly_jar", hanging="true", waterlogged="false")
+    # Banc et pots de fleurs le long de l'allee
+    for x in (c + 3, c + 4):
+        d.stair(x, 1, c - 2, "ember_stairs", "south")
+    for (x, z) in ((c + 6, c - 2), (c - 6, c + 2)):
+        d.set(x, 1, z, "potted_" + d.pick([("ember_bloom", 1), ("glowcap", 1), ("soul_lily", 1)]))
+    d.connect_fences()
     d.save("nether_garden")
 
 
@@ -987,45 +1063,155 @@ def hidden_cache():
 
 
 def nomad_caravan():
-    """Caravane nomade : deux tentes de verrutige, un enclos a lezards, un feu de camp et le marchand piglin."""
-    d = Dungeon(19, 8, 15, "nomad_caravan")
-    d.air(0, 1, 0, 18, 7, 14)
-    d.box(1, 0, 1, 17, 0, 13, [("minecraft:netherrack", 40), ("wart_moss", 25), ("minecraft:soul_soil", 15), ("minecraft:blackstone", 20)])
-    for (x0, color) in ((2, "minecraft:red_wool"), (11, "minecraft:orange_wool")):
-        for z in range(2, 8):
-            for (y, xs) in ((1, (x0, x0 + 6)), (2, (x0 + 1, x0 + 5)), (3, (x0 + 2, x0 + 4))):
-                for x in xs:
+    """Caravane nomade : grande tente du marchand a rayures, tente de repos, chariot bache, enclos a lezards,
+    feu de camp entoure de bancs, lampadaires et etals."""
+    S = 25
+    d = Dungeon(S, 9, S, "nomad_caravan")
+    d.air(0, 1, 0, S - 1, 8, S - 1)
+    d.box(0, 0, 0, S - 1, 0, S - 1, [("minecraft:netherrack", 35), ("wart_moss", 25), ("minecraft:soul_soil", 25), ("minecraft:blackstone", 15)])
+    d.box(11, 0, 1, 13, 0, S - 2, "minecraft:soul_soil")
+    d.box(1, 0, 11, S - 2, 0, 13, "minecraft:soul_soil")
+
+    def striped_tent(x0, z0, width, depth, colors, open_face="south"):
+        """Tente en pignon : la toile monte par paliers vers le faitage, rayee de deux couleurs."""
+        half = width // 2
+        for k in range(half + 1):
+            y = 1 + k
+            for z in range(z0, z0 + depth):
+                color = colors[(z - z0) % 2]
+                for x in (x0 + k, x0 + width - 1 - k):
                     d.set(x, y, z, color)
-            d.set(x0 + 3, 4, z, "wartstalk_planks")
-        for y in range(1, 5):
-            d.set(x0 + 3, y, 8, "wartstalk_fence", north="true", south="false", east="false", west="false", waterlogged="false")
-        d.box(x0 + 1, 0, 3, x0 + 5, 0, 6, "wartstalk_planks")
-        d.set(x0 + 3, 1, 3, "minecraft:magenta_carpet" if x0 == 2 else "minecraft:yellow_carpet")
-    d.chest(3, 1, 3, "nomad_caravan", facing="south")
-    d.barrel(7, 1, 3, "nomad_caravan")
-    d.set(12, 1, 3, "infernal_cauldron", doses="0")
-    d.set(16, 1, 3, "lava_trap")
-    d.lantern(4, 1, 6, "ward_lantern")
-    d.lantern(14, 1, 6, "minecraft:soul_lantern")
+                    for yy in range(1, y):
+                        if k == 0:
+                            d.set(x, yy, z, color)
+        # Pignon du fond ferme, avant ouvert avec deux mats
+        for k in range(half + 1):
+            for x in range(x0 + k, x0 + width - k):
+                for y in range(1, 2 + k):
+                    if open_face == "south":
+                        d.set(x, y, z0, colors[0])
+        for x in (x0, x0 + width - 1):
+            d.pillar(x, z0 + depth, 1, 3, "wartstalk_fence")
+        d.box(x0 + 1, 0, z0 + 1, x0 + width - 2, 0, z0 + depth - 1, "wartstalk_planks")
+        d.box(x0 + 2, 1, z0 + 1, x0 + width - 3, 1, z0 + depth - 2, "minecraft:red_carpet")
+
+    # Grande tente du marchand (nord-ouest) : comptoir, marchandises, coffre
+    striped_tent(1, 1, 9, 8, ("minecraft:red_wool", "minecraft:white_wool"))
+    for x in range(2, 9):
+        d.set(x, 1, 8, "minecraft:barrel", facing="up", open="false") if x in (2, 8) else d.set(x, 1, 8, "wartstalk_slab", type="top", waterlogged="false")
+    d.chest(2, 1, 2, "nomad_caravan", facing="south")
+    d.barrel(8, 1, 2, "nomad_caravan")
+    d.set(3, 1, 2, "infernal_cauldron", doses="0")
+    d.set(7, 1, 2, "minecraft:barrel", facing="up", open="false")
+    d.set(5, 4, 4, "minecraft:lantern", hanging="true", waterlogged="false")
+    d.set(5, 5, 4, "minecraft:chain", axis="y", waterlogged="false")
+    d.guard(5, 1, 5, "piglin_merchant")
+    # Tente de repos (nord-est) : deux lits, coffre
+    striped_tent(15, 1, 9, 8, ("minecraft:orange_wool", "minecraft:yellow_wool"))
+    for x in (17, 21):
+        d.set(x, 1, 3, "minecraft:red_bed", facing="south", part="head", occupied="false")
+        d.set(x, 1, 4, "minecraft:red_bed", facing="south", part="foot", occupied="false")
+    d.chest(19, 1, 2, "nomad_caravan", facing="south")
+    d.set(19, 4, 5, "minecraft:soul_lantern", hanging="true", waterlogged="false")
     # Feu de camp central et bancs
-    d.set(9, 1, 11, "minecraft:campfire", lit="true", facing="north", signal_fire="false", waterlogged="false")
-    d.set(7, 1, 11, "wartstalk_stem", axis="z")
-    d.set(11, 1, 11, "wartstalk_stem", axis="z")
-    # Enclos a lezards
-    for x in range(13, 18):
-        for z in (10, 13):
-            d.set(x, 1, z, "wartstalk_fence", north="false", south="false", east=str(x < 17).lower(), west=str(x > 13).lower(),
-                  waterlogged="false")
-    for z in range(10, 14):
-        for x in (13, 17):
-            d.set(x, 1, z, "wartstalk_fence", north=str(z > 10).lower(), south=str(z < 13).lower(), east="false", west="false",
-                  waterlogged="false")
-    d.set(13, 1, 11, "wartstalk_fence_gate", facing="west", in_wall="false", open="false", powered="false")
-    d.guard(15, 1, 11, "cinder_lizard")
-    d.guard(9, 1, 8, "piglin_merchant")
-    d.set(1, 1, 12, "crimson_bellflower")
-    d.set(6, 1, 13, "minecraft:crimson_roots")
+    d.set(12, 1, 12, "minecraft:campfire", lit="true", facing="north", signal_fire="false", waterlogged="false")
+    for (x, z, axis) in ((9, 12, "z"), (15, 12, "z"), (12, 9, "x"), (12, 15, "x")):
+        for k in (-1, 0, 1):
+            dx, dz = (0, k) if axis == "z" else (k, 0)
+            d.set(x + dx, 1, z + dz, "stripped_wartstalk_stem", axis=axis)
+    # Chariot bache (sud-ouest)
+    d.box(3, 1, 16, 10, 1, 20, "wartstalk_planks")
+    for x in (4, 9):
+        for z in (15, 21):
+            d.set(x, 1, z, "wartstalk_stem", axis="z")
+            d.set(x, 0, z, "wartstalk_stem", axis="z")
+    for x in range(3, 11):
+        for y in (2, 3):
+            d.set(x, y, 16, "minecraft:white_wool")
+            d.set(x, y, 20, "minecraft:white_wool")
+        d.box(x, 4, 16, x, 4, 20, "minecraft:white_wool")
+        if x % 3 == 0:
+            d.box(x, 2, 16, x, 4, 16, "minecraft:brown_wool")
+            d.box(x, 2, 20, x, 4, 20, "minecraft:brown_wool")
+            d.box(x, 4, 17, x, 4, 19, "minecraft:brown_wool")
+    for (x, z) in ((5, 17), (6, 19), (8, 18)):
+        d.set(x, 2, z, "minecraft:barrel", facing="up", open="false")
+    d.set(7, 2, 17, "minecraft:hay_block", axis="x")
+    d.chest(9, 2, 18, "nomad_caravan", facing="west")
+    d.box(1, 1, 18, 2, 1, 18, "wartstalk_fence")
+    # Enclos a lezards (sud-est)
+    for x in range(15, 24):
+        for z in (15, 23):
+            d.set(x, 1, z, "wartstalk_fence")
+    for z in range(15, 24):
+        for x in (15, 23):
+            d.set(x, 1, z, "wartstalk_fence")
+    d.set(15, 1, 19, "wartstalk_fence_gate", facing="west", in_wall="false", open="false", powered="false")
+    for (x, z) in ((21, 17), (22, 21)):
+        d.set(x, 1, z, "fire_berry_bush", age="3")
+    d.set(17, 1, 21, "minecraft:composter", level="7")
+    d.set(22, 1, 16, "minecraft:hay_block", axis="y")
+    d.guard(19, 1, 18, "cinder_lizard")
+    d.guard(20, 1, 20, "cinder_lizard")
+    # Lampadaires aux quatre coins de la place et etal
+    for (x, z) in ((10, 10), (14, 10), (10, 14), (14, 14)):
+        d.pillar(x, z, 1, 2, "wartstalk_fence")
+        d.lantern(x, 3, z, "minecraft:lantern")
+    d.set(16, 1, 11, "lava_trap")
+    d.lantern(4, 1, 11, "ward_lantern")
+    d.set(1, 1, 13, "crimson_bellflower")
+    d.set(23, 1, 10, "minecraft:crimson_roots")
+    d.connect_fences()
     d.save("nomad_caravan")
+
+
+def basalt_forge():
+    """Forge de basalte : repaire du Golem de basalte. Un cercle de colonnes brisees autour d'une forge antique
+    (bassin de lave, enclume d'onyx, hauts fourneaux, cheminee fumante) ; le golem y monte la garde."""
+    S = 25
+    c = S // 2
+    d = Dungeon(S, 14, S, "basalt_forge")
+    d.air(0, 1, 0, S - 1, 13, S - 1)
+    floor = [("minecraft:polished_blackstone", 35), ("minecraft:blackstone", 25), ("minecraft:smooth_basalt", 25),
+             ("minecraft:polished_blackstone_bricks", 15)]
+    for x in range(S):
+        for z in range(S):
+            r = ((x - c) ** 2 + (z - c) ** 2) ** 0.5
+            if r <= 11.5:
+                d.set(x, 0, z, "minecraft:magma_block" if 7.5 < r <= 8.3 and d.rng.random() < 0.6 else d.pick(floor))
+    # Colonnes de basalte en cercle, certaines brisees, avec braseros
+    for i in range(10):
+        a = i * 2 * math.pi / 10
+        x, z = c + round(math.cos(a) * 10), c + round(math.sin(a) * 10)
+        h = 8 if i % 3 else 4 + d.rng.randint(0, 2)
+        for y in range(1, h + 1):
+            d.set(x, y, z, "minecraft:polished_basalt", axis="y")
+        if i % 3:
+            d.set(x, h + 1, z, "minecraft:netherrack")
+            d.set(x, h + 2, z, "minecraft:fire", age="0", east="false", north="false", south="false", up="false", west="false")
+        else:
+            d.set(x + 1, 1, z, "minecraft:basalt", axis="x")
+    # Forge centrale : estrade, bassin de lave, enclume, hauts fourneaux et cheminee
+    d.box(c - 3, 1, c - 3, c + 3, 1, c + 3, "minecraft:polished_blackstone_bricks")
+    for (x0, x1, z0, z1, face) in ((c - 3, c + 3, c + 4, c + 4, "north"), (c - 3, c + 3, c - 4, c - 4, "south"),
+                                   (c + 4, c + 4, c - 3, c + 3, "west"), (c - 4, c - 4, c - 3, c + 3, "east")):
+        for x in range(x0, x1 + 1):
+            for z in range(z0, z1 + 1):
+                d.stair(x, 1, z, "minecraft:polished_blackstone_brick_stairs", face)
+    d.box(c - 1, 1, c - 1, c + 1, 1, c + 1, "minecraft:lava", level="0")
+    d.set(c - 2, 2, c + 2, "onyx_anvil", facing="east")
+    for x in (c - 2, c + 2):
+        d.set(x, 2, c - 2, "minecraft:blast_furnace", facing="south", lit="true")
+    d.pillar(c, c - 3, 2, 7, "minecraft:polished_basalt")
+    d.set(c, 8, c - 3, "minecraft:campfire", lit="true", facing="north", signal_fire="true", waterlogged="false")
+    d.set(c, 7, c - 4, "minecraft:hay_block", axis="y")
+    d.chest(c + 2, 2, c + 2, "basalt_forge", facing="west")
+    for (x, z) in ((c - 3, c - 3), (c + 3, c - 3), (c - 3, c + 3), (c + 3, c + 3)):
+        d.pillar(x, z, 2, 3, "minecraft:polished_blackstone_brick_wall")
+        d.lantern(x, 4, z)
+    # Le golem garde la forge
+    d.guard(c, 2, c + 6, "basalt_golem")
+    d.save("basalt_forge")
 
 
 def wyvern_nest():
@@ -1072,12 +1258,14 @@ def wyvern_nest():
             if (x, y, z) not in d.blocks:
                 break
         d.set(x, y, z, "minecraft:polished_blackstone_slab", type="top", waterlogged="false")
-    d.guard(c + 2, 12, c, "ash_wyvern")
+    # Le gardien du nid : il faut le vaincre pour obtenir son oeuf
+    d.entity(c + 2.5, 12, c + 0.5, "ash_wyvern", extra={"NestGuardian": Byte(1)})
     d.save("wyvern_nest")
 
 
 def generate():
     nomad_caravan()
+    basalt_forge()
     wyvern_nest()
     traveler_camp()
     nether_garden()

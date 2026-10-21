@@ -2,7 +2,7 @@
   "name": "Cochon de blaze",
   "icon": "netheryx:blaze_pig_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 100,
+  "sortnum": 101,
   "pages": [
     {
       "type": "patchouli:entity",

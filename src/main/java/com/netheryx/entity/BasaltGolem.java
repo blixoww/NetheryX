@@ -64,6 +64,8 @@ public class BasaltGolem extends Monster implements GeoEntity {
     private int slamWindup = -1;
     private int throwCooldown = 60;
     private boolean molten;
+    /** Le golem garde sa forge : il reste dans un rayon de 12 blocs autour de son point d'apparition. */
+    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(12.0D, 8.0D);
 
     public BasaltGolem(EntityType<? extends BasaltGolem> type, Level level) {
         super(type, level);
@@ -97,6 +99,7 @@ public class BasaltGolem extends Monster implements GeoEntity {
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
+        this.arena.tick(this);
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
         LivingEntity target = this.getTarget();
         if (!this.molten && this.getHealth() < this.getMaxHealth() * 0.5F) {
@@ -225,12 +228,14 @@ public class BasaltGolem extends Monster implements GeoEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         tag.putBoolean("Molten", this.molten);
+        this.arena.save(tag);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.molten = tag.getBoolean("Molten");
+        this.arena.load(tag);
         if (this.hasCustomName()) {
             this.bossEvent.setName(this.getDisplayName());
         }

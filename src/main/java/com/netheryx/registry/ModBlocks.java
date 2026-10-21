@@ -453,6 +453,11 @@ public final class ModBlocks {
     public static final RegistryObject<Block> RICH_QUARTZ_ORE = register("rich_quartz_ore",
             () -> new AmbientOreBlock(BlockBehaviour.Properties.copy(Blocks.NETHER_QUARTZ_ORE).strength(3.5F, 3.0F),
                     UniformInt.of(3, 7), particles(ModParticles.QUARTZ_GLINT, 6, AmbientParticles.Mode.FACES)));
+    public static final RegistryObject<Block> QUARTZ_CLUSTER = register("quartz_cluster",
+            () -> new AmbientClusterBlock(7, 3, BlockBehaviour.Properties.of().mapColor(MapColor.QUARTZ)
+                    .forceSolidOn().noOcclusion().sound(SoundType.AMETHYST_CLUSTER).strength(1.2F)
+                    .lightLevel(state -> 4).pushReaction(PushReaction.DESTROY),
+                    particles(ModParticles.QUARTZ_GLINT, 4, AmbientParticles.Mode.INSIDE)));
     public static final RegistryObject<Block> QUARTZ_GLASS = register("quartz_glass",
             () -> new QuartzGlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).mapColor(MapColor.QUARTZ).strength(0.6F)));
     public static final RegistryObject<Block> QUARTZ_GLASS_PANE = register("quartz_glass_pane",

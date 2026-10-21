@@ -117,9 +117,9 @@ public final class ClientModEvents {
         event.registerEntityRenderer(ModEntities.ASH_WYVERN.get(),
                 context -> new NetheryXGeoRenderer<AshWyvern>(context, "ash_wyvern", 1.6F, 1.0F).glowing());
         event.registerEntityRenderer(ModEntities.EMBER_FIREFLY.get(),
-                context -> new NetheryXGeoRenderer<Firefly>(context, "ember_firefly", 0.0F, 1.0F).glowing());
+                context -> new NetheryXGeoRenderer<Firefly>(context, "ember_firefly", 0.0F, 1.8F).glowing());
         event.registerEntityRenderer(ModEntities.SOUL_FIREFLY.get(),
-                context -> new NetheryXGeoRenderer<Firefly>(context, "soul_firefly", 0.0F, 1.0F).glowing());
+                context -> new NetheryXGeoRenderer<Firefly>(context, "soul_firefly", 0.0F, 1.8F).glowing());
         event.registerEntityRenderer(ModEntities.BLAZE_PIG.get(),
                 context -> new NetheryXGeoRenderer<BlazePig>(context, "blaze_pig", 0.5F, 1.0F).glowing());
         event.registerEntityRenderer(ModEntities.CRYSTAL_SNAIL.get(),
