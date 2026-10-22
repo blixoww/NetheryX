@@ -32,6 +32,15 @@
     },
     {
       "type": "patchouli:text",
+      "text": "The $(item)Wyvern Crystal$() stores your wyvern to carry it anywhere: right-click your wyvern to put it inside (name and health are kept), right-click a block to release it. While stored, it is still your wyvern. If the crystal is destroyed it shatters and frees her; if it falls into the void it comes back to you.",
+      "title": "Cristal"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:wyvern_crystal"
+    },
+    {
+      "type": "patchouli:text",
       "text": "$(l)Flying$(): move forward while looking up to take off, look down to dive, release to glide slowly. If you dismount in the air, you get a few seconds of $(l)Slow Falling$().",
       "title": "Vol"
     }

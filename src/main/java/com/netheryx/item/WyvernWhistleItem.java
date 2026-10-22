@@ -29,7 +29,9 @@ public class WyvernWhistleItem extends Item {
         level.playSound(null, player.blockPosition(), SoundEvents.GOAT_HORN_SOUND_VARIANTS.get(2).value(), SoundSource.PLAYERS, 1.0F, 1.6F);
         if (player instanceof ServerPlayer serverPlayer) {
             int count = WyvernCompanions.summon(serverPlayer);
-            player.displayClientMessage(count == 0
+            player.displayClientMessage(count < 0
+                    ? Component.translatable("message.netheryx.wyvern_in_crystal").withStyle(ChatFormatting.AQUA)
+                    : count == 0
                     ? Component.translatable("message.netheryx.wyvern_none").withStyle(ChatFormatting.GRAY)
                     : Component.translatable("message.netheryx.wyvern_summoned", count).withStyle(ChatFormatting.GOLD), true);
         }

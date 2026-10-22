@@ -928,6 +928,8 @@ def generate():
     textures_v124.generate()
     from . import textures_v130
     textures_v130.generate()
+    from . import textures_v131
+    textures_v131.generate()
 
 
 # ------------------------------------------------------------------------------------------------

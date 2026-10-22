@@ -78,7 +78,7 @@ public final class WyvernCompanions {
             // Filet de securite : toute wyverne du joueur restee dans l'ancienne dimension et qui ne devait pas attendre
             followers = new ArrayList<>();
             for (WyvernRegistry.Entry entry : WyvernRegistry.get(player.server).ownedBy(player.getUUID())) {
-                if (entry.dimension().equals(event.getFrom())) {
+                if (!entry.stored() && entry.dimension().equals(event.getFrom())) {
                     followers.add(entry.wyvern());
                 }
             }
@@ -92,10 +92,17 @@ public final class WyvernCompanions {
 
     // --- Sifflet : rappel depuis n'importe ou ------------------------------------------------------
 
-    /** Rappelle toutes les wyvernes du joueur. Renvoie le nombre de wyvernes connues. */
+    /**
+     * Rappelle toutes les wyvernes du joueur. Renvoie le nombre de wyvernes rappelees, ou -1 si sa seule wyverne est
+     * rangee dans un cristal (rien a rappeler).
+     */
     public static int summon(ServerPlayer player) {
         MinecraftServer server = player.server;
         List<WyvernRegistry.Entry> entries = WyvernRegistry.get(server).ownedBy(player.getUUID());
+        entries.removeIf(WyvernRegistry.Entry::stored);
+        if (entries.isEmpty() && !WyvernRegistry.get(server).ownedBy(player.getUUID()).isEmpty()) {
+            return -1;
+        }
         for (WyvernRegistry.Entry entry : entries) {
             ServerLevel level = server.getLevel(entry.dimension());
             if (level == null) {

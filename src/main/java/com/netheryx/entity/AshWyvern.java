@@ -126,6 +126,8 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
 
     /** Gardien d'un nid de wyverne : agressif, impossible a apprivoiser, il laisse son oeuf quand on le bat. */
     private boolean nestGuardian;
+    /** Vrai pendant qu'elle est rangee dans un cristal : son inscription au registre est conservee. */
+    private boolean storing;
     private final com.netheryx.util.BossArena nestArena = new com.netheryx.util.BossArena(14.0D, 20.0D, 20.0D);
 
     public boolean isNestGuardian() {
@@ -227,10 +229,35 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
 
     @Override
     public void remove(RemovalReason reason) {
-        if (reason == RemovalReason.DISCARDED && this.level() instanceof ServerLevel server) {
+        if (reason == RemovalReason.DISCARDED && !this.storing && this.level() instanceof ServerLevel server) {
             com.netheryx.util.WyvernRegistry.get(server.getServer()).remove(this.getUUID());
         }
         super.remove(reason);
+    }
+
+    /**
+     * Range la wyverne dans un cristal : renvoie ses donnees completes (nom, vie, maitre, identifiant) et la retire du
+     * monde, en gardant son inscription au registre (elle reste la wyverne de son maitre).
+     */
+    public net.minecraft.nbt.CompoundTag store() {
+        this.ejectPassengers();
+        this.setAerial(false);
+        net.minecraft.nbt.CompoundTag data = new net.minecraft.nbt.CompoundTag();
+        this.saveWithoutId(data);
+        data.putString("id", EntityType.getKey(this.getType()).toString());
+        if (this.level() instanceof ServerLevel server) {
+            com.netheryx.util.WyvernRegistry.get(server.getServer()).markStored(this.getUUID());
+        }
+        this.storing = true;
+        this.discard();
+        return data;
+    }
+
+    /** Liberee d'un cristal : elle reprend sa place au registre a sa nouvelle position. */
+    public void onReleased() {
+        if (this.level() instanceof ServerLevel server) {
+            this.updateRegistry(server);
+        }
     }
 
     public boolean isAerial() {
@@ -244,6 +271,9 @@ public class AshWyvern extends TamableAnimal implements GeoEntity {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (stack.getItem() instanceof com.netheryx.item.WyvernCrystalItem) {
+            return InteractionResult.PASS; // le cristal gere lui-meme l'interaction (ranger la wyverne)
+        }
         if (!this.isTame()) {
             if (this.isNestGuardian()) {
                 return InteractionResult.PASS; // le gardien du nid ne se laisse pas apprivoiser : il faut le vaincre

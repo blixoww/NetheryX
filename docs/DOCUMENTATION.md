@@ -444,6 +444,13 @@ Ses attaques :
 
 - Établi (sans forme) : Os + Lingot d'or + Membrane de phantom + Éclat de verre en fusion → **Sifflet de wyverne**
 
+**Cristal**
+
+Le *Cristal de wyverne* range votre wyverne pour l'emporter partout : clic droit sur elle pour l'y faire entrer (nom et vie conservés), clic droit sur un bloc pour la libérer. Rangée, elle reste votre wyverne. Si le cristal est détruit, il se brise et la libère ; s'il tombe dans le vide, il vous revient.
+
+
+- Établi : `OQO` / `QEQ` / `OQO` (`O` = Onyx, `Q` = Verre de quartz, `E` = Ender eye) → **Cristal de wyverne**
+
 **Vol**
 
 **Voler** : avancez en regardant vers le haut pour décoller, vers le bas pour piquer, relâchez pour planer doucement. Si vous descendez en plein vol, vous obtenez quelques secondes de **Chute lente**.
@@ -1400,6 +1407,8 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi : `###` / `#·#` / `#·#` (`#` = Étoffe spectrale) → **Jambières spectrales**
 - **Robe spectrale** (`netheryx:wraith_robe`)
   - Établi : `#·#` / `###` / `###` (`#` = Étoffe spectrale) → **Robe spectrale**
+- **Cristal de wyverne** (`netheryx:wyvern_crystal`)
+  - Établi : `OQO` / `QEQ` / `OQO` (`O` = Onyx, `Q` = Verre de quartz, `E` = Ender eye) → **Cristal de wyverne**
 - **Sifflet de wyverne** (`netheryx:wyvern_whistle`)
   - Établi (sans forme) : Os + Lingot d'or + Membrane de phantom + Éclat de verre en fusion → **Sifflet de wyverne**
 

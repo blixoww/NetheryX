@@ -1,0 +1,1225 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 9abc62a..da9f196 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -113,6 +113,13 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
+ - **Coffres mimiques dans chaque donjon** (dont les balcons de la Citadelle, qui ont aussi chacun un coffre).
+ 
+ ### Modifié
++- **Structures** : une fois le terrain autour terminé, chaque structure neuve est remise en état (blocs et air du
++  gabarit) : le feuillage des arbres, les colonnes et deltas de basalte des chunks voisins n'y débordent plus. Seules
++  les structures jamais visitées sont concernées (rien ne change dans une structure déjà explorée).
++- **Onglet créatif** : tout le contenu est uniquement dans l'onglet NetheryX (plus d'ajouts dans les onglets vanilla).
++- **Armures** : icônes et textures portées refaites dans l'esprit des armures vanilla (silhouettes simples, quatre
++  tons, un seul détail de couleur par pièce) pour l'onyx, la braise, le spectre, la carapace, l'abysse et les
++  bottes de magma.
+ - **Structures** : nouveau placement. La structure est centrée sur son point d'apparition et toute son emprise est
+   vérifiée (sol à une hauteur proche et volume dégagé jusqu'à 3 blocs au-dessus de son sommet) : plus de structure
+   enterrée dans la roche, coupée par un plafond ou un mur, ou suspendue au-dessus d'un ravin.
+diff --git a/docs/PLAN_DE_TEST.md b/docs/PLAN_DE_TEST.md
+index 3852308..827b0e3 100644
+--- a/docs/PLAN_DE_TEST.md
++++ b/docs/PLAN_DE_TEST.md
+@@ -23,6 +23,8 @@ La liste complète des blocs, objets, recettes et butins est dans [`DOCUMENTATIO
+ ## 1. Onglet créatif et objets
+ 
+ - [ ] L'onglet **NetheryX** contient tous les blocs, objets et œufs (aucune texture violette et noire manquante).
++- [ ] Aucun objet NetheryX dans les onglets vanilla (Combat, Outils, Œufs d'apparition).
++- [ ] Armures : nouvelles icônes et textures portées, simples comme le vanilla (portez chaque ensemble).
+ - [ ] Chaque objet a un nom traduit (français et anglais : changez la langue dans les options).
+ - [ ] Le **Codex** (livre) s'ouvre ; toutes les catégories et pages s'affichent.
+ - Obtenir un objet précis : `/give @s netheryx:abyssal_blade` (remplacez par l'identifiant voulu, voir la documentation).
+@@ -70,6 +72,7 @@ Avec la **Boussole des âmes** (structures NetheryX en tête de liste) ou par co
+ /locate structure netheryx:nether_garden
+ ```
+ - [ ] Aucune structure enterrée, coupée par un plafond ou suspendue dans le vide (explorez des chunks neufs).
++- [ ] Pas de feuilles, de colonnes de basalte ni de delta à l'intérieur des structures (Jungle infernale, deltas de basalte).
+ 
+ Pour chaque donjon, **en survie** (`/gamemode survival`) avec une bonne armure :
+ - [ ] Parcours complet : escaliers praticables (Sanctuaire : descente vers la nef ; Catacombes : deux niveaux).
+diff --git a/src/main/java/com/netheryx/registry/ModCreativeTabs.java b/src/main/java/com/netheryx/registry/ModCreativeTabs.java
+index 5772633..5c44efd 100644
+--- a/src/main/java/com/netheryx/registry/ModCreativeTabs.java
++++ b/src/main/java/com/netheryx/registry/ModCreativeTabs.java
+@@ -4,15 +4,11 @@ import com.netheryx.NetheryX;
+ import net.minecraft.core.registries.Registries;
+ import net.minecraft.network.chat.Component;
+ import net.minecraft.world.item.CreativeModeTab;
+-import net.minecraft.world.item.CreativeModeTabs;
+ import net.minecraft.world.item.ItemStack;
+-import net.minecraftforge.common.ForgeSpawnEggItem;
+-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+-import net.minecraftforge.eventbus.api.SubscribeEvent;
+-import net.minecraftforge.fml.common.Mod;
+ import net.minecraftforge.registries.DeferredRegister;
+ import net.minecraftforge.registries.RegistryObject;
+ 
++/** Un seul onglet creatif : tout le contenu de NetheryX y est regroupe (rien n'est ajoute aux onglets vanilla). */
+ public final class ModCreativeTabs {
+     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, NetheryX.MOD_ID);
+ 
+@@ -22,47 +18,6 @@ public final class ModCreativeTabs {
+             .displayItems((parameters, output) -> orderedItems().forEach(item -> output.accept(item.get())))
+             .build());
+ 
+-    /** Les oeufs et l'equipement apparaissent aussi dans les onglets vanilla correspondants. */
+-    @Mod.EventBusSubscriber(modid = NetheryX.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+-    public static final class VanillaTabs {
+-        private VanillaTabs() {
+-        }
+-
+-        @SubscribeEvent
+-        public static void onBuildTabs(BuildCreativeModeTabContentsEvent event) {
+-            if (event.getTabKey() == CreativeModeTabs.SPAWN_EGGS) {
+-                ModItems.ITEMS.getEntries().stream().map(RegistryObject::get)
+-                        .filter(item -> item instanceof ForgeSpawnEggItem).forEach(event::accept);
+-            } else if (event.getTabKey() == CreativeModeTabs.COMBAT) {
+-                event.accept(ModItems.ONYX_SWORD);
+-                event.accept(ModItems.ABYSSAL_BLADE);
+-                event.accept(ModItems.ONYX_BOW);
+-                event.accept(ModItems.ONYX_HELMET);
+-                event.accept(ModItems.ONYX_CHESTPLATE);
+-                event.accept(ModItems.ONYX_LEGGINGS);
+-                event.accept(ModItems.ONYX_BOOTS);
+-                for (var armor : java.util.List.of(ModItems.EMBER_HELMET, ModItems.EMBER_CHESTPLATE, ModItems.EMBER_LEGGINGS,
+-                        ModItems.EMBER_BOOTS, ModItems.WRAITH_HOOD, ModItems.WRAITH_ROBE, ModItems.WRAITH_LEGGINGS, ModItems.WRAITH_BOOTS,
+-                        ModItems.CARAPACE_HELMET, ModItems.CARAPACE_LEGGINGS, ModItems.CARAPACE_BOOTS)) {
+-                    event.accept(armor);
+-                }
+-            } else if (event.getTabKey() == CreativeModeTabs.OP_BLOCKS && event.hasPermissions()) {
+-                event.accept(ModItems.ADMIN_COMPASS);
+-            } else if (event.getTabKey() == CreativeModeTabs.TOOLS_AND_UTILITIES) {
+-                event.accept(ModItems.ONYX_PICKAXE);
+-                event.accept(ModItems.ONYX_AXE);
+-                event.accept(ModItems.ONYX_SHOVEL);
+-                event.accept(ModItems.ONYX_HOE);
+-                event.accept(ModItems.ONYX_HAMMER);
+-                event.accept(ModItems.SOUL_COMPASS);
+-                event.accept(ModItems.RECALL_STONE);
+-                event.accept(ModItems.OBSIDIAN_BOAT);
+-                event.accept(ModItems.OBSIDIAN_BUCKET);
+-                event.accept(ModItems.ONYX_INFUSION_TEMPLATE);
+-            }
+-        }
+-    }
+-
+     /**
+      * Tous les objets et blocs du mod, dans l'ordre d'inscription, sauf que chaque ensemble d'armure reste groupe
+      * (le plastron de carapace, plus ancien, est replace avec les autres pieces).
+diff --git a/src/main/java/com/netheryx/worldgen/structure/StructureRestorer.java b/src/main/java/com/netheryx/worldgen/structure/StructureRestorer.java
+new file mode 100644
+index 0000000..2675d92
+--- /dev/null
++++ b/src/main/java/com/netheryx/worldgen/structure/StructureRestorer.java
+@@ -0,0 +1,153 @@
++package com.netheryx.worldgen.structure;
++
++import com.netheryx.NetheryX;
++import com.netheryx.registry.ModStructureTypes;
++import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
++import it.unimi.dsi.fastutil.longs.LongSet;
++import net.minecraft.core.registries.Registries;
++import net.minecraft.nbt.CompoundTag;
++import net.minecraft.resources.ResourceKey;
++import net.minecraft.resources.ResourceLocation;
++import net.minecraft.server.MinecraftServer;
++import net.minecraft.server.level.ServerLevel;
++import net.minecraft.world.level.ChunkPos;
++import net.minecraft.world.level.Level;
++import net.minecraft.world.level.block.Block;
++import net.minecraft.world.level.chunk.LevelChunk;
++import net.minecraft.world.level.levelgen.structure.BoundingBox;
++import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
++import net.minecraft.world.level.levelgen.structure.Structure;
++import net.minecraft.world.level.levelgen.structure.StructurePiece;
++import net.minecraft.world.level.levelgen.structure.StructureStart;
++import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
++import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
++import net.minecraft.world.level.saveddata.SavedData;
++import net.minecraftforge.event.TickEvent;
++import net.minecraftforge.event.level.ChunkEvent;
++import net.minecraftforge.eventbus.api.SubscribeEvent;
++import net.minecraftforge.fml.common.Mod;
++
++import java.util.Map;
++import java.util.Optional;
++import java.util.Queue;
++import java.util.concurrent.ConcurrentLinkedQueue;
++
++/**
++ * Remet les structures NetheryX en etat une fois leur terrain termine.
++ * <p>
++ * Une structure est posee a la derniere etape de decoration de son chunk, mais les chunks voisins decores ensuite
++ * peuvent encore deborder dedans (feuillage des arbres, colonnes et deltas de basalte...). Quand un chunk est charge
++ * pour de bon, tous ses voisins ont fini leur decoration : on y repose alors le gabarit de chaque structure (blocs et
++ * air, sans les creatures), une seule fois. Seuls les chunks jamais frequentes par un joueur sont concernes, pour ne
++ * jamais toucher a une structure deja exploree (coffres pilles, constructions).
++ */
++@Mod.EventBusSubscriber(modid = NetheryX.MOD_ID)
++public final class StructureRestorer {
++    /** Un chunk ou un joueur est passe plus longtemps que cela (en ticks) n'est plus restaure. */
++    private static final long MAX_INHABITED = 100L;
++    private static final int CHUNKS_PER_TICK = 4;
++    private static final Queue<Pending> PENDING = new ConcurrentLinkedQueue<>();
++
++    private record Pending(ResourceKey<Level> dimension, ChunkPos pos) {
++    }
++
++    private StructureRestorer() {
++    }
++
++    @SubscribeEvent
++    public static void onChunkLoad(ChunkEvent.Load event) {
++        if (!(event.getLevel() instanceof ServerLevel level) || !(event.getChunk() instanceof LevelChunk chunk)
++                || chunk.getInhabitedTime() > MAX_INHABITED || !hasOurStructure(chunk)) {
++            return;
++        }
++        PENDING.add(new Pending(level.dimension(), chunk.getPos()));
++    }
++
++    private static boolean hasOurStructure(LevelChunk chunk) {
++        for (Map.Entry<Structure, LongSet> entry : chunk.getAllReferences().entrySet()) {
++            if (entry.getKey().type() == ModStructureTypes.NETHER_FLOOR.get() && !entry.getValue().isEmpty()) {
++                return true;
++            }
++        }
++        return false;
++    }
++
++    @SubscribeEvent
++    public static void onServerTick(TickEvent.ServerTickEvent event) {
++        if (event.phase != TickEvent.Phase.END || PENDING.isEmpty()) {
++            return;
++        }
++        MinecraftServer server = event.getServer();
++        for (int i = 0; i < CHUNKS_PER_TICK && !PENDING.isEmpty(); i++) {
++            Pending pending = PENDING.poll();
++            ServerLevel level = server.getLevel(pending.dimension());
++            ChunkPos pos = pending.pos();
++            if (level == null || !level.hasChunk(pos.x, pos.z)) {
++                continue;
++            }
++            Restored restored = Restored.get(level);
++            if (restored.chunks.contains(pos.toLong())) {
++                continue;
++            }
++            LevelChunk chunk = level.getChunk(pos.x, pos.z);
++            if (chunk.getInhabitedTime() <= MAX_INHABITED) {
++                restore(level, chunk);
++            }
++            restored.chunks.add(pos.toLong());
++            restored.setDirty();
++        }
++    }
++
++    /** Repose, dans ce chunk seulement, le gabarit de chaque structure NetheryX qui le traverse. */
++    private static void restore(ServerLevel level, LevelChunk chunk) {
++        ChunkPos pos = chunk.getPos();
++        BoundingBox chunkBox = new BoundingBox(pos.getMinBlockX(), level.getMinBuildHeight(), pos.getMinBlockZ(),
++                pos.getMaxBlockX(), level.getMaxBuildHeight() - 1, pos.getMaxBlockZ());
++        var structures = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
++        for (StructureStart start : level.structureManager().startsForStructure(pos,
++                structure -> structure.type() == ModStructureTypes.NETHER_FLOOR.get())) {
++            ResourceLocation key = structures.getKey(start.getStructure());
++            if (key == null || !start.isValid()) {
++                continue;
++            }
++            // Chaque structure NetheryX n'a qu'un gabarit : netheryx:<nom>/main
++            Optional<StructureTemplate> template = level.getServer().getStructureManager()
++                    .get(new ResourceLocation(key.getNamespace(), key.getPath() + "/main"));
++            if (template.isEmpty()) {
++                continue;
++            }
++            for (StructurePiece piece : start.getPieces()) {
++                if (piece instanceof PoolElementStructurePiece pool && piece.getBoundingBox().intersects(chunkBox)) {
++                    StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(pool.getRotation())
++                            .setBoundingBox(chunkBox).setKnownShape(true).setIgnoreEntities(true);
++                    template.get().placeInWorld(level, pool.getPosition(), pool.getPosition(), settings, level.getRandom(),
++                            Block.UPDATE_CLIENTS);
++                }
++            }
++        }
++    }
++
++    /** Chunks deja restaures (sauvegarde par dimension) : la restauration n'a lieu qu'une fois. */
++    private static final class Restored extends SavedData {
++        private static final String NAME = "netheryx_restored_structures";
++        private final LongSet chunks = new LongOpenHashSet();
++
++        static Restored get(ServerLevel level) {
++            return level.getDataStorage().computeIfAbsent(Restored::load, Restored::new, NAME);
++        }
++
++        private static Restored load(CompoundTag tag) {
++            Restored restored = new Restored();
++            for (long value : tag.getLongArray("Chunks")) {
++                restored.chunks.add(value);
++            }
++            return restored;
++        }
++
++        @Override
++        public CompoundTag save(CompoundTag tag) {
++            tag.putLongArray("Chunks", this.chunks.toLongArray());
++            return tag;
++        }
++    }
++}
+diff --git a/src/main/resources/assets/netheryx/textures/item/abyssal_boots.png b/src/main/resources/assets/netheryx/textures/item/abyssal_boots.png
+index 8170e44eae51f6c47780da3ff5840c4f5f1de77b..ea41ad0e1deaf8a2d78a46ff33589ba51ea3a3ba 100644
+GIT binary patch
+delta 169
+zcmV;a09OBi0>uH4B!7%aL_t(|oMT`Z1r!5D7=w?6<3F;*r$0X!k@>jfnUDo%=@~I(
+zO32`}4VyfQ0q0-6Vz~G18%_hT$ur?lOEkc0fCd`}hM#fCvoJ6~0tne}@*G?Y3=9km
+zHy9ZHfBN%-5uZGY3-I|LmpmiP1sZG|C=w?Vq!{>T-D7~c03w$>+yGp*!VJLcv;hSG
+XZMit%f@3m*00000NkvXXu0mjfFHS?*
+
+delta 228
+zcmV<A02}|s0e}LKB!9<AL_t(|oMT`Z1r!5DWDYAM(|;KI_y2!H$uS};xNNQg*Pwgy
+z23#RNITRbr1VsM-pB43AgpK1rvW+k~B~Bg;IVKEG9XNo~zjp)qFvKtnFyHnIrvb|A
+zKVdh3m67ScucQo4jmUtHnT5euQU)HVOt1iY^6eW@1~4!%FkM`D|Bm6ZxdsC(Bh!B-
+zUr8B;xErq+PI|EsZNS|?J_fIgj~IL<Wf&M&C`kNY^a|5&yTAWHiN?k9Vhq^SF(O9^
+eGQgLRs0sj~yiuNsx14MM0000<MNUMnLSTYfGhe0v
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/abyssal_chestplate.png b/src/main/resources/assets/netheryx/textures/item/abyssal_chestplate.png
+index 65a35845c06ff8ed9c60e78cd6344f87aa8027f0..c6911d1978e010a679fa7e83860420ae7ec65bf1 100644
+GIT binary patch
+delta 248
+zcmV<U00;l_0+RxeBYyzeNkl<Zc$~$PI|_q95Qcwc5!u2bNALhCatS-{ksIU)-XM@;
+zq_gq}wpKzQMOcD`#j=R7DZ+^Rh#FGlt7hl%&oH|S{767X!eUK!KdQi&?8{*kxa<$8
+zg+MDM%D&UKNWx;BB|D^?qw1b$0Nsx&V0M?3b7TO@zSDNhhjAl7B1g_0e=8+gDGgsp
+zMlFO>P~;JcJTioBCV}(gzB(>-Zw58_81UZce8a@)Iyl7yEjh#n?BY3_1eRD8u)E)s
+yd3LUGX<Q$MK-E3JDh6hM0WjbC5}*Fce|Q1Hxl^zR60^Jj0000<MNUMnLSTYnXK<4M
+
+delta 344
+zcmV-e0jK_x0`dZoBYy!oNkl<Zc$}S+ze>YU6vlryG=rg3age5jTIx~)4o>D7gbwZK
+zQ;36)A<mAvbaQa*6Sx&!vcyRcr1+<l{;@U3q1;QNNw9v?x#ynmobNl_t88Tnz(Qih
+z8qhoy2EG97--Z08ktRMIwpNK=qbhQFEZtgN!oU|@kVg&!Uw^u_x->V+a^yIodX1`_
+zzb^rJoQ(NceCDdKl_dw8+YIM309q=>N)|MoGHutxR#r-hKDS-ZkTsO8EV<s@L8}1p
+z90!2g=O+N#t_Q&2?bXz@R7`(5LnWnY4CgbVP9-&I?`CA;(bv*gE&cRq$Y&?1e8fen
+ziLsEi9N_;7vQY>{Fbz((O5Bfg`=v0L#Pk=d_?LyKQ^}pK?~)eGgUQ-M7Lw$Y1#RQ%
+qB`(%qvW$FVA*rI6y~4Ubw-Db*PoZ`HO^8|m0000<MNUMnLSTaT9H{~T
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/abyssal_helmet.png b/src/main/resources/assets/netheryx/textures/item/abyssal_helmet.png
+index 864a66d9745977f3f827a7bc7c41abdd9b16c2b8..760dcf5bb7a670f5a36f4c91380e485c40710c37 100644
+GIT binary patch
+delta 184
+zcmZo*zRWm5xt?K`r;B4q#hl~>iBAoJu?_vLkL~Sv=l}cTaIyK&!{moQ?7h!-Gy=iH
+zKdZwFKJwX{wQUfUmjHpXx~ldh4&_~GDZM8i+}obd0|NZ@HOV_ZzGlB8AeQ2KVpgIQ
+z2cuXCW0L73lZHmdNB%hn=K6P7FiS`nI7^4WF?eWLEN94Yl=b)hy$4tSc*xK6@bK|N
+hALZknlvM0p7#S8ZTggu97e2@U1fH&bF6*2UngEz)OHBX(
+
+delta 358
+zcmV-s0h#{O0e}OLBYy!$Nkl<Zc$~FUv1-Cl6g~Hnmqrn)5{io0;^<_T;1_f#xL7Fk
+zH~Iyg{f!PST^+l2>D1844-j++sXEx0Xl{p)XlSan&;t+dyYHR*&ON+~VW%aESa2W|
+zu?#ycVSC~p%1vNT+)bq{6^i)Be8N%0@_1H}UacY91Vt=j_kTs~ek!MkrB`dnWj-&8
+zSSUWYKRv;duLA%E;}HPBzo`HK^oI!mpj)j20KBP#=T8rTghbo2&X3D@?O)*P?j`E+
+zBl4$RDkuB-dWBiwBan~)AW_h*)-hTv;4Hnp=Cw;@48|h_5|S1tuXP{q{tD2vUED~?
+z)cNkJRWzlUD_;nJovWEEh^ZTiv7GgSsT)wlu!?3X&O)lde7%AqPE2~6xv5wY!#pyw
+z3)~hry~hp*64G`YpIcgn@c2XRnv1=6elt{m8NC0+7ivMDI`6X`O8@`>07*qoM6N<$
+Ef&ee62LJ#7
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/abyssal_leggings.png b/src/main/resources/assets/netheryx/textures/item/abyssal_leggings.png
+index ecbb268fd1d2bba1d7778aa54dddb5663015736a..43a3bc64f6eedcb14d873ac2647a8afa0fb16a53 100644
+GIT binary patch
+delta 184
+zcmbQnbcJz(O8sn47srr_ImrnN1Pl&I)ac0k_q_Py<#~QLHXsm7IT%^x#sdP+<M%do
+zm;Tsj7?Sgg_4)nZ-+B|DFE76lyWrq4$0={k>;5+EZs3eO6zI|7IIp=Ih`HB&IJRD1
+z;?ao)PUjYvhN}(j_WKUb{RuSs*h~F+1{#HlxBRTd4SNij1A-p?E6<mZkWl#8&sT8r
+i;aTntSK9pZ9xyWODYxg~T`HNv00f?{elF{r5}E)$f>H?p
+
+delta 250
+zcmV<W00sZl0hR)gB!AsWL_t(|oMT|15HP|Rtc*<mNzwTG|35~!0j!Kn|1X<skYuy&
+z$r}v6|Nmoz8(_#U#Bj39jlsNZ7Xt$W1H(x#HWUrY>p#KSpZ@+~`1t!5rUBT%o1Z^0
+z#E=bO!spC;-@Y(>`uhj3S8y6|@7ouKkH3F0eEj{3L4=)yICBGF{>J8P7`PkAhr(w;
+z=BzySkHLlI4+8@W3&X5Ws7{aIhA6Gx^$oWHRWHBbw0Xr>>|ud54A7m4OAMz0$Z?KO
+z48?#V0Tu=g#(!{Z#)2>#pB&!2088)q<OUu90D@{?=jjOG+yDRo07*qoM6N<$f_@2j
+Ap8x;=
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/carapace_boots.png b/src/main/resources/assets/netheryx/textures/item/carapace_boots.png
+index a494c954c5301077845ecbd1ac470c1abe862ae2..b04e28fb1be6a79c8b3ab252be76e30f35164ea0 100644
+GIT binary patch
+delta 161
+zcmV;S0ABx(0=)r{B!7fSL_t(|oMT`Z1r!5D7(+ln<Ug{+hYxQUk@>jfnUDozVp14v
+zY#edghD{#DfCmrmGQ4^73a0_s<e6}&B^qEgKuk;m!_T<nSr`}~0fg)~At7NH^Z$nr
+zZy52(qqqQ{|8dE)z!<k~T}P3)8S;)na2kS-OP&$t1zfhmyc&SlX#)xX$%r@2**&HU
+P00000NkvXXu0mjf=Sf1~
+
+delta 243
+zcmV<P01W@V0gnQZB!AXPL_t(|oMT`Z1r!5DWDW-h*MAuM$B%DB$uS};Xex?>YpCm6
+z1XqYpjs@A4ZO0xlL`B6hG&NOWICa~xM+|S?ykhw9;T?9raBy(_XJuvm|36FWKPxNi
+ze`F`)lVd_Q#M;`G!SR{_gSfaXh6UEvt_-?|q%h=|U^aw>C2U}K8X6D~5Ml@mOF#rF
+z%z4OIMn(z43l0um80t7Uxc;+*g(WcT+qZ)#+tHox<mAD?BEay3K~97PL-Ct8sC+#+
+t7KUFRP}SYJw1<Ha*{R3?UqYfP007uGT6o3KQ-A;f002ovPDHLkV1h=<YKQ;;
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/carapace_chestplate.png b/src/main/resources/assets/netheryx/textures/item/carapace_chestplate.png
+index 8cf7b586cc970d69ed4d9a718cf7e45344225907..aa783ffcb553843fb7c985c1606fae3b9c1d37c3 100644
+GIT binary patch
+delta 236
+zcmV<I02BZ30*3;SBYyzSNkl<Zc$~$PO$viB5QU%O0kR05AyDuF^$NX#%ihofbfXt2
+zNP{3`SwbqgLAq#1G)dLcMZeW#e%=g|1o)AJ492)4+gg*vl4Cg;1*+-{r3M(IA!X-$
+z5yrR^;sDNb^!*J0oV6y&{4Sj55CV|0bABvFAV4BznFoGjG-Zs@3tvixQbSNs7cJ_d
+zT?qS30!?$-9GALleV=?8@Y?8n!^G)&42lU_a*7@J#dCHEtg$KJcOS>c;v8J#+PE<m
+m0`C|06~S}eQ}pSt{D&vZSyMPi;9EBU0000<MNUMnLSTYA#A%@b
+
+delta 341
+zcmV-b0jmCo0`CHlBYy!lNkl<Zc$}3}F;2rU6n&uvSsAJdmDS<|oh@1+53uwA9#IxJ
+z00&^;01T`wC}T$k1`fawRUVi+bU+b91r~}rR1r{x0mX^q;<j(HzyEvx{cjrpKxtS|
+z8Wz|P_56U+u#hqW0E|ZW$n!<8j$F^*kut(yaEvs4g_IF|PJc?WQVEnwAZ3I=h@nLo
+z9x+_q#Euh6!{Yk#4DrL*#Io!Yq{j$e(jODNjh_sm>EQ7>wf3w_{$_9?Pb?9}4p+9I
+zRASa`GKZSHAt<YHF3h3U@Bd7pvaa<EdA<mYz;gNRBz~PA008#xKAf{wYu6UwTwpq#
+zSV^7EzNy$m=}v&GA~eyA*9E;T_)xZB9Q6CAP76M0J*ym)E;tuk-2ebsGw3mbaW?k~
+nw7UdaS9|BVZeoAkhuaFjy|#*H+xuc&00000NkvXXu0mjf|H_%+
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/carapace_helmet.png b/src/main/resources/assets/netheryx/textures/item/carapace_helmet.png
+index 16c45627ae11208dc750e6b1fa03e83eba132e29..545bd8cb3c1d9de94d5137068c490f5396720fe5 100644
+GIT binary patch
+delta 183
+zcmV;o07(Cq0@DGIB!8MoL_t(|oYj&|3c@fDMqi}|m_@E26a@F)rAu$<-knDfOF`&T
+zLK=F5xDZPc?KIoIT_*EBCO@!ws=Od#f+kFpOPpjOVnW-V0T_noT)!M|oUVHSy6&EY
+zRJk0BG0s^4ydSalHHXx3Q!IalHR`-jDlP`V=bZm&nnPIt{4n13((CNB@k&T0==+D-
+l?ER>xiI|{$q_zEx@&?AQI$IJwViy1a002ovPDHLkV1jy8RQ~_~
+
+delta 250
+zcmV<W00sZk0hR)gB!AsWL_t(|oMT`>0~{P&|Ix*Wk%KGve<ABXHifw4n9vnE7CgXd
+z0X8`d0~i<>7{bC57&th%{v+eCumpxXcWz*)Wx-~Ejg1|K*tv73u)2y7#(>%K=n<+j
+z-@JK+!Z$K9V_3Cn0mF|U-x%RuAXYQXB``0dc;V5b2MkA#?sLZKOmy(!!#g+|B@D#H
+zWr;EX8DPZ1n>R1uSVctxrx;cjzyK_OPMkRKADNFWfuXoSP6XAwA3we^!ZgExo*b$g
+zCYZt#Ck`-}=%G3f7kKmL1p~Ul47i*~jvD#`0Ot#B3URW=TL1t607*qoM6N<$f~*c|
+A(EtDd
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/carapace_leggings.png b/src/main/resources/assets/netheryx/textures/item/carapace_leggings.png
+index c21cad2987d537b3da5b0d3df6b8219c5a2c6e97..247eaa34a01f025fa151a8c1a0fb851bceffeac9 100644
+GIT binary patch
+delta 186
+zcmX@abd_;}ay`QwPZ!6KiaE&%3j_=fNiZ=f{r9~1<KbaxH#Q&;OF1}Wh6sq&#?Jrl
+z&{4D3vZ){Trtm)BU-`M~;j!M;H)0jk)EuY0T_3l%VRr*(q?51jWJeE=89*$t?!(p9
+z;u4QeG;lh%xHMdCD1U$N(A=LuqmL=Oe>3jr=n%|jFg~g$k;t}S$&u*o>x>Ny93IKb
+lKA7Ze$S~V2=?R+{1H-OcHtcTRe>O1yfv2mV%Q~loCIHTsP8t9J
+
+delta 296
+zcmcc0c!+6&ay=ubr;B4q#hm1X1p)?#BxGb_{(D~h@%Xs8+YUw$XLi>kk4-z*<qIC}
+zm%lF&nZR_r&o-%}t1CHTTaIAcBlG;Yg&*u|D%jHx$A0+!KA)#|e~_!B1Q6Uv+kb3A
+za#~vIkB^U~mG3ZcbF;Tum*)w*Z3XICP}K+oj;^lt%;)wMKW95U+gu-{NkT_QCSXtF
+z8`d3+?)~rFHaf<{h_%*#e&))fzd#}(_ifj8?iXx_V%i_EGBPTzId??8{VF%e!W8qu
+z1rh}}-${DqJowu5PEnDKjV(m{h1{eh0daSUu7|9)mSS!3@(FkRd1{n&c=GQlJULg>
+p(4okq*l?lZGn3BV$CITi7#OO~XLIuF`aEU;0#8>zmvv4FO#mogc~AfV
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/ember_boots.png b/src/main/resources/assets/netheryx/textures/item/ember_boots.png
+index cdd10e58a037f8aad3e98ce0602213d7c9e54a31..f4831a242e316fe792722d1f099de0e33cbb3ba6 100644
+GIT binary patch
+delta 168
+zcmV;Z09XH-0>lB3B!7!ZL_t(|oMT`Z1r!5D7{f}0?LV@_u{XaMk@>jfnUDpKt_opT
+zm#2c$Hf-`J2E06Sf#Jc8cQ_5eCeMUJEztn00SRhs7=Fej&%(d}2_R&@=_&9qBrtqo
+zU|?YQf9%aKMtt%pF2Lu1T=Fb1#-<&QP$W{fO<`D|lEy$to*@zD1zfhmynxqf0}22I
+WY(6!mca`D*0000<MNUMnLSTXwg-4eF
+
+delta 254
+zcmV<a00IBR0h$7kB!A&aL_t(|oMT`Z1t>s^i{(GrYP7gm{{R2|;J+3Z%YST&VB#<}
+zFmV=SMIVnQFkF2$hk=2Cfk9g;<^Q#Be;8q!VdCBK2DqK}AVKQ?{|yTNv*b8XY{4hT
+zgkh4y0$ko_SlRIoLkz=!hXqkM4ZsGNU{1U`&4wrqc2aB%S9hn`z+;067C;XV+#=f6
+zl{3yUTzxi&L5qv!KhxD|HVh97s^F3*ZhRrm5RW{DtJ7>4SUxH+Fs%CZ4I!h%#Gs(W
+z!N9Nq)gXZcHHJsCE})2Y@4CRih%05m(f|w)lS;_~0RN<5t%u`T!~g&Q07*qoM6N<$
+Ef}^u@tpET3
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/ember_chestplate.png b/src/main/resources/assets/netheryx/textures/item/ember_chestplate.png
+index 4d0b81106647151d501e9608acae99a0865ddd74..e6be16bb6a2cd74341eca575e877d8636594de3b 100644
+GIT binary patch
+delta 236
+zcmbQq+|D#Xxt`&ir;B4q#hm1X1p)?#B*K(({wKak&aX2}3hoK+oyu|h|Nq~M{_W4W
+z^s8RU>yiB?rxa85MJiwc`_o<Q>)Kdj7dEvCILk9LJ6~K^F4302EWvhwCvv%Bi{ifr
+z$E@4f&F?MjFgz%s-yd_}g2KG;V?f-NWMI`GEnxDJFV*q+p`7@F*Wxift&NOAi*7Kz
+zd%8rA=d1xkH>(<(62q>v6o)B{KNuXDFXZn3@_?I5URmm+rMR?%VZ!A;ca_Yv1cy`H
+kJUlBhW#tb{4QFFxVDM=3%i)#2%fkQ!p00i_>zopr04CjDC;$Ke
+
+delta 383
+zcmV-_0f7F80+|DlBYy#4Nkl<Zc$}4!u}cDR6vsbz+z>}(I5agJ4iP6rG&S5Hjk#wy
+zHA*c`5lxN$1rp)l6xno>vq*$Ggv*IY!zpn?gh(6?dhlxy#b2qHZ~DFW_<nxh_xSw~
+zV^^5ECRj5}T@zyL3WRNlbs<x+unnOMDhUA)8MwsLAGC&n5`QLk9(Sp`0o8_&3J^KG
+zqic_FyaKD7n7Sq$uRtl+$9?(+m;k!jGyqoznNa)P?5&im^U3u|6en+C>YB8ZY3}4L
+zYHeQvD5kE7*RsW+*a4u{_DN-q0El0{0N~^;08007Ghr{LQnY=P=?&$xoj>%{O>`p6
+z^`&~%8&UZRXm||+MH=CcI9Y*YWd>Rl+OkF|*C$0{p@W5h?TbB(=DXCay8!^k`Ic1g
+zHGHsr889ezaDVM!S-9S4c2)se!$3KG{^WRnGgLgkK*_;$jNU_YCBTSn%<Kb5@BY6Z
+dD(t_k6+azBn{7uv2Fm~d002ovPDHLkV1i@}u0#L;
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/ember_helmet.png b/src/main/resources/assets/netheryx/textures/item/ember_helmet.png
+index 290e31cbbc41e3fa73187c382ee1cc981995a51b..a2ff3922f2a4a32531d533f01bc8d90a0d0050a6 100644
+GIT binary patch
+delta 185
+zcmX@jbcJz(ay`RrPZ!6KiaE&%5}z6bV-I+>ytTLEJ$~<x)5YdP8-)^o*O!EHFayEi
+z)5_ux9zCi|<x$_PB>@6mWqX|sTLfc`H@T&JcyP>`4G7x2`S%&<?D)!^$HBcxDdnsI
+zZwmwWE{2U#g;EC&Fnm-uyYO7iWey_`&y0n=+GR677+Lm9G(2kZwU&DrTJ!Rt_@8Bw
+kog4lhpFV-(B!3_SgXB>w#aZ?hP7FZc>FVdQ&MBb@00-4c3jhEB
+
+delta 305
+zcmcb@c$#T~ay_Gvr;B4q#hm1X1B_dCMEpxm7G?#}|NsAeuwP94bbX4M*;XA3-<z)v
+z6nuRwYauP3a3t;b)l?%M5a2ielav4i6ZjL7LG*>bszU{DZ_A6=`bf-Le$&9fLZ>0S
+zO>)bo$Fhg7W|~PnJlL`B=flQmiE}oEkGbc_&Z|#6vS4m0%R3>pAQNK)1A{el3i*zz
+zesK7+;=log2@Bd5{W#WY&BMi3Bhgm&eiuXfVcs7b7?O5h-6Sp{HNkPdApha!^o|dX
+zoJZExzL#K$nDO98#1t0i1{UeA8Le#mU5yc!8Fd==gzf#+f9CkK84vUvzT5jKSM32=
+zrE#Mm;g;5_qenme|Ifxc$8(y7>5&wvNycJl85ub5mG(_b>*-?v0#8>zmvv4FO#oc9
+Bhs^*0
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/ember_leggings.png b/src/main/resources/assets/netheryx/textures/item/ember_leggings.png
+index cb7d8321815ebdd9de74c6b2f0d3a5dafc7180ac..4dc8a617d5a9f314926fcb416af1ee00f60ecbf0 100644
+GIT binary patch
+delta 190
+zcmZo-y2Us_rGBBOi(^Q|oaBTB0tSa9!jy9UdtR(~b5`Gt4G6?i4lZ8pBmn|(ayuEs
+zh0kjzS6Hs(K38AxSl0RCy7C*b6BZnEoAQ=B@9&{^O!oYiZS3X>%i^m(v?d;08_xp*
+zuRnzZ9GS={92oY9F@m?@W*yM*W6Ak-hHSpO4lgiYpy;xPQDk>Qi)6zjKC`zKM-Ch~
+nz|dcx^dx}iz_N)FI~!RUrV2WWuW<GI%K!wPu6{1-oD!M<k<U!n
+
+delta 230
+zcmcb`*u*qJrT(O+i(^Q|oaBTB0tSa9qGELZdtR(~dt2UZ2P25H-fp(@q_ekzG<mM?
+z`<s~3$Z4aqB5A_>4LuJN9Yta${&|zk0|MH)Ujt0!tG;ocOLLs&aP7>20|!1BT<v;z
+zq*uQp_E3xertJIHBDXz^769os=KOyKG8LcO4>~os$D1&7SV}KvWa7-?`NWvR!zEZF
+z!6mBnL*kHji@}osrb73lmUGN(BR+OMWK<NNz`P>8!J$d&u(GO}Mc9Ui2?}m}`Ed<P
+d%WI05`5AutIcw=oI?crZ1fH&bF6*2UngAcVU6=p>
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/magma_treads.png b/src/main/resources/assets/netheryx/textures/item/magma_treads.png
+index 92800a6265d5f09ecc2ea633736fe1f9f3ac6e09..d3e638f4b128801f838bd12e2b32b3d7eb6caed5 100644
+GIT binary patch
+delta 161
+zcmV;S0ABy30=)r{B!7fSL_t(|oMT`Z1r!5D7(<VX<v+5-rEh;2k@>jfnUDo9PEcc5
+z<->>5Hf-`J2Hf29g5ko0UpNiGCeMUJEztn00Zu|J7=Fej&%(d}2_R&@SxB+KnEx+*
+z`@@J&9>oRt{Etf>Zq$rp-%up_j}<ZKYjiOXl4pc@0hg^XFB;%=+JFK87@|27?(3Uy
+P00000NkvXXu0mjfkmyD_
+
+delta 265
+zcmV+k0rvjA0i*(uB!BBkL_t(|oMT`Z1t>s@h3P-pYNS}0{{Qci`Y*-8^dFldm^e%g
+zOq>Npm6#gC)ANB03=9km(uULjKl}5K5vKX+`Ah}|1_p+c#fxz}txAjU|Nkzj|5gHQ
+zD7N5}W5O`WGZ3f$qbIz>5JNGbHGzkrIvj@+q2Oqh2zKW$uzwOE$_r6a9RC+siNNKV
+zU;%XN!!HH~1_p-e1z!kyVb_B%3{THzGDxv7{by=36Jn?iU(C>&zytRNF0iyf2u?@4
+z&t+&c6JlWezrf-D$z|s-6bJ45!hjNubL<$fsbj>IvS6B#!vUw$C;<T3lyHb${Q1ZL
+P0000<MNUMnLIPldHyU~?
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/onyx_boots.png b/src/main/resources/assets/netheryx/textures/item/onyx_boots.png
+index 5af19c94e36a1f52ac42eefc3c0d57aad8788f82..444c203fdf0d81b43e9b75fa94c2747a03c3435d 100644
+GIT binary patch
+delta 162
+zcmV;T0A2s_0loo{B!7iTL_t(|oMT`Z1r!5D7(;|t?mx1`o6nCJk@>jfnUDp`;%6~<
+zSS8@J4VyfQ0hewcV|elA0Zs$3$unVBN<6@7fRv~jhM#fCvoJ6~0tne}VuDgI=KnXJ
+zA2H&SM{xl@|KpN}8*u6NF@{&~pTY60w%sTSamh2nynxGAm>U=HI&DA!0PMI&XTM`s
+Q0000007*qoM6N<$g4q5?SpWb4
+
+delta 213
+zcmV;`04o2!0r3HlB!9R`L_t(|oMT`Z1r!5DWDYmGz<(I~>(38F%fS_Vc=I2Qku~6x
+zLovY5qT>JiC;$J;ifCXM;Ac_s-&n;9LyigEp!kqVV!RFq7zU6Em|#vU4BbGK1~CC8
+zhQiPd@IYnaW*7MX^yzzsOLuk<ZR_?ET?|j3zGvWO7x>Rq7*4u@A<l<1e={&JFgROy
+zGZcnyU|`&}<;MR73l?A~*tmHHJifWv1^%yJdx8O*I!3H<%78y1Q566HFY#b47O6Jf
+P00000NkvXXu0mjf!6#j|
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/onyx_chestplate.png b/src/main/resources/assets/netheryx/textures/item/onyx_chestplate.png
+index 16f2ee24a357e5bd232e1a5fb6daf1e12a12538a..eeb6cb909604a9c3e1e409a449344b5bf19ada60 100644
+GIT binary patch
+delta 240
+zcmV<M01yB20*eBWBYyzWNkl<Zc$~$PuMUGS5XL_U7FU5HsA=>RlD8Om^gORIwa1u5
+zp$W1Wf*@pTGQk6MW+myh{7EMEQ`fuRcVBWX@FR{2m>)_Ni+ONtmu+`ERk&VmXuBGd
+z=+W>>QW55dGCm~;ScJB#0YHj*a6CFCU=d;@Xm}-Q&4wYML}^l%8Tm={m_)DTTort6
+zX%u;hA}=*z$|CTn@4I%@^zp@)oVJDZY}%&H0MPJi*@C;)u+~gDB(TM<0G<APkJ{N-
+q<Ca|;nt*MUdl=94NYmP1`41lmBT+DTWn0kz0000<MNUMnLSTZRm~L|b
+
+delta 344
+zcmV-e0jK_p0`dZoBYy!oNkl<Zc$}?~Axy(S6o$VpBo#FkIBXL@u&~U`Auuo&GQlj^
+z1vf*s1jp12W@56QEZZ^x0(^s^!C_F4kfni3$i&n`kh`ocODp)*_3r)Od;co{j_rzL
+zyFyOI>K)q^6^W=wazRq{DiZm66FIK5Ga=es_Nr3$s-hy1!hd7%!r4g&fSs-F%<)fa
+z9dkZ!b|@@Amb^Nx#yGVT{oQJed5@lBK+CaR84UyaUEf?5y#oNQZ|VTF8e;%%gPy6`
+z+$}Ph4zP5G{Zi9B>Mn<si<A*yre68{{$RdP)><;-@`&xry<b4Bmn<`i0h0Od`zw8a
+z1CqMBJIVx@9Z`&i0bv+sw*<m4WHKGZchK+psR*kyQ?KS+0GKb7_3$)cW4)Nmtp9+C
+qupGnp{Y;1+KL*f{JQ1|{U-SbNwVY368o+@70000<MNUMnLSTaEAEMp>
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/onyx_helmet.png b/src/main/resources/assets/netheryx/textures/item/onyx_helmet.png
+index 2a4f66990f5f0760074fb63845d274ab60c770df..2bae49e5e402f0dc0afa5a502c0a2775d5ad1a72 100644
+GIT binary patch
+delta 181
+zcmX@cbb)b#ay`RzPZ!6KiaE&%5}z6bV;x$;-`U&o=G)mjU2Hxi_;Bj)crp9#Mj&{2
+z>1}es$2mvb+Gf40U;~0S?(KXFBo1|~lZ;e0s`&Vfkr@aMul{~sV&2|;tmZAOk%F7j
+zX0SOmu*Nn-^jh#HBsBaGmNp0|RyfDN#&+hyF;Q!u9eT3vG6y6(ZX5vW`!HMWkoI@^
+fcqb(ldlyCqO#>_WL-v9p3_#%N>gTe~DWM4fuG~i>
+
+delta 300
+zcmcb>c#LU+ay=ujr;B4q#hm1X1*#9y#DAPWtM_4k&e{09KmY$fJyyS`%^>OWi30}?
+z1W4>^Jm_*@ULz1ZJk#FH^LI6~1PJW=_orb|yI^c_;tMtqX!9;FTOhG!`J;nCT?a1g
+zw_-Rd;8t?>sO&eMkBU<z{Azza6JiE}=H;%EU5fQRCuUvDb-m8Re4=f`0hYH)DiUub
+zgbYmLcN73EI>_M5lPGwnK~t9-Y**RbxlLC^4HoF;AOG;`u&u>>&d5)H=JN8K@zE)G
+zlQ!qD!YTb`B{khe?MVvU%wi1O3-&%w|Kt8F*_*#W{K*xS1XB*%dy+tta%7nda-RZy
+syI(c?H1D33eG8<LF4^9!Y))ff2r|stv;VO|3Ih;$y85}Sb4q9e06DdSHUIzs
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/onyx_leggings.png b/src/main/resources/assets/netheryx/textures/item/onyx_leggings.png
+index 6fed092c0bdde82b27c24b631913e643f9c4d6db..217d1c41244993c3632683a3094fb1bf73e9d574 100644
+GIT binary patch
+delta 182
+zcmbQkbcu0-O8rbv7srr_ImrnN1Pl&IDD5fw?|JdZv(L(IY(OBEa&Xg+NFETFo+sbj
+z{Zz%w$Y*9e|MUG7pBo+?TFZPRRzY=@+myHG<L)=@Zs3e`^1s^U=o0|KT<bpEd>t+E
+z=tKjjbBjyE)rRo*^AFDb2{ihc>~S#zj}8rie1@a?dJ>6j3zoP<aMgVKCD!H?Q>4L`
+faM`2h&H*L{|6SI#CKnFGFaUw4tDnm{r-UW|W1vnX
+
+delta 256
+zcmV+b0ssEe0h|JmB!A;cL_t(|oMT|15HP|R-0TAXNzwTA=Lbf(0o?2Y|DQg6Pm;~j
+z(t-?Me|}(OfeFO<R5C1F)6NhdQVCa-WYW&Sz`(%Jyu%ws^Q#Z{;B2@HoDDOu+Vu3z
+zB@D4wAMP={`}~68>(392O!%C6{>}yz+pqzg2AsdMf#Kcf7kLctKEGg)7SSWk0Bp|2
+z1z3<dIW-9k7cN|2U|=v{m^`5YMPYbC9Gs0ThhjiwK@m=yRxVhCRUB_15(6kU0G<xk
+zuRX!AV8H?u$&H(5FfcGMFyNB=`tt)L-n;-y@A%{f9smH>;#DI#{M)qv0000<MNUMn
+GLSTYgCUsB%
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/wraith_boots.png b/src/main/resources/assets/netheryx/textures/item/wraith_boots.png
+index e8f300c635c296ae3f17bb387d5ada923798f3bb..1ec66db5245e051fff96413e96214a1a921ed9a9 100644
+GIT binary patch
+delta 162
+zcmV;T0A2s50=@x|B!7iTL_t(|oMT`Z1r!5D7(+}_?mx1`tLKjxk@>jfnUDp`sv8*m
+zf+KL+hD{#DfEzb%Fg$<u6sG~$<e6}&B^qEgKwe1=!_T<nSr`}~0fg)~F>!Gi^Z%>o
+zj~MaEqqqQ{|8dE)z!(?LpF@%GTDzNJx}iJ+A$dla7jW4M^BV$Qrwu3o04{MkMKQn5
+QBLDyZ07*qoM6N<$f@W$&bpQYW
+
+delta 268
+zcmV+n0rUR80jC0xB!BKnL_t(|oMT`Z1r!5DWR9Sq*nb%N{rgu$$uS};m|hviaO0a2
+zg9g_<hRpU=aE18fSdeYmc7=gKN9Yto%bI%_PTh8efr01SCWbXPzM+USA#-$u-Y{Hw
+zC&D1d_XWcM9icZ2w?6P=$e|c;<(&wFj?f#1N1u2w47l=6gnvOz;3I|{6U>kK`4t$N
+zumK4PNrwFV3V5J0!8E&gc)@ML1#W%dXJBApU^sH*Alwk9{QL@rd-v`!%$hcZC>Ov0
+z%n%l?52qO3+_{7zDaXga@boFF1|6X{3~%n-MiD!;>ox-;asojH_!1IT0RR`#WWy~f
+Se3$?L002ovP6b4+LSTZ<{C3Fz
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/wraith_hood.png b/src/main/resources/assets/netheryx/textures/item/wraith_hood.png
+index 6e554b59d85a8dec0a94826c3bc9392880c16901..28a0b34523be6edd98d017c7dbe35e8a79e36f82 100644
+GIT binary patch
+delta 180
+zcmV;l089U>0?+}FB!8DlL_t(|oMT`Z@_-RtKul8ZKRykwo<Bm-gTfJ$l>1*+-N3-W
+zz`$_h#tpc*bWJD2nXDKF1_lO()5i~^7{Z9I8CfGTc>e4u#04*3GCaI@3vLJtvLa;7
+zFb#wN3%UTY8gUxHzyR?lHehOLOPm1=449#fD|VRhIgc2C;w^%U=g;9){OaXP{HBRX
+i%KgWekO;{SQ2+ph!a88eo$wU^0000<MNUMnLSTZ+A5KjG
+
+delta 271
+zcmcb>xQc0lO8rMq7srr_ImrnJm|0kl{^REA`g?qN8|VCIfBtZ_0Wn)mTY@RWvYST_
+zcR#$hx4MEi@yODjK!(O6FE1}1Vf8YDJ@x;&T=|6!XGuy(6zpp0lsL-+1n1}3rdbp{
+zQD{@td9lp^2z27@*jFol`}U3}``Q`@!DOdxvh&l}>e<-Zn%T>ZJUl!W?O=MxnzB6p
+z-`BZ~KydKu$8xso$L|Lok&uuGh-rMpDsdt8aY_OZ+|WJUso2IBkmTt8g4gf);f7fU
+z+(qoVxcTPnI&$Ff;r8nctdg8<&gL7AOj)qt#{YFq9D6e7FOYJQY>zPg!pe{;lxo{{
+TS?wwV5O8?9`njxgN@xNAD9?4u
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/wraith_leggings.png b/src/main/resources/assets/netheryx/textures/item/wraith_leggings.png
+index c9de9c2f2d30171131186231ae37643c66f17879..b29e8bc0f4ca1d5e0d8735ac4915b8dc04f68539 100644
+GIT binary patch
+delta 184
+zcmdnObcJz(O8sn47srr_ImrnN1Pl&IBuy&%?|JdZtDnklY(OBEa&Xft5QD8v+C1;T
+z(IwedlJmArIsEhdeA`ru+CK(m;wQ9M3a0)(T)q8)UV_uK3+5(C0>a|yK-{ifQ}JG`
+z&B7?*kbt6Kg6V^+r>7UB@2mRPQF!^5D9@yzOGl&~HX3rf&0y5f{P^f+F%J*Vgdgtg
+kJDvpa99T9{VrL^OgZp2r>ncjOG8urt)78&qol`;+04i`ytN;K2
+
+delta 281
+zcmV+!0p|YH0ki^;B!Bx!L_t(|oW)Z+3c^4TeGyABiG&aZEmL_Ok02;sz!P`@QSb;J
+zzynxXq}oDKiLx<B$VVh?EM%A6tO<&RQ_Z~D_vXVa@S|zWF-^PphL|KbjSHBjU99J$
+zuPRR#TO`R%YcgO*fbn#O&1$JU4uXpmhvAj`TwvIV6td?X0Dl0E)0OZ+`vFQ{euIG|
+zwlM5O5}DEyC_SOq>vP;SGMw)%9&>?rB4u-p41TIhSfl)i#1>jP`G_nDu*yMjfuHIa
+zv>y<2B3aByI}j_2bCTGSI;q@&pXzXpOlh-j3}pvZB2_zRiUB*2FjTAWk2!!`!E65l
+fyZ5@>|LqA)7ZPc{qCy`300000NkvXXu0mjf3!{8%
+
+diff --git a/src/main/resources/assets/netheryx/textures/item/wraith_robe.png b/src/main/resources/assets/netheryx/textures/item/wraith_robe.png
+index 78f2c3c948786eab70fc51d0ee018b105295aab9..f004d642acc80c652a2ee53c0b6bc0c46c6a6066 100644
+GIT binary patch
+delta 242
+zcmey%)XOwMxt`&Qr;B4q#hm1X1p)?#B$6f-{ZD)oeqP=%DY(a%m)mF2nq7?#kM&CP
+zoS$!-YEk>=Lw$+!5tXO^W=GvJ^6>IBj<KolYiw+M_<!~Deu>Bnxf7>MN;BBH1*+6C
+zhv6{848^*Gf)bBF22}iequC`P+*A1Y7%va+CDXatJU~K&Z87r>#@W}_DZGf8@s|Jn
+z-KOr11_lmJB9<+Q4>G+i+tMT&SdE041sP(EjTBBX)HEz$l<=$nDb(68*!yEnH}3)o
+n2H!*##-1l$J!&zPsR;}W%>qFMUzk7rWB>wBS3j3^P6<r_j$&q&
+
+delta 355
+zcmV-p0i6Dg0{sGzBYy!zNkl<Zc$}q^v1`Im7{q@GokXgylwgG}4(cHN3j$dRErP4y
+z-lbDk-Q3!#;N;@2l+2}+E(QMt2k8(5s|Jy#7RmZL*rbUmR_RU0eRucrJzn4&LTHj5
+z5%#LS&~8)_LX+Ey{JHN1P=wH=Y1TQvEc5*MKrvx+eRGfN&VQB7aJx}u=;i45U(j`f
+zR_hj}*}RjsZ3o6~w*x>jc^H%kp~=<i69B`w2)w#(poYUf3Wc+nR;yjbG|TF7ur0iK
+zAHNkVLTIv5sm2E75)8c@0L6q&=V=_7JI;*BWJIvzW=YZ;@cNMgAfH|aJREl2xe{5S
+zbhH3q^yb9AC|sXjh6;Z4NWtL!nCWy3q{4FK^fkPIsbP5?-Vdt(koE~@GAEd39U(NS
+z0{Cyiab|((FK$`A=nDSLX0xX|@d&~{(Z2lO_yRI;qD%l-|7idK002ovPDHLkV1l)9
+Bu%rM0
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/abyssal_layer_1.png b/src/main/resources/assets/netheryx/textures/models/armor/abyssal_layer_1.png
+index d85c5d9be0615e8065a706781f6fddc38071454c..aa4e1cac11e86847ad22e1303e4a2865cdc5faee 100644
+GIT binary patch
+delta 411
+zcmV;M0c8G^2($x`BYy#VNkl<Zc%1E+y$ZrG5P+}JL7a+62N87e1zg;H22p$yUr7|7
+z!QF=tU7Vyig>E`XrACvxn2U+l4;<3FT-&qvmk1E%o&H57+hix`)*H&bhg`r`oFnWW
+zKB-ZZ25AaAA)bB(<6h6z^Erp)fc1WFB@Y>r1Advm1AIS#Z+|N9fEZKQWGAiskPEFm
+zbRw+IkD4vzW)8XUJ|PCU)p=bhE9A>r0ssKh#rdTi+aDq^0KLx3FD}cm{UP#Cf>gy-
+zc6^A{NwclY9p6OdzW|a0<bPjv?Hh@PjRgIaRi%ou_g&kc0=;=T)+zHn)>qiRaM?bG
+zJyHmm&imN;fqyN9eGXX818nt8;k1vILDOCzn;mT7wr`z)<d`&>4Q%x(Yb-~w^Z{~A
+zVmW|IpSsq;;s7}&O=kmJeN%g7oOXiCS#qBsL#6VqFnJhy2i5o-60t6eQ`WAL?_s*e
+zczGgZx^{`{S)m5tHp_-i<&&V&0il;KE=cDAK5?A`t`uhnEA5d9Dfs{Z002ovPDHLk
+FV1hidz=Hq)
+
+delta 1023
+zcmV<b0|5NA1C$7mBYy+iNkl<Zc%0o>-Afcv6#uPFvIHvmQ3O$tgb2O_K|<0OK?qSk
+zg^(`_;eR7!L?4fVJ!Fuzl2ITQ1wBUekV#AFuI}pkwX^e)bMKuVY-V@v&dj~repx@c
+z4`<K0Kh7M_z2}@8fdHc?y6iChgZO+z#Icv5$QWss1prvmb$`r_w&KEr4FJGbb-Q|=
+z)d&qTMif9ir@~?sXYZ|H?n(nJMyu>vZ6K8aaW(6adtdHU#hH3QDgYK^)%K%qkO}~`
+zL+`<V8j>0Cf1GzeNCja1PZjtd5xIKgXlQ;n?{5qx$XekSA`u*)SE*!O`-lbrFe!ye
+zDPqITSkyFkeSgTT0swSEpc8_Lp(wtqs=HpNmQlFBaBpn5+1+mvikXoXBs9&lK4#YH
+z^x1hR0KfpGbpt))hOZF=kkmAszN`7_-&~HM=Y{V1t!I4Mv%h;hSrLaT4Fv#}H9gd5
+zF_#O~cR%+JjDwUB&R<U`06<Y(=f7QVLhIyiMtsU{_<x?$_Qt3kw7(G4-n)IoZUB5P
+zs?Mow(QiQz^$Bzjw-E{eYzl625k&j<bOubXBt&J%c2eCBGW%6RO82Zr5Z2&x9fv(1
+z|86ZEx~JOj2Rwhdd{X1ENg3YWYQv|^4Jp#BWg%->_`JE{uKR=gFqK#=$5$8k2lpXs
+zSry@vYJY`oo8j2l4{1_nGt6&$A4^W%St-e}FbqD@i}?Q*QURD(<tqXJ%&n&X%9(ob
+zm)(aK&JwYU3^(6LL+$z5A$F0We>T_+CF0fbvkA|~&mN*#L+TC?AvW9$lTx%!W&q@8
+zhq$V`YhozsnH`*2p?@|4lTet1BB5!XnZcPA9DjaiwwM@-LMO!K<MlHmEieg{nl&nt
+z0S2X5HB2N-4gE)sLL&q#dU5+3*K_D?Ye%8|nYIoXgd$^_MfOQkM_<Pw1o4ablBSL=
+zvQzyGNErqg@~M~5HBi_^E66@=8YS5~{35>18|^~hD-r-^+h7G}&yo2RWN!!j`PonO
+znSauJ2cKkwzDrdB5g2#z@N&8KsbAhPeTkbcd41aFI0d010pQ(dg5if(7k>Z3Kod?*
+zsjkeo+L6c0g(9X`5+3<gs<d|pg?|z&waftJWx&iO8=cSca_6(sdX93@0PL0#)w0|&
+zvc0q8DO<cgXIYpTX>rR;(3$*l?SSwO=y;!vfZ6a}wSWQu=O3<PQOm#j*Z{h2=Tpm1
+ze|+qxD>E*sog2FAx&KQNZ_mrMgaQCRxF@e~S#O`s>wjuqng4Hzj{qmvI{+&6zWZ+x
+tugvRn+<edL7Y3Tp@icgH6!Fy(zX26@^!{$iNbLXs002ovPDHLkV1jaO?4bYv
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/abyssal_layer_2.png b/src/main/resources/assets/netheryx/textures/models/armor/abyssal_layer_2.png
+index ec8c0f57a53dbd9202c2009d694ff30696502ef9..57632cd18c05ff3ed01f2abb4af66607c8512581 100644
+GIT binary patch
+delta 258
+zcmV+d0sa1s1f2qqBYyzoNkl<Zc%1FlF$#k~5Czat#3EG?u}YZ>q)G1uyiTs*WpW1l
+z970Sll4?n3Dg&8aqszt}jQ@e)tP2jqtRoQs00000003-Fz!xruV?W$iT}wCh(DwY3
+z(6o5UGOCsGor?%#0j^EsISn}xU#PlPA`dYEKl6E#l1;q!Z+k>Yq@Q`)c+Em0{mk3O
+zYi9fiZV3t?oq)8>7eM<Du=Q<>a#Lf~w14R_`;!hB8<S-bQ(44RD>ZAZ^2>+dyxaHF
+z+s5Td`cC%#R39<NpU>I9bO%JPFUXVBsesa)tLxf9Q<m<47dnTC$5K?B*8l(j07*qo
+IM6N<$f@HLJ-v9sr
+
+delta 500
+zcmV<Q0So?}0*wTaBYy$ZNkl<Zc%1E)!E4h{9LGPcRd%t0X~955P-K6?cF>ErLBZ=_
+zySRh<V}zkMy$bU*P>`W`QkdXfJZ#8d(rH`kY-5`|^IjScb0aSXS8AJ*`9AOt-{0?>
+z@Xg~T`GLV;Fc=I5gTY`h7z~F0jY6`pdUZC6>qooWe|Sz4#ecNo!^JbWQu3_+DeF9$
+zlez(mk3F8;6j^7P3Z=B->sFIX8(Bx04uzWSXzzUa>^aTg%0Sa9((Jr!?C1I$Q3QB?
+zr;G?g-nLr+tS`^tDaEVCXVUsFRxTh^$h-E}Da9Tig_`X|ei+j71$EJ9!FK2?#TU<G
+z*XuEFRfzZJtbZ!L3TX?$zVPU%AlE0L1kmt(tyuT^nojncLf3hw1TaXv*C*)+UFVsR
+zHXy0<Oc5aZy^a_}hwF%Bf9LjjPRkyQbONqDbtfDvJ4yiG<WH^G4D=~5**}QQ27j9)
+z)^7-wwq~?zPns)|OnT1v=bP7TCvv6a&0UL&_dc><J8g7=!-w2lDKq<^e(XJv0rOUc
+zxPQ*7@<U1hwpJ@#S=&4IyGl;{H=8;Nk3u{+z>eGH`u*<E{=I&W%WJ)H#TlBhY{2{O
+qcTI2J8c^MkL;F8;JL8Bk62AZqbm)PZ!yuUe0000<MNUMnLSTXv;s4<P
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/carapace_layer_1.png b/src/main/resources/assets/netheryx/textures/models/armor/carapace_layer_1.png
+index 8a183619d1de2ad43373d91c7aaa1de4ca9d14bf..63bf182976b1a07b44d1d94b20ff24f5506a901b 100644
+GIT binary patch
+delta 398
+zcmV;90dfBL2&V&(BYy#INkl<Zc%1E+y$ZrG5P+|eC(suV#Dd`1K_{VeS6^3fs)M5-
+z#5WM_E9fAV8cpwF?nr9=z#-n{8n5185<n=5_01;J`Uu0}$hx<xuAucH!JZM40Yzy%
+zp1|dDe*4s9*;4F)(vTdm-<MwUm?1gfm-#y&^Z`QCdj}{?L4WIGtGueNY=;R!g4Ovn
+zomn??$V2xD3gA)a+e%q2FY^-s04z7tk8*5(j3@wloi~5DDaZE5$Ug~E6?ePsORO#y
+zD{JoP621QikQ`vXecN|kL}7JaS{@qoEjDAFGT&o;g>T(&+UKxG3IW%7AG<&BrMAxj
+z%YA^azAK#e(SI`N+UrZlJhy%COm4=c%WUAQPg!F*f~5~IV-m{&T>8{?8!QemW72gt
+z@YQ#<*F>}vEc4TIf{c~kx5DIM=o@U~b4;kVEKXTVV?M)mjq&kD$aO7=^p)8FKsL+9
+sPVbYT)d8`WFD{ZaokxAOC7lEA@O3Oi&XgD(00000Ne4wvM6N<$f|U5d^Z)<=
+
+delta 1124
+zcmV-q1e^P(1NaD#BYy-xNkl<Zc%0psPiP!f9LGN?V}hQfMU7fhs4dnirNvsPhSWfd
+z)RUnx6s#T^Z(f8F5B6552h)QWLBv!rdyuk_fW<c0xCv^&Dz&A_#_pf&pX@(vnoTn7
+zXt&uJ58EC0&CJfsW;2`O7vAB$-|zRG@BHS?`@Q#CaKPEKpMPq0_S2_7XmR3rkRiEo
+zT3%iTAR3(m!2jH@^xk@zVDN@_%9;dM3D7i+a5$v*dxCp`dmc$@E;hMw`sAStlu9L`
+zjqJYev9#vE)eJa#Z5PHbULKqCKvHwzDgmWZ$!i@O23HAKUHyOj?^bY?fLt!)wT=x#
+z%gK}P+t&Hbn}4_15-cv>F^vti2k6gr15hm9wT<`rzTD7#galA16adI(GfZ}-IP}w2
+z0OIi|eSL2u%Q67TWRmap&GN?Y&jSz+&(hV^EyM#Hifm=FGr%_AUAnruQ4|G$TrS7Y
+zujP1kqWwN!tXc0_6B3l`d^(*1pmXv`KwR`RO(PzUF@Lr{%<I4H1XfM<N_+)np15wW
+zB<J7{kD2&45)wc%nW*V7*y`tSbUOftf7y<ec)NIjRBFBfiQYm2bD6t(<PHbEFaP@k
+z#a_n8&shGaJ9g~Wtm2J$kjtn9psJ$4{bP?(&onj0o9$}d!kPsM;P&l50Z5!^W1G)@
+z)wV(<-hT?i9aHSN@yHtGc@OFQ`Ooy}-SV-ek5-xLR;Z4*!aK?Lw0wSi%>uoKV-4=<
+zIWD~X$jCRgF<##v82KCJbF~vx6otz#MR@8f*%j$Wg)jK<ULT>*Enz$qnyp`<4gbZ9
+zqYZPpybn-$VYCf!mw;3M9AkR=dIPeW$L}fuH-B%|ck^@U(zk08vl09a@57B}iF(ft
+zPG^PI);6JU<agq8I%~MP5pqJIP++J%z?CbP0gz=GS(X`W^%D#R^)@={2g-+~LZP7h
+z4|hzVC<?JyOlT7m<Cgvv?pl0`qA=VsrN?`o0D!I^pBDOwM1rH&cA=`O-okxl+wtfD
+zGJl!0?tAQyy=1dl!MA$zWb}v1ja2#Nt?aJ^o^YjmT@sK=%?pA*-!g`(mP~Eu1#ACI
+zCXJ@4rdEqT7Ms&|pZ&S+ntX2HY7umTajSde>a##?0Y-nPt+JDUy?oVJmjoEI?IghL
+zZ@YIQolXk<csy!r&t$}-xgFMN255%9(|;Eg{q3f!ajSjq+!?_hi3Ekd&nG6w36fJ8
+zb5pj~drCJGo1nasuB<HUWh9@^>t$xBJz%mAcT6G6vR-D4i<WUUH?HbNe@)XYTQeX5
+zycOC<G#aTI*6!ci<>=3Kv$C=z*x#Iakyz}%sb>D7_1zCR`FjZoARG=0gEKSJLS5fz
+zk4DA+tonrpTm2kVAGdv|IRVZ2+E$PN^7-<Ao;cCQKoJ%e{t}!j_6nAk7HirEioGl>
+q_-!BR#5e!$!#wl#-){6bjDG=A7s8*t%xcj90000<MNUMnLSTaN{y}H}
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/carapace_layer_2.png b/src/main/resources/assets/netheryx/textures/models/armor/carapace_layer_2.png
+index 2a6a476e2346e54fc83e9ca70987331c62b618c0..18f34aecb57c120ed1bdb1f83c33cbbdc619d252 100644
+GIT binary patch
+delta 251
+zcmV<X00jTc1eOAjBYyzhNkl<Zc%1Fl!3u&v5C-61=|O~OK<EX!cJ|uqcJ<;h5Vki6
+z^A+q6M(u9tvgly`-^p1A9ERN;0U{zIA|fIpTARdPD2h|pKO0lSn2VG1Pg37vmTl2A
+zx4COk;cY-wm2=mjW@9fHQ)|?rCb7@FNRE(r>32j5xMw~zUUae)aL;^byky=>a81|%
+z?E<u|z5&jEK&W41)HXC$efd+5+2{rU&$0ME8Tz<9UI74y^KMkWhD2oF4X1r4lE3~5
+z+V=ht+wAva@+aQ`u^$l0qZ+6!y1TJEXvow%-~qVPcS-2lv;qJC002ovPDHLkV1mB_
+Bck=)M
+
+delta 564
+zcmV-40?YlD0?Y)EBYy%DNkl<Zc%1E)F=!KE6vux(LZskS1rMZVa}b2OC^#IPi;H6|
+zg5r=m2whxU?A$4fvv?r&HV-U<;1Ib|p=c}BfTXB3F*L>`B_ZTUN;2FzM3R1Iw3a3p
+zPQTxD|M%V<@BQJv_klzrkw_#Gi9{liNF<W~jWK^<Vd1{FSAWmX-}$BHUqa~@yw`X@
+ztyaS{9|hb_@bonRAeDL_U>l<&(l2=CX%zSxY$qdPEFPZ|{`rZCV?sf-TES3lW{Wxi
+z?RHDZo94q%pAiaxq1rSW4U)+h03@Ooj^nVjWC3vP%Xtjd?&h1#CXY|8vb_9qL~Rca
+z1v&#33g5cH+kchI<Z?NoP<wS!&=>6!0kk)KA^`dPwh+u_GlKT#_nH-UA^@)I3c-Ww
+zFrxr?o{Q)8hH_n37;;rF`SKpFE1aF7MS<Qxxf@65XwiTR$>YMne#64dPXjsw$IQ-(
+z^Bb_A4l@yea{0RuEEIZ&o}t>rlH%^)*(r6O_q#{<see{0g7)7l{0#e^ap;f7<8xlU
+zUgOE>cf`yVGc(soL@jQWF0r|p7HZ4oBATXSs5VzWonvk7HJYa5ICVhWKB+5BCKq?f
+z=d(jKpzl@qpm?6g)bpc2i$v67wy2X%fB0?v^v5Z-wmu8*XENgIJ^O4N*d0WBe`FvA
+ztgpZ6J}uvEPqVUO{dGOS#>QJgZ{Hkea&h>>1N;Ei8Tu+LMsTeF0000<MNUMnLSTYZ
+C#1i!Y
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/ember_layer_1.png b/src/main/resources/assets/netheryx/textures/models/armor/ember_layer_1.png
+index d5873ccdd58ae5e9d177e12b9d63abdee6338180..4dbb85b2b20eacd04203c34d40ad9481917058e8 100644
+GIT binary patch
+delta 426
+zcmV;b0agB>3Bv=BBYy#kNkl<Zc%1E+t#Se}5Xb+=oWxVrsYY~g$8=Drsy;w9Q_&}=
+zM)3p)2Hgihp^!|msLC4@s_Hydbgn6TyCIt<$MKs%<aV>UESLRA0*3v#d!S^C<qr3E
+zZF255FYvN15^jx<q!Ojhpoh(TMar|$uu>i~Er}Ahxw>v15Pv%0lDRq{^b3Th@eW|K
+zz+$<plyCDw?PWrcaC!de@s^ydArD<AqyV4ikMe9f0RU`X-%iT8`7x3L@;q;D+>~?k
+zW8@kHrHcLc{jan7@q9zZjylo!FF@n~^WUeQ)sbZO&}KhnDpg75o@@KRU>7f+bxD8E
+z)fKKAF5B0zCx1Eu*=T5Gv@_@-|NQ#%)8c4f1C{##SAAPF?Xzjnw$|r*2UoQ1I|m^1
+zOxpAYuKJQO7b8^a0P{?8F+fXSI<7*+0p^*s?G0S@ZS9ruS_x*;$xjCvD~&IO#m&$;
+zQ0;R}q*YN|GWLzRhV7W+<c*N+*eAYwg%;p9%EnIPgCij6fY{TQ7NYxrkob-P--(?T
+UlNE|Xi2wiq07*qoM6N<$g6R#{;s5{u
+
+delta 1165
+zcmV;81akYs1E2|zBYy;ENkl<Zc%0Q(-%ndr9RGkfaWVb@KKXim&?N>j#26n;BvUqh
+zSeBVBYY+ro5#6A18%uO^S%d{$Ri;z2C5{#54`x`xK-tVPL_0_am9f#x!6=2cY$;7G
+z?b_b<_)vPe=e9lfK)LPwBqurF^ZlOB{hseR_k7PeMbH50e}9#*^hKNcinKT$W(ZtX
+z?f?KFV!aChc=Y3=h#WqM!vj9O{K^~n0zd%&;Iu4;4>sxLPu{^5fcZ;z^!B4*;0i!E
+z64%?0f`Kmp(S+W96bzgJU?zh9HMj!s%k8k<eiRHvlg-aFr&oO9F(!e-6JqLv57_(1
+zbBAmNJx2%t5P$L|2l4D46Z&gSva-V#faTK{5WE)z0L+cLWS!XBjJmRS@xE~*M1v8d
+z=2m!bdMNS^TL2C3JcH0;l7GRm007u}`ZIJ_HR9aZzd8<$4*~!r2;drb!&%js(I`QH
+z>5*Bg&HlkYxo$h&3fH(h>qim<n7`?j<t{@*PEM~U1b+aSx;~et*k;~=AIsYT0Jnx_
+zm?W9{D{<GJJvfDi005C#`ZjR3&LY>#dhTWXPmND*AldpWp`|Y*k^#su&ujIM#va~t
+zga81)&pgP9gw?-fYZ<QeICA3G6T(ybhnZ=}0+7^F&jhXh4c%5^bw}6gpYG7i!58*C
+zO%48a^M4IyAHClX)cm>fah(LWd}zWC2ae#(MJFHY#_d4gcesCbnri-h(7#&$nEXvg
+zM{}m)3V>zb5loGHwGC6a@GU0$Zm-p+yz+AeptGNI=9kfQY-}yQ6ofzLbGZ60vD&+X
+z)?MN84UbT=nqP}g>#kAE{5mH@gAw7y5I*^0EPvThUWujqLHu*cL6y3XtN?)UVhEza
+zDBFkqA%y)Q%wC(3OG#}#noo{1`Lpqr)Yc>H56S&?55TCo74tV%E<!;|8=N*5VsS#1
+z6bJz>)|e>Sb87)og2?6Pw;DD1v+)hKwBW_+m+{j;ji&GG5`fvi-H;RmoEn}*Od@F|
+zn}7Y>gcnkrq!lfGrT(?%?G)d+y<OP$O1q}-e6PY9kR&?w$0YXIUv00JSIaL+1n2j5
+zaq}sWa{$DOQrLf^Q<8GIXM&U<Oj(WYi6AAPwgs5_p2;O9pAtC-z|lLBHX~6f{qplt
+z%bVz^I0Ybm23Y}9AGJFxuTc80_YYHY=YJuaw$lm-$}}cclmfO1%77<r#S+>Bx@=lm
+zqH237PO!Uu7rv?KScU8BgJJ;id4doPM(kXE06}>r7F+>2&4>mge4e13W_;cyDosfe
+zq5iu}8=!L5)%H@H;H#=LSvNsFQ4A#0$jLYA<wozRFL7;PN|yg@IR^XC%99u&z<=@0
+z@5!>-VdbDVnRm$b6TQ^{fVbOsQTCZKK;8l%R+QrUA5Ll`8v6APwT#tzyVV8dZ=TBC
+zDQs!mDd+z4yU)t?y5&8ft@3-yUP@#x`GDZ)9l>Ao^nLxZGeXH~{jev>)Tagt04I8@
+fDVc{apZE_J-_d<N+CA(50000<MFvhpu0mjf@5n}k
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/ember_layer_2.png b/src/main/resources/assets/netheryx/textures/models/armor/ember_layer_2.png
+index 55ed135255cb730810723eef9477f441a02c26ee..341d4c06032c4b0af7a036a6be662969c3145b6f 100644
+GIT binary patch
+delta 264
+zcmV+j0r&pg1fl|vBYyztNkl<Zc%1FlF%E)25Cza#LTOLO0j#Wz2cY5@mXsX8V;E0C
+zMP+GXYeh+@tf=Ur(!|+C*sL%?{!2)hWfLZoSq35i00000003AU#TTBZZTq^<@`{eP
+zM%(jGJkw%u*il*3bLS$$Sb+QGI(Hsoe7=z7l|&w56hHHE6n~OUy!3B`N2H&5+jz-5
+zBK^$U#!F`W2(AeVAf14;)fYhf53u!ZjB-O`)wF-=G5eDa=o^zkl2VYQR2KE9vC6MG
+zsPlf)4sYuhN8vl!N7;PD9DhD$|I{7eyS^Zf$f<zRoU7~FK|`kQfDW<8h97(X)9(NP
+O002ovPDHLkU;%;^*M8Fg
+
+delta 580
+zcmV-K0=xa90^9_UBYy%TNkl<Zc%1E*&ubGw6vsaep$GBMoAobfQ4nb)pqF?G{y^{`
+z3M!(AQkzN-MUb9~9t<j?pr}M42MdA{Bp_`q6b}k2inUQ1k*W}z#*+#qDc#LJ4`HXB
+zb)i(+jj8j2VdwkaJG^<bv-<`N27|$1Fc=I5gTY`h{BJaQ4SzDUQ?!5`gMY-VCPKc}
+zO$T7=7kyn%gUzN6gng~q+vEp71)NHK@GU^!#j$|Xs2@%FWK=uzZLMpxfRClJre|iW
+zn%>g?rlG$PA%M0cT~vOQId^TWW{qrw_|e+a$6xtbCUWvL$y>QPq`bU@0N!4`O!0k5
+z8E1xGGSPdM#DDI)xc<$DW6CcA50CW*oa)LD1}KbAYsSy73YspAPg6K^U+Jk2-vdZ3
+z7{UOyt$hZtJlgB`>P996U^{~C%rDBS3RZPqyZ(VEC-94JWI|Be@rAoSXFJT<j?%9G
+zP&`%Bo&q&8wE{STwP1(63v~T1c2%%fNddwDBa;;XMt|Zd1}<zPGok<cUBAod*I6}R
+ztdH=rSYP4gpYJpB$*4T<*&tF(%fa={BI)f?I^Q8uOiMP_B9co;HrAr%`D9cimr(Jq
+z`y(>k*)GGK?IOjrT<KV=#=h3(6@ShAFGEYj5#jotZl%}l-AZPE4^~ykoVurul-pN4
+zOO0yrf<5r=#WybP>c)0ZBMAI2Lrdi5gGo)h3kA6G__(J1;_p2AvK(pr6~6&pqaC>g
+S(wn#d0000<MNUMnLSTZ6A{$x&
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/magma_layer_1.png b/src/main/resources/assets/netheryx/textures/models/armor/magma_layer_1.png
+index e5447fd9c55340e52eecd98d5862249d2b5f85fc..75f9a3350af935d6ae610c1179c2bc601825048e 100644
+GIT binary patch
+delta 210
+zcmZqTe9JgNxt?K*r;B4q#hl~>3D(64B0Wuk23&3jHIO+T%snk4YYZO$<WHVo@vS}a
+z&}4a*uRN*;TzVFL5V4HfoqT{Hka0uNIb|@DTai_L-rt4o)(BG=8G6hQwLH+>D|vjM
+zVM;`y;e<o-uXLT&*x1;-*-FJZ+qn7b4zhYa<xf3u<UqsCOUhI2r!WTkK77biz~=B{
+smQB?zpcToDJjd$~ohoQv7{|fH@ZzC)eaN-lQyGB3)78&qol`;+0B<)^y8r+H
+
+delta 1134
+zcmV-!1d;pg0fGsTBYy-*Nkl<Zc%0o>UuauZ82=>%pG9zQz6sgOo@x<aR1kzdtS}_h
+zIv3kPWH2bGRfLM@!@!Y(IGk9+)-2VoHR{}^j!hD&lQnEjtm(QnT}4#P*5*$eO_L@$
+z_Z}a@y}9S)=AL`k=BE0Ck9*JkzVCO>`R;empU(jS=;=qOk$>KC_)mw3V>iQP%IYow
+z0IXcw#G~&W!pfTy0D#fNR@*ve7o0+i?p}Zb$sadSB0zF@0wn^Jhz-570pbj}aRIZ@
+zq77Z?3{3q3<^Rdo)`O`4lxl|a;C~t>1JLenbPlEh5dEv#?tXL(j-}W480NS8VdEI3
+zGR6}`u_7DlAAdWM?dU$j1pphl`XC;Er5_W%psM_Qxr&Q3FC%v*3;<Y2lvUl+A9!)_
+znE>8?=|R<h`Bnvo0s|_C;tv3k<C9ofsxUAA`q$29mJ0x63Ow;@KLUfnW{XSbAW<NG
+zqs%@&8dC3N3fx?%502-E2d0tFOSrwr4t}@52>|i=Eq{FI9Y;l?j41eNwuCaFO`;$^
+zzt!Zc^`B4H^+TaSRW}qGv~ifN;R1k)V4Z*NT2c2uePPc7)Qo>ss$Y*ie_DN}z3(KP
+z0I(%dT@m54h!1A`@0Z^WxBy^e`Y`rC^@(L?WfF|tGfn|fhIA6Hz5X=^{3nfUsFLb>
+z*y~?2Tz|&i0q8<*_eMat245I>h#7ouFmLG7?)m}Gzg<4@aTvh<*ZQ%sAz}2~-{x4;
+z1V|GkrV2<*6@czuB&G^DGP1gzzBbU^3#7@8@R`~QkB@wcUluJCKL~K?%0JAb)uQo^
+z&=S7<s)_%8VJZN@nN3TiN5*nY`~0&3Oa5m0KYzaB!`ME<`Adjx@5A}Cgw?Zy(OIF(
+z*N0Rn%sk`yMSP;OhN(F~1h?0NLY`pw)H(nlpCQO+2(Df(s)C*aI5?WswJ)qoD6C89
+z^7Y~8*|I7<Pmbx@qvrtf8Pbxk%h!j(x`ekTHiUgQR}>W>_WoI<G<$uS0?9agc8Csz
+zT7TM83fx($V0m!d6o2+inBnL3k>iuNvt;h<u_FPvnPgu!cfH)gQs4fT;GiVpx5}r*
+zjs$?Om{kQ6K5s9oxQY0!@@cUn0U+GIz9!h`^Y(mO3%A#U;Zy83eR`Sw!r%SI))l`0
+z-F%&4+W~NUJ^1!A`|k=fK=1{%aO^wD%zxsJH`0uL(!a*Ezd4aLemMshT{ud$OO4fK
+zCKU>!CR@t@-rgt!+6`wa6o%XD!QHjSGV({7G%Z_NeV4Bf_cD!TrY6@#DSuUEz&k#`
+zT(w!D*ef7ZU+jPr0HXf0_#xJqS!D`*^kPtLD|%&s7mrQi>RiLVCe=kbQdgzAzi0NU
+z6h*Z5e47_L;B<REh{Q@Dv=Q?2(IS(kkyr`ue$l8I%*>UUFGMJ1{A)7Rl~(qh%m7y^
+z6h<=3hWq*|``;(C5>qf)%r)zc{CV*9JfEHT7f6!oDx7U1AOHXW07*qoM6N<$f_1e#
+A1^@s6
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/magma_layer_2.png b/src/main/resources/assets/netheryx/textures/models/armor/magma_layer_2.png
+index e833cce5d797984d06111e6c8b20862682fa0e1e..80831befd798ae7b8b314c29d78c0b4e41830993 100644
+GIT binary patch
+delta 266
+zcmV+l0rmdJ1f&9xBYyzvNkl<Zc%1Flu?~VT5C-6bFc?NB2Y23q*=O(>I{F|Cjtstl
+zFG3s{9f>hM0x^UHCyic<g;cm8|Cf+(Z4)k+wg(Xa00000007L5#|O^aW%GPbvy%4L
+zySC<^_@=>Vv!cAH#?D2Au>i-zW$Zk}1biUPN{Kwg1pLgaIDe$~*fu})JHjW@&wSr_
+z%6uaI%=e9_%y<dT2?`*cfV9~cK>H8q>sy=TOl{P*e&{y)lO533CZj}AlqkxJs#9C#
+z&ltSjdePXIwNr8UO7?WCKVpv0cUeF54hUR7peS@Ipfu;|y6zyGp?AOo2mFY2OQNY9
+Q00000NkvXXt^-0~g0N10BLDyZ
+
+delta 559
+zcmV+~0?_@W0>=c9BYy%8Nkl<Zc%1E)J!lhQ7{`ANQ36gWnn7?386DKs#l?UK8G<F^
+zfnQh%*rg?d1@|I;foO-eMnT06g@A+(RS*Z2xHJmQR8S~LV`?B$)4R*#a53?{q|`!k
+zG4cJuarb|o|M0x;``q0F8jVJy(P%UpjYgx<X#O{b+yR+AB!7zG!j~4$AmM8pU9;fW
+zX-2Po^|&1GX}<v$WUr(>E~Pj4+XY9bzj<9p&lp;n2r2J;<bb*-g>_5Om1<4VNADK<
+z`WxW`h!}CoC5!Qy4JR6nQChb+d!q<IxnvPB;*ETH!{*54GfY1I-jkv`i67wYt)~<|
+zRh>vQMln6l@_&cThN&iyzVxu6Mc~2tIZq4i7CwNF%T-Lf9?33{d%ww+-83nA;6y5+
+z=zhizV2T>tQeX3y{LOQNar#i-0LxZaXu7mJ@7Dc{(*dp%Z|Q&?I-;NPMT|IRO)zWC
+zRhhOZUEt1JwhT-c_zREbd9$Ye>lZ(pigxF(Kfg%y_<uA2f6fsRBM#XGM?_=J^Y43|
+zo#qNR|NNY>G7%EVCuPYPmQ%xfM5YeP>R3ot$3k-N@V>?+`J^O5d&TX~UEMF4k)UKo
+zf|3dcMDj^Vg#(fb2jpbX-}N?YI|}cXrKu;peAk>CM1;(%AByKrVs3js!t2~m0LEi8
+xoha$A=_tqs+<s9}^yIVhuKf2GE894`&o8af^Udaz4srkh002ovPDHLkV1h9b6K((i
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/onyx_layer_1.png b/src/main/resources/assets/netheryx/textures/models/armor/onyx_layer_1.png
+index 472d123f744bdfb90f41eb71af8ab01cea986868..a3737d71efe3787c5831e8dd762b876d234716e0 100644
+GIT binary patch
+delta 412
+zcmV;N0b~C32eku`BYy#WNkl<Zc%1E+zs><c5WweTUqGW!eu?%P6}9jV@`b0+iAv`w
+zC_IFysWjJ0zI>I4NIU|CoSbEEX6;ONIln})W_E7PnSUDr!f$7EHp!Ch3M%EQaqr=@
+zgXC`+VbAbMiJ}zOny^3qKYUW!jjq)B#34Cgv7S50Lx$vlPk-j?0N)4jP2nA&Fok5h
+z%9S5ZJGR64Aj0Z=Tx%LPbI5)72@2p^=krQgDjyG~001zY^q<PH{UM?N=yhKI;kq2#
+zA0po*NL5^JW_PjLs`re!<DDq{KY-)_{q38+dq)&j=cVPoLEmCF)+zHn)>pXJ{j7Zs
+zd!!Jso%gZ(1AkXi`y8;`2e|6n!f78ZgSNfCbj)+xch2N`Oxnx_uKJWUmLpjD06iwL
+z9KfYdUFX5#06ivcX9HJ#TYFhVJHhc_dYd3arSPpVc^G;H)A$?`Dldyu*3#(Duw7$3
+zy%DlqOCo(`RsxXCvY}J>BxrO%=;e!xDE?^$eYGW>0~Ib)875ADcEHmB0000<MNUMn
+GLSTaHkjt$A
+
+delta 991
+zcmV<510ejh1M~-wBYy+CNkl<Zc%0=}OGs2v82*$?ZQ2AuZdybe7eP>qz(69X%t!;%
+zqK7S-9%chBY*Qj-GqrGGVJT5TFB<G&^g=1IKr0_;XpW6(KGJdWIin7h&fI%jRJS?D
+z@tkv=xidl^oW*~>|NriP|9kHJ&$%(+;K><PW$~$JVq$n23x64sh?8r45CBkTzpu>|
+z-O9n*b!&{tDuNIyfT}8}X}v?tW$(LSNJ5c@Pywo%t{R<3)F4y<pZwkEJfa4n0!;h<
+z^8(EHe;A!d)F4!V-k}dh=Mgo;6dZiZ?DKI;S1|>?xxX;^=@~DRx7xNwbsr%CfZ3XW
+z0`mj3_q`#=mVcf~6dZhq5l=4w;J9Ty4)4y_`1+0qIK2G^+>=h^7pG%SO7^VyLrJA@
+zPq_d99sRW$_wdCv#IIgy#69VP1OR7Gl;LCdt2v!iRY9ZUF&fey&B^adHq9Lm1?|1B
+ziMgFgne)jv?2rJUx$_y*>22FRCeMp+>8jM3R^%W7fPYV(VLDYbT@L!5u2>eYip2XB
+zHXlv=DZtN=M0oL`>Kh3O00u_wA&Kzf{hSpNO-T8-Ht^bz`gf@ZgGl_ar(1t!5dyad
+zXQ$jIZvM*COlFMH{|{*WQ1xO(oGc{=;PJXp_U4q3sB^3z&ar;jsx3$~0k&!jY}FRz
+zl!oX3L4Ts@_cg+yC$tsL+J7ExJypV@e*ZKo8ZH3<_NJQWml*?htX-OZs1W-f&|IoZ
+zw5U97Udcp5KjeKleU{LBcHo^A7B5;t*t9-Rk9XD(`Udb|wkE(m<wVKT0|0>Z+~pXZ
+z=tEW0RbrgGyD_N0$LoT}>q7mfa&6=mZo&16qklpDM<@D_p1WMrb5A*8wkBwNZs8Vq
+zye=)C1)*1fhXV6`*aP<ZC3$sd{`_3nUsY8&zSa;vX~~Be{t8SPc?g)m?j2d0dHUGR
+zS$cCJECpz#4pI${$GZIO)ImwFzFxgRgrxwo;v;R&&Tp1KW$V?~s}~4E3gFj!LyDj2
+z?|&E|mvc)`C6n(Qe9zPiM0g4y>s$epzrrXOz12Q)F^=X5+iKg&yfzJq*TzKJmaLLb
+zkh=mXf8Gi(60ra<G~P+Hk%19A(Pqrn1PqOL5^ZM4-L175S@sc6RhDOhj(<GmulR$G
+zNI(Jr6)H9*Zqp`JsMx+aL$gn3-Nbu)nOJ6@G?k*kQLfo^vixtr!dU?l0MvfGOH96O
+zEGBH4uWK(O>`=P^>l<J+Bmfwm=piNt$2$m{=0_&`m^>X%gQpis`~px7CJ`8vHxmE=
+N002ovPDHLkV1jIH+<^c9
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/onyx_layer_2.png b/src/main/resources/assets/netheryx/textures/models/armor/onyx_layer_2.png
+index cfee9db0521b3b8c6d3eca7dbe8eceb75f3be060..9fbeee9257a6272a463893116ad82e6ea5e31723 100644
+GIT binary patch
+delta 258
+zcmV+d0sa1|1f2qqBYyzoNkl<Zc%1FlOA3Q95C-5;JV_zj9Kdy<m*~d5XDE1?9-?$@
+z_ilyasz?!f1iLDfBtAlFhBW^Nf{6jgVd8`c000000001Dlc*EN!)g57H*HPL{i?0`
+zC#h*tik$kP^Bf8fV*)O>v+p?AWa>oI)*NxLNz^?rMNT&3(0l(8DUrVCZO0)?iS#{h
+zI}VxgCm0hXfI9$g(I-GV2iTfxqpGF0YFfW_oBc@zOts0fsHiL|>W6MsTU9R~61m%t
+z%gd&Hf6Vjsm^~w?&)2Nqx&kuS7f6viC6JqQc3mrI$<`I{2FuZiZwxJ!UH||907*qo
+IM6N<$f`Pwu#sB~S
+
+delta 529
+zcmV+s0`C2t0;vR$BYy$#Nkl<Zc%1E)u}d3a7{-5*`~#ip;*`mu2z3jJL9`VdEEI(n
+zN(v(C5GO&X9V9kW3!PL1MGGwj3z3Q<7(_~qq*4T1TY{*l!PZo*DY~e+I|oae@ADv4
+zlM9L8Z@TAsUykSAd++!_p-?Ck3WY+UP$(1%#dX6b8}GXeBY#=fb=l7K<P&x?b89cc
+zgN`C@mzG$a$8rkH%y|5WhjkvSvt$L+4S4ClZ*`8WVe`6!!Z%-d!yz<m@2?8_==f03
+zzPERC`X5mM;PE-xKiHyo>=6L<?Kj!|vqAT37iRVL=XZ!5{$yaXIXkJ-h#kP|8R6Ud
+zOv3Da8e(C2Jb$6(dS}Zp;mwa0#>^acfG=wS!JH3|3R<ow4<pyH18Dk*U~1a2sO7q(
+za~abC#8W)5rpGfJ%R0^mprzOVsjlbU1{mTSJ+}c;J?}PP<JY2KuKWlITCPWSmlD^h
+z&Ji-H&J{A5K4)C{=3aNu*#5nYukSI%w;Xugb3}H|27ffY&=0^wV1(N01|mCOX{sH>
+z<8#v4I*fm|o5q?xqJM`nANKQMHb6yLH2~4r3enhlMh9Se6uu~iVNg+4m85k7pL-Iz
+zrt+T9|D<Jz;L@9a{pfu9{tke0rz;(i{+qN6U^Mtl(66T2F4R9BdXbJ8m*Ny{7R}oh
+T<V|7#015yANkvXXu0mjfDx3h5
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/wraith_layer_1.png b/src/main/resources/assets/netheryx/textures/models/armor/wraith_layer_1.png
+index 875d89734cffa365a493f7bef9ff8f58b6a0e0ea..c6339354cd748f55771221d5603891d42f803b21 100644
+GIT binary patch
+delta 413
+zcmV;O0b>4x3AO`}BYy#XNkl<Zc%1E+y>7xV5P&bp&j7EGt!f1m6VR<&*LLiLnENO^
+z0bRSX@iQ@jg7Oe;mAnKDC{-{xcgA<JA$$^px%0(bxIagL@G<(_nPllUfo7{^+?!_^
+ztXH!LdxlRM6s0(h;qUk7<Wtb=55x{A4aot^#oS3AG9(AwGJkgm_&$JdYVQDrDWuz^
+zQl4iS+hKeVVRioD@yWQEL+-mzPymNIUscKqd3!to0D#T#{j40@A0i5XUgz~6uFJ9g
+zA#zWGRK@A{*HNs#yuKN8$2C#=e*nn=`r9{sca12l&P&UEgTBRbtW)NDtgmpb`(^ta
+z_DCUMJMUxn2Y;><_Bmj=4{+7Dh0{J-25ozN>6quX@0`i?n6#M<T=gkyEJv{P0eVbg
+zIe<%_x~_u70eVc@&IYdfw)V=1c7pBk<bQ$;mD;z$<YDL%OyhG%sH!YZSxcio!*-2v
+z_D0BdEs6A%Spz^e%Z5(vlc3Q7p_eZ%qE7cY=&LR192T$#+BhZK18Wcr00000NkvXX
+Hu0mjf!;Z^`
+
+delta 1135
+zcmV-#1d#i-1A_^WBYy-+Nkl<Zc%0o>T}&KR6#gI+BZgOf@~4kHs7Zr~c0-IYm{wn^
+z7#}c@$OcSV*#>E?HYtRPrnJ%qtq>cxtuak}@Fz-&)k+qr-7QPElx1OAkf!a5t-u01
+zNh8_axidbjGo3p-JNIs3fAmXka?d^Ie0%2XnS1V?5-<=9FMlak`X?$LDq(RHGXx%^
+z<;6t+z<p0Y4qx9%ZGCWXAU9Fv5nKt76&Yh*58(MN*YV^Xr94I#e{~~~h~wF|W+W1E
+zZT^1%R|Ul5aR9*J!Nb~`e*RwuR|1mBc&_6p7&t2+nd>+T2Cf85PfzALj)I}Yb^2S&
+zKL79|k698d{C{!NQop|bx24|cs4wU_LI419Z4ChM``nDCsO#;4bDIr^K01!oXcUjW
+zydCGd=#6i9cnJ2UX3D>=w+Clh_W}TXJ}>M|4v4WBo@;BtDTkBt_xs0k_hg(9fK;Ck
+zho&jT>9<<7xva?eq5Xr5Bzk|np9)2haiXa>+h!>MOn*&IK$4PaL&cU?UPLmPNE<4q
+zCMVF)*PGElG!=v-Nok`PAOJuzX}!x=-Ctt*p4x2Hit68Qe>0;$i@%WIN&pKie|<F+
+z8w3EDpP$_j3Cq7&%H0e?W5cVgHl(PfZU(l$Ly1IgWFJ|c!0f@DUB{@0?`&_g^vU)2
+z10(-N`G2@hg4OT5jqeV0;>WY!bCHT$9>ltL5<V||eRjLgXC0s!{<?J=Wws~L@zTx>
+zb8#i$oBan6o|$GF{);;o{BRHbe9u9#K%@i)IzHSKF0KUpbna|cq({2D?kSi;@Nf7W
+zZoErmdv{>n70SvUpk$T5ys8p+E?!~svF;jNUw?#HsHm-h7+XW%Cp`dw)s-k#SEBHY
+zxZxRbqr9pTo)I_R?|2UYAjZ~EQCp+gi((9-7(-zEvNpEb>+tz!$4%{5SE2x5$*1?v
+zc>+fJU6`E-X|kdy2u@suBoRmw!QjDeND{#j_b;0M%iVjRbHM!UEF?+RhHICT;?vtJ
+z3V+>b%=q;FR@jsTghNx1WunP}aX$!=(#F2$Uof?w3x^=fQrb}QjH5A)f1u;;<t!5)
+z54bi#7K|r7*2&MPCxm3MOu@CQC9B_K@#(QC36N#kG=SF*cj4=I+d1rIw0z;hr*AZx
+z@&^Lrlsr1>vD62H0lvVoX%#>Wa_S%XYJbmu06^{0L)u)mcbqx_=QbOFRKh;4Z!qOH
+z9<_H=KSk-i-XThMIxb}uyTEE=JZ($={sHMFc&2q<n!WztHu~oir2w$Jv`Dp)+qeEi
+zc~zy>W-4lHDE(G@9iq!iTALw+P!DbP@k9Tf8tqltIPw7jNVSn;uh(mfilX3T^Js2O
+zzR=qb|JdEqI^TU1SFc>wWI~Lako6{*ZeO?x5CFh;iQZI(hv-X-QSTocrDQ_rP0hF`
+z7-6(8cmg7k>(t`4Yjc!r)GsVVEcHfzBUpU-#6O~0#HH5k{xbjo002ovPDHLkV1j>X
+BD(wIO
+
+diff --git a/src/main/resources/assets/netheryx/textures/models/armor/wraith_layer_2.png b/src/main/resources/assets/netheryx/textures/models/armor/wraith_layer_2.png
+index a85e24f50987fc37735a4e863dab4c91f5f1429c..d00a3588a18b85dbec7bd1f48d9183bb024c2a34 100644
+GIT binary patch
+delta 260
+zcmV+f0sH=?1fK$sBYyzqNkl<Zc%1FlJr06E5Cz}|@i24*qLr=3u(UGP9>o)Q41X#s
+z4TM7|!AoFaFuJ=6n+;5m_f^a?36sh04ge7m5fKp)5e<!}E-Y5-vU<+a1n1LE%lRk1
+zX)y=_<hN_rwTLh_;CR?~U5A*Fx{#%bL>*#0^~{G+44b&`cYTBp=x5$G?lT|I&%ABi
+zXU0o#NZ0`B0;CPT0os3ntzTnQRX0{m`E8F`=LP`JvG_h2s(8HF0st<{d82#@-efu}
+z>(jmqqxkhta4(9FSf##ilHd9caQ#3S#ZC>B=G<M^9aN|79q<70OLi@m5-7j`0000<
+KMNUMnLSTZT0(G|l
+
+delta 525
+zcmV+o0`mQz0;L3yBYy$xNkl<Zc%1E)%WD%+6vlrIv+Pz^O1sRa3+YP9UlAx+sGDFx
+z1Hq+TWud6mc2OEqq(-t)XsngSRiPB(gS14`+O(vZbWwuhqrMst3o;KE%9uMDn#Lv*
+zlHT9$JKx7}&Ye5M0f|H+kw_#Gi9{liNF>LNE_-34uxnQ8K7a4Ys!S*0aVma%|ABJv
+z39bY$y4{cKI39qm{o-l(hTFZg1jVU%XY{(;eYA|OSbR?S=1-mO5d!btmIS@O|5MPR
+z;DxsSM|c3dgMP|;--%9+1JLd3=iApWTnmrj<d@5PoCyqZ?{1_;Z8r`DU}Y*sv9M(o
+zOY;kCuD`Lg-G9e4iCqf0)?_pB02K0@7={k~dHd_DuhDhQ3RU_5#X=s#(C7pd08RTh
+z%#W8@LEC)*UDxRp6ad38gra@GYG2gt%-<Uz4qSZ$M85-Xz`+CBeY<XF6aZDt3&mV+
+zP0*^EC$gL-boLwo+uN$;)!HNM)Y>cTG<(lD^21~CIe*hT=;!&w6tjs3+!~9}?dzwQ
+zNb(}JBxF@}i@@+@D)WKiAfI<X0kD>R1;EwW8Ey}pr&QV@m&-Ku03280dU-YxC9|Bi
+zv^q0SYH9J%c@xNHRxEwfKhTJ_4n;!_;Bn%ipzlvd>&hpeJZeN6|HW@y4c#)b`xT=A
+P0000<MFvhpu0mjf9PR|d
+
+diff --git a/tools/netheryx_gen/textures.py b/tools/netheryx_gen/textures.py
+index 4c07d05..025509e 100644
+--- a/tools/netheryx_gen/textures.py
++++ b/tools/netheryx_gen/textures.py
+@@ -928,6 +928,8 @@ def generate():
+     textures_v124.generate()
+     from . import textures_v130
+     textures_v130.generate()
++    from . import textures_v131
++    textures_v131.generate()
+ 
+ 
+ # ------------------------------------------------------------------------------------------------
+diff --git a/tools/netheryx_gen/textures_v131.py b/tools/netheryx_gen/textures_v131.py
+new file mode 100644
+index 0000000..9b270b3
+--- /dev/null
++++ b/tools/netheryx_gen/textures_v131.py
+@@ -0,0 +1,205 @@
++"""Textures 1.3.1 : armures refaites dans l'esprit des armures vanilla (fer, diamant) : silhouettes simples, quatre
++tons et un contour sombre, un seul petit detail de couleur par piece. Les textures portees suivent la disposition
++vanilla (64 x 32) : faces pleines bordees, ouverture du visage sur le casque."""
++from PIL import Image
++
++from .pixels import hexc
++from .textures import save
++
++# Palette d'un ensemble : contour, sombre, moyen, clair, reflet, detail
++SETS = {
++    "onyx": ("#140d1e", "#2e2244", "#44335e", "#5c477e", "#8a6cb8", "#c8a8ff"),
++    "ember": ("#3a1406", "#9a3a0c", "#c85a18", "#e8822a", "#ffbe5a", "#fff0a0"),
++    "wraith": ("#16191e", "#353b44", "#4b525b", "#646c76", "#8c949e", "#7fe8ff"),
++    "carapace": ("#101014", "#26262c", "#38383f", "#4c4c55", "#6c6c78", "#ff7a1a"),
++    "abyssal": ("#0e0408", "#360a10", "#55121a", "#771c24", "#a8323a", "#ff6a2a"),
++    "magma": ("#2e0a04", "#701c08", "#a8360c", "#d85612", "#ff9a2a", "#ffe27a"),
++}
++
++# Icones 16 x 16 : o contour, d sombre, m moyen, l clair, h reflet, a detail
++ICONS = {
++    "helmet": [
++        "................",
++        "................",
++        "................",
++        "....oooooooo....",
++        "...ohhlllammo...",
++        "..ohllllllmmdo..",
++        "..olllmmmmmmdo..",
++        "..olmmmmmmmmdo..",
++        "..olmoooooomdo..",
++        "..olmo....omdo..",
++        "..olmo....omdo..",
++        "..oddo....oddo..",
++        "...oo......oo...",
++        "................",
++        "................",
++        "................",
++    ],
++    "chestplate": [
++        "................",
++        "..ooo......ooo..",
++        ".ohlmo....omldo.",
++        ".ohllmooooomldo.",
++        ".ohllllllllmmdo.",
++        ".olllllaalllmdo.",
++        ".oollllaallmmoo.",
++        "..olllllllmmmo..",
++        "..ollllllmmmmo..",
++        "..ollllllmmmmo..",
++        "..olllllmmmmdo..",
++        "..olmmmmmmmmdo..",
++        "..oddddddddddo..",
++        "...oooooooooo...",
++        "................",
++        "................",
++    ],
++    "leggings": [
++        "................",
++        "..oooooooooooo..",
++        "..ohhlllalllmo..",
++        "..oddddddddddo..",
++        "..olmmdoolmmdo..",
++        "..olmmdoolmmdo..",
++        "..olmdo..olmdo..",
++        "..olmdo..olmdo..",
++        "..olmdo..olmdo..",
++        "..olmdo..olmdo..",
++        "..olmdo..olmdo..",
++        "..olmdo..olmdo..",
++        "..oddoo..oddoo..",
++        "..ooooo..ooooo..",
++        "................",
++        "................",
++    ],
++    "boots": [
++        "................",
++        "................",
++        "................",
++        "................",
++        "................",
++        "..oooo....oooo..",
++        "..ohlo....ohlo..",
++        "..olmo....olmo..",
++        "..olmo....olmo..",
++        "..olmdo...olmdo.",
++        ".ollmmdo.ollmmdo",
++        ".olmmmdo.olmmmdo",
++        ".oddddao.oddddao",
++        ".ooooooo.ooooooo",
++        "................",
++        "................",
++    ],
++}
++
++
++def icon(set_name, piece):
++    o, d, m, l, h, a = SETS[set_name]
++    colors = {"o": o, "d": d, "m": m, "l": l, "h": h, "a": a}
++    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
++    for y, row in enumerate(ICONS[piece]):
++        for x, ch in enumerate(row[:16]):
++            if ch in colors:
++                img.putpixel((x, y), hexc(colors[ch]))
++    return img
++
++
++# ------------------------------------------------------------------------------------------------
++# Textures portees (disposition vanilla 64 x 32)
++# ------------------------------------------------------------------------------------------------
++
++def face(img, x0, y0, w, h, pal, top_light=True):
++    """Face pleine : bord sombre, interieur moyen eclaire en haut a gauche, quelques reflets reguliers."""
++    o, d, m, l, hi, _ = pal
++    for y in range(y0, y0 + h):
++        for x in range(x0, x0 + w):
++            edge_bottom = y == y0 + h - 1
++            edge_right = x == x0 + w - 1
++            edge_top = y == y0
++            edge_left = x == x0
++            if edge_bottom or edge_right:
++                c = d
++            elif (edge_top or edge_left) and top_light:
++                c = l
++            else:
++                c = m
++            img.putpixel((x, y), hexc(c))
++    if w > 3 and h > 3:
++        img.putpixel((x0 + 1, y0 + 1), hexc(hi))
++
++
++def box(img, u, v, w, h, d, pal, rows=None):
++    """Toutes les faces d'un cube a la disposition vanilla ; rows limite les faces laterales a certaines lignes."""
++    face(img, u + d, v, w, d, pal)              # dessus
++    face(img, u + d + w, v, w, d, pal, False)   # dessous
++    for (x, fw) in ((u, d), (u + d, w), (u + d + w, d), (u + 2 * d + w, w)):
++        y0 = v + d
++        if rows:
++            face(img, x, y0 + rows[0], fw, rows[1] - rows[0], pal)
++        else:
++            face(img, x, y0, fw, h, pal)
++
++
++def clear(img, x0, y0, x1, y1):
++    for y in range(y0, y1):
++        for x in range(x0, x1):
++            img.putpixel((x, y), (0, 0, 0, 0))
++
++
++def layer_1(set_name, boots_only=False):
++    pal = SETS[set_name]
++    img = Image.new("RGBA", (64, 32), (0, 0, 0, 0))
++    a = hexc(pal[5])
++    if not boots_only:
++        # Casque : cube de tete, ouverture du visage sur la face avant
++        box(img, 0, 0, 8, 8, 8, pal)
++        clear(img, 10, 12, 14, 16)
++        clear(img, 9, 14, 15, 16)
++        img.putpixel((11, 9), a)
++        img.putpixel((12, 9), a)
++        # Plastron : torse complet, epaulieres jusqu'au coude
++        box(img, 16, 16, 8, 12, 4, pal)
++        clear(img, 28, 16, 36, 20)  # dessous du torse invisible
++        for (x, y) in ((23, 23), (24, 23), (23, 24), (24, 24)):
++            img.putpixel((x, y), a)
++        box(img, 40, 16, 4, 12, 4, pal, rows=(0, 7))
++        clear(img, 48, 16, 52, 20)
++    # Bottes : bas des jambes
++    box(img, 0, 16, 4, 12, 4, pal, rows=(6, 12))
++    clear(img, 4, 16, 8, 20)  # pas de dessus
++    img.putpixel((6, 30), a)
++    return img
++
++
++def layer_2(set_name):
++    pal = SETS[set_name]
++    img = Image.new("RGBA", (64, 32), (0, 0, 0, 0))
++    # Ceinture : bas du torse
++    box(img, 16, 16, 8, 12, 4, pal, rows=(7, 12))
++    clear(img, 20, 16, 36, 20)
++    img.putpixel((23, 28), hexc(pal[5]))
++    img.putpixel((24, 28), hexc(pal[5]))
++    # Jambieres : jambes presque entieres
++    box(img, 0, 16, 4, 12, 4, pal, rows=(0, 10))
++    clear(img, 8, 16, 12, 20)
++    return img
++
++
++ITEM_NAMES = {
++    "onyx": ("onyx_helmet", "onyx_chestplate", "onyx_leggings", "onyx_boots"),
++    "ember": ("ember_helmet", "ember_chestplate", "ember_leggings", "ember_boots"),
++    "wraith": ("wraith_hood", "wraith_robe", "wraith_leggings", "wraith_boots"),
++    "carapace": ("carapace_helmet", "carapace_chestplate", "carapace_leggings", "carapace_boots"),
++    "abyssal": ("abyssal_helmet", "abyssal_chestplate", "abyssal_leggings", "abyssal_boots"),
++}
++
++
++def generate():
++    for set_name, names in ITEM_NAMES.items():
++        for piece, name in zip(("helmet", "chestplate", "leggings", "boots"), names):
++            save(icon(set_name, piece), "item", f"{name}.png")
++        save(layer_1(set_name), "models", "armor", f"{set_name}_layer_1.png")
++        save(layer_2(set_name), "models", "armor", f"{set_name}_layer_2.png")
++    save(icon("magma", "boots"), "item", "magma_treads.png")
++    save(layer_1("magma", boots_only=True), "models", "armor", "magma_layer_1.png")
++    save(layer_2("magma"), "models", "armor", "magma_layer_2.png")
