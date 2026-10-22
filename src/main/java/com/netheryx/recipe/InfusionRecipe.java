@@ -62,6 +62,18 @@ public class InfusionRecipe implements SmithingRecipe {
         return ItemStack.EMPTY;
     }
 
+    public Ingredient template() {
+        return this.template;
+    }
+
+    public Ingredient addition() {
+        return this.addition;
+    }
+
+    public Infusion infusion() {
+        return this.infusion;
+    }
+
     @Override
     public boolean isIncomplete() {
         return this.template.isEmpty() || this.addition.isEmpty();

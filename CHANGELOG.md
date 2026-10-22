@@ -113,6 +113,14 @@ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 - **Coffres mimiques dans chaque donjon** (dont les balcons de la Citadelle, qui ont aussi chacun un coffre).
 
 ### Modifié
+- **Structures** : nouveau placement. La structure est centrée sur son point d'apparition et toute son emprise est
+  vérifiée (sol à une hauteur proche et volume dégagé jusqu'à 3 blocs au-dessus de son sommet) : plus de structure
+  enterrée dans la roche, coupée par un plafond ou un mur, ou suspendue au-dessus d'un ravin.
+- **Cristal de wyverne** (nouvel objet) : range sa wyverne pour l'emporter partout (clic droit sur elle), la libère
+  d'un clic droit sur un bloc ; nom et vie conservés, elle reste la wyverne du joueur. Détruit, il la libère ; tombé
+  dans le vide, il revient à son maître.
+- **Intégration JEI** (facultative) : catégories « Autel des âmes » et « Infusion d'onyx », pages d'information sur
+  les objets particuliers (œuf, sifflet et cristal de wyverne, Cœur scellé, fruits, voile ignifuge…).
 - **Autel des âmes** : nouvelle interface, comme une machine : emplacement de l'objet et de l'offrande, guide des
   offrandes (l'offrande reconnue est surlignée), compteur de flammes des âmes, coût, message clair sur ce qui manque,
   bouton « Infuser » et rituel de 3 secondes avec jauge (rien n'est consommé s'il est interrompu).

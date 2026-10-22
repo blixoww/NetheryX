@@ -76,6 +76,8 @@ def generate_recipes():
     shaped("molten_glass", ["MM", "MM"], {"M": "molten_shard"}, "molten_glass", 1, "building")
     shapeless("wyvern_whistle", ["minecraft:bone", "minecraft:gold_ingot", "minecraft:phantom_membrane", "molten_shard"],
               "wyvern_whistle", 1, "equipment")
+    shaped("wyvern_crystal", ["OQO", "QEQ", "OQO"], {"O": "onyx", "Q": "quartz_glass", "E": "minecraft:ender_eye"},
+           "wyvern_crystal", 1, "equipment")
     # Arme ultime : volontairement tres chere (butin du boss final, etoile du Nether, netherite, onyx)
     shaped("abyssal_blade", ["NAN", "AXA", "OSO"], {"N": "minecraft:netherite_ingot", "A": "abyssal_shard", "X": "minecraft:nether_star",
                                                   "O": "onyx_block", "S": "onyx_sword"}, "abyssal_blade", 1, "equipment")

@@ -69,6 +69,8 @@ Avec la **Boussole des âmes** (structures NetheryX en tête de liste) ou par co
 /locate structure netheryx:traveler_camp
 /locate structure netheryx:nether_garden
 ```
+- [ ] Aucune structure enterrée, coupée par un plafond ou suspendue dans le vide (explorez des chunks neufs).
+
 Pour chaque donjon, **en survie** (`/gamemode survival`) avec une bonne armure :
 - [ ] Parcours complet : escaliers praticables (Sanctuaire : descente vers la nef ; Catacombes : deux niveaux).
 - [ ] Coffres et **mimiques** (approchez accroupi).
@@ -114,6 +116,8 @@ Invoquez-les avec leurs œufs (onglet NetheryX) ou `/summon netheryx:<nom>` :
 - [ ] Montée : frappez une créature devant vous → elle crache du feu dessus.
 - [ ] Prenez un portail du Nether : elle vous suit dans l'autre dimension.
 - [ ] Éloignez-vous de 2 000 blocs (`/tp`), puis utilisez le **Sifflet** : elle revient.
+- [ ] **Cristal de wyverne** : clic droit sur elle → elle entre dedans (infobulle : nom, vie) ; le sifflet indique
+      qu'elle est dans le cristal ; un second œuf refuse toujours d'éclore ; clic droit sur un bloc → elle ressort.
 - [ ] `/kill` la wyverne : son œuf revient dans votre inventaire.
 - [ ] Wyverne sauvage (œuf d'apparition) : s'apprivoise avec de la viande crue ou cuite.
 
@@ -145,6 +149,10 @@ Invoquez-les avec leurs œufs (onglet NetheryX) ou `/summon netheryx:<nom>` :
 - [ ] Progrès : onglet NetheryX des progrès (`L`).
 
 ## 9. Compatibilité
+
+- [ ] Avec JEI : catégories « Autel des âmes » et « Infusion d'onyx » (touche `U` sur une offrande ou sur le gabarit),
+      pages d'information (`R` sur l'œuf de wyverne, le cristal, les fruits…).
+
 
 Ajoutez ensuite les mods de votre pack par petits groupes. En cas de crash, ouvrez `logs/latest.log` et cherchez la
 dernière ligne `Caused by:` : elle désigne l'exception et, souvent, le mod responsable.

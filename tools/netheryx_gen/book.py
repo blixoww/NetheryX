@@ -882,6 +882,13 @@ entry("creatures", "Ash Wyvern (mount)", "Wyverne de cendre (monture)", "nethery
          "$(li)le $(item)Sifflet de wyverne$() rappelle toutes vos wyvernes, de n'importe où, même d'une zone non chargée ou d'une "
          "autre dimension ;$(li)si elle meurt, son $(item)œuf$() vous revient avec son nom : faites-le éclore à nouveau.", "Fidélité"),
     craft("wyvern_whistle"),
+    text("The $(item)Wyvern Crystal$() stores your wyvern to carry it anywhere: right-click your wyvern to put it inside "
+         "(name and health are kept), right-click a block to release it. While stored, it is still your wyvern. If the "
+         "crystal is destroyed it shatters and frees her; if it falls into the void it comes back to you.",
+         "Le $(item)Cristal de wyverne$() range votre wyverne pour l'emporter partout : clic droit sur elle pour l'y faire "
+         "entrer (nom et vie conservés), clic droit sur un bloc pour la libérer. Rangée, elle reste votre wyverne. Si le cristal "
+         "est détruit, il se brise et la libère ; s'il tombe dans le vide, il vous revient.", "Cristal"),
+    craft("wyvern_crystal"),
     text("$(l)Flying$(): move forward while looking up to take off, look down to dive, release to glide slowly. If you dismount in "
          "the air, you get a few seconds of $(l)Slow Falling$().",
          "$(l)Voler$() : avancez en regardant vers le haut pour décoller, vers le bas pour piquer, relâchez pour planer doucement. "

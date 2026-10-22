@@ -73,6 +73,7 @@ def generate():
     save(onyx_anvil_body(), "block", "onyx_anvil.png")
     save(onyx_anvil_top(), "block", "onyx_anvil_top.png")
     generate_fruits()
+    save(wyvern_crystal(), "item", "wyvern_crystal.png")
 
 
 # ------------------------------------------------------------------------------------------------
@@ -147,3 +148,24 @@ def generate_fruits():
         for stage in range(3):
             save(fruit_cluster(name, stage), "block", f"{name}_cluster_stage{stage}.png")
         save(fruit_item(name), "item", f"{name}.png")
+
+
+def wyvern_crystal():
+    """Cristal de wyverne : gemme d'onyx et de quartz taillee en losange, une silhouette de wyverne au coeur."""
+    shape = Shape()
+    for y in range(1, 15):
+        half = (y - 0.5) * 0.85 if y < 8 else (14.5 - y) * 0.85
+        for x in range(16):
+            dx = x + 0.5 - 8
+            if abs(dx) <= half:
+                t = (dx + half) / max(0.5, 2 * half)
+                col = "#8f62d6" if t < 0.3 else ("#b48cff" if t < 0.55 else ("#6a3fc0" if t < 0.85 else "#4a2c80"))
+                if y < 4:
+                    col = "#e0ccff" if abs(dx) < half * 0.5 else col
+                shape.put(x, y, hexc(col))
+    # Silhouette de wyverne (ailes deployees) au coeur du cristal
+    for (x, y) in ((8, 6), (7, 7), (8, 7), (9, 7), (5, 6), (6, 7), (10, 7), (11, 6), (4, 5), (12, 5), (8, 8), (8, 9), (7, 10)):
+        shape.put(x, y, hexc("#1a0a2a"))
+    shape.put(6, 3, hexc("#ffffff"))
+    shape.put(5, 4, hexc("#ffffff"))
+    return shape.render(outline=hexc("#140d1e"))
