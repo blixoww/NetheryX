@@ -28,6 +28,9 @@ def main():
     structures.generate()
     book.generate()
     docs.generate()
+    art = common.copy_art()
+    if art:
+        print(f"NetheryX : {art} textures faites main copiees depuis art/.")
     print(f"NetheryX : {common.written_count()} fichiers JSON generes + textures et structures.")
 
 

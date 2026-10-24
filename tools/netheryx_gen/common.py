@@ -8,6 +8,8 @@ ROOT = Path(__file__).resolve().parents[2]
 RESOURCES = ROOT / "src" / "main" / "resources"
 ASSETS = RESOURCES / "assets" / MOD_ID
 DATA = RESOURCES / "data"
+# Textures faites a la main (ou recolorees depuis le jeu) : elles remplacent les textures generees du meme nom
+ART = ROOT / "art"
 
 _written = []
 
@@ -31,6 +33,20 @@ def asset_path(*parts: str) -> Path:
 def mid(name: str) -> str:
     """Identifiant complet dans l'espace de noms du mod."""
     return name if ":" in name else f"{MOD_ID}:{name}"
+
+
+def copy_art() -> int:
+    """Copie art/assets/** par-dessus les ressources generees (les vraies textures ont toujours le dernier mot)."""
+    import shutil
+    source = ART / "assets"
+    copied = 0
+    if source.is_dir():
+        for path in source.rglob("*.png"):
+            target = RESOURCES / "assets" / path.relative_to(source)
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(path, target)
+            copied += 1
+    return copied
 
 
 def written_count() -> int:
