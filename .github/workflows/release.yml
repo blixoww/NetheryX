@@ -49,5 +49,6 @@ jobs:
         with:
           name: NetheryX 1.7.10 - ${{ steps.version.outputs.version }}
           body_path: release_notes.md
-          files: build/libs/netheryx-*.jar
+          # Uniquement le jar du jeu (pas le -dev.jar, destine aux environnements de developpement)
+          files: build/libs/netheryx-1.7.10-${{ steps.version.outputs.version }}.jar
           fail_on_unmatched_files: true
