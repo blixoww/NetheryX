@@ -1,6 +1,7 @@
 package com.netheryx.entity;
 
 import com.netheryx.registry.ModItems;
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,16 +24,22 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 /**
  * Wyverne de cendre : monture volante. Sauvage, elle s'apprivoise avec de la viande crue ; la gardienne d'un nid ne
  * s'apprivoise pas mais laisse son oeuf a sa mort. Apprivoisee, elle suit son maitre, crache du feu sur ses ennemis et
- * se monte : avancez en regardant vers le haut pour decoller, vers le bas pour piquer, relachez pour planer.
+ * se monte : saut (espace) ou avancer en regardant vers le haut pour decoller, avancer pour voler dans la direction du
+ * regard (vers le bas pour piquer), relacher pour planer. Sans cavalier, elle vole aussi : pour rejoindre son maitre,
+ * fondre sur une cible, ou (sauvage) pour de longues promenades aeriennes.
  */
 public class EntityAshWyvern extends EntityTameable implements IAnimatedMob {
     private boolean nestGuardian;
+    /** Promenade aerienne d'une wyverne sauvage : ticks restants et point vise. */
+    private int wanderFlight;
+    private Vec3 wanderGoal;
     private int breathCooldown = 40;
     private int breathAnim;
 
@@ -159,41 +166,171 @@ public class EntityAshWyvern extends EntityTameable implements IAnimatedMob {
         this.dataWatcher.updateObject(20, Byte.valueOf((byte) (flying ? 1 : 0)));
     }
 
+    /** Touche de saut du cavalier (champ protege de la 1.7.10, lu par reflexion ; mis a jour cote serveur par le paquet d'entrees). */
+    private static boolean isJumping(EntityLivingBase rider) {
+        try {
+            Boolean jumping = ReflectionHelper.getPrivateValue(EntityLivingBase.class, rider, "field_70703_bu", "isJumping");
+            return jumping != null && jumping;
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
     @Override
     public void moveEntityWithHeading(float strafe, float forward) {
         if (this.riddenByEntity instanceof EntityPlayer) {
-            EntityPlayer rider = (EntityPlayer) this.riddenByEntity;
-            this.prevRotationYaw = this.rotationYaw = rider.rotationYaw;
-            this.rotationPitch = rider.rotationPitch * 0.5F;
-            setRotation(this.rotationYaw, this.rotationPitch);
-            this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
-            this.fallDistance = 0.0F;
-            float move = rider.moveForward;
-            boolean up = move > 0.0F && rider.rotationPitch < -15.0F;
             if (!this.worldObj.isRemote) {
-                if (up || (!this.onGround && isFlying())) {
-                    setFlying(true);
-                    Vec3 look = rider.getLookVec();
-                    double speed = 0.7D;
-                    this.motionX = look.xCoord * speed * move;
-                    this.motionZ = look.zCoord * speed * move;
-                    this.motionY = move != 0.0F ? look.yCoord * speed * move : -0.06D; // vol plane si on relache
-                    moveEntity(this.motionX, this.motionY, this.motionZ);
-                    if (this.onGround) {
-                        setFlying(false);
-                    }
-                } else {
-                    setFlying(false);
-                    setAIMoveSpeed((float) getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());
-                    super.moveEntityWithHeading(rider.moveStrafing * 0.5F, move > 0.0F ? move : move * 0.25F);
-                }
+                rideTick((EntityPlayer) this.riddenByEntity);
             }
             return;
         }
-        if (isFlying() && !this.worldObj.isRemote) {
-            setFlying(false);
+        if (!this.worldObj.isRemote && flightTick()) {
+            return;
         }
         super.moveEntityWithHeading(strafe, forward);
+    }
+
+    /**
+     * Vol monte : la wyverne suit le regard du cavalier. Saut (espace) ou avancer en regardant vers le haut : decoller /
+     * monter ; avancer : voler dans la direction du regard (vers le bas pour piquer) ; rien : planer en descendant.
+     */
+    private void rideTick(EntityPlayer rider) {
+        this.prevRotationYaw = this.rotationYaw = rider.rotationYaw;
+        this.rotationPitch = rider.rotationPitch * 0.5F;
+        setRotation(this.rotationYaw, this.rotationPitch);
+        this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
+        this.fallDistance = 0.0F;
+        getNavigator().clearPathEntity();
+        float move = rider.moveForward;
+        boolean jump = isJumping(rider);
+        boolean takeOff = jump || move > 0.0F && rider.rotationPitch < -15.0F;
+        if (takeOff || !this.onGround && isFlying()) {
+            setFlying(true);
+            Vec3 look = rider.getLookVec();
+            double speed = 0.75D;
+            double tx = move > 0.0F ? look.xCoord * speed : move < 0.0F ? -look.xCoord * 0.2D : 0.0D;
+            double tz = move > 0.0F ? look.zCoord * speed : move < 0.0F ? -look.zCoord * 0.2D : 0.0D;
+            double ty = move > 0.0F ? look.yCoord * speed : -0.08D; // plane si on relache
+            if (jump) {
+                ty = Math.max(ty, 0.0D) + 0.35D;
+            }
+            // Un peu d'inertie : les virages restent souples
+            this.motionX += (tx - this.motionX) * 0.3D;
+            this.motionY += (ty - this.motionY) * 0.4D;
+            this.motionZ += (tz - this.motionZ) * 0.3D;
+            moveEntity(this.motionX, this.motionY, this.motionZ);
+            if (this.isCollidedHorizontally) {
+                this.motionY = 0.25D;
+            }
+            if (this.onGround && !takeOff) {
+                setFlying(false);
+            }
+            return;
+        }
+        setFlying(false);
+        setAIMoveSpeed((float) getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());
+        super.moveEntityWithHeading(rider.moveStrafing * 0.5F, move > 0.0F ? move : move * 0.25F);
+    }
+
+    /** Point vise en vol libre, ou null pour se poser. */
+    private Vec3 flightGoal() {
+        EntityLivingBase target = getAttackTarget();
+        if (target != null && target.isEntityAlive()) {
+            double dx = target.posX - this.posX;
+            double dz = target.posZ - this.posZ;
+            double horizontal = Math.sqrt(dx * dx + dz * dz);
+            // Proche et a sa hauteur : elle se pose pour mordre ; sinon elle fond sur sa cible par les airs
+            if (horizontal < 3.5D && Math.abs(target.posY - this.posY) < 2.5D) {
+                return null;
+            }
+            if (horizontal > 5.0D || target.posY - this.posY > 2.5D || isFlying()) {
+                return Vec3.createVectorHelper(target.posX, target.posY + 2.5D, target.posZ);
+            }
+            return null;
+        }
+        if (isTamed()) {
+            EntityLivingBase owner = getOwner();
+            if (isSitting() || owner == null || owner.worldObj != this.worldObj) {
+                return null;
+            }
+            double distance = getDistanceToEntity(owner);
+            boolean ownerAirborne = owner.posY - this.posY > 4.0D || owner instanceof EntityPlayer && ((EntityPlayer) owner).capabilities.isFlying;
+            if (distance > 14.0D || ownerAirborne || isFlying() && distance > 5.0D) {
+                return Vec3.createVectorHelper(owner.posX, owner.posY + 3.0D, owner.posZ);
+            }
+            return null;
+        }
+        if (this.nestGuardian) {
+            return null;
+        }
+        // Sauvage : de temps en temps, une longue promenade dans les airs
+        if (this.wanderFlight <= 0) {
+            if (this.onGround && this.rand.nextInt(500) == 0) {
+                this.wanderFlight = 200 + this.rand.nextInt(300);
+                this.wanderGoal = null;
+            } else {
+                return null;
+            }
+        }
+        this.wanderFlight--;
+        if (this.wanderFlight <= 0) {
+            return null;
+        }
+        if (this.wanderGoal == null || this.wanderGoal.squareDistanceTo(this.posX, this.posY, this.posZ) < 9.0D) {
+            double gx = this.posX + (this.rand.nextDouble() - 0.5D) * 48.0D;
+            double gz = this.posZ + (this.rand.nextDouble() - 0.5D) * 48.0D;
+            int ground = MathHelper.floor_double(this.posY);
+            while (ground > 1 && this.worldObj.isAirBlock(MathHelper.floor_double(gx), ground, MathHelper.floor_double(gz))) {
+                ground--;
+            }
+            this.wanderGoal = Vec3.createVectorHelper(gx, Math.min(ground + 8 + this.rand.nextInt(8), 118), gz);
+        }
+        return this.wanderGoal;
+    }
+
+    /** Vol libre (sans cavalier) : decolle, file vers son but, puis se pose en planant. Renvoie false au sol. */
+    private boolean flightTick() {
+        Vec3 goal = flightGoal();
+        if (goal == null && (this.onGround || !isFlying())) {
+            setFlying(false);
+            return false;
+        }
+        setFlying(true);
+        getNavigator().clearPathEntity();
+        this.fallDistance = 0.0F;
+        double tx;
+        double ty;
+        double tz;
+        if (goal != null) {
+            double dx = goal.xCoord - this.posX;
+            double dy = goal.yCoord - this.posY;
+            double dz = goal.zCoord - this.posZ;
+            double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            double speed = distance < 2.0D ? 0.1D : 0.5D;
+            tx = dx / Math.max(distance, 0.01D) * speed;
+            ty = dy / Math.max(distance, 0.01D) * speed;
+            tz = dz / Math.max(distance, 0.01D) * speed;
+        } else {
+            // Atterrissage : descente planee
+            tx = this.motionX * 0.9D;
+            ty = -0.18D;
+            tz = this.motionZ * 0.9D;
+        }
+        this.motionX += (tx - this.motionX) * 0.15D;
+        this.motionY += (ty - this.motionY) * 0.2D;
+        this.motionZ += (tz - this.motionZ) * 0.15D;
+        moveEntity(this.motionX, this.motionY, this.motionZ);
+        if (this.isCollidedHorizontally) {
+            this.motionY = 0.3D;
+        }
+        if (this.motionX * this.motionX + this.motionZ * this.motionZ > 0.001D) {
+            float yaw = (float) (Math.atan2(this.motionZ, this.motionX) * 180.0D / Math.PI) - 90.0F;
+            this.rotationYaw = this.renderYawOffset = this.rotationYawHead = yaw;
+        }
+        if (goal == null && this.onGround) {
+            setFlying(false);
+        }
+        return true;
     }
 
     @Override
@@ -209,7 +346,7 @@ public class EntityAshWyvern extends EntityTameable implements IAnimatedMob {
 
     @Override
     public boolean attackEntityAsMob(Entity target) {
-        this.breathAnim = 10;
+        this.breathAnim = 20;
         return target.attackEntityFrom(DamageSource.causeMobDamage(this),
                 (float) getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue());
     }
@@ -311,7 +448,7 @@ public class EntityAshWyvern extends EntityTameable implements IAnimatedMob {
 
     @Override
     public float getActionProgress() {
-        return Math.min(1.0F, this.breathAnim / 10.0F);
+        return Math.min(1.0F, this.breathAnim / 20.0F);
     }
 
     @Override

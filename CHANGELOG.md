@@ -3,6 +3,14 @@
 Toutes les évolutions de la branche 1.7.10. Les tags de cette branche ont la forme `1.7.10-<version>`
 (ex. : `git tag 1.7.10-0.1.0 && git push origin 1.7.10-0.1.0`).
 
+## [1.0.1] - 2026-10-31
+
+### Modifié
+- Animations : les créatures rejouent désormais les animations d'origine de la 1.20.1 (repos, marche, course, vol,
+  assis, nage, attaques, souffle, sorts…), avec leurs courbes d'accélération, au lieu d'animations approximatives.
+- Wyverne de cendre : elle vole aussi sans cavalier (pour rejoindre son maître, fondre sur une cible ; sauvage, en
+  longues promenades aériennes) ; montée, la touche de saut la fait décoller et monter.
+
 ## [1.0.0] - 2026-10-31
 
 ### Ajouté
