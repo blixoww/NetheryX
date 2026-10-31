@@ -12,11 +12,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Gradle 9 tourne en Java 17+ ; le JDK 8 de compilation est telecharge automatiquement (toolchain)
+      # RetroFuturaGradle 2 est compile pour Java 25 ; le JDK 8 de compilation est telecharge automatiquement (toolchain)
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          java-version: 25
 
       - uses: gradle/actions/setup-gradle@v4
 

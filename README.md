@@ -12,7 +12,7 @@ Portage de NetheryX pour **Minecraft 1.7.10** (Forge 10.13.4.1614), réécrit de
 ```
 
 Le `.jar` se trouve dans `build/libs/`. La compilation utilise **RetroFuturaGradle** (l'outil de référence des mods
-1.7.10) et **Gradle 9.2** : il faut Java 17 ou plus pour lancer Gradle, et le JDK 8 de Minecraft 1.7.10 est téléchargé
+1.7.10) et **Gradle 9.2** : il faut **Java 25** pour lancer Gradle (RetroFuturaGradle 2 est compilé pour Java 25), et le JDK 8 de Minecraft 1.7.10 est téléchargé
 automatiquement. `./gradlew runClient` lance le jeu avec le mod.
 
 ## Contenu (1.0.0)

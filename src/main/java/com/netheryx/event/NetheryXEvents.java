@@ -29,7 +29,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.event.entity.EntityTravelToDimensionEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingSetAttackTargetEvent;
@@ -38,7 +37,9 @@ import net.minecraftforge.event.world.BlockEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.WeakHashMap;
 
 /**
  * Regles de jeu de NetheryX (bus Forge et bus FML) :
@@ -52,6 +53,8 @@ import java.util.UUID;
  */
 public class NetheryXEvents {
     private static final UUID ANCHORING_ID = UUID.fromString("5c1e3a72-8d4b-4f0e-9a61-2b7d0c4e8f13");
+    /** Derniere position de chaque joueur dans le Monde normal (pour la pierre de rappel). */
+    private final Map<EntityPlayer, double[]> lastOverworld = new WeakHashMap<EntityPlayer, double[]>();
 
     /** Ensemble complet porte par le joueur, ou null. */
     public static String fullSet(EntityLivingBase living) {
@@ -84,6 +87,9 @@ public class NetheryXEvents {
         }
         World world = player.worldObj;
         boolean nether = world.provider.dimensionId == -1;
+        if (world.provider.dimensionId == 0) {
+            this.lastOverworld.put(player, new double[]{player.posX, player.posY, player.posZ, player.rotationYaw});
+        }
         ItemStack boots = player.getEquipmentInSlot(1);
         if (boots != null && boots.getItem() == ModItems.magmaTreads) {
             crustLava(player);
@@ -295,21 +301,26 @@ public class NetheryXEvents {
         event.materialCost = 1;
     }
 
-    /** Pierre de rappel : memorise ou le joueur a quitte le Monde normal pour le Nether. */
+    /**
+     * Pierre de rappel : quand le joueur passe du Monde normal au Nether, memorise sa derniere position dans le Monde
+     * normal (devant le portail emprunte). La 1.7.10 n'a que cet evenement, declenche apres le changement de dimension.
+     */
     @SubscribeEvent
-    public void onTravel(EntityTravelToDimensionEvent event) {
-        if (event.entity instanceof EntityPlayer && event.entity.dimension == 0 && event.dimension == -1) {
-            EntityPlayer player = (EntityPlayer) event.entity;
-            NBTTagCompound data = player.getEntityData();
-            NBTTagCompound persisted = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-            NBTTagCompound memory = new NBTTagCompound();
-            // Un pas en arriere du portail, pour ne pas y retomber aussitot
-            double yaw = Math.toRadians(player.rotationYaw);
-            memory.setDouble("X", player.posX + Math.sin(yaw) * 1.5D);
-            memory.setDouble("Y", player.posY);
-            memory.setDouble("Z", player.posZ - Math.cos(yaw) * 1.5D);
-            persisted.setTag(ItemRecallStone.MEMORY, memory);
-            data.setTag(EntityPlayer.PERSISTED_NBT_TAG, persisted);
+    public void onChangedDimension(cpw.mods.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent event) {
+        double[] last = this.lastOverworld.get(event.player);
+        if (event.fromDim != 0 || event.toDim != -1 || last == null) {
+            return;
         }
+        EntityPlayer player = event.player;
+        NBTTagCompound data = player.getEntityData();
+        NBTTagCompound persisted = data.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        NBTTagCompound memory = new NBTTagCompound();
+        // Un pas en arriere du portail, pour ne pas y retomber aussitot
+        double yaw = Math.toRadians(last[3]);
+        memory.setDouble("X", last[0] + Math.sin(yaw) * 1.5D);
+        memory.setDouble("Y", last[1]);
+        memory.setDouble("Z", last[2] - Math.cos(yaw) * 1.5D);
+        persisted.setTag(ItemRecallStone.MEMORY, memory);
+        data.setTag(EntityPlayer.PERSISTED_NBT_TAG, persisted);
     }
 }
