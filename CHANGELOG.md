@@ -7,6 +7,38 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le pr
 Chaque tag Git (`git tag 1.0.0 && git push origin 1.0.0`) déclenche la compilation et la publication du `.jar`
 dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 
+## [1.3.4] - 2026-11-01
+
+### Ajouté
+- **Donjons variables** : la Citadelle d'onyx, le Sanctuaire infernal et les Catacombes flétries existent chacun en
+  quatre versions, tirées au sort à chaque génération. Le donjon historique est conservé ; dans les trois variantes,
+  les salles annexes (tours, ailes, salles rituelles, cryptes, ossuaires) prennent un thème tiré dans le pool du donjon
+  (bibliothèque, armurerie, ossuaire, prison, sanctuaire aux bougies, forge) et leurs générateurs changent de créature.
+  Arène du boss, coffre-fort scellé et escaliers ne changent pas.
+- **Indices d'approche** : autour de chaque grand donjon, des ruines, des restes d'explorateurs (feu de camp éteint,
+  ossements, tonneau) et des panneaux gravés signalent sa présence de loin, sans boussole.
+- **Sous la voûte du Nether** : nids de spectres (boules d'os et de cendre, parfois gardées par un générateur) et cages
+  d'explorateurs pendues à des chaînes (crâne et tonneau de butin), au-dessus des grands vides.
+- **Capitaine flétri** : un chevalier flétri sur six apparaît en capitaine (plus grand, plus robuste, flammes des
+  âmes) et mène une patrouille de deux ou trois chevaliers. Ils gardent la formation, reçoivent Résistance près de lui
+  et chargent ensemble dès que l'un d'eux voit une cible ; s'il tombe, la patrouille est démoralisée.
+- **Tests en jeu** (`./gradlew runGameTestServer`, lancés par la CI) : gabarits des donjons et de leurs indices,
+  structures de la voûte.
+
+### Modifié
+- **Traqueur de braise** : il tourne autour de sa proie en resserrant le cercle, tapi, puis bondit ; touché pendant
+  sa chasse, il bondit aussitôt.
+- **Spectre de cendre** : il fuit la lumière vive (lave, lanternes, porteur de lanterne) et n'attaque pas tant qu'il y
+  est exposé.
+- **Bloc d'onyx** et **onyx poli** plus lumineux, avec des éclats violets.
+- **Textures animées** : les fissures de la lave encroûtée et des briques de magma pulsent, le cristal en fusion
+  s'illumine par vagues, des bulles remontent dans le verre en fusion.
+
+### Corrigé
+- La table de butin de la maçonnerie scellée visait un objet inexistant (erreur au chargement du datapack).
+- `runClient` et les autres lancements de développement plantaient au démarrage (mixins de TerraBlender non remappés).
+- Le générateur de ressources réécrivait tous les gabarits NBT à chaque exécution (date dans l'en-tête gzip).
+
 ## [1.3.3] - 2026-10-31
 
 ### Modifié

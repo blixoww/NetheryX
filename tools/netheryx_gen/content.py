@@ -747,4 +747,18 @@ EXTRA_LANG = {
     "advancements.netheryx.basalt_golem.description": ("Defeat a Basalt Golem", "Vaincre un Golem de basalte"),
     "advancements.netheryx.firefly_jar.title": ("Bottled Light", "Lumière en bocal"),
     "advancements.netheryx.firefly_jar.description": ("Catch fireflies with a glass bottle", "Attraper des lucioles avec une fiole"),
+    # 1.3.4
+    "entity.netheryx.withered_knight_captain": ("Withered Captain", "Capitaine flétri"),
+    "sign.netheryx.onyx_citadel.1": ('Turn back:', 'Demi-tour :'),
+    "sign.netheryx.onyx_citadel.2": ('the Sentinel', 'la Sentinelle'),
+    "sign.netheryx.onyx_citadel.3": ('guards the', 'garde les'),
+    "sign.netheryx.onyx_citadel.4": ('onyx towers.', "tours d'onyx."),
+    "sign.netheryx.infernal_sanctum.1": ('The fire', 'Le feu sous'),
+    "sign.netheryx.infernal_sanctum.2": ('beneath the', 'le temple'),
+    "sign.netheryx.infernal_sanctum.3": ('temple never', 'ne dort'),
+    "sign.netheryx.infernal_sanctum.4": ('sleeps.', 'jamais.'),
+    "sign.netheryx.withered_catacombs.1": ('Here lie the', 'Ici reposent'),
+    "sign.netheryx.withered_catacombs.2": ("Champion's", 'les chevaliers'),
+    "sign.netheryx.withered_catacombs.3": ('knights. Do', 'du Champion.'),
+    "sign.netheryx.withered_catacombs.4": ('not wake them.', 'Silence !'),
 }

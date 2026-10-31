@@ -1,5 +1,6 @@
 package com.netheryx.entity;
 
+import com.netheryx.entity.ai.StalkerCircleGoal;
 import com.netheryx.registry.ModParticles;
 import com.netheryx.util.MobParticles;
 import net.minecraft.core.BlockPos;
@@ -11,7 +12,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
-import net.minecraft.world.entity.ai.goal.LeapAtTargetGoal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -31,7 +31,10 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-/** Traqueur de braise : predateur felin des Bosquets de braise. Ses morsures enflamment ses proies. */
+/**
+ * Traqueur de braise : predateur felin des Bosquets de braise. Il tourne autour de sa proie avant de bondir, et ses
+ * morsures l'enflamment.
+ */
 public class EmberStalker extends Monster implements GeoEntity {
     private static final String NAME = "ember_stalker";
     private static final RawAnimation IDLE = NetheryXAnimations.loop(NAME, "idle");
@@ -40,6 +43,7 @@ public class EmberStalker extends Monster implements GeoEntity {
     private static final RawAnimation ATTACK = NetheryXAnimations.once(NAME, "attack");
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    private StalkerCircleGoal circle;
 
     public EmberStalker(EntityType<? extends EmberStalker> type, Level level) {
         super(type, level);
@@ -58,7 +62,9 @@ public class EmberStalker extends Monster implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(2, new LeapAtTargetGoal(this, 0.4F));
+        // Tourne autour de sa proie en resserrant le cercle, puis bondit ; la morsure prend ensuite le relais
+        this.circle = new StalkerCircleGoal(this, 1.0D);
+        this.goalSelector.addGoal(2, this.circle);
         this.goalSelector.addGoal(3, new MeleeAttackGoal(this, 1.25D, false));
         this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.8D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 10.0F));
@@ -81,6 +87,9 @@ public class EmberStalker extends Monster implements GeoEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         boolean hurt = super.hurt(source, amount);
+        if (hurt && this.circle != null) {
+            this.circle.provoke();
+        }
         if (hurt && !this.level().isClientSide && this.isAlive() && this.random.nextFloat() < 0.3F
                 && !this.hasEffect(net.minecraft.world.effect.MobEffects.INVISIBILITY)) {
             this.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.INVISIBILITY, 50));

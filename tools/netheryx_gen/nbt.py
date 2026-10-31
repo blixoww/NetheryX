@@ -101,5 +101,6 @@ def write_nbt(path, root: dict) -> None:
     _write_string(out, "")
     _write_payload(out, root, TAG_COMPOUND)
     path.parent.mkdir(parents=True, exist_ok=True)
-    with gzip.open(path, "wb") as handle:
+    # mtime=0 et nom vide : l'en-tete gzip ne depend plus de l'heure, un gabarit inchange donne le meme fichier
+    with open(path, "wb") as raw, gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as handle:
         handle.write(b"".join(out))

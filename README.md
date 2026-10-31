@@ -61,15 +61,19 @@ et les objets en onyx ne brûlent pas dans la lave. Au-delà : l'**équipement a
   invoqué avec le Cœur scellé), Golem de basalte (mini-boss, Forge de basalte). Toutes leurs attaques sont annoncées.
 - **Montures et compagnons** : Wyverne de cendre (monture volante, une par joueur), Lézard de cendre (monture qui
   marche sur la lave), Porteur de lanterne (lumière dynamique).
-- **Hostiles** : Traqueur de braise, Spectre de cendre, Chevalier flétri, Ghast de feu, Cube d'onyx, Coffre mimique.
+- **Hostiles** : Traqueur de braise (tourne autour de sa proie avant de bondir), Spectre de cendre (fuit la lumière),
+  Chevalier flétri (en patrouille derrière un capitaine), Ghast de feu, Cube d'onyx, Coffre mimique.
 - **Neutres et paisibles** : Scarabée et Fouisseur de basalte, Crabe de magma, Phalène des âmes, Vache de braise,
   Poule de cendre, Cochon de blaze, Escargot de cristal, Poisson de magme, lucioles de braise et des âmes, Marchand piglin.
 
 ### Structures
 - **Citadelle d'onyx**, **Sanctuaire infernal**, **Catacombes flétries** : donjons sur plusieurs niveaux, gardes,
   générateurs, coffres et mimiques, **arène de boss** et **coffre-fort scellé** qui ne s'ouvre qu'à la mort du boss.
+  Chacun existe en **quatre versions** (salles annexes à thèmes tirées au sort) et s'annonce de loin par des
+  **indices** : ruines, restes d'explorateurs et panneaux.
 - Petites structures : Forge de basalte, Nids de wyverne, Caravane nomade, Campement de voyageur, Jardin du Nether,
   Cache secrète. Toutes se retrouvent avec la **Boussole des âmes**.
+- Sous la voûte : **nids de spectres** et **cages d'explorateurs** suspendus au-dessus des grands vides.
 - Les bastions et forteresses contiennent aussi du butin NetheryX (Global Loot Modifiers).
 
 ### Objets et ateliers
@@ -101,6 +105,7 @@ est dans [`docs/DOCUMENTATION.md`](docs/DOCUMENTATION.md#configuration).
 ```bash
 ./gradlew runClient      # lancer le jeu de développement (avec JEI)
 ./gradlew build          # produire build/libs/netheryx-1.20.1-<version>.jar
+./gradlew runGameTestServer   # tests en jeu (com.netheryx.gametest), aussi lancés par la CI
 ```
 
 Le plan de test en jeu est dans [`docs/PLAN_DE_TEST.md`](docs/PLAN_DE_TEST.md).

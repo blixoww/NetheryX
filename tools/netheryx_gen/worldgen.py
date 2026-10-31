@@ -546,11 +546,24 @@ def generate_structures():
                 "rules": [{"input_predicate": {"predicate_type": "minecraft:random_block_match", "block": block, "probability": p},
                            "location_predicate": {"predicate_type": "minecraft:always_true"},
                            "output_state": {"Name": out}} for (block, p, out) in PROCESSORS[name]]}]})
+        from .structures_v134 import APPROACH, VARIANTS, template_file
+        # Grands donjons : le gabarit historique et ses variantes thematiques, tires au sort a chaque generation
+        files = [template_file(v) for v in range(VARIANTS)] if name in APPROACH else ["main"]
         write_json(data_path("worldgen", "template_pool", name, "start.json"), {
             "fallback": "minecraft:empty",
             "elements": [{"weight": 1, "element": {"element_type": "minecraft:single_pool_element",
-                                                   "location": mid(f"{name}/main"), "projection": "rigid",
-                                                   "processors": processors}}]})
+                                                   "location": mid(f"{name}/{file}"), "projection": "rigid",
+                                                   "processors": processors}} for file in files]})
+        approach = {}
+        if name in APPROACH:
+            # Indices d'approche : ruines, restes d'explorateurs et panneaux autour du donjon
+            write_json(data_path("worldgen", "template_pool", f"{name}_approach", "start.json"), {
+                "fallback": "minecraft:empty",
+                "elements": [{"weight": weight, "element": {"element_type": "minecraft:single_pool_element",
+                                                            "location": mid(f"{name}_approach/{kind}"), "projection": "rigid",
+                                                            "processors": "minecraft:empty"}}
+                             for kind, weight in (("ruin", 3), ("remains", 2), ("signpost", 2))]})
+            approach = {"approach_pool": mid(f"{name}_approach/start"), "approach_count": 5}
         write_json(data_path("worldgen", "structure", f"{name}.json"), {
             "type": mid("nether_floor"),
             "biomes": f"#{MOD_ID}:has_structure/{name}",
@@ -567,6 +580,7 @@ def generate_structures():
             "footprint": footprint,
             "required_air": air,
             "max_distance_from_center": 80,
+            **approach,
         })
         write_json(data_path("worldgen", "structure_set", f"{name}.json"), {
             "structures": [{"structure": mid(name), "weight": 1}],

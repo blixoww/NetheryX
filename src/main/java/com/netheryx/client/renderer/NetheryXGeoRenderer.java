@@ -2,6 +2,7 @@ package com.netheryx.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.netheryx.NetheryX;
+import com.netheryx.util.RenderScaled;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -55,6 +56,10 @@ public class NetheryXGeoRenderer<T extends LivingEntity & GeoAnimatable> extends
         poseStack.pushPose();
         if (entity.isBaby()) {
             poseStack.scale(0.5F, 0.5F, 0.5F);
+        }
+        if (entity instanceof RenderScaled scaled && scaled.renderScale() != 1.0F) {
+            float s = scaled.renderScale();
+            poseStack.scale(s, s, s);
         }
         super.render(entity, entityYaw, partialTick, poseStack, bufferSource, packedLight);
         poseStack.popPose();

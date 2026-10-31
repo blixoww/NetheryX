@@ -57,7 +57,7 @@ class Template:
         nbt.update(extra or {})
         self.entities.append({"pos": [Double(x), Double(y), Double(z)], "blockPos": [int(x), int(y), int(z)], "nbt": nbt})
 
-    def save(self, name):
+    def save(self, name, file="main"):
         palette, palette_index, blocks = [], {}, []
         for pos in sorted(self.blocks, key=lambda p: (p[1], p[2], p[0])):
             key = self.blocks[pos]
@@ -78,7 +78,7 @@ class Template:
             "blocks": blocks,
             "entities": TypedList(TAG_COMPOUND, self.entities),
         }
-        write_nbt(data_path("structures", name, "main.nbt"), root)
+        write_nbt(data_path("structures", name, f"{file}.nbt"), root)
 
 
 # ------------------------------------------------------------------------------------------------
@@ -287,10 +287,12 @@ class Dungeon(Template):
 #   Etage 3 : arene de la Sentinelle sous le toit, avec balcons.
 # ------------------------------------------------------------------------------------------------
 
-def onyx_citadel():
+def onyx_citadel(variant=0):
+    """variant 0 : la Citadelle historique ; au-dela, salles annexes thematiques (structures_v134)."""
+    from .structures_v134 import ONYX_MOBS, ONYX_THEMES, furnish, template_file
     S = 45
     c = S // 2
-    d = Dungeon(S, 38, S, "onyx_citadel")
+    d = Dungeon(S, 38, S, "onyx_citadel" if variant == 0 else f"onyx_citadel_v{variant}")
     d.box(0, 0, 0, S - 1, 0, S - 1, ONYX_FLOOR)
     d.air(2, 1, 2, S - 3, 13, S - 3)
 
@@ -308,7 +310,7 @@ def onyx_citadel():
         d.air(tx + 6, 7, tz + 7, tx + 6, 7, tz + 7)
         for y in range(1, 8):
             d.set(tx + 6, y, tz + 7, "minecraft:ladder", facing="north", waterlogged="false")
-        d.spawner(tx + 3, 1, tz + 3, "ash_wraith")
+        d.spawner(tx + 3, 1, tz + 3, d.rng.choice(ONYX_MOBS) if variant else "ash_wraith")
         d.chest(tx + 2, 8, tz + 2, "onyx_citadel", facing="south")
         if (tx + tz) % 2 == 0:
             d.guard(tx + 4, 8, tz + 2, "mimic")
@@ -319,6 +321,8 @@ def onyx_citadel():
         d.set(tx + 4, 16, tz + 4, "onyx_lantern", hanging="false", waterlogged="false")
         door_x = tx + 8 if tx == 0 else tx
         d.air(door_x, 1, tz + 3, door_x, 3, tz + 5)
+        if variant:
+            furnish(d, tx + 1, 0, tz + 1, tx + 7, tz + 7, 6, d.rng.choice(ONYX_THEMES), "onyx_citadel", "polished_onyx")
 
     # Porte d'entree (sud) et ses gardes
     d.air(c - 2, 1, S - 2, c + 2, 5, S - 1)
@@ -395,11 +399,11 @@ def onyx_citadel():
     # Armurerie (ouest)
     d.chest(kx0 + 1, 9, 10, "onyx_citadel", facing="east")
     d.guard(kx0 + 2, 9, 12, "mimic")
-    for z in (14, 16, 18):
+    for z in ((14, 16, 18) if variant == 0 else ()):
         d.set(kx0 + 1, 9, z, "minecraft:polished_blackstone_slab", type="bottom", waterlogged="false")
         d.skull(kx0 + 1, 10, z, wither=z == 16)
     # Bibliotheque (est) et generateurs
-    for z in range(19, 31):
+    for z in (range(19, 31) if variant == 0 else ()):
         for y in (9, 10, 11):
             d.set(kx1 - 1, y, z, "minecraft:bookshelf")
     d.chest(kx1 - 2, 9, 24, "onyx_citadel", facing="west")
@@ -412,6 +416,12 @@ def onyx_citadel():
     d.air(kx1 - 3, 16, 10, kx1 - 1, 16, 16)
     d.rail(kx1 - 4, 17, 9, kx1 - 4, 16, "onyx_brick_wall")
     d.rail(kx1 - 3, 17, 9, kx1 - 1, 9, "onyx_brick_wall")
+    if variant:
+        # Ailes de l'etage 2 : un theme chacune ; le pied de l'escalier et la mimique restent libres
+        keep = {(x, z) for x in range(kx1 - 3, kx1) for z in (8, 9, 10)} | {(kx0 + 2, 12)}
+        keep |= {(x, z) for x in range(kx0 + 1, kx0 + 4) for z in range(19, 23)}
+        furnish(d, kx0 + 1, 8, kz0 + 1, 17, kz1 - 1, 15, d.rng.choice(ONYX_THEMES), "onyx_citadel", "polished_onyx", keep)
+        furnish(d, 27, 8, kz0 + 1, kx1 - 1, kz1 - 1, 15, d.rng.choice(ONYX_THEMES), "onyx_citadel", "polished_onyx", keep)
 
     # Etage 3 : arene de la Sentinelle
     for x in range(kx0 + 1, kx1):
@@ -444,7 +454,7 @@ def onyx_citadel():
         d.hanging_lantern(chest_x, 28, 14, 2, "onyx_lantern")
         d.hanging_lantern(chest_x, 28, 27, 2, "onyx_lantern")
     decorate_citadel(d, S, c, kx0, kx1, kz0, kz1)
-    d.save("onyx_citadel")
+    d.save("onyx_citadel", template_file(variant))
 
 
 def decorate_citadel(d, S, c, kx0, kx1, kz0, kz1):
@@ -530,11 +540,13 @@ def decorate_citadel(d, S, c, kx0, kx1, kz0, kz1):
 SANCTUM_SINK = 10
 
 
-def infernal_sanctum():
+def infernal_sanctum(variant=0):
+    """variant 0 : le Sanctuaire historique ; au-dela, salles rituelles thematiques (structures_v134)."""
+    from .structures_v134 import MAGMA_MOBS, MAGMA_THEMES, furnish, template_file
     S = 41
     c = S // 2
     G = SANCTUM_SINK  # y du sol du Nether dans le gabarit
-    d = Dungeon(S, G + 22, S, "infernal_sanctum")
+    d = Dungeon(S, G + 22, S, "infernal_sanctum" if variant == 0 else f"infernal_sanctum_v{variant}")
     # Sous-sol massif : la nef ne communique pas avec les grottes alentour
     d.box(0, 0, 0, S - 1, G - 1, S - 1, MAGMA_WALL)
     for x in range(S):
@@ -587,10 +599,13 @@ def infernal_sanctum():
         d.box(rx0, G + 1, 18, rx1, G + 11, 18, MAGMA_WALL)
         d.air(wx, G + 1, 12, wx, G + 3, 13)
         d.box(rx0, G, tz0 + 1, rx1, G, 17, "minecraft:polished_blackstone")
-        d.spawner((rx0 + rx1) // 2, G + 1, 13, mob)
+        d.spawner((rx0 + rx1) // 2, G + 1, 13, d.rng.choice(MAGMA_MOBS) if variant else mob)
         d.chest((rx0 + rx1) // 2, G + 1, tz0 + 1, "infernal_sanctum", facing="south")
         d.guard((rx0 + rx1) // 2 + (2 if side == "east" else -2), G + 1, tz0 + 1, "mimic")
         d.hanging_lantern((rx0 + rx1) // 2, G + 12, 14, 4, "minecraft:lantern")
+        if variant:
+            mimic = ((rx0 + rx1) // 2 + (2 if side == "east" else -2), tz0 + 1)
+            furnish(d, rx0, G, tz0 + 1, rx1, 17, G + 11, d.rng.choice(MAGMA_THEMES), "infernal_sanctum", "magma_bricks", {mimic})
     d.spawner(c, G + 1, 12, "ember_stalker")
     for (x, z) in ((c, 16), (c, 26)):
         d.hanging_lantern(x, G + 12, z, 4, "minecraft:lantern")
@@ -636,7 +651,7 @@ def infernal_sanctum():
         d.pillar(x, nz0, 2, G - 1, "minecraft:polished_basalt")
     d.set(c, 6, nz0, "ember_lamp")
     decorate_sanctum(d, S, c, G, tx0, tx1, tz0, tz1, nx0, nx1, nz0, nz1)
-    d.save("infernal_sanctum")
+    d.save("infernal_sanctum", template_file(variant))
 
 
 def decorate_sanctum(d, S, c, G, tx0, tx1, tz0, tz1, nx0, nx1, nz0, nz1):
@@ -694,11 +709,13 @@ def decorate_sanctum(d, S, c, G, tx0, tx1, tz0, tz1, nx0, nx1, nz0, nz1):
 CATACOMB_SINK = 16
 
 
-def withered_catacombs():
+def withered_catacombs(variant=0):
+    """variant 0 : les Catacombes historiques ; au-dela, cryptes et ossuaires thematiques (structures_v134)."""
+    from .structures_v134 import CRYPT_MOBS, CRYPT_THEMES, furnish, template_file
     S = 39
     G = CATACOMB_SINK  # y du sol du Nether dans le gabarit
     U = 9              # sol de la crypte superieure
-    d = Dungeon(S, G + 13, S, "withered_catacombs")
+    d = Dungeon(S, G + 13, S, "withered_catacombs" if variant == 0 else f"withered_catacombs_v{variant}")
     # Roche massive : rien ne doit communiquer avec les grottes alentour
     d.box(0, 0, 0, S - 1, G - 1, S - 1, CRYPT_WALL)
 
@@ -730,7 +747,7 @@ def withered_catacombs():
         d.box(x0, U, z0, x1, U, z1, CRYPT_FLOOR)
         d.air(dx0, U + 1, dz0, dx1, U + 3, dz1)
         cx, cz = (x0 + x1) // 2, (z0 + z1) // 2
-        d.spawner(cx, U + 1, cz, mob)
+        d.spawner(cx, U + 1, cz, d.rng.choice(CRYPT_MOBS) if variant else mob)
         d.chest(x0, U + 1, z0, "withered_catacombs", facing="south")
         if (x0, z0) in ((1, 15), (1, 33)):
             d.guard(x0 + 2, U + 1, z0, "mimic")
@@ -739,6 +756,9 @@ def withered_catacombs():
         d.skull(x1, U + 2, z1)
         d.hanging_lantern(cx, U + 6, cz + 1, 1)
         d.set(x0 + 1, U + 4, z1, "minecraft:cobweb")
+        if variant:
+            furnish(d, x0, U, z0, x1, z1, U + 5, d.rng.choice(CRYPT_THEMES), "withered_catacombs",
+                    "minecraft:chiseled_polished_blackstone", {(x0 + 2, z0)})
     # Chapelle centrale de la crypte superieure (au-dessus du tombeau)
     d.air(13, U + 1, 13, 25, U + 5, 25)
     d.box(13, U, 13, 25, U, 25, CRYPT_FLOOR)
@@ -778,13 +798,16 @@ def withered_catacombs():
         d.air(ox0, 2, 17, ox1, 6, 24)
         d.box(ox0, 1, 17, ox1, 1, 24, CRYPT_FLOOR)
         d.air(door_x, 2, 20, door_x, 4, 21)
-        d.spawner((ox0 + ox1) // 2, 2, 20, mob)
+        d.spawner((ox0 + ox1) // 2, 2, 20, d.rng.choice(CRYPT_MOBS) if variant else mob)
         d.chest(ox0, 2, 17, "withered_catacombs", facing="east")
         d.guard(ox0, 2, 19, "mimic")
         for z in range(17, 25, 2):
             d.set(ox1 if ox0 == 3 else ox0, 3, z, "minecraft:bone_block", axis="y")
             d.skull(ox1 if ox0 == 3 else ox0, 4, z)
         d.hanging_lantern((ox0 + ox1) // 2, 7, 22, 1)
+        if variant:
+            furnish(d, ox0, 1, 17, ox1, 24, 6, d.rng.choice(CRYPT_THEMES), "withered_catacombs",
+                    "minecraft:chiseled_polished_blackstone", {(ox0, 19)})
     # Coffre-fort scelle (au nord du tombeau)
     d.vault(14, 1, 8, 24, 7, 13, "blackstone", (18, 2, 13, 20, 4, 13))
     d.air(18, 2, 14, 20, 4, 14)
@@ -817,7 +840,7 @@ def withered_catacombs():
     d.set(36, G + 1, 31, "soul_lily")
     d.set(27, G + 1, 31, "soul_lily")
     decorate_catacombs(d, S, G, U, mx0, mx1, mz0, mz1)
-    d.save("withered_catacombs")
+    d.save("withered_catacombs", template_file(variant))
 
 
 GRAVE_GROUND = [("minecraft:soul_soil", 40), ("minecraft:netherrack", 25), ("minecraft:blackstone", 20), ("withered_soil", 15)]
@@ -1314,6 +1337,12 @@ def generate():
     traveler_camp()
     nether_garden()
     hidden_cache()
-    onyx_citadel()
-    infernal_sanctum()
-    withered_catacombs()
+    from . import structures_v134
+    # Chaque grand donjon : le gabarit historique (main) et ses variantes thematiques
+    for variant in range(structures_v134.VARIANTS):
+        onyx_citadel(variant)
+        infernal_sanctum(variant)
+        withered_catacombs(variant)
+    structures_v134.generate_approach()
+    structures_v134.generate_gametest()
+    structures_v134.save_check()

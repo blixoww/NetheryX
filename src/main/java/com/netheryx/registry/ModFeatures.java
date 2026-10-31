@@ -2,6 +2,7 @@ package com.netheryx.registry;
 
 import com.netheryx.NetheryX;
 import com.netheryx.worldgen.feature.BoulderFeature;
+import com.netheryx.worldgen.feature.CeilingHangFeature;
 import com.netheryx.worldgen.feature.FallenLogFeature;
 import com.netheryx.worldgen.feature.HellTreeFeature;
 import com.netheryx.worldgen.feature.LavaIslandFeature;
@@ -44,6 +45,10 @@ public final class ModFeatures {
             () -> new LavaIslandFeature(NoneFeatureConfiguration.CODEC));
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> PETRIFIED_TREE = FEATURES.register("petrified_tree",
             () -> new PetrifiedTreeFeature(NoneFeatureConfiguration.CODEC));
+
+    /** Nids de spectres et cages d'explorateurs suspendus sous la voute (1.3.4). */
+    public static final RegistryObject<Feature<NoneFeatureConfiguration>> CEILING_HANG = FEATURES.register("ceiling_hang",
+            () -> new CeilingHangFeature(NoneFeatureConfiguration.CODEC));
 
     private ModFeatures() {
     }

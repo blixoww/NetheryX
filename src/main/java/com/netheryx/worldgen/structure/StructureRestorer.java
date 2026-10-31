@@ -4,8 +4,8 @@ import com.netheryx.NetheryX;
 import com.netheryx.registry.ModStructureTypes;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -19,6 +19,7 @@ import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
+import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -103,28 +104,36 @@ public final class StructureRestorer {
         ChunkPos pos = chunk.getPos();
         BoundingBox chunkBox = new BoundingBox(pos.getMinBlockX(), level.getMinBuildHeight(), pos.getMinBlockZ(),
                 pos.getMaxBlockX(), level.getMaxBuildHeight() - 1, pos.getMaxBlockZ());
-        var structures = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
         for (StructureStart start : level.structureManager().startsForStructure(pos,
                 structure -> structure.type() == ModStructureTypes.NETHER_FLOOR.get())) {
-            ResourceLocation key = structures.getKey(start.getStructure());
-            if (key == null || !start.isValid()) {
+            if (!start.isValid()) {
                 continue;
             }
-            // Chaque structure NetheryX n'a qu'un gabarit : netheryx:<nom>/main
-            Optional<StructureTemplate> template = level.getServer().getStructureManager()
-                    .get(new ResourceLocation(key.getNamespace(), key.getPath() + "/main"));
-            if (template.isEmpty()) {
-                continue;
-            }
+            // Chaque piece (donjon dans l'une de ses variantes, indices d'approche) repose son propre gabarit
             for (StructurePiece piece : start.getPieces()) {
-                if (piece instanceof PoolElementStructurePiece pool && piece.getBoundingBox().intersects(chunkBox)) {
-                    StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(pool.getRotation())
-                            .setBoundingBox(chunkBox).setKnownShape(true).setIgnoreEntities(true);
-                    template.get().placeInWorld(level, pool.getPosition(), pool.getPosition(), settings, level.getRandom(),
-                            Block.UPDATE_CLIENTS);
+                if (!(piece instanceof PoolElementStructurePiece pool) || !piece.getBoundingBox().intersects(chunkBox)) {
+                    continue;
                 }
+                Optional<StructureTemplate> template = templateOf(pool.getElement())
+                        .flatMap(location -> level.getServer().getStructureManager().get(location));
+                if (template.isEmpty()) {
+                    continue;
+                }
+                StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(pool.getRotation())
+                        .setBoundingBox(chunkBox).setKnownShape(true).setIgnoreEntities(true);
+                template.get().placeInWorld(level, pool.getPosition(), pool.getPosition(), settings, level.getRandom(),
+                        Block.UPDATE_CLIENTS);
             }
         }
+    }
+
+    /** Emplacement du gabarit d'un element de pool simple (lu via son codec : le champ n'est pas public). */
+    private static Optional<ResourceLocation> templateOf(StructurePoolElement element) {
+        return StructurePoolElement.CODEC.encodeStart(NbtOps.INSTANCE, element).result()
+                .filter(CompoundTag.class::isInstance)
+                .map(tag -> ((CompoundTag) tag).getString("location"))
+                .filter(location -> !location.isEmpty())
+                .map(ResourceLocation::tryParse);
     }
 
     /** Chunks deja restaures (sauvegarde par dimension) : la restauration n'a lieu qu'une fois. */

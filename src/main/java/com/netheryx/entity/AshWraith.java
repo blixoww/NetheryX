@@ -1,5 +1,6 @@
 package com.netheryx.entity;
 
+import com.netheryx.entity.ai.FleeLightGoal;
 import com.netheryx.registry.ModParticles;
 import com.netheryx.util.MobParticles;
 import net.minecraft.core.BlockPos;
@@ -36,7 +37,7 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-/** Spectre de cendre : esprit volant des Terres cendrees, il aveugle et affaiblit ses victimes. */
+/** Spectre de cendre : esprit volant des Terres cendrees, il aveugle et affaiblit ses victimes et fuit la lumiere. */
 public class AshWraith extends Monster implements GeoEntity {
     private static final String NAME = "ash_wraith";
     private static final RawAnimation FLOAT = NetheryXAnimations.loop(NAME, "float");
@@ -73,6 +74,8 @@ public class AshWraith extends Monster implements GeoEntity {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
+        // Une lumiere forte (lave, lanternes, porteur de lanterne) le fait fuir vers l'ombre, sans attaquer
+        this.goalSelector.addGoal(1, new FleeLightGoal(this, 12, 1.4D));
         this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2D, true));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomFlyingGoal(this, 0.8D));
         this.goalSelector.addGoal(7, new LookAtPlayerGoal(this, Player.class, 12.0F));

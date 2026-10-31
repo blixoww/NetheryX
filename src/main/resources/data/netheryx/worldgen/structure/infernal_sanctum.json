@@ -11,5 +11,7 @@
   "sink": 10,
   "footprint": 40,
   "required_air": 10,
-  "max_distance_from_center": 80
+  "max_distance_from_center": 80,
+  "approach_pool": "netheryx:infernal_sanctum_approach/start",
+  "approach_count": 5
 }

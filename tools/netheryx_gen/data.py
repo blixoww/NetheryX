@@ -48,7 +48,7 @@ def silk_or(name, drop, functions):
 
 def generate_block_loot():
     special = {"onyx_ore", "sulfur_ore", "ember_nylium", "onyx_cluster", "sulfur_cluster", "onyx_brick_slab",
-               "ember_slab", "ember_door", "withered_slab", "magma_brick_slab", "withered_door", "guardian_seal", "nether_grass", "cinder_wheat_crop", "blaze_pepper_crop", "soul_tuber_crop", "fire_berry_bush", "crusted_lava"}
+               "ember_slab", "ember_door", "withered_slab", "magma_brick_slab", "withered_door", "guardian_seal", "warded_bricks", "nether_grass", "cinder_wheat_crop", "blaze_pepper_crop", "soul_tuber_crop", "fire_berry_bush", "crusted_lava"}
     for name, _kind, _extra in BLOCKS:
         if name not in special:
             self_drop(name)
@@ -846,3 +846,5 @@ def generate():
     data_v120.generate()
     from . import data_v130
     data_v130.generate()
+    from . import data_v134
+    data_v134.generate()

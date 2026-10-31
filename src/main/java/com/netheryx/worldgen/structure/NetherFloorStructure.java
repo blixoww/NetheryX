@@ -15,10 +15,13 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -30,6 +33,9 @@ import java.util.Optional;
  * colonnes, le sol doit etre a une hauteur proche et tout le volume de la structure (plus une marge au-dessus) doit
  * etre degage. Sinon on essaie le sol suivant plus bas. Plus de structure enterree, coupee par un plafond ou un mur de
  * roche, ou suspendue au-dessus d'un ravin.
+ * <p>
+ * Avec un {@code approach_pool}, quelques indices (ruines, restes d'explorateurs, panneaux) sont semes autour, chacun
+ * sur son propre sol : on repere le donjon de loin, sans boussole.
  */
 public class NetherFloorStructure extends Structure {
     public static final Codec<NetherFloorStructure> CODEC = RecordCodecBuilder.<NetherFloorStructure>mapCodec(instance -> instance.group(
@@ -42,7 +48,9 @@ public class NetherFloorStructure extends Structure {
             Codec.intRange(1, 32).optionalFieldOf("required_air", 8).forGetter(structure -> structure.requiredAir),
             Codec.intRange(1, 128).optionalFieldOf("max_distance_from_center", 64).forGetter(structure -> structure.maxDistanceFromCenter),
             Codec.intRange(0, 32).optionalFieldOf("sink", 0).forGetter(structure -> structure.sink),
-            Codec.intRange(0, 64).optionalFieldOf("footprint", 0).forGetter(structure -> structure.footprint)
+            Codec.intRange(0, 64).optionalFieldOf("footprint", 0).forGetter(structure -> structure.footprint),
+            StructureTemplatePool.CODEC.optionalFieldOf("approach_pool").forGetter(structure -> structure.approachPool),
+            Codec.intRange(0, 12).optionalFieldOf("approach_count", 0).forGetter(structure -> structure.approachCount)
     ).apply(instance, NetherFloorStructure::new)).codec();
 
     private final Holder<StructureTemplatePool> startPool;
@@ -57,6 +65,12 @@ public class NetherFloorStructure extends Structure {
     /** Nombre de blocs dont la structure est enfoncee sous le sol (donjons souterrains). */
     private final int sink;
     private final int footprint;
+    private final Optional<Holder<StructureTemplatePool>> approachPool;
+    private final int approachCount;
+
+    /** Distance des indices au bord du donjon (en blocs) : entre MIN et MIN + SPREAD. */
+    private static final int APPROACH_MIN = 10;
+    private static final int APPROACH_SPREAD = 22;
 
     /** Le sol de chaque colonne de l'emprise doit etre a cette distance (en blocs) du sol au centre. */
     private static final int FLOOR_TOLERANCE = 3;
@@ -68,7 +82,8 @@ public class NetherFloorStructure extends Structure {
 
     public NetherFloorStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool,
                                 Optional<ResourceLocation> startJigsawName, int size, int maxY, int minY,
-                                int requiredAir, int maxDistanceFromCenter, int sink, int footprint) {
+                                int requiredAir, int maxDistanceFromCenter, int sink, int footprint,
+                                Optional<Holder<StructureTemplatePool>> approachPool, int approachCount) {
         super(settings);
         this.startPool = startPool;
         this.startJigsawName = startJigsawName;
@@ -79,6 +94,8 @@ public class NetherFloorStructure extends Structure {
         this.maxDistanceFromCenter = maxDistanceFromCenter;
         this.sink = sink;
         this.footprint = footprint;
+        this.approachPool = approachPool;
+        this.approachCount = approachCount;
     }
 
     @Override
@@ -109,7 +126,11 @@ public class NetherFloorStructure extends Structure {
                 BlockPos origin = new BlockPos(offsetX, y + 1 - this.sink, offsetZ);
                 PoolElementStructurePiece piece = new PoolElementStructurePiece(templates, element, origin,
                         element.getGroundLevelDelta(), rotation, element.getBoundingBox(templates, origin, rotation));
-                return Optional.of(new GenerationStub(new BlockPos(x, y + 1, z), builder -> builder.addPiece(piece)));
+                int floorY = y;
+                return Optional.of(new GenerationStub(new BlockPos(x, y + 1, z), builder -> {
+                    builder.addPiece(piece);
+                    this.addApproach(context, builder, piece.getBoundingBox(), floorY);
+                }));
             }
             airRun = 0;
         }
@@ -150,6 +171,55 @@ public class NetherFloorStructure extends Structure {
             }
         }
         return grounded >= columns * GROUNDED_SHARE && open >= columns * OPEN_SHARE;
+    }
+
+    /** Seme les indices d'approche autour du donjon, chacun pose sur le sol trouve a sa position. */
+    private void addApproach(GenerationContext context, StructurePiecesBuilder builder, BoundingBox dungeon, int floorY) {
+        if (this.approachPool.isEmpty() || this.approachCount == 0) {
+            return;
+        }
+        WorldgenRandom random = context.random();
+        StructureTemplateManager templates = context.structureTemplateManager();
+        int centerX = (dungeon.minX() + dungeon.maxX()) / 2;
+        int centerZ = (dungeon.minZ() + dungeon.maxZ()) / 2;
+        int halfSize = Math.max(dungeon.getXSpan(), dungeon.getZSpan()) / 2;
+        List<BoundingBox> placed = new ArrayList<>();
+        placed.add(dungeon.inflatedBy(3));
+        for (int i = 0; i < this.approachCount; i++) {
+            double angle = random.nextDouble() * Math.PI * 2.0D;
+            int distance = halfSize + APPROACH_MIN + random.nextInt(APPROACH_SPREAD);
+            int px = centerX + (int) Math.round(Math.cos(angle) * distance);
+            int pz = centerZ + (int) Math.round(Math.sin(angle) * distance);
+            StructurePoolElement element = this.approachPool.get().value().getRandomTemplate(random);
+            Rotation rotation = Rotation.getRandom(random);
+            int ground = groundNear(context, px, pz, floorY);
+            if (ground == Integer.MIN_VALUE) {
+                continue;
+            }
+            BoundingBox local = element.getBoundingBox(templates, BlockPos.ZERO, rotation);
+            BlockPos origin = new BlockPos(px - (local.minX() + local.maxX()) / 2, ground + 1, pz - (local.minZ() + local.maxZ()) / 2);
+            BoundingBox box = element.getBoundingBox(templates, origin, rotation);
+            if (placed.stream().anyMatch(box::intersects)) {
+                continue;
+            }
+            placed.add(box);
+            builder.addPiece(new PoolElementStructurePiece(templates, element, origin, element.getGroundLevelDelta(), rotation, box));
+        }
+    }
+
+    /** Sol (bloc plein sous au moins 4 blocs d'air) le plus proche de la hauteur du donjon, ou MIN_VALUE. */
+    private static int groundNear(GenerationContext context, int x, int z, int floorY) {
+        NoiseColumn column = context.chunkGenerator().getBaseColumn(x, z, context.heightAccessor(), context.randomState());
+        for (int offset = 0; offset <= 12; offset++) {
+            for (int y : new int[]{floorY - offset, floorY + offset}) {
+                BlockState state = column.getBlock(y);
+                if (!state.isAir() && state.getFluidState().isEmpty() && column.getBlock(y + 1).isAir()
+                        && column.getBlock(y + 2).isAir() && column.getBlock(y + 3).isAir() && column.getBlock(y + 4).isAir()) {
+                    return y;
+                }
+            }
+        }
+        return Integer.MIN_VALUE;
     }
 
     private static boolean hasFloorNear(NoiseColumn column, int floorY) {
