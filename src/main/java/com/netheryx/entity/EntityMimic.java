@@ -68,7 +68,7 @@ public class EntityMimic extends EntityNetheryXMonster {
 
     @Override
     public float getActionProgress() {
-        return isAwake() ? Math.max(0.6F, super.getActionProgress()) : 0.0F;
+        return isAwake() ? super.getActionProgress() : 0.0F;
     }
 
     @Override

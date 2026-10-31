@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
@@ -19,16 +20,48 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 /**
  * Modele de creature construit a partir des fichiers de geometrie (format Bedrock) de la version 1.20.1 : les memes
  * os, cubes et textures, convertis en ModelRenderer de la 1.7.10 (axe X retourne, Y vers le bas, origine a 24).
- * L'animation est procedurale : pattes, bras, ailes, queues, tete et pieces speciales sont reconnus a leur nom.
+ * Les animations sont celles d'origine ({@link GeoAnimation}) : repos, marche, course, vol, assis, et l'action en cours
+ * (attaque, souffle, sort...) par-dessus. Sans fichier d'animation, une animation procedurale prend le relais.
  */
 public class GeoModel extends ModelBase {
     private static final float DEG = (float) Math.PI / 180.0F;
 
     private final List<ModelRenderer> roots = new ArrayList<ModelRenderer>();
     private final List<Bone> bones = new ArrayList<Bone>();
+    private final Map<String, GeoAnimation> animations;
+
+    /** Os qui accepte une echelle (les pistes « scale » des animations). */
+    private static final class ScaledPart extends ModelRenderer {
+        float scaleX = 1.0F;
+        float scaleY = 1.0F;
+        float scaleZ = 1.0F;
+
+        ScaledPart(ModelBase model, String name) {
+            super(model, name);
+        }
+
+        @Override
+        public void render(float scale) {
+            if (this.scaleX == 1.0F && this.scaleY == 1.0F && this.scaleZ == 1.0F || this.isHidden || !this.showModel) {
+                super.render(scale);
+                return;
+            }
+            if (this.scaleX == 0.0F || this.scaleY == 0.0F || this.scaleZ == 0.0F) {
+                return;
+            }
+            GL11.glPushMatrix();
+            GL11.glTranslatef(this.rotationPointX * scale, this.rotationPointY * scale, this.rotationPointZ * scale);
+            GL11.glScalef(this.scaleX, this.scaleY, this.scaleZ);
+            GL11.glTranslatef(-this.rotationPointX * scale, -this.rotationPointY * scale, -this.rotationPointZ * scale);
+            super.render(scale);
+            GL11.glPopMatrix();
+        }
+    }
 
     private static final class Bone {
         final String name;
@@ -36,6 +69,9 @@ public class GeoModel extends ModelBase {
         final float rx;
         final float ry;
         final float rz;
+        final float px;
+        final float py;
+        final float pz;
         final boolean left;
         final boolean back;
         final int index;
@@ -46,6 +82,9 @@ public class GeoModel extends ModelBase {
             this.rx = part.rotateAngleX;
             this.ry = part.rotateAngleY;
             this.rz = part.rotateAngleZ;
+            this.px = part.rotationPointX;
+            this.py = part.rotationPointY;
+            this.pz = part.rotationPointZ;
             this.left = name.contains("left") || name.matches(".*_l\\d.*");
             this.back = name.contains("back");
             this.index = index;
@@ -53,6 +92,7 @@ public class GeoModel extends ModelBase {
     }
 
     public GeoModel(String name) {
+        this.animations = GeoAnimation.load(name);
         ResourceLocation location = new ResourceLocation(NetheryX.MOD_ID, "geo/" + name + ".geo.json");
         try {
             InputStreamReader reader = new InputStreamReader(
@@ -90,7 +130,7 @@ public class GeoModel extends ModelBase {
             JsonObject bone = element.getAsJsonObject();
             String name = bone.get("name").getAsString();
             float[] pivot = java(vec(bone, "pivot"));
-            ModelRenderer part = new ModelRenderer(this, name);
+            ModelRenderer part = new ScaledPart(this, name);
             part.setTextureSize(this.textureWidth, this.textureHeight);
             part.mirror = true;
             String parent = bone.has("parent") ? bone.get("parent").getAsString() : null;
@@ -158,8 +198,121 @@ public class GeoModel extends ModelBase {
         }
     }
 
+    private GeoAnimation first(String... names) {
+        for (String name : names) {
+            GeoAnimation animation = this.animations.get(name);
+            if (animation != null) {
+                return animation;
+            }
+        }
+        return null;
+    }
+
+    /** Animation de fond selon l'etat de la creature (vol, nage, marche, assise, repos). */
+    private GeoAnimation baseAnimation(Entity entity, float limbAmount) {
+        boolean flying = entity instanceof IAnimatedMob && ((IAnimatedMob) entity).isFlyingAnimation()
+                || !entity.onGround && entity.motionY < -0.05D && first("flap") != null; // poule qui volette en tombant
+        boolean liquid = entity.handleLavaMovement() || entity.isInWater();
+        GeoAnimation animation = null;
+        if (flying) {
+            animation = first("fly", "flap", "glide", "float");
+        } else if (liquid) {
+            animation = first("swim");
+        } else if (first("swim") != null && first("flop") != null) {
+            animation = first("flop"); // poisson de magme hors de la lave
+        }
+        if (animation == null && entity instanceof EntityTameable && ((EntityTameable) entity).isSitting()) {
+            animation = first("sit");
+        }
+        if (animation == null && limbAmount > 0.12F) {
+            animation = limbAmount > 0.6F ? first("run", "walk", "crawl", "hop", "swim") : first("walk", "crawl", "hop", "run", "swim");
+        }
+        if (animation == null) {
+            animation = first("idle", "float", "dormant", "fly", "swim", "crawl");
+        }
+        return animation;
+    }
+
+    /** Action jouee par-dessus l'animation de fond (attaque, souffle, sort...). */
+    private GeoAnimation actionAnimation() {
+        return first("attack", "punch", "chomp", "breath", "cast", "pulse", "slam", "sweep", "roar");
+    }
+
+    private static float time(GeoAnimation animation, float seconds) {
+        if (animation.loop) {
+            return animation.length <= 0.0F ? 0.0F : seconds % animation.length;
+        }
+        return Math.min(seconds, animation.length);
+    }
+
+    /** Pose les os d'apres les animations d'origine. */
+    private void animate(Entity entity, float limbSwing, float limbAmount, float age, float yaw, float pitch) {
+        GeoAnimation base = baseAnimation(entity, limbAmount);
+        float action = entity instanceof IAnimatedMob ? ((IAnimatedMob) entity).getActionProgress() : 0.0F;
+        GeoAnimation overlay = action > 0.0F ? actionAnimation() : null;
+        // Decalage par creature : deux creatures cote a cote ne bougent pas a l'unisson
+        float seconds = (age + (entity.getEntityId() % 40) * 1.7F) / 20.0F;
+        float baseTime = base == null ? 0.0F : time(base, seconds);
+        float overlayTime = overlay == null ? 0.0F : (1.0F - action) * overlay.length;
+        boolean headDone = false;
+        for (Bone bone : this.bones) {
+            ModelRenderer p = bone.part;
+            float rx = 0.0F;
+            float ry = 0.0F;
+            float rz = 0.0F;
+            float ox = 0.0F;
+            float oy = 0.0F;
+            float oz = 0.0F;
+            float[] sc = null;
+            GeoAnimation.BoneTrack track = overlay == null ? null : overlay.bones.get(bone.name);
+            float t = overlayTime;
+            if (track == null && base != null) {
+                track = base.bones.get(bone.name);
+                t = baseTime;
+            }
+            if (track != null) {
+                float[] r = GeoAnimation.sample(track.rotation, t);
+                if (r != null) {
+                    rx = r[0];
+                    ry = r[1];
+                    rz = r[2];
+                }
+                float[] o = GeoAnimation.sample(track.position, t);
+                if (o != null) {
+                    ox = o[0];
+                    oy = o[1];
+                    oz = o[2];
+                }
+                sc = GeoAnimation.sample(track.scale, t);
+            }
+            // Conversion vers la 1.7.10 (comme pour la pose de repos) : X retourne, Y vers le bas
+            p.rotateAngleX = bone.rx + rx * DEG;
+            p.rotateAngleY = bone.ry - ry * DEG;
+            p.rotateAngleZ = bone.rz - rz * DEG;
+            p.rotationPointX = bone.px - ox;
+            p.rotationPointY = bone.py - oy;
+            p.rotationPointZ = bone.pz + oz;
+            if (p instanceof ScaledPart) {
+                ScaledPart scaled = (ScaledPart) p;
+                scaled.scaleX = sc == null ? 1.0F : sc[0];
+                scaled.scaleY = sc == null ? 1.0F : sc[1];
+                scaled.scaleZ = sc == null ? 1.0F : sc[2];
+            }
+            // La tete suit le regard
+            if (!headDone && (bone.name.equals("head") || bone.name.equals("neck1"))) {
+                p.rotateAngleY += yaw * DEG * 0.6F;
+                p.rotateAngleX += pitch * DEG * 0.6F;
+                headDone = true;
+            }
+        }
+    }
+
     @Override
     public void setRotationAngles(float limbSwing, float limbAmount, float age, float yaw, float pitch, float scale, Entity entity) {
+        if (!this.animations.isEmpty()) {
+            animate(entity, limbSwing, limbAmount, age, yaw, pitch);
+            return;
+        }
         boolean flying = entity instanceof IAnimatedMob && ((IAnimatedMob) entity).isFlyingAnimation();
         float action = entity instanceof IAnimatedMob ? ((IAnimatedMob) entity).getActionProgress() : 0.0F;
         boolean headDone = false;
