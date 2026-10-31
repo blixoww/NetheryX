@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "netheryx:block/wartvine_plant_lit"
-  },
-  "render_type": "minecraft:cutout"
-}

@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "netheryx:magma_bricks"
-  },
-  "result": "netheryx:magma_brick_slab",
-  "count": 2
-}

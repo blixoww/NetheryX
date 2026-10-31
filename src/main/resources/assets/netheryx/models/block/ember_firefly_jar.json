@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/template_lantern",
-  "textures": {
-    "lantern": "netheryx:block/ember_firefly_jar"
-  },
-  "render_type": "minecraft:cutout"
-}

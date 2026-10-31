@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "netheryx:block/withered_fungus"
-  },
-  "render_type": "minecraft:cutout"
-}

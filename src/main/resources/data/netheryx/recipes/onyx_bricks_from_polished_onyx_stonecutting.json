@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "netheryx:polished_onyx"
-  },
-  "result": "netheryx:onyx_bricks",
-  "count": 1
-}

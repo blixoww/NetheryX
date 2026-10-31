@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/door_bottom_right",
-  "textures": {
-    "bottom": "netheryx:block/wartstalk_door_bottom",
-    "top": "netheryx:block/wartstalk_door_top"
-  },
-  "render_type": "minecraft:cutout"
-}

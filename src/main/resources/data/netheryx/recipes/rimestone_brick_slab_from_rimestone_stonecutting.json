@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "netheryx:rimestone"
-  },
-  "result": "netheryx:rimestone_brick_slab",
-  "count": 2
-}

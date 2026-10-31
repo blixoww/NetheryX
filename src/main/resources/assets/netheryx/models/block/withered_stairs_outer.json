@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "netheryx:block/withered_planks",
-    "top": "netheryx:block/withered_planks",
-    "side": "netheryx:block/withered_planks"
-  }
-}

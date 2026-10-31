@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "netheryx:block/onyx_bricks",
-    "top": "netheryx:block/onyx_bricks",
-    "side": "netheryx:block/onyx_bricks"
-  }
-}

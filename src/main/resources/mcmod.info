@@ -1,0 +1,15 @@
+[
+  {
+    "modid": "netheryx",
+    "name": "NetheryX",
+    "description": "Le Nether enrichi : onyx, soufre, quartz riche, nouveaux bois et arbres, flore, outils et armure en onyx.",
+    "version": "${modVersion}",
+    "mcversion": "1.7.10",
+    "url": "https://github.com/blixoww/NetheryX",
+    "authorList": ["blixoww"],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

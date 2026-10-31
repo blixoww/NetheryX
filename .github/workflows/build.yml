@@ -1,6 +1,6 @@
 name: Build
 
-# Compile le mod a chaque push et pull request (verification continue).
+# Compile le mod 1.7.10 a chaque push et pull request.
 on:
   push:
     branches: ["**"]
@@ -12,23 +12,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Gradle 9 tourne en Java 17+ ; le JDK 8 de compilation est telecharge automatiquement (toolchain)
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 21
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Verifier les ressources generees
-        run: |
-          pip install pillow
-          python3 tools/generate_resources.py
-          python3 tools/check_resources.py
-          git diff --exit-code -- src/main/resources ':!*.png' ':!*.nbt'
-
-      - uses: gradle/actions/setup-gradle@v3
+      - uses: gradle/actions/setup-gradle@v4
 
       - name: Compiler le mod
         run: |
@@ -37,5 +27,5 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: netheryx-${{ github.sha }}
-          path: build/libs/*.jar
+          name: netheryx-1.7.10-${{ github.sha }}
+          path: build/libs/netheryx-*.jar

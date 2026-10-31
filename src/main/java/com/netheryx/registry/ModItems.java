@@ -1,321 +1,268 @@
 package com.netheryx.registry;
 
-import net.minecraft.world.effect.MobEffects;
-import com.netheryx.NetheryX;
-import com.netheryx.item.AdminCompassItem;
-import com.netheryx.item.FireVeilItem;
-import com.netheryx.item.GlimmerElixirItem;
-import com.netheryx.item.InfernalHeartItem;
-import com.netheryx.item.MagmaTreadsItem;
-import com.netheryx.item.MarrowMealItem;
-import com.netheryx.item.SetBonusArmorItem;
-import com.netheryx.item.FruitItem;
-import com.netheryx.item.TooltipItem;
-import com.netheryx.item.ObsidianBoatItem;
-import com.netheryx.item.ObsidianBucketItem;
-import com.netheryx.item.OnyxArmorItem;
-import com.netheryx.item.OnyxBowItem;
-import com.netheryx.item.OnyxHammerItem;
-import com.netheryx.item.RecallStoneItem;
-import com.netheryx.item.SealedHeartItem;
-import com.netheryx.item.AbyssalBladeItem;
-import com.netheryx.item.WyvernEggItem;
-import com.netheryx.item.WyvernCrystalItem;
-import com.netheryx.item.WyvernWhistleItem;
-import com.netheryx.item.NetherLanternItem;
-import com.netheryx.item.SoulCompassItem;
-import com.netheryx.item.SoulScytheItem;
-import com.netheryx.item.SulfurBombItem;
-import com.netheryx.item.SulfurItem;
-import com.netheryx.item.WarlockStaffItem;
-import com.netheryx.item.WitheredBladeItem;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.BowlFoodItem;
-import net.minecraft.world.item.HoeItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Rarity;
-import net.minecraft.world.item.ShovelItem;
-import net.minecraft.world.item.SwordItem;
-import net.minecraftforge.common.ForgeSpawnEggItem;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import com.netheryx.item.ItemBasic;
+import com.netheryx.item.ItemCodex;
+import com.netheryx.item.ItemInfusionTemplate;
+import com.netheryx.item.ItemModArmor;
+import com.netheryx.item.ItemModFood;
+import com.netheryx.item.ItemModSword;
+import com.netheryx.item.ItemNetheryXEgg;
+import com.netheryx.item.ItemOnyxApple;
+import com.netheryx.item.ItemOnyxBow;
+import com.netheryx.item.ItemOnyxHammer;
+import com.netheryx.item.ItemPlanter;
+import com.netheryx.item.ItemRecallStone;
+import com.netheryx.item.ItemSealedHeart;
+import com.netheryx.item.ItemSoulCompass;
+import com.netheryx.item.ItemSulfurBomb;
+import com.netheryx.item.ItemWarlockStaff;
+import com.netheryx.item.ItemWyvernCrystal;
+import com.netheryx.item.ItemWyvernEgg;
+import com.netheryx.item.ItemWyvernWhistle;
+import com.netheryx.item.ModTools;
+import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
+import net.minecraft.potion.Potion;
+import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.oredict.OreDictionary;
 
-import java.util.function.Supplier;
-
+/** Tous les objets du mod (identifiants de registre identiques a ceux de la version 1.20.1). */
 public final class ModItems {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, NetheryX.MOD_ID);
+    /** Onyx : un peu au-dessus du diamant (niveau de minage 3, 1800 utilisations). */
+    public static final Item.ToolMaterial ONYX_TOOLS = EnumHelper.addToolMaterial("NETHERYX_ONYX", 3, 1800, 8.5F, 3.5F, 12);
+    /** Abyssal : l'arme ultime (13 de degats pour la lame). */
+    public static final Item.ToolMaterial ABYSSAL_TOOLS = EnumHelper.addToolMaterial("NETHERYX_ABYSSAL", 4, 3000, 10.0F, 9.0F, 22);
+    /** Armure d'onyx : protection du diamant, plus durable et plus facile a enchanter. */
+    public static final ItemArmor.ArmorMaterial ONYX_ARMOR = EnumHelper.addArmorMaterial("NETHERYX_ONYX", 40, new int[]{3, 8, 6, 3}, 15);
+    public static final ItemArmor.ArmorMaterial EMBER_ARMOR = EnumHelper.addArmorMaterial("NETHERYX_EMBER", 24, new int[]{2, 6, 5, 2}, 15);
+    public static final ItemArmor.ArmorMaterial WRAITH_ARMOR = EnumHelper.addArmorMaterial("NETHERYX_WRAITH", 18, new int[]{2, 5, 4, 2}, 20);
+    public static final ItemArmor.ArmorMaterial CARAPACE_ARMOR = EnumHelper.addArmorMaterial("NETHERYX_CARAPACE", 28, new int[]{2, 7, 5, 2}, 10);
+    public static final ItemArmor.ArmorMaterial ABYSSAL_ARMOR = EnumHelper.addArmorMaterial("NETHERYX_ABYSSAL", 70, new int[]{5, 10, 8, 5}, 22);
+    public static final ItemArmor.ArmorMaterial MAGMA_ARMOR = EnumHelper.addArmorMaterial("NETHERYX_MAGMA", 20, new int[]{2, 5, 4, 2}, 12);
 
-    // --- Materiaux --------------------------------------------------------------------------
-    public static final RegistryObject<Item> ONYX = register("onyx", () -> new Item(new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> ONYX_SHARD = register("onyx_shard", () -> new Item(new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> SULFUR = register("sulfur", () -> new SulfurItem(new Item.Properties()));
-    public static final RegistryObject<Item> WRAITH_ESSENCE = register("wraith_essence", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> MAGMA_SHELL = register("magma_shell", () -> new Item(new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> SENTINEL_CORE = register("sentinel_core",
-            () -> new TooltipItem(new Item.Properties().fireResistant().rarity(Rarity.EPIC)));
-
-    public static final RegistryObject<Item> SOUL_DUST = register("soul_dust", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> WITHERED_BONE = register("withered_bone", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> BASALT_CARAPACE = register("basalt_carapace", () -> new Item(new Item.Properties().fireResistant()));
-
-    // --- Outils en Onyx ---------------------------------------------------------------------
-    public static final RegistryObject<Item> ONYX_SWORD = register("onyx_sword",
-            () -> new SwordItem(ModTiers.ONYX, 3, -2.4F, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> ONYX_PICKAXE = register("onyx_pickaxe",
-            () -> new PickaxeItem(ModTiers.ONYX, 1, -2.8F, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> ONYX_AXE = register("onyx_axe",
-            () -> new AxeItem(ModTiers.ONYX, 5.0F, -3.0F, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> ONYX_SHOVEL = register("onyx_shovel",
-            () -> new ShovelItem(ModTiers.ONYX, 1.5F, -3.0F, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> ONYX_HOE = register("onyx_hoe",
-            () -> new HoeItem(ModTiers.ONYX, -4, 0.0F, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> ONYX_HAMMER = register("onyx_hammer",
-            () -> new OnyxHammerItem(ModTiers.ONYX, 4, -3.2F, new Item.Properties().fireResistant().durability(7000)));
-    public static final RegistryObject<Item> SOUL_SCYTHE = register("soul_scythe",
-            () -> new SoulScytheItem(ModTiers.ONYX, 5, -2.8F, new Item.Properties().fireResistant().rarity(Rarity.RARE)));
-
-    public static final RegistryObject<Item> WITHERED_BLADE = register("withered_blade",
-            () -> new WitheredBladeItem(ModTiers.ONYX, 4, -2.4F, new Item.Properties().fireResistant().rarity(Rarity.RARE)));
-    public static final RegistryObject<Item> WARLOCK_STAFF = register("warlock_staff",
-            () -> new WarlockStaffItem(new Item.Properties().durability(256).fireResistant().rarity(Rarity.EPIC)));
-
-    public static final RegistryObject<Item> ONYX_BOW = register("onyx_bow",
-            () -> new OnyxBowItem(new Item.Properties().durability(2400).fireResistant()));
-
-    // --- Armure -----------------------------------------------------------------------------
-    public static final RegistryObject<Item> ONYX_HELMET = register("onyx_helmet",
-            () -> new OnyxArmorItem(ArmorItem.Type.HELMET, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> ONYX_CHESTPLATE = register("onyx_chestplate",
-            () -> new OnyxArmorItem(ArmorItem.Type.CHESTPLATE, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> ONYX_LEGGINGS = register("onyx_leggings",
-            () -> new OnyxArmorItem(ArmorItem.Type.LEGGINGS, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> ONYX_BOOTS = register("onyx_boots",
-            () -> new OnyxArmorItem(ArmorItem.Type.BOOTS, new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> MAGMA_TREADS = register("magma_treads",
-            () -> new MagmaTreadsItem(new Item.Properties().fireResistant().rarity(Rarity.UNCOMMON)));
-
-    public static final RegistryObject<Item> CARAPACE_CHESTPLATE = armor("carapace_chestplate", ModArmorMaterials.CARAPACE,
-            ArmorItem.Type.CHESTPLATE, "carapace");
-
-    // --- Objets utilitaires -----------------------------------------------------------------
-    public static final RegistryObject<Item> SOUL_COMPASS = register("soul_compass",
-            () -> new SoulCompassItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> INFERNAL_HEART = register("infernal_heart",
-            () -> new InfernalHeartItem(new Item.Properties().stacksTo(1).fireResistant().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> SULFUR_BOMB = register("sulfur_bomb",
-            () -> new SulfurBombItem(new Item.Properties().stacksTo(16)));
-
-    public static final RegistryObject<Item> RECALL_STONE = register("recall_stone",
-            () -> new RecallStoneItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<Item> GLIMMER_ELIXIR = register("glimmer_elixir",
-            () -> new GlimmerElixirItem(new Item.Properties().stacksTo(16)));
-    public static final RegistryObject<Item> OBSIDIAN_BOAT = register("obsidian_boat",
-            () -> new ObsidianBoatItem(new Item.Properties().stacksTo(1).fireResistant()));
-    public static final RegistryObject<Item> OBSIDIAN_BUCKET = register("obsidian_bucket",
-            () -> new ObsidianBucketItem(new Item.Properties().stacksTo(1).fireResistant()));
-
-    // --- Cultures et nourriture --------------------------------------------------------------
-    public static final RegistryObject<Item> FIRE_BERRIES = register("fire_berries",
-            () -> new ItemNameBlockItem(ModBlocks.FIRE_BERRY_BUSH.get(), new Item.Properties().food(ModFoods.FIRE_BERRIES)));
-    public static final RegistryObject<Item> EMBER_FIG = register("ember_fig",
-            () -> new FruitItem(ModBlocks.EMBER_FIG_CLUSTER.get(), new Item.Properties().food(ModFoods.EMBER_FIG), null));
-    public static final RegistryObject<Item> WITHERED_PLUM = register("withered_plum",
-            () -> new FruitItem(ModBlocks.WITHERED_PLUM_CLUSTER.get(), new Item.Properties().food(ModFoods.WITHERED_PLUM),
-                    () -> MobEffects.WITHER));
-    public static final RegistryObject<Item> BLAZE_PEPPER_SEEDS = register("blaze_pepper_seeds",
-            () -> new ItemNameBlockItem(ModBlocks.BLAZE_PEPPER_CROP.get(), new Item.Properties()));
-    public static final RegistryObject<Item> BLAZE_PEPPER = register("blaze_pepper",
-            () -> new Item(new Item.Properties().food(ModFoods.BLAZE_PEPPER)));
-    public static final RegistryObject<Item> SOUL_TUBER = register("soul_tuber",
-            () -> new ItemNameBlockItem(ModBlocks.SOUL_TUBER_CROP.get(), new Item.Properties().food(ModFoods.SOUL_TUBER)));
-    public static final RegistryObject<Item> BAKED_SOUL_TUBER = register("baked_soul_tuber",
-            () -> new Item(new Item.Properties().food(ModFoods.BAKED_SOUL_TUBER)));
-    public static final RegistryObject<Item> STALKER_MEAT = register("stalker_meat",
-            () -> new Item(new Item.Properties().food(ModFoods.STALKER_MEAT)));
-    public static final RegistryObject<Item> COOKED_STALKER_MEAT = register("cooked_stalker_meat",
-            () -> new Item(new Item.Properties().food(ModFoods.COOKED_STALKER_MEAT)));
-    public static final RegistryObject<Item> CRAB_LEG = register("crab_leg",
-            () -> new Item(new Item.Properties().food(ModFoods.CRAB_LEG)));
-    public static final RegistryObject<Item> COOKED_CRAB_LEG = register("cooked_crab_leg",
-            () -> new Item(new Item.Properties().food(ModFoods.COOKED_CRAB_LEG)));
-    public static final RegistryObject<Item> INFERNAL_STEW = register("infernal_stew",
-            () -> new BowlFoodItem(new Item.Properties().stacksTo(1).food(ModFoods.INFERNAL_STEW)));
-
-    public static final RegistryObject<Item> CINDER_WHEAT_SEEDS = register("cinder_wheat_seeds",
-            () -> new ItemNameBlockItem(ModBlocks.CINDER_WHEAT_CROP.get(), new Item.Properties()));
-    public static final RegistryObject<Item> CINDER_WHEAT = register("cinder_wheat",
-            () -> new Item(new Item.Properties().food(ModFoods.CINDER_WHEAT)));
-    public static final RegistryObject<Item> CINDER_BREAD = register("cinder_bread",
-            () -> new Item(new Item.Properties().food(ModFoods.CINDER_BREAD)));
-    public static final RegistryObject<Item> GLOWCAP = register("glowcap",
-            () -> new ItemNameBlockItem(ModBlocks.GLOWCAP.get(), new Item.Properties().food(ModFoods.GLOWCAP)));
-    public static final RegistryObject<Item> GLOWCAP_STEW = register("glowcap_stew",
-            () -> new BowlFoodItem(new Item.Properties().stacksTo(1).food(ModFoods.GLOWCAP_STEW)));
-    public static final RegistryObject<Item> INFERNAL_BEEF = register("infernal_beef",
-            () -> new Item(new Item.Properties().food(ModFoods.INFERNAL_BEEF)));
-    public static final RegistryObject<Item> COOKED_INFERNAL_BEEF = register("cooked_infernal_beef",
-            () -> new Item(new Item.Properties().food(ModFoods.COOKED_INFERNAL_BEEF)));
-    public static final RegistryObject<Item> INFERNAL_CHICKEN = register("infernal_chicken",
-            () -> new Item(new Item.Properties().food(ModFoods.INFERNAL_CHICKEN)));
-    public static final RegistryObject<Item> COOKED_INFERNAL_CHICKEN = register("cooked_infernal_chicken",
-            () -> new Item(new Item.Properties().food(ModFoods.COOKED_INFERNAL_CHICKEN)));
-    public static final RegistryObject<Item> EMBER_EGG = register("ember_egg",
-            () -> new Item(new Item.Properties().stacksTo(16)));
-    public static final RegistryObject<Item> FRIED_EMBER_EGG = register("fried_ember_egg",
-            () -> new Item(new Item.Properties().food(ModFoods.FRIED_EMBER_EGG)));
-
-    // --- Oeufs d'apparition (couleurs gerees automatiquement par ForgeSpawnEggItem) ------------
-    public static final RegistryObject<Item> EMBER_STALKER_SPAWN_EGG = register("ember_stalker_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.EMBER_STALKER, 0x3A1A12, 0xFF7A1A, new Item.Properties()));
-    public static final RegistryObject<Item> ASH_WRAITH_SPAWN_EGG = register("ash_wraith_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.ASH_WRAITH, 0x8F8A86, 0x2B2827, new Item.Properties()));
-    public static final RegistryObject<Item> ONYX_SENTINEL_SPAWN_EGG = register("onyx_sentinel_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.ONYX_SENTINEL, 0x16131C, 0xA05CFF, new Item.Properties()));
-    public static final RegistryObject<Item> MAGMA_CRAB_SPAWN_EGG = register("magma_crab_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.MAGMA_CRAB, 0x5A1E0E, 0xFFB020, new Item.Properties()));
-
-    public static final RegistryObject<Item> SOUL_MOTH_SPAWN_EGG = register("soul_moth_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.SOUL_MOTH, 0x1E3A44, 0x7FE8FF, new Item.Properties()));
-    public static final RegistryObject<Item> WITHERED_KNIGHT_SPAWN_EGG = register("withered_knight_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.WITHERED_KNIGHT, 0x2A2A2A, 0x8A8A80, new Item.Properties()));
-    public static final RegistryObject<Item> BASALT_BEETLE_SPAWN_EGG = register("basalt_beetle_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.BASALT_BEETLE, 0x3A3A40, 0xFF6A1A, new Item.Properties()));
-    public static final RegistryObject<Item> INFERNAL_WARLOCK_SPAWN_EGG = register("infernal_warlock_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.INFERNAL_WARLOCK, 0x4A0E0E, 0xFFC531, new Item.Properties()));
-
-    public static final RegistryObject<Item> WITHERED_CHAMPION_SPAWN_EGG = register("withered_champion_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.WITHERED_CHAMPION, 0x1A1A1A, 0xD8C060, new Item.Properties()));
-
-    public static final RegistryObject<Item> EMBER_COW_SPAWN_EGG = register("ember_cow_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.EMBER_COW, 0x6A1E0E, 0xFFB347, new Item.Properties()));
-    public static final RegistryObject<Item> CINDER_HEN_SPAWN_EGG = register("cinder_hen_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.CINDER_HEN, 0x4A4442, 0xFF6A1A, new Item.Properties()));
-    public static final RegistryObject<Item> FIRE_GHAST_SPAWN_EGG = register("fire_ghast_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.FIRE_GHAST, 0xFF8A1A, 0x8A1E0A, new Item.Properties()));
-    public static final RegistryObject<Item> ONYX_CUBE_SPAWN_EGG = register("onyx_cube_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.ONYX_CUBE, 0x16131C, 0xB06CFF, new Item.Properties()));
-
-    // =============================================================================================
-    // 1.2.0
-    // =============================================================================================
-    public static final RegistryObject<Item> MARROW_MEAL = register("marrow_meal", () -> new MarrowMealItem(new Item.Properties()));
-    public static final RegistryObject<Item> RIME_SHARD = register("rime_shard", () -> new TooltipItem(new Item.Properties()));
-    public static final RegistryObject<Item> WARTFRUIT = register("wartfruit",
-            () -> new ItemNameBlockItem(ModBlocks.WARTVINE.get(), new Item.Properties().food(ModFoods.WARTFRUIT)));
-    public static final RegistryObject<Item> WARTFRUIT_TART = register("wartfruit_tart",
-            () -> new Item(new Item.Properties().food(ModFoods.WARTFRUIT_TART)));
-    public static final RegistryObject<Item> MAGMAFISH = register("magmafish",
-            () -> new Item(new Item.Properties().food(ModFoods.MAGMAFISH).fireResistant()));
-    public static final RegistryObject<Item> GRILLED_MAGMAFISH = register("grilled_magmafish",
-            () -> new Item(new Item.Properties().food(ModFoods.GRILLED_MAGMAFISH).fireResistant()));
-    public static final RegistryObject<Item> MAGMAFISH_SCALE = register("magmafish_scale",
-            () -> new TooltipItem(new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> WRAITH_CLOTH = register("wraith_cloth", () -> new Item(new Item.Properties()));
-    public static final RegistryObject<Item> ONYX_INFUSION_TEMPLATE = register("onyx_infusion_template",
-            () -> new TooltipItem(new Item.Properties().rarity(Rarity.UNCOMMON).fireResistant()));
-    /** Objet d'administration : non fabricable, reserve au mode creatif / aux operateurs. */
-    public static final RegistryObject<Item> ONYX_APPLE = register("onyx_apple",
-            () -> new TooltipItem(new Item.Properties().rarity(Rarity.RARE).fireResistant().food(ModFoods.ONYX_APPLE)) {
-                @Override
-                public boolean isFoil(net.minecraft.world.item.ItemStack stack) {
-                    return true;
-                }
-            });
-    // --- Boss final : trophees, invocation et armure abyssale ---------------------------------------
-    public static final RegistryObject<Item> SENTINEL_EYE = register("sentinel_eye",
-            () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> WARLOCK_SIGIL = register("warlock_sigil",
-            () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> CHAMPION_CROWN = register("champion_crown",
-            () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> BASALT_HEARTSTONE = register("basalt_heartstone",
-            () -> new TooltipItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> SEALED_HEART = register("sealed_heart",
-            () -> new SealedHeartItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> ABYSSAL_SHARD = register("abyssal_shard",
-            () -> new Item(new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> ABYSSAL_UPGRADE_TEMPLATE = register("abyssal_upgrade_template",
-            () -> new TooltipItem(new Item.Properties().rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> ABYSSAL_HELMET = armor("abyssal_helmet", ModArmorMaterials.ABYSSAL, ArmorItem.Type.HELMET, "abyssal");
-    public static final RegistryObject<Item> ABYSSAL_CHESTPLATE = armor("abyssal_chestplate", ModArmorMaterials.ABYSSAL, ArmorItem.Type.CHESTPLATE, "abyssal");
-    public static final RegistryObject<Item> ABYSSAL_LEGGINGS = armor("abyssal_leggings", ModArmorMaterials.ABYSSAL, ArmorItem.Type.LEGGINGS, "abyssal");
-    public static final RegistryObject<Item> ABYSSAL_BOOTS = armor("abyssal_boots", ModArmorMaterials.ABYSSAL, ArmorItem.Type.BOOTS, "abyssal");
-    public static final RegistryObject<Item> NETHER_HEART_SPAWN_EGG = register("nether_heart_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.NETHER_HEART, 0x2A0606, 0xFF6A1A, new Item.Properties()));
-
-    public static final RegistryObject<Item> ADMIN_COMPASS = register("admin_compass",
-            () -> new AdminCompassItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> FIRE_VEIL = register("fire_veil",
-            () -> new FireVeilItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant()));
-    public static final RegistryObject<Item> BURROWER_FANG = register("burrower_fang", () -> new TooltipItem(new Item.Properties()));
-
-    public static final RegistryObject<Item> EMBER_HELMET = armor("ember_helmet", ModArmorMaterials.EMBER, ArmorItem.Type.HELMET, "ember");
-    public static final RegistryObject<Item> EMBER_CHESTPLATE = armor("ember_chestplate", ModArmorMaterials.EMBER, ArmorItem.Type.CHESTPLATE, "ember");
-    public static final RegistryObject<Item> EMBER_LEGGINGS = armor("ember_leggings", ModArmorMaterials.EMBER, ArmorItem.Type.LEGGINGS, "ember");
-    public static final RegistryObject<Item> EMBER_BOOTS = armor("ember_boots", ModArmorMaterials.EMBER, ArmorItem.Type.BOOTS, "ember");
-    public static final RegistryObject<Item> WRAITH_HOOD = armor("wraith_hood", ModArmorMaterials.WRAITH, ArmorItem.Type.HELMET, "wraith");
-    public static final RegistryObject<Item> WRAITH_ROBE = armor("wraith_robe", ModArmorMaterials.WRAITH, ArmorItem.Type.CHESTPLATE, "wraith");
-    public static final RegistryObject<Item> WRAITH_LEGGINGS = armor("wraith_leggings", ModArmorMaterials.WRAITH, ArmorItem.Type.LEGGINGS, "wraith");
-    public static final RegistryObject<Item> WRAITH_BOOTS = armor("wraith_boots", ModArmorMaterials.WRAITH, ArmorItem.Type.BOOTS, "wraith");
-    public static final RegistryObject<Item> CARAPACE_HELMET = armor("carapace_helmet", ModArmorMaterials.CARAPACE, ArmorItem.Type.HELMET, "carapace");
-    public static final RegistryObject<Item> CARAPACE_LEGGINGS = armor("carapace_leggings", ModArmorMaterials.CARAPACE, ArmorItem.Type.LEGGINGS, "carapace");
-    public static final RegistryObject<Item> CARAPACE_BOOTS = armor("carapace_boots", ModArmorMaterials.CARAPACE, ArmorItem.Type.BOOTS, "carapace");
-
-    public static final RegistryObject<Item> MAGMAFISH_SPAWN_EGG = register("magmafish_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.MAGMAFISH, 0x3A0E06, 0xFF8A1A, new Item.Properties()));
-    public static final RegistryObject<Item> PIGLIN_MERCHANT_SPAWN_EGG = register("piglin_merchant_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.PIGLIN_MERCHANT, 0xC88A6A, 0xE8C040, new Item.Properties()));
-    public static final RegistryObject<Item> MIMIC_SPAWN_EGG = register("mimic_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.MIMIC, 0x6A4214, 0x1A0A0A, new Item.Properties()));
-    public static final RegistryObject<Item> BASALT_BURROWER_SPAWN_EGG = register("basalt_burrower_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.BASALT_BURROWER, 0x3A3A40, 0xC8B080, new Item.Properties()));
-    public static final RegistryObject<Item> LANTERN_BEARER_SPAWN_EGG = register("lantern_bearer_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.LANTERN_BEARER, 0x2A2440, 0x7FE8FF, new Item.Properties()));
-    public static final RegistryObject<Item> CINDER_LIZARD_SPAWN_EGG = register("cinder_lizard_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.CINDER_LIZARD, 0x2A1A14, 0xFF6A1A, new Item.Properties()));
+    // Materiaux et butins de creatures
+    public static Item onyx;
+    public static Item onyxShard;
+    public static Item sulfur;
+    public static Item soulDust;
+    public static Item wraithEssence;
+    public static Item wraithCloth;
+    public static Item magmaShell;
+    public static Item witheredBone;
+    public static Item basaltCarapace;
+    public static Item burrowerFang;
+    public static Item magmafishScale;
+    public static Item rimeShard;
+    // Trophees des gardiens et fin de jeu
+    public static Item sentinelEye;
+    public static Item sentinelCore;
+    public static Item warlockSigil;
+    public static Item championCrown;
+    public static Item basaltHeartstone;
+    public static Item sealedHeart;
+    public static Item abyssalShard;
+    public static Item abyssalTemplate;
+    public static Item infernalHeart;
+    // Outils et armes
+    public static Item onyxSword;
+    public static Item onyxPickaxe;
+    public static Item onyxAxe;
+    public static Item onyxShovel;
+    public static Item onyxHoe;
+    public static Item onyxHammer;
+    public static Item onyxBow;
+    public static Item soulScythe;
+    public static Item witheredBlade;
+    public static Item warlockStaff;
+    public static Item abyssalBlade;
+    // Armures
+    public static Item onyxHelmet;
+    public static Item onyxChestplate;
+    public static Item onyxLeggings;
+    public static Item onyxBoots;
+    public static Item emberHelmet;
+    public static Item emberChestplate;
+    public static Item emberLeggings;
+    public static Item emberBoots;
+    public static Item wraithHood;
+    public static Item wraithRobe;
+    public static Item wraithLeggings;
+    public static Item wraithBoots;
+    public static Item carapaceHelmet;
+    public static Item carapaceChestplate;
+    public static Item carapaceLeggings;
+    public static Item carapaceBoots;
+    public static Item abyssalHelmet;
+    public static Item abyssalChestplate;
+    public static Item abyssalLeggings;
+    public static Item abyssalBoots;
+    public static Item magmaTreads;
+    // Objets utiles
+    public static Item soulCompass;
+    public static Item recallStone;
+    public static Item fireVeil;
+    public static Item glimmerElixir;
+    public static Item sulfurBomb;
+    public static Item onyxInfusionTemplate;
+    public static Item codex;
+    public static Item ashWyvernEgg;
+    public static Item wyvernWhistle;
+    public static Item wyvernCrystal;
+    public static Item spawnEgg;
+    // Cultures et nourriture
+    public static Item fireBerries;
+    public static Item blazePepperSeeds;
+    public static Item blazePepper;
+    public static Item cinderWheatSeeds;
+    public static Item cinderWheat;
+    public static Item cinderBread;
+    public static Item soulTuber;
+    public static Item bakedSoulTuber;
+    public static Item glowcapStew;
+    public static Item infernalStew;
+    public static Item stalkerMeat;
+    public static Item cookedStalkerMeat;
+    public static Item crabLeg;
+    public static Item cookedCrabLeg;
+    public static Item infernalBeef;
+    public static Item cookedInfernalBeef;
+    public static Item infernalChicken;
+    public static Item cookedInfernalChicken;
+    public static Item blazePork;
+    public static Item cookedBlazePork;
+    public static Item emberEgg;
+    public static Item friedEmberEgg;
+    public static Item magmafish;
+    public static Item grilledMagmafish;
+    public static Item onyxApple;
 
     private ModItems() {
     }
 
-    private static RegistryObject<Item> armor(String name, ModArmorMaterials material, ArmorItem.Type type, String set) {
-        return register(name, () -> new SetBonusArmorItem(material, type, new Item.Properties().fireResistant(), set));
+    public static void register() {
+        onyx = add(new ItemBasic("onyx"));
+        onyxShard = add(new ItemBasic("onyx_shard"));
+        sulfur = add(new ItemBasic("sulfur"));
+        soulDust = add(new ItemBasic("soul_dust"));
+        wraithEssence = add(new ItemBasic("wraith_essence"));
+        wraithCloth = add(new ItemBasic("wraith_cloth"));
+        magmaShell = add(new ItemBasic("magma_shell"));
+        witheredBone = add(new ItemBasic("withered_bone"));
+        basaltCarapace = add(new ItemBasic("basalt_carapace"));
+        burrowerFang = add(new ItemBasic("burrower_fang").tooltip());
+        magmafishScale = add(new ItemBasic("magmafish_scale").tooltip());
+        rimeShard = add(new ItemBasic("rime_shard").tooltip());
+
+        sentinelEye = add(new ItemBasic("sentinel_eye").rarity(EnumRarity.epic).stack(1).tooltip());
+        sentinelCore = add(new ItemBasic("sentinel_core").rarity(EnumRarity.epic).tooltip());
+        warlockSigil = add(new ItemBasic("warlock_sigil").rarity(EnumRarity.epic).stack(1).tooltip());
+        championCrown = add(new ItemBasic("champion_crown").rarity(EnumRarity.epic).stack(1).tooltip());
+        basaltHeartstone = add(new ItemBasic("basalt_heartstone").rarity(EnumRarity.epic).stack(1).tooltip());
+        sealedHeart = add(new ItemSealedHeart("sealed_heart"));
+        abyssalShard = add(new ItemBasic("abyssal_shard").rarity(EnumRarity.epic));
+        abyssalTemplate = add(new ItemBasic("abyssal_upgrade_template").rarity(EnumRarity.epic).tooltip());
+        infernalHeart = add(new ItemBasic("infernal_heart").rarity(EnumRarity.epic).stack(1).tooltip());
+
+        onyxSword = add(ModTools.sword(ONYX_TOOLS, "onyx_sword"));
+        onyxPickaxe = add(ModTools.pickaxe(ONYX_TOOLS, "onyx_pickaxe"));
+        onyxAxe = add(ModTools.axe(ONYX_TOOLS, "onyx_axe"));
+        onyxShovel = add(ModTools.shovel(ONYX_TOOLS, "onyx_shovel"));
+        onyxHoe = add(ModTools.hoe(ONYX_TOOLS, "onyx_hoe"));
+        onyxHammer = add(new ItemOnyxHammer(ONYX_TOOLS, "onyx_hammer"));
+        onyxBow = add(new ItemOnyxBow("onyx_bow"));
+        soulScythe = add(new ItemModSword(ONYX_TOOLS, "soul_scythe", ItemModSword.Kind.SOUL_SCYTHE, EnumRarity.rare));
+        witheredBlade = add(new ItemModSword(ONYX_TOOLS, "withered_blade", ItemModSword.Kind.WITHERED_BLADE, EnumRarity.rare));
+        warlockStaff = add(new ItemWarlockStaff("warlock_staff"));
+        abyssalBlade = add(new ItemModSword(ABYSSAL_TOOLS, "abyssal_blade", ItemModSword.Kind.ABYSSAL_BLADE, EnumRarity.epic));
+
+        onyxHelmet = armor(ONYX_ARMOR, "onyx", 0, "onyx_helmet");
+        onyxChestplate = armor(ONYX_ARMOR, "onyx", 1, "onyx_chestplate");
+        onyxLeggings = armor(ONYX_ARMOR, "onyx", 2, "onyx_leggings");
+        onyxBoots = armor(ONYX_ARMOR, "onyx", 3, "onyx_boots");
+        emberHelmet = armor(EMBER_ARMOR, "ember", 0, "ember_helmet");
+        emberChestplate = armor(EMBER_ARMOR, "ember", 1, "ember_chestplate");
+        emberLeggings = armor(EMBER_ARMOR, "ember", 2, "ember_leggings");
+        emberBoots = armor(EMBER_ARMOR, "ember", 3, "ember_boots");
+        wraithHood = armor(WRAITH_ARMOR, "wraith", 0, "wraith_hood");
+        wraithRobe = armor(WRAITH_ARMOR, "wraith", 1, "wraith_robe");
+        wraithLeggings = armor(WRAITH_ARMOR, "wraith", 2, "wraith_leggings");
+        wraithBoots = armor(WRAITH_ARMOR, "wraith", 3, "wraith_boots");
+        carapaceHelmet = armor(CARAPACE_ARMOR, "carapace", 0, "carapace_helmet");
+        carapaceChestplate = armor(CARAPACE_ARMOR, "carapace", 1, "carapace_chestplate");
+        carapaceLeggings = armor(CARAPACE_ARMOR, "carapace", 2, "carapace_leggings");
+        carapaceBoots = armor(CARAPACE_ARMOR, "carapace", 3, "carapace_boots");
+        abyssalHelmet = armor(ABYSSAL_ARMOR, "abyssal", 0, "abyssal_helmet");
+        abyssalChestplate = armor(ABYSSAL_ARMOR, "abyssal", 1, "abyssal_chestplate");
+        abyssalLeggings = armor(ABYSSAL_ARMOR, "abyssal", 2, "abyssal_leggings");
+        abyssalBoots = armor(ABYSSAL_ARMOR, "abyssal", 3, "abyssal_boots");
+        magmaTreads = armor(MAGMA_ARMOR, "magma", 3, "magma_treads");
+
+        soulCompass = add(new ItemSoulCompass("soul_compass"));
+        recallStone = add(new ItemRecallStone("recall_stone"));
+        fireVeil = add(new ItemBasic("fire_veil").rarity(EnumRarity.rare).stack(1).tooltip());
+        glimmerElixir = add(new ItemModFood("glimmer_elixir", 0, 0.0F, false).drink()
+                .effect(Potion.nightVision.id, 3600, 0, 1.0F).effect(Potion.fireResistance.id, 600, 0, 1.0F));
+        sulfurBomb = add(new ItemSulfurBomb("sulfur_bomb"));
+        onyxInfusionTemplate = add(new ItemInfusionTemplate("onyx_infusion_template"));
+        codex = add(new ItemCodex("codex"));
+        ashWyvernEgg = add(new ItemWyvernEgg("ash_wyvern_egg"));
+        wyvernWhistle = add(new ItemWyvernWhistle("wyvern_whistle"));
+        wyvernCrystal = add(new ItemWyvernCrystal("wyvern_crystal"));
+        spawnEgg = new ItemNetheryXEgg();
+        GameRegistry.registerItem(spawnEgg, "spawn_egg");
+
+        fireBerries = add(new ItemPlanter.Food("fire_berries", 2, 0.2F, () -> ModBlocks.fireBerryBush));
+        blazePepperSeeds = add(new ItemPlanter("blaze_pepper_seeds", () -> ModBlocks.blazePepperCrop));
+        blazePepper = add(new ItemModFood("blaze_pepper", 3, 0.4F, false).always().effect(Potion.fireResistance.id, 400, 0, 1.0F));
+        cinderWheatSeeds = add(new ItemPlanter("cinder_wheat_seeds", () -> ModBlocks.cinderWheatCrop));
+        cinderWheat = add(new ItemBasic("cinder_wheat"));
+        cinderBread = add(new ItemModFood("cinder_bread", 6, 0.7F, false));
+        soulTuber = add(new ItemPlanter.Food("soul_tuber", 1, 0.3F, () -> ModBlocks.soulTuberCrop));
+        bakedSoulTuber = add(new ItemModFood("baked_soul_tuber", 6, 0.7F, false));
+        glowcapStew = add(new ItemModFood("glowcap_stew", 6, 0.7F, false).bowl().effect(Potion.nightVision.id, 1200, 0, 1.0F));
+        infernalStew = add(new ItemModFood("infernal_stew", 10, 1.0F, false).bowl()
+                .effect(Potion.fireResistance.id, 1200, 0, 1.0F).effect(Potion.damageBoost.id, 600, 0, 1.0F));
+        stalkerMeat = add(new ItemModFood("stalker_meat", 3, 0.3F, true));
+        cookedStalkerMeat = add(new ItemModFood("cooked_stalker_meat", 8, 0.9F, true));
+        crabLeg = add(new ItemModFood("crab_leg", 2, 0.2F, true));
+        cookedCrabLeg = add(new ItemModFood("cooked_crab_leg", 6, 0.8F, true));
+        infernalBeef = add(new ItemModFood("infernal_beef", 4, 0.4F, true));
+        cookedInfernalBeef = add(new ItemModFood("cooked_infernal_beef", 10, 1.0F, true).effect(Potion.fireResistance.id, 200, 0, 1.0F));
+        infernalChicken = add(new ItemModFood("infernal_chicken", 2, 0.3F, true));
+        cookedInfernalChicken = add(new ItemModFood("cooked_infernal_chicken", 7, 0.8F, true));
+        blazePork = add(new ItemModFood("blaze_pork", 3, 0.3F, true));
+        cookedBlazePork = add(new ItemModFood("cooked_blaze_pork", 8, 0.8F, true).effect(Potion.fireResistance.id, 300, 0, 1.0F));
+        emberEgg = add(new ItemBasic("ember_egg").stack(16));
+        friedEmberEgg = add(new ItemModFood("fried_ember_egg", 5, 0.6F, false));
+        magmafish = add(new ItemModFood("magmafish", 2, 0.2F, false));
+        grilledMagmafish = add(new ItemModFood("grilled_magmafish", 6, 0.8F, false).effect(Potion.fireResistance.id, 400, 0, 1.0F));
+        onyxApple = add(new ItemOnyxApple("onyx_apple"));
+
+        // Ingredients de reparation (enclume)
+        ONYX_TOOLS.customCraftingMaterial = onyx;
+        ONYX_ARMOR.customCraftingMaterial = onyx;
+        ABYSSAL_TOOLS.customCraftingMaterial = abyssalShard;
+        ABYSSAL_ARMOR.customCraftingMaterial = abyssalShard;
+        EMBER_ARMOR.customCraftingMaterial = magmaShell;
+        MAGMA_ARMOR.customCraftingMaterial = magmaShell;
+        WRAITH_ARMOR.customCraftingMaterial = wraithCloth;
+        CARAPACE_ARMOR.customCraftingMaterial = basaltCarapace;
+
+        OreDictionary.registerOre("gemOnyx", onyx);
+        OreDictionary.registerOre("dustSulfur", sulfur);
+        OreDictionary.registerOre("cropWheat", cinderWheat);
     }
 
-    // --- Creatures, biomes et outils de la 1.2.0 (suite) ------------------------------------------
-    public static final RegistryObject<Item> ABYSSAL_BLADE = register("abyssal_blade",
-            () -> new AbyssalBladeItem(ModTiers.ABYSSAL, 5, -2.4F, new Item.Properties().fireResistant().rarity(Rarity.EPIC)));
-    public static final RegistryObject<Item> BLAZE_PORK = register("blaze_pork",
-            () -> new Item(new Item.Properties().food(ModFoods.BLAZE_PORK)));
-    public static final RegistryObject<Item> COOKED_BLAZE_PORK = register("cooked_blaze_pork",
-            () -> new Item(new Item.Properties().food(ModFoods.COOKED_BLAZE_PORK)));
-    public static final RegistryObject<Item> MOLTEN_SHARD = register("molten_shard",
-            () -> new Item(new Item.Properties().fireResistant()));
-    public static final RegistryObject<Item> NETHER_LANTERN = register("nether_lantern",
-            () -> new NetherLanternItem(new Item.Properties().durability(64).rarity(Rarity.RARE).fireResistant()));
-    public static final RegistryObject<Item> ASH_WYVERN_EGG = register("ash_wyvern_egg",
-            () -> new WyvernEggItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> WYVERN_WHISTLE = register("wyvern_whistle",
-            () -> new WyvernWhistleItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant()));
-    public static final RegistryObject<Item> WYVERN_CRYSTAL = register("wyvern_crystal",
-            () -> new WyvernCrystalItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
-    public static final RegistryObject<Item> BASALT_GOLEM_SPAWN_EGG = register("basalt_golem_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.BASALT_GOLEM, 0x2E2C30, 0xFF7A1A, new Item.Properties()));
-    public static final RegistryObject<Item> ASH_WYVERN_SPAWN_EGG = register("ash_wyvern_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.ASH_WYVERN, 0x4A4646, 0xC8C0B8, new Item.Properties()));
-    public static final RegistryObject<Item> EMBER_FIREFLY_SPAWN_EGG = register("ember_firefly_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.EMBER_FIREFLY, 0x3A1A0A, 0xFFC040, new Item.Properties()));
-    public static final RegistryObject<Item> SOUL_FIREFLY_SPAWN_EGG = register("soul_firefly_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.SOUL_FIREFLY, 0x1A2A30, 0x6AF0FF, new Item.Properties()));
-    public static final RegistryObject<Item> BLAZE_PIG_SPAWN_EGG = register("blaze_pig_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.BLAZE_PIG, 0xC8601A, 0xFFD040, new Item.Properties()));
-    public static final RegistryObject<Item> CRYSTAL_SNAIL_SPAWN_EGG = register("crystal_snail_spawn_egg",
-            () -> new ForgeSpawnEggItem(ModEntities.CRYSTAL_SNAIL, 0x3A3442, 0xB06CFF, new Item.Properties()));
+    /** Enregistre l'objet sous son nom (celui de sa cle de traduction « item.netheryx.nom »). */
+    private static Item add(Item item) {
+        String texture = item.getUnlocalizedName().substring("item.netheryx.".length());
+        GameRegistry.registerItem(item, texture);
+        return item;
+    }
 
-    private static <T extends Item> RegistryObject<T> register(String name, Supplier<T> item) {
-        return ITEMS.register(name, item);
+    private static Item armor(ItemArmor.ArmorMaterial material, String set, int type, String name) {
+        return add(new ItemModArmor(material, set, type, name));
     }
 }

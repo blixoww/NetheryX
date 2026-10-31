@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab",
-  "textures": {
-    "bottom": "netheryx:block/wartstalk_planks",
-    "top": "netheryx:block/wartstalk_planks",
-    "side": "netheryx:block/wartstalk_planks"
-  }
-}
