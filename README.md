@@ -1,13 +1,18 @@
 # NetheryX
 
-**NetheryX** est une grosse mise a jour du Nether pour **Minecraft 1.20.1 (Forge)**.
+**NetheryX** est une grosse mise à jour du Nether pour **Minecraft 1.20.1 (Forge)**.
 
 | | |
 |---|---|
 | Minecraft | 1.20.1 |
-| Forge | 47.1+ (developpe avec 47.3.0) |
+| Forge | 47.1+ (développé avec 47.3.0) |
 | Java | 17 |
-| Dependances | [GeckoLib 4](https://github.com/bernie-g/geckolib) (animations), [TerraBlender](https://github.com/Glitchfiend/TerraBlender) (biomes), [Patchouli](https://github.com/VazkiiMods/Patchouli) (livre-guide) |
+| Dépendances | [GeckoLib 4](https://github.com/bernie-g/geckolib) (animations), [TerraBlender](https://github.com/Glitchfiend/TerraBlender) (biomes), [Patchouli](https://github.com/VazkiiMods/Patchouli) (livre-guide) |
+| Facultatif | [JEI](https://github.com/mezz/JustEnoughItems) (recettes de l'autel et des infusions), [Curios](https://github.com/TheIllusiveC4/Curios) (voile ignifuge en breloque) |
+
+La référence complète (chaque bloc, objet, recette, créature, butin et option) est dans
+[`docs/DOCUMENTATION.md`](docs/DOCUMENTATION.md), générée à partir des données du mod. L'historique des versions est
+dans [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Contenu
 
@@ -17,165 +22,138 @@ grille), objets, blocs, créatures (modèle 3D animé), biomes, structures, outi
 première connexion et se fabrique avec **un livre + un bloc de netherrack**.
 
 ### En chiffres
-12 biomes · 26 créatures (dont 3 boss, 1 mini-boss et 1 boss final) · 3 grands donjons + 4 petites structures · 4 bois complets · ~50 blocs · ~50 objets · ~110 recettes.
+12 biomes · 26 créatures (dont 3 boss de donjon, 1 mini-boss et 1 boss final) · 3 grands donjons + 6 petites structures · 4 bois complets · ~50 blocs · ~50 objets · ~110 recettes.
 Les 5 biomes vanilla sont aussi décorés (plantes, créatures) : le Nether a un aspect différent partout.
 
 ### L'Onyx
-Le **minerai d'onyx** (noir, reflets violets) est aussi frequent que le diamant dans tout le Nether entre y=5 et y=56,
-et en abondance dans les **Profondeurs d'onyx**. Il exige une pioche en diamant. L'onyx se situe entre le
-diamant et la netherite (via `TierSortingRegistry`) :
+Le **minerai d'onyx** (noir, reflets violets) est aussi fréquent que le diamant dans tout le Nether entre y=5 et y=56,
+et abonde dans la **Forêt pétrifiée d'onyx**. Il exige une pioche en diamant. L'onyx se place **au-dessus de la
+netherite** dans la hiérarchie des paliers (`TierSortingRegistry`, compatible avec les paliers des autres mods) :
 
-| | Diamant | **Onyx** | Netherite |
+| | Diamant | Netherite | **Onyx** |
 |---|---|---|---|
-| Durabilite outils | 1561 | **4500** | 2031 |
-| Vitesse | 8.0 | **9.5** | 9.0 |
-| Bonus de degats | 3.0 | **3.5** | 4.0 |
-| Armure (total) | 20 | **20** | 20 |
-| Robustesse | 2.0 | **2.5** | 3.0 |
+| Durabilité des outils | 1561 | 2031 | **4500** |
+| Vitesse de minage | 8.0 | 9.0 | **10.0** |
+| Bonus de dégâts | 3.0 | 4.0 | **5.0** |
+| Armure (total) | 20 | 20 | **24** |
+| Robustesse | 2.0 | 3.0 | **4.0** |
+| Résistance au recul | 0 | 0.1 | **0.15** |
 
-Plus forte que la netherite. Bonus d'ensemble : l'armure complete donne **Resistance I** et **resistance au feu**. Les manches des outils sont en **baton de blaze**.
+L'armure complète donne **Résistance I** et la **résistance au feu**. Les manches des outils sont en **bâton de blaze**
+et les objets en onyx ne brûlent pas dans la lave. Au-delà : l'**équipement abyssal** (butin du boss final).
 
 ### Biomes (TerraBlender)
+- **Bosquet de braise** : nylium et champignons géants de braise, racines lumineuses, piments sauvages. *Traqueurs de braise.*
+- **Terres cendrées** : dunes de cendre sur du basalte, arbustes calcinés, pluie de cendres. *Spectres de cendre.*
 - **Prairie de braise** : herbe du Nether dorée, fleurs, luminelles, blé de cendre. *Vaches de braise, poules de cendre.*
-- **Marais des âmes** : terre des âmes, pics de feu bleu, lys des âmes lumineux. *Phalènes des âmes.*
-- **Forêt flétrie** : champignons géants gris ornés d'os, terre flétrie. *Chevaliers flétris.*
-- **Faille de magma** : deltas de lave, sols de magma, pics de basalte. *Scarabées de basalte, Sorcier infernal.*
-- **Bosquet de braise** : nylium et champignons geants de braise, racines lumineuses, piments sauvages. *Traqueurs de braise.*
-- **Terres cendrees** : sol de cendre, arbustes calcines, particules de cendre. *Spectres de cendre.*
-- **Profondeurs d'onyx** : blackstone, colonnes de basalte, amas d'onyx lumineux, onyx abondant.
 - **Sources sulfureuses** : roche sulfureuse, minerai et amas de soufre. *Crabes de magma.*
+- **Forêt flétrie** : champignons géants gris ornés d'os, terre flétrie. *Chevaliers flétris.*
+- **Fourré de moelle** : arbres de moelle soudés à la voûte, lianes lumineuses, farine de moelle (engrais 3x3).
+- **Gouffre de givre** : pierre et glace de givre ; la glace fond en **source d'eau** près d'une source de chaleur.
+- **Enchevêtrement de verrues** : verrues géantes, verrulianes dont les fruits repoussent.
+- **Récifs de quartz** : aiguilles et amas de quartz, minerai de quartz riche, verre et lampes de quartz.
+- **Jungle infernale** : arbres infernaux géants à contreforts, fougères infernales, lianes de braise.
+- **Lac de verre en fusion** : bassins de lave cerclés d'obsidienne, verre et cristaux en fusion.
+- **Forêt pétrifiée d'onyx** : arbres en bois pétrifié couronnés de feuillage cristallisé, onyx abondant.
 
-### Creatures (GeckoLib)
-| Creature | Comportement | Butin |
-|---|---|---|
-| Traqueur de braise | Predateur, bondit et enflamme | Viande de traqueur |
-| Spectre de cendre | Volant, aveugle et affaiblit | Essence de spectre |
-| Crabe de magma | Paisible, elevable aux baies de feu | Pattes de crabe, carapace de magma |
-| Phalène des âmes | Paisible, volante, lumineuse | Poussière d'âme |
-| Chevalier flétri | Guerrier, inflige le Flétrissement | Os flétri, Lame flétrie (rare) |
-| Scarabée de basalte | Neutre, très cuirassé, charge en troupeau | Carapace de basalte |
-| **Sorcier infernal** (boss) | Boules de feu, téléportation, invocations | Bâton du sorcier, Pierre de rappel |
-| Vache de braise | Paisible, se trait, s'élève au blé de cendre | Bœuf infernal, cuir, crème de magma |
-| Poule de cendre | Paisible, pond des œufs de braise | Poulet infernal, plumes |
-| Ghast de feu | Ghast embrasé, explosions plus fortes | Boules de feu, larmes de ghast, éclats d'onyx |
-| Cube d'onyx | Cube de magma cristallisé, se divise | Crème de magma, éclats d'onyx |
-| **Champion flétri** (boss) | Chevalier géant, appelle des renforts | Lame flétrie, crâne de wither |
-| **Sentinelle d'onyx** (boss) | Barre de boss, coups de poing, onde de choc de zone | Coeur de sentinelle, onyx |
+### Créatures (GeckoLib)
+- **Boss** : Sentinelle d'onyx, Sorcier infernal et Champion flétri (un par donjon), **Cœur du Nether** (boss final,
+  invoqué avec le Cœur scellé), Golem de basalte (mini-boss, Forge de basalte). Toutes leurs attaques sont annoncées.
+- **Montures et compagnons** : Wyverne de cendre (monture volante, une par joueur), Lézard de cendre (monture qui
+  marche sur la lave), Porteur de lanterne (lumière dynamique).
+- **Hostiles** : Traqueur de braise, Spectre de cendre, Chevalier flétri, Ghast de feu, Cube d'onyx, Coffre mimique.
+- **Neutres et paisibles** : Scarabée et Fouisseur de basalte, Crabe de magma, Phalène des âmes, Vache de braise,
+  Poule de cendre, Cochon de blaze, Escargot de cristal, Poisson de magme, lucioles de braise et des âmes, Marchand piglin.
 
-### Donjons
-Trois grands donjons, chacun avec gardes, générateurs de monstres, salles annexes avec coffres, une **arène de boss**
-et une **salle au trésor fermée par des Sceaux du gardien** (indestructibles, ils se brisent à la mort du boss) :
-- **Sanctuaire infernal** (Faille de magma, Bosquet de braise, Sources sulfureuses) : douves de lave, autels à blazes,
-  salles rituelles, puis le **Sorcier infernal**.
-- **Catacombes flétries** (Forêt flétrie, Terres cendrées, Marais des âmes, Vallée des âmes) : mausolée, escalier de
-  12 blocs, galerie bordée de crânes, 4 cryptes, puis le **Champion flétri**.
-- **Citadelle d'onyx** (Profondeurs d'onyx, Deltas de basalte) : remparts, 4 tours, grand hall, puis la **Sentinelle d'onyx**.
+### Structures
+- **Citadelle d'onyx**, **Sanctuaire infernal**, **Catacombes flétries** : donjons sur plusieurs niveaux, gardes,
+  générateurs, coffres et mimiques, **arène de boss** et **coffre-fort scellé** qui ne s'ouvre qu'à la mort du boss.
+- Petites structures : Forge de basalte, Nids de wyverne, Caravane nomade, Campement de voyageur, Jardin du Nether,
+  Cache secrète. Toutes se retrouvent avec la **Boussole des âmes**.
+- Les bastions et forteresses contiennent aussi du butin NetheryX (Global Loot Modifiers).
 
-Petites structures (sans boss) : **Campement de voyageur**, **Jardin du Nether**, **Cache secrète**.
-
-Les bastions et forteresses contiennent aussi du butin NetheryX (Global Loot Modifiers).
-
-### Objets utiles
-- **Marteau en onyx** : mine en 3x3 (accroupi = un seul bloc), respecte les protections de terrain.
-- **Boussole des âmes** : ouvre une interface pour choisir n'importe quelle structure (vanilla ou moddée) de la dimension, puis guide le joueur.
-- **Arc en onyx** : flèches plus puissantes et enflammées.
-- **Semelles de magma** : solidifient la lave sous vos pas (equivalent "Frost Walker" pour la lave).
-- **Coeur infernal** (fabrique avec le coeur du boss) : resistance au feu permanente dans le Nether.
-- **Bombe de soufre** : explosif lancable (aussi via distributeur).
-- **Faux des ames** : vol de vie a chaque coup (tresor uniquement).
-- **Pierre de rappel** : 3 secondes de concentration pour rejoindre un portail du Nether emprunté ; avec plusieurs portails, une interface demande lequel (ou le point de réapparition).
-- **Bateau d'obsidienne** : navigue sur la lave, ne se casse jamais et revient directement dans l'inventaire quand on le frappe.
-- **Seau d'obsidienne** : fait disparaître n'importe quelle source de fluide sans jamais se remplir.
-- **Élixir de lueur** : vision nocturne et résistance au feu.
-- **Lame flétrie**, **Bâton du sorcier** (boules de feu), **Plastron de carapace** (résistance au recul).
-- **Soufre** : engrais pour les cultures du Nether, y compris les verrues ; donne aussi de la poudre a canon.
-
-### Nouveautés 1.2.0
-- **Boss final** : le Cœur du Nether, invoqué dans le Nether avec le Cœur scellé (fabriqué avec les trophées des 3 boss) ;
-  il lâche de quoi forger l'**armure abyssale**.
-- **Biomes** : Fourré de moelle, Gouffre de givre (l'eau du Nether), Enchevêtrement de verrues (fruits renouvelables), Récifs de quartz,
-  Jungle infernale (arbres géants, fougères, lianes de braise), Lac de verre en fusion, Forêt pétrifiée d'onyx.
-- **Nouvelles créatures** : Golem de basalte (mini-boss), Wyverne de cendre (monture volante), lucioles de braise et des âmes
-  (à mettre en bocal), cochon de blaze, escargot de cristal. **Lanterne du Nether** : révèle les minerais à travers les murs.
-- **Créatures** : poisson de magme, lézard de cendre (monture), porteur de lanterne (lumière dynamique), fouisseur de basalte,
-  marchand piglin (caravanes nomades), coffre mimique.
-- **Ateliers** : nasse à magma, chaudron infernal, autel des âmes (enchantements du Nether), lanterne de garde.
-- **Équipement** : armures de braise, spectrale et de carapace (bonus d'ensemble), infusions d'onyx à la table de forgeron.
+### Objets et ateliers
+- **Outils** : marteau en onyx (minage 3x3, respecte les protections), arc en onyx, Lame abyssale, Faux des âmes.
+- **Exploration** : Boussole des âmes, Pierre de rappel (retour à un portail emprunté), Lanterne du Nether (révèle
+  les minerais), bateau et seau d'obsidienne, Semelles de magma, Voile ignifuge.
+- **Ateliers** : enclume et four en onyx, Autel des âmes (enchantements du Nether), Chaudron infernal (potions en
+  masse), Nasse à magma (pêche dans la lave), Lanterne de garde (empêche l'apparition des monstres), infusions d'onyx.
 - **Événements du Nether** : pluie de cendres, tempête de soufre, éruption.
+- **Cultures et nourriture** : piment de blaze, tubercule d'âme, baies de feu, blé de cendre, fruits des arbres
+  (figues de braise, prunes flétries), ragoûts, tartes et pomme d'onyx.
 
-### Particules
-7 particules animées propres au mod (étincelles de braise, flocons de cendre, feux follets d'âme, reflets d'onyx,
-bouffées de soufre, pollen de braise, spores flétries) utilisées par l'ambiance des biomes, les minerais, plantes et
-cultures mûres, et toutes les créatures.
-
-### Ateliers en onyx
-- **Enclume en onyx** : ne s'abime jamais et chaque operation coute deux fois moins d'experience.
-- **Four en onyx** : cuit deux fois plus vite, pour toutes les recettes.
-
-### Cultures et nourriture
-Piment de blaze (resistance au feu), tubercule d'ame (sable/terre des ames), baies de feu, viande de traqueur,
-pattes de crabe, ragout infernal.
-
-## Compatibilite
-- Biomes injectes via **TerraBlender** : cohabitent avec Biomes O' Plenty et les autres mods de biomes.
-- Minerai d'onyx ajoute par **biome modifier Forge** a tout `#minecraft:is_nether` (biomes moddes compris).
+## Compatibilité
+- Biomes injectés via **TerraBlender** : cohabitent avec Biomes O' Plenty et les autres mods de biomes.
+- Minerai d'onyx ajouté par **biome modifier Forge** à tout `#minecraft:is_nether` (biomes moddés compris).
 - Tags **Forge** (`forge:gems/onyx`, `forge:ores/sulfur`, `forge:dusts/sulfur`, `forge:storage_blocks/*`...) pour
-  l'interoperabilite avec les mods techniques.
+  l'interopérabilité avec les mods techniques.
 - Tags vanilla (`minecraft:logs`, `nylium`, `beacon_base_blocks`, `trimmable_armor`...) : les garnitures d'armure fonctionnent sur l'onyx.
-- Comportement des sols, cultures et apparitions pilote par des **tags de donnees** (`data/netheryx/tags`), modifiables par datapack.
-- Aucun mixin : uniquement des API Forge et des registres differes.
+- Comportement des sols, cultures et apparitions piloté par des **tags de données** (`data/netheryx/tags`), modifiables par datapack.
+- Aucun mixin : uniquement des API Forge et des registres différés.
 
 ## Configuration
-`config/netheryx-common.toml` : poids de la region de biomes, bonus d'armure, minage 3x3, rayon de la boussole,
-destruction de blocs par les bombes, points de vie du boss, rayon des Semelles de magma.
+`config/netheryx-common.toml` : poids de la région de biomes, bonus d'armure, minage 3x3, rayon de la boussole,
+destruction de blocs par les bombes, points de vie du boss, rayon des Semelles de magma. Le détail de chaque option
+est dans [`docs/DOCUMENTATION.md`](docs/DOCUMENTATION.md#configuration).
 
-## Developpement
+## Développement
 
 ```bash
-./gradlew runClient      # lancer le jeu de developpement
+./gradlew runClient      # lancer le jeu de développement (avec JEI)
 ./gradlew build          # produire build/libs/netheryx-1.20.1-<version>.jar
 ```
 
-### Ressources generees
-Textures, modeles, blockstates, tables de butin, recettes, tags, biomes, structures (NBT) et modeles/animations
-GeckoLib sont produits par un generateur Python deterministe :
+Le plan de test en jeu est dans [`docs/PLAN_DE_TEST.md`](docs/PLAN_DE_TEST.md).
+
+### Ressources générées
+Textures, modèles, blockstates, tables de butin, recettes, tags, biomes, structures (NBT), modèles/animations
+GeckoLib, le Codex et `docs/DOCUMENTATION.md` sont produits par un générateur Python déterministe :
 
 ```bash
 pip install pillow
 python3 tools/generate_resources.py
 ```
 
-Le contenu est decrit dans `tools/netheryx_gen/content.py`, le livre dans `tools/netheryx_gen/book.py`.
-`python3 tools/check_resources.py` verifie que chaque modele, texture, traduction, recette et page du livre
-reference quelque chose qui existe ; la CI lance les deux scripts.
-Les fichiers `.png` peuvent ensuite etre retouches a la main (pensez a ne plus regenerer ceux-la, ou a modifier le generateur).
+Le contenu est décrit dans `tools/netheryx_gen/content.py`, le livre dans `tools/netheryx_gen/book.py`.
+`python3 tools/check_resources.py` vérifie que chaque modèle, texture, traduction, recette et page du livre
+référence quelque chose qui existe ; la CI lance les deux scripts.
+
+**Textures faites main** : placez-les dans `art/assets/netheryx/...` (même chemin que dans les ressources). Le
+générateur les copie par-dessus les textures générées, elles ne sont donc jamais écrasées (voir [`art/README.md`](art/README.md)).
 
 ### Architecture
 ```
 com.netheryx
-├── NetheryX                 point d'entree, branchement des registres
+├── NetheryX                 point d'entrée, branchement des registres
 ├── config/                 ForgeConfigSpec
-├── registry/               DeferredRegister (blocs, objets, entites, onglet, structures, loot modifiers), paliers, materiaux
-├── block/ item/ entity/    contenu de jeu
-├── worldgen/               region TerraBlender, regles de surface, type de structure "nether_floor"
-├── loot/                   Global Loot Modifier generique
-├── event/                  evenements (attributs, apparitions, marteau, bonus d'armure)
-└── client/                 rendus GeckoLib (couche emissive *_glowmask)
+├── registry/               DeferredRegister (blocs, objets, entités, onglet, structures, loot modifiers), paliers, matériaux
+├── block/ blockentity/     blocs et blocs-entités (autel, chaudron, nasse...)
+├── item/ entity/ effect/   contenu de jeu ; entity/ai : comportements partagés
+├── enchantment/ recipe/    enchantements du Nether, infusions d'onyx
+├── menu/ network/          interfaces et paquets (boussoles, pierre de rappel, événements)
+├── worldgen/               région TerraBlender, règles de surface, features, type de structure "nether_floor"
+├── world/                  événements du Nether (pluie de cendres, tempête de soufre, éruption)
+├── loot/                   Global Loot Modifier générique
+├── event/                  événements (attributs, apparitions, marteau, bonus d'armure)
+├── compat/jei/             intégration JEI facultative
+└── client/                 rendus GeckoLib (couche émissive *_glowmask), particules, écrans
 ```
 
 ### Publier une version
-Chaque tag Git déclenche la CI (`.github/workflows/release.yml`) : elle compile le mod avec la version du tag et
-publie le `.jar` dans une Release GitHub, avec les notes extraites du `CHANGELOG.md`.
+1. Augmenter `mod_version` (SemVer) dans `gradle.properties`.
+2. Ajouter la section `## [x.y.z] - AAAA-MM-JJ` dans `CHANGELOG.md`.
+3. Lancer `.\gitpush` sous Windows (PowerShell ou cmd), ou `./gitpush.sh` sous Linux/macOS/Git Bash ;
+   un message personnalisé se passe en argument, et `.\gitpush --dry-run` affiche les commandes sans rien faire.
+   Le script fait le commit, le push, puis le tag de la version.
 
-```bash
-git tag 1.0.0
-git push origin 1.0.0
-```
+Le tag déclenche la CI (`.github/workflows/release.yml`) : elle vérifie que le tag correspond à `mod_version` et a
+ses notes dans le changelog, revérifie les ressources générées, compile le mod et publie le `.jar` dans une Release
+GitHub avec ces notes.
 
-### Monter de version
-1. Mettre a jour `minecraft_version`, `forge_version`, `geckolib_version`, `terrablender_version` dans `gradle.properties`.
-2. Augmenter `mod_version` (SemVer) et completer `CHANGELOG.md`.
-3. Regenerer les ressources et lancer `./gradlew build`.
+### Monter de version de Minecraft ou des dépendances
+1. Mettre à jour `minecraft_version`, `forge_version`, `geckolib_version`, `terrablender_version` et leurs plages
+   (`*_version_range`) dans `gradle.properties`.
+2. Régénérer les ressources et lancer `./gradlew build`.
 
 ## Licence
 GNU GPL - voir [LICENSE](LICENSE).

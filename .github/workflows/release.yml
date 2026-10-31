@@ -1,7 +1,7 @@
 name: Release
 
-# A chaque tag pousse (ex. : git tag 1.0.0 && git push origin 1.0.0), compile le mod avec la version
-# du tag et publie le .jar dans une Release GitHub.
+# A chaque tag pousse (le plus simple : gitpush.bat ou gitpush.sh), compile le mod avec la version du tag et publie le .jar dans une
+# Release GitHub. Le tag doit etre egal a mod_version (gradle.properties) et avoir sa section dans CHANGELOG.md.
 on:
   push:
     tags: ["*"]
@@ -20,11 +20,34 @@ jobs:
           distribution: temurin
           java-version: 17
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Version du tag
         id: version
         run: |
           TAG="${GITHUB_REF_NAME}"
-          echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+          VERSION="${TAG#v}"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          # Le tag doit correspondre a mod_version et avoir ses notes dans le CHANGELOG.
+          PROPS=$(sed -n 's/^mod_version=//p' gradle.properties | tr -d '\r')
+          if [ "$PROPS" != "$VERSION" ]; then
+            echo "::error::Le tag $VERSION ne correspond pas a mod_version=$PROPS (gradle.properties)."
+            exit 1
+          fi
+          if ! grep -q "^## \[$VERSION\]" CHANGELOG.md; then
+            echo "::error::Aucune section [$VERSION] dans CHANGELOG.md."
+            exit 1
+          fi
+
+      # Meme verification que la CI de build : un tag pousse depuis une branche non verifiee ne publie pas un jar casse.
+      - name: Verifier les ressources generees
+        run: |
+          pip install pillow
+          python3 tools/generate_resources.py
+          python3 tools/check_resources.py
+          git diff --exit-code -- src/main/resources ':!*.png' ':!*.nbt'
 
       - uses: gradle/actions/setup-gradle@v3
 
@@ -37,11 +60,10 @@ jobs:
         run: |
           VERSION="${{ steps.version.outputs.version }}"
           awk -v v="$VERSION" '
-            $0 ~ "^## \\[" v "\\]" { found = 1; next }
-            found && /^## \[/ { exit }
+            index($0, "## [" v "]") == 1 { found = 1; next }
+            found && index($0, "## [") == 1 { exit }
             found { print }
           ' CHANGELOG.md > release_notes.md
-          if [ ! -s release_notes.md ]; then echo "Version $VERSION de NetheryX." > release_notes.md; fi
 
       - name: Publier la release
         uses: softprops/action-gh-release@v2

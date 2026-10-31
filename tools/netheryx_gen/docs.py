@@ -258,4 +258,4 @@ def generate():
               "plus générés. Ils restent enregistrés pour que les mondes existants se chargent sans erreur ; leurs rôles sont repris "
               "par la Forêt pétrifiée d'onyx, la Vallée des âmes vanilla et le Lac de verre en fusion.", ""]
     OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text("\n".join(lines), encoding="utf-8")
+    OUT.write_text("\n".join(lines), encoding="utf-8", newline="\n")

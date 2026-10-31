@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 R = ROOT / "src/main/resources"
 A = R / "assets/netheryx"
 D = R / "data"
-java = "".join(p.read_text() for p in (ROOT / "src/main/java").rglob("*.java"))
+java = "".join(p.read_text(encoding="utf-8") for p in (ROOT / "src/main/java").rglob("*.java"))
 reg = set(re.findall(r'register\("([a-z_]+)"', java))
 JAVA = ROOT / "src/main/java/com/netheryx"
 
@@ -17,7 +17,7 @@ JAVA = ROOT / "src/main/java/com/netheryx"
 def names_in(*files):
     found = set()
     for f in files:
-        found |= set(re.findall(r'register\("([a-z_]+)"', (JAVA / f).read_text()))
+        found |= set(re.findall(r'register\("([a-z_]+)"', (JAVA / f).read_text(encoding="utf-8")))
     return found
 
 
@@ -39,19 +39,19 @@ untranslated = technical | {f"long_{p}" for p in effects}
 errors = []
 
 for f in A.rglob("models/**/*.json"):
-    j = json.loads(f.read_text())
+    j = json.loads(f.read_text(encoding="utf-8"))
     for t in j.get("textures", {}).values():
         if t.startswith("netheryx:") and not (A / "textures" / (t.split(":")[1] + ".png")).exists():
             errors.append(f"texture manquante {t} ({f.name})")
 for f in A.rglob("blockstates/*.json"):
-    for m in re.findall(r'"netheryx:(block/[a-z_0-9]+)"', f.read_text()):
+    for m in re.findall(r'"netheryx:(block/[a-z_0-9]+)"', f.read_text(encoding="utf-8")):
         if not (A / "models" / (m + ".json")).exists():
             errors.append(f"modele manquant {m}")
 for n in items:
     if not (A / "models/item" / (n + ".json")).exists():
         errors.append(f"modele d'objet manquant {n}")
 for lang in ("en_us", "fr_fr"):
-    keys = json.loads((A / "lang" / f"{lang}.json").read_text())
+    keys = json.loads((A / "lang" / f"{lang}.json").read_text(encoding="utf-8"))
     for n in reg - untranslated:
         if not any(k.endswith("." + n) for k in keys):
             errors.append(f"traduction {lang} manquante {n}")
@@ -60,17 +60,17 @@ for n in particles:
     if not pj.exists():
         errors.append(f"particule sans definition {n}")
     else:
-        for t in json.loads(pj.read_text())["textures"]:
+        for t in json.loads(pj.read_text(encoding="utf-8"))["textures"]:
             if not (A / "textures/particle" / (t.split(":")[1] + ".png")).exists():
                 errors.append(f"texture de particule manquante {t}")
 recipes = {p.stem for p in (D / "netheryx/recipes").glob("*.json")}
 known = reg | items | particles | recipes | {p.stem for p in D.rglob("*.json")} | {"ember_stems", "withered_stems"}
 for f in D.rglob("*.json"):
-    for m in re.findall(r'"netheryx:([a-z_0-9]+)"', f.read_text()):
+    for m in re.findall(r'"netheryx:([a-z_0-9]+)"', f.read_text(encoding="utf-8")):
         if m not in known:
             errors.append(f"reference inconnue netheryx:{m} dans {f.relative_to(R)}")
 for f in (A / "patchouli_books").rglob("entries/**/*.json"):
-    j = json.loads(f.read_text())
+    j = json.loads(f.read_text(encoding="utf-8"))
     icon = j["icon"]
     if icon.startswith("netheryx:") and icon.split(":", 1)[1] not in items:
         errors.append(f"icone inconnue {icon} ({f.name})")

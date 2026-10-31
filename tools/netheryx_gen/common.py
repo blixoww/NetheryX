@@ -16,7 +16,8 @@ _written = []
 
 def write_json(path: Path, obj) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    with open(path, "w", encoding="utf-8") as handle:
+    # newline="\n" : fins de ligne LF meme sous Windows (sinon chaque JSON apparait modifie dans git)
+    with open(path, "w", encoding="utf-8", newline="\n") as handle:
         json.dump(obj, handle, indent=2, ensure_ascii=False)
         handle.write("\n")
     _written.append(path)

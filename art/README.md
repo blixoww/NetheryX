@@ -11,3 +11,15 @@ art/assets/netheryx/textures/models/armor/onyx_layer_1.png
 
 Pour remplacer une texture : dessinez-la (Aseprite, Paint.NET, Blockbench…), enregistrez-la ici sous le même nom,
 puis copiez-la aussi dans `src/main/resources/assets/netheryx/...` (ou lancez le générateur).
+
+## Armures recolorées depuis le diamant
+
+Les icônes et les textures portées de toutes les armures (onyx, braise, spectre, carapace, abysse, semelles de magma)
+reprennent les armures vanilla en diamant, recolorées selon la luminosité de chaque pixel avec la palette de
+l'ensemble (`SETS` dans `tools/netheryx_gen/textures_v131.py`, la couleur d'accent remplaçant les éclats blancs).
+Pour les refaire après avoir changé une palette :
+
+```bash
+python3 tools/diamond_armor.py      # lit le jar Minecraft du cache Gradle (après un premier ./gradlew build)
+python3 tools/generate_resources.py
+```
