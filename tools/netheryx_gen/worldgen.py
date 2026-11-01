@@ -563,7 +563,7 @@ def generate_structures():
         from .structures_v134 import APPROACH
         # Grands donjons : le gabarit historique et ses variantes thematiques, tires au sort a chaque generation
         # Les mondes existants gardent leurs gabarits (main, variant_*) ; les nouveaux donjons sont les complexes 1.4.0.
-        from .structures_v140 import ENTRANCE, ENTRANCE_FOOTPRINT, GROUND, KEEPS
+        from .structures_v140 import ENTRANCE, ENTRANCE_FOOTPRINT, GATE_REACH, GROUND, KEEPS
         files = [f"keep_{k}" for k in range(KEEPS)] if name in APPROACH else FILES_V150.get(name, ["main"])
         write_json(data_path("worldgen", "template_pool", name, "start.json"), {
             "fallback": "minecraft:empty",
@@ -580,7 +580,7 @@ def generate_structures():
                                                             "processors": "minecraft:empty"}}
                              for kind, weight in (("ruin", 3), ("remains", 2), ("signpost", 2))]})
             approach = {"approach_pool": mid(f"{name}_approach/start"), "approach_count": 5,
-                        "entrance_x": ENTRANCE[0], "entrance_z": ENTRANCE[1]}
+                        "entrance_x": ENTRANCE[0], "entrance_z": ENTRANCE[1], "gate_reach": GATE_REACH, "floor_tolerance": 14}
             sink, footprint, adaptation, min_y = GROUND, ENTRANCE_FOOTPRINT, "none", 40
         write_json(data_path("worldgen", "structure", f"{name}.json"), {
             "type": mid("nether_floor"),

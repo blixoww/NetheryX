@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "A dungeon is a complex $(l)dug under the ground$(): only its entrance shows on the surface, and $(l)ruins, remains and signs$() around it give it away.$(br2)From the central $(l)rotunda$(), the great stairs lead down to the $(l)boss arena$(). Three optional $(l)wings$() branch off: each one ends with a chamber held by a $(l)Rune Warden$(), and a fine treasure.",
+      "text": "A dungeon is a $(l)fortress$(): towers, bridges and courtyards above, a complex $(l)dug under the ground$() below, and $(l)ruins, remains and signs$() around it give it away.$(br2)From the central $(l)rotunda$(), the great stairs lead down to the $(l)boss arena$(). Three optional $(l)wings$() branch off: each one ends with a chamber held by a $(l)Rune Warden$(), and a fine treasure.",
       "title": "Donjons"
     },
     {

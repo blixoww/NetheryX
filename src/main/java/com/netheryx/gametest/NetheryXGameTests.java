@@ -8,6 +8,7 @@ import com.netheryx.entity.boss.BossEntity;
 import com.netheryx.registry.ModBlocks;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.registry.ModFeatures;
+import com.netheryx.worldgen.structure.NetherFloorStructure;
 import com.netheryx.worldgen.structure.StructureRestorer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -204,6 +205,73 @@ public final class NetheryXGameTests {
     }
 
     /**
+     * Sur une grande zone d'un vrai Nether, on calcule les pieces de toutes les structures qui y naissent reellement : aucune
+     * ne doit en recouvrir une autre (vu du ciel, indices d'approche compris), ni recouvrir un bastion ou une forteresse.
+     */
+    @GameTest(template = AREA, timeoutTicks = 200, batch = "overlap")
+    public static void structuresNeverOverlap(GameTestHelper helper) {
+        ServerLevel nether = helper.getLevel().getServer().getLevel(Level.NETHER);
+        var sets = nether.registryAccess().registryOrThrow(Registries.STRUCTURE_SET);
+        var structures = nether.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var generator = nether.getChunkSource().getGenerator();
+        long seed = nether.getSeed();
+        Structure.GenerationContext context = new Structure.GenerationContext(nether.registryAccess(), generator, generator.getBiomeSource(),
+                nether.getChunkSource().randomState(), nether.getStructureManager(), seed, new ChunkPos(0, 0), nether, holder -> true);
+        record Placed(String name, long chunk, List<BoundingBox> boxes) {
+        }
+        List<Placed> ours = new java.util.ArrayList<>();
+        List<Placed> vanilla = new java.util.ArrayList<>();
+        int radius = 200;
+        List<String> names = new java.util.ArrayList<>(NetherFloorStructure.PRIORITY);
+        names.add("minecraft:nether_complexes");
+        for (String name : names) {
+            boolean mod = !name.contains(":");
+            var set = sets.get(mod ? NetheryX.id(name) : new net.minecraft.resources.ResourceLocation(name));
+            if (set == null || !(set.placement() instanceof net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement placement)) {
+                helper.fail("Ensemble de structures introuvable : " + name);
+                return;
+            }
+            int spacing = placement.spacing();
+            for (int rx = Math.floorDiv(-radius, spacing); rx <= Math.floorDiv(radius, spacing); rx++) {
+                for (int rz = Math.floorDiv(-radius, spacing); rz <= Math.floorDiv(radius, spacing); rz++) {
+                    ChunkPos candidate = placement.getPotentialStructureChunk(seed, rx * spacing, rz * spacing);
+                    for (var entry : set.structures()) {
+                        Structure structure = entry.structure().value();
+                        List<BoundingBox> boxes = NetherFloorStructure.piecesOf(context, structure, structures.getKey(structure), candidate);
+                        if (!boxes.isEmpty()) {
+                            (mod ? ours : vanilla).add(new Placed(mod ? name : structures.getKey(structure).toString(), candidate.toLong(), boxes));
+                        }
+                    }
+                }
+            }
+        }
+        int overlaps = 0;
+        for (int i = 0; i < ours.size(); i++) {
+            Placed a = ours.get(i);
+            List<Placed> others = new java.util.ArrayList<>(ours.subList(i + 1, ours.size()));
+            others.addAll(vanilla);
+            for (Placed b : others) {
+                if (a.boxes().stream().anyMatch(x -> b.boxes().stream().anyMatch(y -> NetherFloorStructure.overlapsFromAbove(x, y, 0)))) {
+                    overlaps++;
+                    NetheryX.LOGGER.info("CHEVAUCHEMENT {} (chunk {}) / {} (chunk {})", a.name(), new ChunkPos(a.chunk()), b.name(), new ChunkPos(b.chunk()));
+                }
+            }
+        }
+        java.util.Map<String, Long> counts = ours.stream().collect(java.util.stream.Collectors.groupingBy(Placed::name, java.util.TreeMap::new, java.util.stream.Collectors.counting()));
+        NetheryX.LOGGER.info("SONDE chevauchements : {} sur {} structures du mod et {} complexes vanilla ({} chunks de rayon) ; {}",
+                overlaps, ours.size(), vanilla.size(), radius, counts);
+        if (overlaps > 0) {
+            helper.fail(overlaps + " chevauchement(s) de structures");
+            return;
+        }
+        if (ours.size() < 50) {
+            helper.fail("Trop peu de structures pour conclure : " + ours.size());
+            return;
+        }
+        helper.succeed();
+    }
+
+    /**
      * De bout en bout, dans un vrai Nether : un donjon genere contient son coffre-fort scelle et ses coffres, et le
      * restaurateur de structures ne repand aucun objet au sol (bug corrige en 1.4.0).
      */
@@ -228,6 +296,13 @@ public final class NetheryXGameTests {
             }
         }
         helper.runAtTickTime(200, () -> {
+            if (System.getenv("NETHERYX_DUMP") != null) {
+                try {
+                    WorldgenProbe.dump(nether, center.getMiddleBlockPosition(64), 112, java.nio.file.Path.of("keep_dump", "fortress.bin"));
+                } catch (java.io.IOException exception) {
+                    helper.fail("Copie de la forteresse impossible : " + exception);
+                }
+            }
             int boss = 0;
             int seals = 0;
             int chests = 0;

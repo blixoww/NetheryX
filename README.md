@@ -68,7 +68,7 @@ et les objets en onyx ne brûlent pas dans la lave. Au-delà : l'**équipement a
   Poule de cendre, Cochon de blaze, Escargot de cristal, Poisson de magme, lucioles de braise et des âmes, Marchand piglin.
 
 ### Structures
-- **Citadelle d'onyx**, **Sanctuaire infernal**, **Catacombes flétries** : complexes souterrains sous une petite entrée, trahis
+- **Citadelle d'onyx**, **Sanctuaire infernal**, **Catacombes flétries** : forteresses à explorer, tours, ponts et cours en surface, complexes souterrains dessous, trahies
   en surface par des **indices** (ruines, restes d'explorateurs, panneaux). Un grand escalier mène à l'**arène du boss** ; **trois ailes**
   facultatives cachent de beaux trésors. Le **coffre-fort**, aux murs indestructibles camouflés en briques, ne s'ouvre qu'à la mort
   du boss. Le plan et les salles changent d'un donjon à l'autre.

@@ -7,6 +7,26 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le pr
 Chaque tag Git (`git tag 1.0.0 && git push origin 1.0.0`) déclenche la compilation et la publication du `.jar`
 dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 
+## [1.4.3] - 2026-11-01
+
+### Modifié
+- **Les donjons sont de vraies forteresses**, à la manière de celles du Nether : enceinte crénelée à contreforts posée sur des arcades,
+  quatre tours d'angle, un donjon central, un chemin de ronde et une croix de ponts sur arches. Plus aucune salle enterrée n'apparaît en
+  bloc brut dans le paysage. Les fondations descendent jusqu'au sol quand le terrain est plus bas.
+- **Plusieurs entrées** : le châtelet et son pont au sud, trois poternes (ouest, est, nord) avec chacune un escalier vers une aile, et
+  une échelle qui descend du donjon central jusqu'à la rotonde.
+- **De quoi fouiller dehors** : quatre cours (ruine, autel, campement, stèles), des salles meublées dans le donjon central, du butin et
+  des gardes en haut des tours. Chaque donjon a ses sommets : flèches d'onyx, brasiers, ou crânes et flammes des âmes.
+- **Biomes vanilla de retour** : environ 60 % de biomes du mod et 40 % de vanilla (poids de 90 à 15, nouvelle clé `netherRegionWeightV4`).
+  Les structures liées aux biomes du mod s'éloignent donc un peu.
+
+### Corrigé
+- **Structures superposées** : chaque structure calcule maintenant les vraies pièces de ses voisines et leur cède la place, indices
+  d'approche, bastions et forteresses compris. Un test le vérifie sur 400 × 400 chunks.
+- **Lanternes qui volaient** au-dessus des dalles de la Caravane nomade. La génération refuse désormais ce défaut sur toutes les structures.
+- **CI** : le générateur supprimait `noise_settings/nether.json`, écrit à la main, et faisait échouer le contrôle des ressources. Sa source est maintenant dans `art/data/`.
+- **Murets qui volaient** autour de l'escalier vers le boss. Ils reposent sur le sol plein, et un parapet dans le vide fait échouer la génération.
+
 ## [1.4.2] - 2026-11-01
 
 ### Ajouté

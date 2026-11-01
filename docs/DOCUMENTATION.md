@@ -489,7 +489,7 @@ Le *Cristal de wyverne* range votre wyverne pour l'emporter partout : clic droit
 
 **Donjons**
 
-Un donjon est un complexe **creusé sous terre** : seule son entrée se voit en surface, et des **ruines, restes et panneaux** le trahissent aux alentours.
+Un donjon est une **forteresse** : tours, ponts et cours en surface, complexe **creusé sous terre** en dessous, et des **ruines, restes et panneaux** la trahissent aux alentours.
 
 Depuis la **rotonde** centrale, le grand escalier descend vers l'**arène du boss**. Trois **ailes** facultatives s'y greffent : chacune finit par une chambre tenue par un **Gardien des runes**, et un beau trésor.
 

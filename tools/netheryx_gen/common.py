@@ -37,7 +37,7 @@ def mid(name: str) -> str:
 
 
 def copy_art() -> int:
-    """Copie art/assets/** par-dessus les ressources generees (les vraies textures ont toujours le dernier mot)."""
+    """Copie art/assets/** et art/data/** par-dessus les ressources generees (ce qui est fait main a toujours le dernier mot)."""
     import shutil
     source = ART / "assets"
     copied = 0
@@ -47,6 +47,14 @@ def copy_art() -> int:
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(path, target)
             copied += 1
+    # Donnees ecrites a la main (art/data/**) : le generateur vide data/, elles doivent donc etre recopiees
+    data = ART / "data"
+    if data.is_dir():
+        for path in data.rglob("*"):
+            if path.is_file():
+                target = DATA / path.relative_to(data)
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(path, target)
     return copied
 
 

@@ -302,11 +302,11 @@ for eid, en, fr, scale, ten, tfr in CREATURES:
 
 # ---------------------------------------------------------------- Structures
 DUNGEON_INTRO = text(
-    "A dungeon is a complex $(l)dug under the ground$(): only its entrance shows on the surface, and $(l)ruins, remains and signs$() "
+    "A dungeon is a $(l)fortress$(): towers, bridges and courtyards above, a complex $(l)dug under the ground$() below, and $(l)ruins, remains and signs$() "
     "around it give it away.$(br2)From the central $(l)rotunda$(), the great stairs lead down to the $(l)boss arena$(). Three optional "
     "$(l)wings$() branch off: each one ends with a chamber held by a $(l)Rune Warden$(), and a fine treasure.",
-    "Un donjon est un complexe $(l)creusé sous terre$() : seule son entrée se voit en surface, et des $(l)ruines, restes et panneaux$() "
-    "le trahissent aux alentours.$(br2)Depuis la $(l)rotonde$() centrale, le grand escalier descend vers l'$(l)arène du boss$(). Trois "
+    "Un donjon est une $(l)forteresse$() : tours, ponts et cours en surface, complexe $(l)creusé sous terre$() en dessous, et des $(l)ruines, restes et panneaux$() "
+    "la trahissent aux alentours.$(br2)Depuis la $(l)rotonde$() centrale, le grand escalier descend vers l'$(l)arène du boss$(). Trois "
     "$(l)ailes$() facultatives s'y greffent : chacune finit par une chambre tenue par un $(l)Gardien des runes$(), et un beau trésor.", "Donjons")
 DUNGEON_BOSS = text(
     "The real prize is the $(l)vault$() behind the arena. Its walls look like the rest of the dungeon, but they are $(item)Warded "

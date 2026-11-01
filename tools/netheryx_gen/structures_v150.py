@@ -232,7 +232,7 @@ def nomad_caravan():
     for (x, z) in ((2, 15), (28, 15), (15, 2), (13, 11), (17, 11), (28, 28), (2, 28)):
         for y in range(1, 4):
             d.set(x, y, z, "wartstalk_fence")
-        d.set(x, 4, z, "wartstalk_slab", type="bottom", waterlogged="false")
+        d.set(x, 4, z, "wartstalk_slab", type="top", waterlogged="false")  # dalle haute : la lanterne repose dessus sans vide
         d.lantern(x, 5, z, "minecraft:lantern")
     d.guard(23, 1, 18, "lantern_bearer")
     return d

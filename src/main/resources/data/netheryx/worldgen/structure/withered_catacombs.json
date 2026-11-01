@@ -9,11 +9,13 @@
   "max_y": 100,
   "min_y": 40,
   "sink": 27,
-  "footprint": 15,
+  "footprint": 60,
   "required_air": 8,
   "max_distance_from_center": 80,
   "approach_pool": "netheryx:withered_catacombs_approach/start",
   "approach_count": 5,
-  "entrance_x": 37,
-  "entrance_z": 69
+  "entrance_x": 45,
+  "entrance_z": 45,
+  "gate_reach": 56,
+  "floor_tolerance": 14
 }

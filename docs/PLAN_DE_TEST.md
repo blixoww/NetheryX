@@ -59,6 +59,13 @@ Biomes à vérifier : `ember_meadow`, `ember_grove`, `ashen_wastes`, `sulfur_spr
 
 ## 4. Structures et donjons
 
+- [ ] **Forteresses** : silhouette de loin (tours, flèche), aucune boîte de salle visible, fondations jusqu'au sol sur terrain bas.
+- [ ] **Accès** : pont et châtelet, trois poternes et leurs escaliers, échelle du donjon central vers la rotonde, échelles des tours.
+- [ ] **Surface** : les quatre cours, le chemin de ronde, les ponts ; butin et gardes en haut des tours.
+- [ ] **Détails corrigés** : lanternes de la Caravane posées sur leur dalle ; murets autour de l'escalier vers le boss sur le sol.
+- [ ] **Chevauchements** : en explorant, aucune structure n'en coupe une autre.
+- [ ] **Biomes** : les biomes vanilla reviennent (environ 40 %), les structures restent à portée raisonnable.
+
 Avec la **Boussole des âmes** (structures NetheryX en tête de liste) ou par commande :
 ```
 /locate structure netheryx:onyx_citadel

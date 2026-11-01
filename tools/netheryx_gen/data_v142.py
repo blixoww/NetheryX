@@ -145,6 +145,8 @@ def generate_structure_biomes():
     tag("worldgen/biome", MOD_ID, "has_structure/withered_catacombs", m(["petrified_onyx_forest", "rimefrost_chasm"]))
     tag("worldgen/biome", MOD_ID, "has_structure/wyvern_nest", m(["ember_grove", "hellwood_jungle", "withered_forest"]))
     tag("worldgen/biome", MOD_ID, "has_structure/lava_forge", m(["ember_grove", "ashen_wastes", "hellwood_jungle"]))
+    # Pied des contreforts des forteresses : prolonge jusqu'au sol a la generation
+    tag("blocks", MOD_ID, "keep_foundation", [mid("polished_onyx"), mid("magma_bricks"), "minecraft:polished_blackstone_bricks"])
 
 
 def generate():

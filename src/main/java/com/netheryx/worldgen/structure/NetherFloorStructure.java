@@ -8,16 +8,26 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.NoiseColumn;
+import net.minecraft.world.level.StructureManager;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
 import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.StructurePiece;
+import net.minecraft.world.level.levelgen.structure.StructureSet;
+import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.StructureType;
+import net.minecraft.world.level.levelgen.structure.pieces.PiecesContainer;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
 import net.minecraft.world.level.levelgen.structure.placement.RandomSpreadStructurePlacement;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
@@ -26,8 +36,12 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Structure posee sur le sol du Nether (une seule piece, tiree du {@code start_pool}).
@@ -58,7 +72,8 @@ public class NetherFloorStructure extends Structure {
             Codec.intRange(0, 12).optionalFieldOf("approach_count", 0).forGetter(structure -> structure.approachCount),
             Codec.intRange(-1, 255).optionalFieldOf("entrance_x", -1).forGetter(structure -> structure.entranceX),
             Codec.intRange(-1, 255).optionalFieldOf("entrance_z", -1).forGetter(structure -> structure.entranceZ),
-            Codec.intRange(1, 16).optionalFieldOf("floor_tolerance", 3).forGetter(structure -> structure.floorTolerance)
+            Codec.intRange(1, 16).optionalFieldOf("floor_tolerance", 3).forGetter(structure -> structure.floorTolerance),
+            Codec.intRange(0, 128).optionalFieldOf("gate_reach", 0).forGetter(structure -> structure.gateReach)
     ).apply(instance, NetherFloorStructure::new)).codec();
 
     private final Holder<StructureTemplatePool> startPool;
@@ -80,28 +95,53 @@ public class NetherFloorStructure extends Structure {
     private final int entranceZ;
     /** Ecart de hauteur tolere entre le sol du centre et celui de l'emprise (plus grand si le terrain s'adapte). */
     private final int floorTolerance;
+    /** Forteresse : distance du centre au bout du pont d'entree (vers le sud du gabarit). Ce point doit toucher le sol. */
+    private final int gateReach;
 
     /** Distance des indices au bord du donjon (en blocs) : entre MIN et MIN + SPREAD. */
     private static final int APPROACH_MIN = 10;
     private static final int APPROACH_SPREAD = 22;
-    private static final String[] DUNGEON_SETS = {"onyx_citadel", "infernal_sanctum", "withered_catacombs"};
-    /** Un donjon s'etend a 75 blocs au plus de son entree, dans n'importe quelle rotation. */
-    private static final int DUNGEON_REACH_CHUNKS = 6;
-    /** Des plus grandes aux plus petites : les petites s'ecartent des grandes. */
-    private static final String[] SURFACE_PRIORITY = {"nether_garden", "nomad_caravan", "basalt_forge", "wyvern_nest", "traveler_camp", "scorched_outpost",
-            "bone_shrine", "crystal_hollow", "lava_forge", "hidden_cache"};
-    private static final int NEIGHBOUR_REACH_CHUNKS = 2;
+    /**
+     * Ordre de priorite de toutes les structures du mod : chacune cede la place a celles qui la precedent. L'ordre ne depend
+     * que de la graine, le resultat est donc le meme quel que soit le chunk genere en premier.
+     */
+    public static final List<String> PRIORITY = List.of("onyx_citadel", "infernal_sanctum", "withered_catacombs",
+            "nether_garden", "nomad_caravan", "basalt_forge", "wyvern_nest", "traveler_camp", "scorched_outpost",
+            "bone_shrine", "crystal_hollow", "lava_forge", "hidden_cache");
+    private static final Set<String> LARGE = Set.of("onyx_citadel", "infernal_sanctum", "withered_catacombs");
+    /** Distance maximale (en chunks) entre le chunk d'origine d'une structure et ses pieces. */
+    private static final int LARGE_REACH = 9;
+    private static final int SMALL_REACH = 3;
+    /** Ecart minimal entre deux structures, en blocs. */
+    private static final int CLEARANCE = 2;
+    private static final TagKey<Block> FOUNDATION = TagKey.create(Registries.BLOCK, NetheryX.id("keep_foundation"));
+    private static final int MAX_PIER = 96;
+
+    /** Pieces deja calculees : une structure est interrogee par toutes ses voisines moins prioritaires. */
+    private static final Map<String, List<BoundingBox>> PIECES = Collections.synchronizedMap(new LinkedHashMap<>(256, 0.75F, true) {
+        @Override
+        protected boolean removeEldestEntry(Map.Entry<String, List<BoundingBox>> eldest) {
+            return this.size() > 4096;
+        }
+    });
 
     /** Marge d'air exigee au-dessus du haut de la structure (pas de plafond qui la coupe). */
     private static final int HEADROOM = 3;
     /** Part minimale des colonnes de l'emprise qui doivent avoir un sol, et un volume degage. */
     private static final double GROUNDED_SHARE = 0.85D;
     private static final double OPEN_SHARE = 0.85D;
+    /** Hauteur de l'enceinte des forteresses au-dessus du sol : c'est elle, pas la fleche, qui doit etre degagee. */
+    private static final int FORTRESS_WALLS = 10;
+    private static final double FORTRESS_GROUNDED = 0.5D;
+    private static final double FORTRESS_OPEN = 0.7D;
+    /** Hauteurs atteignables depuis les marches du pont d'entree, par rapport au sol du centre. */
+    private static final int GATE_DROP = 6;
+    private static final int GATE_RISE = 3;
 
     public NetherFloorStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool,
                                 Optional<ResourceLocation> startJigsawName, int size, int maxY, int minY,
                                 int requiredAir, int maxDistanceFromCenter, int sink, int footprint,
-                                Optional<Holder<StructureTemplatePool>> approachPool, int approachCount, int entranceX, int entranceZ, int floorTolerance) {
+                                Optional<Holder<StructureTemplatePool>> approachPool, int approachCount, int entranceX, int entranceZ, int floorTolerance, int gateReach) {
         super(settings);
         this.startPool = startPool;
         this.startJigsawName = startJigsawName;
@@ -117,29 +157,50 @@ public class NetherFloorStructure extends Structure {
         this.entranceX = entranceX;
         this.entranceZ = entranceZ;
         this.floorTolerance = floorTolerance;
+        this.gateReach = gateReach;
     }
 
-    /**
-     * Vrai si un grand donjon peut se trouver ici : il s'etend sur 75 blocs autour de son entree, sous la surface, et une
-     * petite structure enfoncee dans le sol creuserait dans ses salles. On lit les emplacements candidats de chaque donjon, sans
-     * les generer (un candidat sans donjon coute au pire une petite structure).
-     */
-    private static boolean nearDungeon(GenerationContext context) {
+    /** Boites des pieces reellement generees par une structure a partir d'un chunk (vide si elle n'y nait pas). */
+    public static List<BoundingBox> piecesOf(GenerationContext context, Structure structure, ResourceLocation id, ChunkPos chunk) {
+        String key = context.seed() + "/" + id + "/" + chunk.toLong();
+        List<BoundingBox> known = PIECES.get(key);
+        if (known != null) {
+            return known;
+        }
+        StructureStart start = structure.generate(context.registryAccess(), context.chunkGenerator(), context.biomeSource(), context.randomState(),
+                context.structureTemplateManager(), context.seed(), chunk, 0, context.heightAccessor(), structure.biomes()::contains);
+        List<BoundingBox> boxes = start.isValid() ? start.getPieces().stream().map(StructurePiece::getBoundingBox).toList() : List.of();
+        PIECES.put(key, boxes);
+        return boxes;
+    }
+
+    /** Vrai si deux boites se recouvrent vu du ciel : l'une creuserait ou couperait forcement l'autre. */
+    public static boolean overlapsFromAbove(BoundingBox a, BoundingBox b, int margin) {
+        return a.minX() - margin <= b.maxX() && a.maxX() + margin >= b.minX() && a.minZ() - margin <= b.maxZ() && a.maxZ() + margin >= b.minZ();
+    }
+
+    private boolean blockedBySet(GenerationContext context, ResourceLocation setId, BoundingBox box, int reach) {
         var sets = context.registryAccess().registryOrThrow(Registries.STRUCTURE_SET);
-        ChunkPos here = context.chunkPos();
-        for (String name : DUNGEON_SETS) {
-            var set = sets.get(NetheryX.id(name));
-            if (set == null || !(set.placement() instanceof RandomSpreadStructurePlacement placement)) {
-                continue;
-            }
-            int spacing = placement.spacing();
-            int regionX = Math.floorDiv(here.x, spacing);
-            int regionZ = Math.floorDiv(here.z, spacing);
-            for (int dx = -1; dx <= 1; dx++) {
-                for (int dz = -1; dz <= 1; dz++) {
-                    ChunkPos candidate = placement.getPotentialStructureChunk(context.seed(), (regionX + dx) * spacing, (regionZ + dz) * spacing);
-                    if (Math.abs(candidate.x - here.x) <= DUNGEON_REACH_CHUNKS && Math.abs(candidate.z - here.z) <= DUNGEON_REACH_CHUNKS) {
-                        return true;
+        var structures = context.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        StructureSet set = sets.get(setId);
+        if (set == null || !(set.placement() instanceof RandomSpreadStructurePlacement placement)) {
+            return false;
+        }
+        int spacing = placement.spacing();
+        ChunkPos here = new ChunkPos(new BlockPos((box.minX() + box.maxX()) / 2, 0, (box.minZ() + box.maxZ()) / 2));
+        for (int regionX = Math.floorDiv(here.x - reach, spacing); regionX <= Math.floorDiv(here.x + reach, spacing); regionX++) {
+            for (int regionZ = Math.floorDiv(here.z - reach, spacing); regionZ <= Math.floorDiv(here.z + reach, spacing); regionZ++) {
+                ChunkPos candidate = placement.getPotentialStructureChunk(context.seed(), regionX * spacing, regionZ * spacing);
+                if (Math.abs(candidate.x - here.x) > reach || Math.abs(candidate.z - here.z) > reach) {
+                    continue;
+                }
+                for (StructureSet.StructureSelectionEntry entry : set.structures()) {
+                    Structure other = entry.structure().value();
+                    ResourceLocation id = structures.getKey(other);
+                    for (BoundingBox piece : piecesOf(context, other, id, candidate)) {
+                        if (overlapsFromAbove(box, piece, CLEARANCE)) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -148,24 +209,21 @@ public class NetherFloorStructure extends Structure {
     }
 
     /**
-     * Deux petites structures ne doivent pas se chevaucher : l'une couperait le sol de l'autre, et ses lanternes et tapis
-     * tomberaient en objets. Chacune cede la place aux emplacements candidats de celles qui la precedent dans la liste.
+     * Cette boite empiete-t-elle sur une structure prioritaire ? On calcule les vraies pieces des voisines : ni emplacement
+     * candidat vide, ni marge arbitraire. Bastions et forteresses sont toujours prioritaires.
      */
-    private boolean yieldsToNeighbour(GenerationContext context) {
+    private boolean blocked(GenerationContext context, BoundingBox box) {
         ResourceLocation self = context.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(this);
-        var sets = context.registryAccess().registryOrThrow(Registries.STRUCTURE_SET);
-        ChunkPos here = context.chunkPos();
-        for (String name : SURFACE_PRIORITY) {
-            if (self != null && self.getPath().equals(name)) {
+        if (self == null || this.blockedBySet(context, new ResourceLocation("minecraft", "nether_complexes"), box, LARGE_REACH + (box.getXSpan() >> 5))) {
+            return self != null;
+        }
+        for (String name : PRIORITY) {
+            if (name.equals(self.getPath())) {
                 return false;
             }
-            var set = sets.get(NetheryX.id(name));
-            if (set != null && set.placement() instanceof RandomSpreadStructurePlacement placement) {
-                int spacing = placement.spacing();
-                ChunkPos candidate = placement.getPotentialStructureChunk(context.seed(), Math.floorDiv(here.x, spacing) * spacing, Math.floorDiv(here.z, spacing) * spacing);
-                if (Math.abs(candidate.x - here.x) <= NEIGHBOUR_REACH_CHUNKS && Math.abs(candidate.z - here.z) <= NEIGHBOUR_REACH_CHUNKS) {
-                    return true;
-                }
+            int reach = (LARGE.contains(name) ? LARGE_REACH : SMALL_REACH) + (Math.max(box.getXSpan(), box.getZSpan()) >> 5) + 1;
+            if (this.blockedBySet(context, NetheryX.id(name), box, reach)) {
+                return true;
             }
         }
         return false;
@@ -173,35 +231,28 @@ public class NetherFloorStructure extends Structure {
 
     @Override
     public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
-        // Seule une structure qui s'enfonce dans le sol peut percer le plafond d'une salle de donjon
-        if (this.entranceX < 0 && this.sink > 0 && nearDungeon(context)) {
-            return Optional.empty();
-        }
-        if (this.entranceX < 0 && yieldsToNeighbour(context)) {
-            return Optional.empty();
-        }
         ChunkPos chunkPos = context.chunkPos();
         int x = chunkPos.getMiddleBlockX();
         int z = chunkPos.getMiddleBlockZ();
         WorldgenRandom random = context.random();
-        Rotation rotation = Rotation.getRandom(random);
+        Rotation drawn = Rotation.getRandom(random);
         StructurePoolElement element = this.startPool.value().getRandomTemplate(random);
         StructureTemplateManager templates = context.structureTemplateManager();
-        // Emprise de la piece tournee, posee a l'origine : on la decale pour la centrer sur le chunk
-        BoundingBox local = element.getBoundingBox(templates, BlockPos.ZERO, rotation);
-        int offsetX = x - (local.minX() + local.maxX()) / 2;
-        int offsetZ = z - (local.minZ() + local.maxZ()) / 2;
+        // Emprise de la piece, posee a l'origine (rotation tiree ; une forteresse tourne ensuite vers le sol qui recoit son pont)
+        BoundingBox local = element.getBoundingBox(templates, BlockPos.ZERO, drawn);
         int above = Math.max(2, local.getYSpan() - this.sink);
         BoundingBox surface = local;
         if (this.entranceX >= 0) {
-            // Donjon souterrain : seule l'entree doit tenir en surface, le reste est creuse dans la roche. L'entree est
-            // centree sur le chunk, et c'est son emprise qu'on verifie.
-            BlockPos entrance = StructureTemplate.transform(new BlockPos(this.entranceX, 0, this.entranceZ), Mirror.NONE, rotation, BlockPos.ZERO);
-            offsetX = x - entrance.getX();
-            offsetZ = z - entrance.getZ();
+            // Forteresse : son centre est au milieu du chunk. Ses tours peuvent percer une voute, mais l'enceinte doit etre a l'air libre.
+            BlockPos center = StructureTemplate.transform(new BlockPos(this.entranceX, 0, this.entranceZ), Mirror.NONE, drawn, BlockPos.ZERO);
             int half = this.footprint / 2;
-            surface = new BoundingBox(entrance.getX() - half, 0, entrance.getZ() - half, entrance.getX() + half, local.maxY(), entrance.getZ() + half);
+            surface = new BoundingBox(center.getX() - half, 0, center.getZ() - half, center.getX() + half, local.maxY(), center.getZ() + half);
+            above = Math.min(above, FORTRESS_WALLS);
         }
+        BlockPos anchor = this.entranceX >= 0 ? StructureTemplate.transform(new BlockPos(this.entranceX, 0, this.entranceZ), Mirror.NONE, drawn, BlockPos.ZERO)
+                : new BlockPos((local.minX() + local.maxX()) / 2, 0, (local.minZ() + local.maxZ()) / 2);
+        int offsetX = x - anchor.getX();
+        int offsetZ = z - anchor.getZ();
 
         NoiseColumn column = context.chunkGenerator().getBaseColumn(x, z, context.heightAccessor(), context.randomState());
         int airRun = 0;
@@ -213,24 +264,51 @@ public class NetherFloorStructure extends Structure {
             }
             if (airRun >= Math.min(this.requiredAir, above) && state.getFluidState().isEmpty()
                     && this.fits(context, surface, offsetX, offsetZ, y, above)) {
+                Rotation rotation = this.gateRotation(context, drawn, x, z, y);
+                if (rotation == null) {
+                    airRun = 0;
+                    continue;
+                }
+                if (rotation != drawn) {
+                    BlockPos turned = StructureTemplate.transform(new BlockPos(this.entranceX, 0, this.entranceZ), Mirror.NONE, rotation, BlockPos.ZERO);
+                    offsetX = x - turned.getX();
+                    offsetZ = z - turned.getZ();
+                }
                 BlockPos origin = new BlockPos(offsetX, y + 1 - this.sink, offsetZ);
                 PoolElementStructurePiece piece = new PoolElementStructurePiece(templates, element, origin,
                         element.getGroundLevelDelta(), rotation, element.getBoundingBox(templates, origin, rotation));
+                // La hauteur ne change rien ici : deux structures l'une au-dessus de l'autre se couperaient quand meme
+                if (this.blocked(context, piece.getBoundingBox())) {
+                    return Optional.empty();
+                }
                 int floorY = y;
-                BoundingBox surfaceBox = surface;
                 return Optional.of(new GenerationStub(new BlockPos(x, y + 1, z), builder -> {
                     builder.addPiece(piece);
-                    BoundingBox entranceBox = new BoundingBox(surfaceBox.minX() + origin.getX(), origin.getY(), surfaceBox.minZ() + origin.getZ(),
-                            surfaceBox.maxX() + origin.getX(), origin.getY() + surfaceBox.maxY(), surfaceBox.maxZ() + origin.getZ());
-                    // Partie enterree du donjon : un indice pose dessus perdrait son sol quand le donjon creuse ses salles
-                    BoundingBox whole = piece.getBoundingBox();
-                    BoundingBox buried = new BoundingBox(whole.minX(), whole.minY(), whole.minZ(), whole.maxX(), floorY + 1, whole.maxZ());
-                    this.addApproach(context, builder, entranceBox, buried, floorY);
+                    this.addApproach(context, builder, piece.getBoundingBox(), floorY);
                 }));
             }
             airRun = 0;
         }
         return Optional.empty();
+    }
+
+    /** Rotation qui amene le bout du pont d'entree sur un sol praticable, en commencant par celle tiree au sort ; null s'il n'y en a pas. */
+    private Rotation gateRotation(GenerationContext context, Rotation drawn, int x, int z, int floorY) {
+        if (this.gateReach == 0) {
+            return drawn;
+        }
+        for (int turn = 0; turn < 4; turn++) {
+            Rotation rotation = drawn.getRotated(Rotation.values()[turn]);
+            BlockPos tip = StructureTemplate.transform(new BlockPos(0, 0, this.gateReach), Mirror.NONE, rotation, BlockPos.ZERO);
+            NoiseColumn column = context.chunkGenerator().getBaseColumn(x + tip.getX(), z + tip.getZ(), context.heightAccessor(), context.randomState());
+            for (int y = floorY - GATE_DROP; y <= floorY + GATE_RISE; y++) {
+                BlockState state = column.getBlock(y);
+                if (!state.isAir() && state.getFluidState().isEmpty() && column.getBlock(y + 1).isAir()) {
+                    return rotation;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -266,11 +344,13 @@ public class NetherFloorStructure extends Structure {
                 }
             }
         }
-        return grounded >= columns * GROUNDED_SHARE && open >= columns * OPEN_SHARE;
+        // Une forteresse enjambe les creux sur ses arcades : seul un relief qui la traverserait la gene vraiment
+        boolean fortress = this.entranceX >= 0;
+        return grounded >= columns * (fortress ? FORTRESS_GROUNDED : GROUNDED_SHARE) && open >= columns * (fortress ? FORTRESS_OPEN : OPEN_SHARE);
     }
 
-    /** Seme les indices d'approche autour du donjon, chacun pose sur le sol trouve a sa position. */
-    private void addApproach(GenerationContext context, StructurePiecesBuilder builder, BoundingBox dungeon, BoundingBox buried, int floorY) {
+    /** Seme les indices d'approche autour de la forteresse, chacun pose sur le sol trouve a sa position. */
+    private void addApproach(GenerationContext context, StructurePiecesBuilder builder, BoundingBox dungeon, int floorY) {
         if (this.approachPool.isEmpty() || this.approachCount == 0) {
             return;
         }
@@ -281,7 +361,6 @@ public class NetherFloorStructure extends Structure {
         int halfSize = Math.max(dungeon.getXSpan(), dungeon.getZSpan()) / 2;
         List<BoundingBox> placed = new ArrayList<>();
         placed.add(dungeon.inflatedBy(3));
-        placed.add(buried);
         for (int i = 0; i < this.approachCount; i++) {
             double angle = random.nextDouble() * Math.PI * 2.0D;
             int distance = halfSize + APPROACH_MIN + random.nextInt(APPROACH_SPREAD);
@@ -296,7 +375,8 @@ public class NetherFloorStructure extends Structure {
             BoundingBox local = element.getBoundingBox(templates, BlockPos.ZERO, rotation);
             BlockPos origin = new BlockPos(px - (local.minX() + local.maxX()) / 2, ground + 1, pz - (local.minZ() + local.maxZ()) / 2);
             BoundingBox box = element.getBoundingBox(templates, origin, rotation);
-            if (placed.stream().anyMatch(box::intersects)) {
+            // Les indices aussi cedent la place : a la forteresse, entre eux et aux structures prioritaires
+            if (placed.stream().anyMatch(other -> overlapsFromAbove(box, other, CLEARANCE)) || this.blocked(context, box)) {
                 continue;
             }
             placed.add(box);
@@ -327,6 +407,35 @@ public class NetherFloorStructure extends Structure {
             }
         }
         return false;
+    }
+
+    /**
+     * Prolonge les piles de fondation d'une forteresse jusqu'au sol, comme les piles des forteresses du Nether. Le gabarit
+     * s'arrete a sa couche du bas : seuls les blocs de fondation qu'il y pose continuent vers le bas.
+     */
+    @Override
+    public void afterPlace(WorldGenLevel level, StructureManager structures, ChunkGenerator generator, RandomSource random, BoundingBox chunkBox,
+                           ChunkPos chunkPos, PiecesContainer pieces) {
+        if (this.entranceX < 0 || pieces.pieces().isEmpty()) {
+            return;
+        }
+        BoundingBox whole = pieces.pieces().get(0).getBoundingBox();
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int x = Math.max(whole.minX(), chunkBox.minX()); x <= Math.min(whole.maxX(), chunkBox.maxX()); x++) {
+            for (int z = Math.max(whole.minZ(), chunkBox.minZ()); z <= Math.min(whole.maxZ(), chunkBox.maxZ()); z++) {
+                BlockState foot = level.getBlockState(pos.set(x, whole.minY(), z));
+                if (!foot.is(FOUNDATION)) {
+                    continue;
+                }
+                for (int y = whole.minY() - 1, depth = 0; y > level.getMinBuildHeight() && depth < MAX_PIER; y--, depth++) {
+                    BlockState below = level.getBlockState(pos.set(x, y, z));
+                    if (!below.isAir() && below.getFluidState().isEmpty() && !below.canBeReplaced()) {
+                        break;
+                    }
+                    level.setBlock(pos, foot, 2);
+                }
+            }
+        }
     }
 
     @Override

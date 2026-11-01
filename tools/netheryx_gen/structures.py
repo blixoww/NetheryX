@@ -57,7 +57,20 @@ class Template:
         nbt.update(extra or {})
         self.entities.append({"pos": [Double(x), Double(y), Double(z)], "blockPos": [int(x), int(y), int(z)], "nbt": nbt})
 
+    def floating_lanterns(self):
+        """Lanternes posees sur le vide ou sur une dalle basse : elles semblent voler (un demi-bloc d'air dessous)."""
+        found = []
+        for (x, y, z), (name, props) in self.blocks.items():
+            props = dict(props)
+            if name.endswith("lantern") and props.get("hanging") == "false":
+                below = self.blocks.get((x, y - 1, z))
+                if below is not None and (below[0] == AIR or ("type", "bottom") in below[1] and below[0].endswith("slab")):
+                    found.append((x, y, z))
+        return found
+
     def save(self, name, file="main"):
+        floating = self.floating_lanterns()
+        assert not floating, f"{name}/{file} : lanternes qui volent en {floating[:6]}"
         palette, palette_index, blocks = [], {}, []
         for pos in sorted(self.blocks, key=lambda p: (p[1], p[2], p[0])):
             key = self.blocks[pos]
