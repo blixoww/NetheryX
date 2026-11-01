@@ -1,0 +1,14 @@
+{
+  "type": "netheryx:landmass",
+  "config": {
+    "biome": "netheryx:ember_grove",
+    "top": {
+      "Name": "netheryx:ember_nylium"
+    },
+    "body": {
+      "Name": "minecraft:red_terracotta"
+    },
+    "threshold": -0.55,
+    "height": 10
+  }
+}

@@ -95,6 +95,7 @@ FOODS = {
     "infernal_stew": ("rabbit_stew", 12, 1.2, 0.95),
     "glowcap_stew": ("mushroom_stew", 175, 0.9, 1.05),
     "wartfruit_tart": ("pumpkin_pie", 350, 1.05, 0.95),
+    "nether_atlas": ("map", 12, 0.75, 0.8),
 }
 
 # Bois : (teinte, saturation, luminosite) applique aux bois carmin du Nether

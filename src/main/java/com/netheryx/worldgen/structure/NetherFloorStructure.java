@@ -87,6 +87,10 @@ public class NetherFloorStructure extends Structure {
     private static final String[] DUNGEON_SETS = {"onyx_citadel", "infernal_sanctum", "withered_catacombs"};
     /** Un donjon s'etend a 75 blocs au plus de son entree, dans n'importe quelle rotation. */
     private static final int DUNGEON_REACH_CHUNKS = 6;
+    /** Des plus grandes aux plus petites : les petites s'ecartent des grandes. */
+    private static final String[] SURFACE_PRIORITY = {"nether_garden", "nomad_caravan", "basalt_forge", "wyvern_nest", "traveler_camp", "scorched_outpost",
+            "bone_shrine", "crystal_hollow", "lava_forge", "hidden_cache"};
+    private static final int NEIGHBOUR_REACH_CHUNKS = 2;
 
     /** Marge d'air exigee au-dessus du haut de la structure (pas de plafond qui la coupe). */
     private static final int HEADROOM = 3;
@@ -143,10 +147,37 @@ public class NetherFloorStructure extends Structure {
         return false;
     }
 
+    /**
+     * Deux petites structures ne doivent pas se chevaucher : l'une couperait le sol de l'autre, et ses lanternes et tapis
+     * tomberaient en objets. Chacune cede la place aux emplacements candidats de celles qui la precedent dans la liste.
+     */
+    private boolean yieldsToNeighbour(GenerationContext context) {
+        ResourceLocation self = context.registryAccess().registryOrThrow(Registries.STRUCTURE).getKey(this);
+        var sets = context.registryAccess().registryOrThrow(Registries.STRUCTURE_SET);
+        ChunkPos here = context.chunkPos();
+        for (String name : SURFACE_PRIORITY) {
+            if (self != null && self.getPath().equals(name)) {
+                return false;
+            }
+            var set = sets.get(NetheryX.id(name));
+            if (set != null && set.placement() instanceof RandomSpreadStructurePlacement placement) {
+                int spacing = placement.spacing();
+                ChunkPos candidate = placement.getPotentialStructureChunk(context.seed(), Math.floorDiv(here.x, spacing) * spacing, Math.floorDiv(here.z, spacing) * spacing);
+                if (Math.abs(candidate.x - here.x) <= NEIGHBOUR_REACH_CHUNKS && Math.abs(candidate.z - here.z) <= NEIGHBOUR_REACH_CHUNKS) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     @Override
     public Optional<GenerationStub> findGenerationPoint(GenerationContext context) {
         // Seule une structure qui s'enfonce dans le sol peut percer le plafond d'une salle de donjon
         if (this.entranceX < 0 && this.sink > 0 && nearDungeon(context)) {
+            return Optional.empty();
+        }
+        if (this.entranceX < 0 && yieldsToNeighbour(context)) {
             return Optional.empty();
         }
         ChunkPos chunkPos = context.chunkPos();

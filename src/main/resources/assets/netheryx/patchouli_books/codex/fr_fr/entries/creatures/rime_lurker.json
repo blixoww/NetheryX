@@ -1,0 +1,15 @@
+{
+  "name": "Rôdeur de givre",
+  "icon": "netheryx:rime_lurker_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 29,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:rime_lurker",
+      "scale": 0.7,
+      "offset": 0.0,
+      "text": "Colosse de glace du Gouffre de givre. Ses coups gèlent, et il fait jaillir sous vous des zones de givre annoncées. Il est lent : restez en mouvement entre ses assauts."
+    }
+  ]
+}

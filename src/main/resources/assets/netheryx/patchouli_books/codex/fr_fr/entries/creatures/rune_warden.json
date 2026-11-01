@@ -1,0 +1,15 @@
+{
+  "name": "Gardien des runes",
+  "icon": "netheryx:rune_warden_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 31,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:rune_warden",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "Chevalier d'élite qui tient la chambre au fond de chaque aile de donjon. Robuste, il frappe fort : battez-le pour atteindre le trésor de l'aile."
+    }
+  ]
+}

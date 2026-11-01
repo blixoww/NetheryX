@@ -81,6 +81,10 @@ Pour chaque donjon, **en survie** (`/gamemode survival`) avec une bonne armure :
 - [ ] Le coffre-fort se fond dans les murs : ses blocs ressemblent aux briques, mais sont incassables jusqu'à la mort du boss.
 - [ ] **Biomes** : chacun a sa roche, ses colonnes et sa lumière ; animaux par petits troupeaux, dans leurs biomes.
 - [ ] **Petites trouvailles** : quelques ennemis, un coffre, souvent sur le chemin.
+- [ ] **Relief** : plateaux, banquise, récifs à la place de la lave ; aucun bord cassé entre deux chunks.
+- [ ] **Atlas du Nether** : la carte s'ouvre, se déplace, zoome ; biomes et structures au survol.
+- [ ] **Modèles** : Capitaine, Gardien des runes, Rôdeur de givre, Rampant de quartz (animations, couche lumineuse).
+- [ ] **Équipement de boss** : une pièce nommée à la mort de chaque boss, tuée par un joueur.
 - [ ] Aucun objet ne traîne par terre à côté des coffres en arrivant dans une structure neuve.
 - [ ] Lisibilité des **annonces au sol** pendant les combats, tremblements de caméra (option d'accessibilité du jeu pour les couper).
 - [ ] Le coffre-fort est **impossible à ouvrir ou à contourner** avant la mort du boss (essayez de creuser autour).

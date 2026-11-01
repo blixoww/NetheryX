@@ -71,6 +71,9 @@ public final class ModBusEvents {
         event.put(ModEntities.EMBER_FIREFLY.get(), Firefly.createAttributes().build());
         event.put(ModEntities.SOUL_FIREFLY.get(), Firefly.createAttributes().build());
         event.put(ModEntities.BLAZE_PIG.get(), BlazePig.createAttributes().build());
+        event.put(ModEntities.RIME_LURKER.get(), com.netheryx.entity.RimeLurker.createAttributes().build());
+        event.put(ModEntities.QUARTZ_CRAWLER.get(), com.netheryx.entity.QuartzCrawler.createAttributes().build());
+        event.put(ModEntities.RUNE_WARDEN.get(), com.netheryx.entity.RuneWarden.createAttributes().build());
         event.put(ModEntities.CRYSTAL_SNAIL.get(), CrystalSnail.createAttributes().build());
     }
 
@@ -121,6 +124,10 @@ public final class ModBusEvents {
         event.register(ModEntities.EMBER_FIREFLY.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.SOUL_FIREFLY.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(ModEntities.RIME_LURKER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+        event.register(ModEntities.QUARTZ_CRAWLER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.BLAZE_PIG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 PassiveSpawns::check,

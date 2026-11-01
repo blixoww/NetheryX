@@ -1,0 +1,14 @@
+{
+  "type": "netheryx:landmass",
+  "config": {
+    "biome": "netheryx:withered_forest",
+    "top": {
+      "Name": "netheryx:withered_soil"
+    },
+    "body": {
+      "Name": "minecraft:deepslate"
+    },
+    "threshold": -0.75,
+    "height": 6
+  }
+}

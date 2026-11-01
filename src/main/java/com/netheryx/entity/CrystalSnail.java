@@ -166,6 +166,12 @@ public class CrystalSnail extends Animal implements GeoEntity {
         return state.setAndContinue(state.isMoving() ? WALK : IDLE);
     }
 
+    /** Par defaut un animal n'apparait qu'en pleine lumiere, rarissime dans les cavernes du Nether. */
+    @Override
+    public float getWalkTargetValue(net.minecraft.core.BlockPos pos, net.minecraft.world.level.LevelReader level) {
+        return 0.0F;
+    }
+
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return this.cache;

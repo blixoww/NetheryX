@@ -1,0 +1,14 @@
+{
+  "type": "netheryx:landmass",
+  "config": {
+    "biome": "netheryx:hellwood_jungle",
+    "top": {
+      "Name": "netheryx:ember_nylium"
+    },
+    "body": {
+      "Name": "minecraft:brown_terracotta"
+    },
+    "threshold": -0.9,
+    "height": 8
+  }
+}

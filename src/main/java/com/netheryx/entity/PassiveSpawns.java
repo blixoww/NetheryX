@@ -17,9 +17,9 @@ import net.minecraft.world.phys.AABB;
  */
 public final class PassiveSpawns {
     private static final double HERD_RANGE = 32.0D;
-    private static final int MAX_SAME_NEARBY = 5;
+    private static final int MAX_SAME_NEARBY = 8;
     private static final double AREA_RANGE = 56.0D;
-    private static final int MAX_ANIMALS_NEARBY = 12;
+    private static final int MAX_ANIMALS_NEARBY = 20;
 
     private PassiveSpawns() {
     }

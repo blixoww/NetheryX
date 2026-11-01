@@ -1,0 +1,14 @@
+{
+  "type": "netheryx:landmass",
+  "config": {
+    "biome": "netheryx:molten_glass_lake",
+    "top": {
+      "Name": "minecraft:obsidian"
+    },
+    "body": {
+      "Name": "minecraft:blackstone"
+    },
+    "threshold": 0.15,
+    "height": 3
+  }
+}

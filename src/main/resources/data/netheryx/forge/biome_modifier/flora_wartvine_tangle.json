@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:wartvine_tangle",
+  "features": [
+    "netheryx:flora_wartvine_tangle_crimson_roots",
+    "netheryx:flora_wartvine_tangle_crimson_fungus",
+    "netheryx:flora_wartvine_tangle_crimson_bellflower"
+  ],
+  "step": "vegetal_decoration"
+}

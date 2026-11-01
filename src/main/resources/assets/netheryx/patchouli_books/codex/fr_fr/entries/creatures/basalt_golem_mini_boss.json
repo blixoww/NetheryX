@@ -2,7 +2,7 @@
   "name": "Golem de basalte (mini-boss)",
   "icon": "netheryx:basalt_golem_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 99,
+  "sortnum": 103,
   "pages": [
     {
       "type": "patchouli:entity",

@@ -2,7 +2,7 @@
   "name": "Maçonnerie scellée",
   "icon": "netheryx:guardian_seal",
   "category": "netheryx:structures",
-  "sortnum": 92,
+  "sortnum": 96,
   "pages": [
     {
       "type": "patchouli:text",

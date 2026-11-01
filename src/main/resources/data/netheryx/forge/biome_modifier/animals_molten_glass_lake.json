@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "netheryx:molten_glass_lake",
+  "spawners": [
+    {
+      "type": "netheryx:blaze_pig",
+      "weight": 40,
+      "minCount": 3,
+      "maxCount": 5
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "type": "netheryx:landmass",
+  "config": {
+    "biome": "netheryx:quartz_reef",
+    "top": {
+      "Name": "minecraft:quartz_block"
+    },
+    "body": {
+      "Name": "minecraft:calcite"
+    },
+    "threshold": -0.3,
+    "height": 10
+  }
+}

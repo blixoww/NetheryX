@@ -310,6 +310,15 @@ public final class ModItems {
             () -> new ForgeSpawnEggItem(ModEntities.EMBER_FIREFLY, 0x3A1A0A, 0xFFC040, new Item.Properties()));
     public static final RegistryObject<Item> SOUL_FIREFLY_SPAWN_EGG = register("soul_firefly_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.SOUL_FIREFLY, 0x1A2A30, 0x6AF0FF, new Item.Properties()));
+    public static final RegistryObject<Item> RIME_LURKER_SPAWN_EGG = register("rime_lurker_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.RIME_LURKER, 0x4A7CA8, 0xC8F0FF, new Item.Properties()));
+    public static final RegistryObject<Item> QUARTZ_CRAWLER_SPAWN_EGG = register("quartz_crawler_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.QUARTZ_CRAWLER, 0xE8DDD0, 0x8A7C78, new Item.Properties()));
+    public static final RegistryObject<Item> RUNE_WARDEN_SPAWN_EGG = register("rune_warden_spawn_egg",
+            () -> new ForgeSpawnEggItem(ModEntities.RUNE_WARDEN, 0x2A2030, 0xB88CFF, new Item.Properties()));
+    /** Atlas du Nether : carte des biomes et structures visites (1.4.2). */
+    public static final RegistryObject<Item> NETHER_ATLAS = register("nether_atlas",
+            () -> new com.netheryx.item.NetherAtlasItem(new Item.Properties().stacksTo(1).fireResistant()));
     public static final RegistryObject<Item> BLAZE_PIG_SPAWN_EGG = register("blaze_pig_spawn_egg",
             () -> new ForgeSpawnEggItem(ModEntities.BLAZE_PIG, 0xC8601A, 0xFFD040, new Item.Properties()));
     public static final RegistryObject<Item> CRYSTAL_SNAIL_SPAWN_EGG = register("crystal_snail_spawn_egg",

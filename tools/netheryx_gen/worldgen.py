@@ -314,7 +314,7 @@ def generate_v124_features():
     placed("obsidian_delta", "obsidian_delta", [every_layer(25), BIOME_FILTER])
     configured("lava_island", mid("lava_island"), {})
     placed("lava_island", "lava_island", [{"type": "minecraft:count", "count": 5}, {"type": "minecraft:in_square"},
-                                          {"type": "minecraft:height_range", "height": {"type": "minecraft:constant", "value": {"absolute": 31}}},
+                                          {"type": "minecraft:height_range", "height": {"type": "minecraft:constant", "value": {"absolute": 21}}},
                                           BIOME_FILTER])
     configured("obsidian_spire", mid("obsidian_spire"), {})
     placed("obsidian_spire", "obsidian_spire", [every_layer(2), BIOME_FILTER])
@@ -360,15 +360,15 @@ def biome(name, fog, particle, probability, ambient, music, monsters, creatures,
         "spawners": {"monster": monsters, "creature": creatures, "ambient": list(ambient_mobs), "axolotls": [],
                      "underground_water_creature": [], "water_creature": [], "water_ambient": [], "misc": []},
         # Les troupeaux s'espacent : chaque animal "coute" de l'energie autour de lui (comme les striders et les piglins vanilla)
-        "spawn_costs": {c["type"]: {"energy_budget": 0.14, "charge": 0.7} for c in creatures if c["type"] != "minecraft:strider"},
-        "creature_spawn_probability": 0.2,
+        "spawn_costs": {c["type"]: {"energy_budget": 0.3, "charge": 0.5} for c in creatures if c["type"] != "minecraft:strider"},
+        "creature_spawn_probability": 0.35,
         "carvers": {"air": "minecraft:nether_cave"},
         "features": features,
     })
 
 
 def generate_biomes():
-    strider = spawner("minecraft:strider", 60, 1, 2)
+    strider = spawner("minecraft:strider", 8, 1, 2)
     biome("ember_grove", "#5c1a08", "netheryx:ember_spark", 0.02, "crimson_forest", "crimson_forest",
           [spawner("ember_stalker", 50, 1, 2), spawner("fire_ghast", 30, 1, 1), spawner("minecraft:zombified_piglin", 10, 2, 4),
            spawner("minecraft:magma_cube", 3, 1, 2)],

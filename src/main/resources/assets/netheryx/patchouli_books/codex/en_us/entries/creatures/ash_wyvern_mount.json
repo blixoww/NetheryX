@@ -2,7 +2,7 @@
   "name": "Ash Wyvern (mount)",
   "icon": "netheryx:ash_wyvern_egg",
   "category": "netheryx:creatures",
-  "sortnum": 100,
+  "sortnum": 104,
   "pages": [
     {
       "type": "patchouli:entity",

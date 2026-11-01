@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:withered_forest",
+  "features": "netheryx:withered_forest_landmass",
+  "step": "local_modifications"
+}

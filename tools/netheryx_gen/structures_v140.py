@@ -188,13 +188,7 @@ class Keep:
         d.box(cx - 1, FLOOR + 1, cz - 1, cx + 1, FLOOR + 1, cz + 1, t["pedestal"])
         d.chest(cx, FLOOR + 2, cz, "wing_treasure", facing="south")
         self.keys.append((cx, FLOOR + 2, cz))
-        d.entity(cx + 0.5, FLOOR + 1, z0 + 2.5, t["warden"], {
-            "Attributes": TypedList(TAG_COMPOUND, [
-                {"Name": "minecraft:generic.max_health", "Base": Double(90.0)},
-                {"Name": "minecraft:generic.attack_damage", "Base": Double(11.0)},
-                {"Name": "minecraft:generic.armor", "Base": Double(12.0)},
-                {"Name": "minecraft:generic.knockback_resistance", "Base": Double(0.8)}]),
-            "Health": Float(90.0), "CustomName": '{"translate":"entity.netheryx.rune_warden"}', "CustomNameVisible": Byte(1)})
+        d.guard(cx, FLOOR + 1, z0 + 2, "rune_warden")
         for (x, z) in self.corners(x0, z0, x1, z1):
             d.pillar(x, z, FLOOR + 1, TOP, t["pillar"])
             d.set(x, FLOOR + 3, z, t["accent"])

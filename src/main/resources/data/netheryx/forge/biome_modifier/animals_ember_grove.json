@@ -1,0 +1,18 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "netheryx:ember_grove",
+  "spawners": [
+    {
+      "type": "netheryx:blaze_pig",
+      "weight": 40,
+      "minCount": 3,
+      "maxCount": 5
+    },
+    {
+      "type": "netheryx:cinder_hen",
+      "weight": 30,
+      "minCount": 3,
+      "maxCount": 5
+    }
+  ]
+}

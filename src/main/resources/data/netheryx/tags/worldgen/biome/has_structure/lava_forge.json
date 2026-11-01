@@ -4,6 +4,9 @@
     "netheryx:molten_glass_lake",
     "netheryx:sulfur_springs",
     "minecraft:basalt_deltas",
-    "minecraft:nether_wastes"
+    "minecraft:nether_wastes",
+    "netheryx:ember_grove",
+    "netheryx:ashen_wastes",
+    "netheryx:hellwood_jungle"
   ]
 }

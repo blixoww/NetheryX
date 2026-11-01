@@ -2,7 +2,7 @@
   "name": "How Dungeons Work",
   "icon": "netheryx:guardian_seal",
   "category": "netheryx:structures",
-  "sortnum": 29,
+  "sortnum": 32,
   "pages": [
     {
       "type": "patchouli:text",

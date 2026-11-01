@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "netheryx:quartz_reef",
+  "spawners": [
+    {
+      "type": "netheryx:quartz_crawler",
+      "weight": 70,
+      "minCount": 2,
+      "maxCount": 4
+    }
+  ]
+}

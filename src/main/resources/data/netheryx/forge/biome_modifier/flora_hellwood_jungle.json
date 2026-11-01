@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:hellwood_jungle",
+  "features": [
+    "netheryx:flora_hellwood_jungle_blazing_grass",
+    "netheryx:flora_hellwood_jungle_ember_roots",
+    "netheryx:flora_hellwood_jungle_crimson_bellflower"
+  ],
+  "step": "vegetal_decoration"
+}

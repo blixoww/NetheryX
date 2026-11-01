@@ -7,6 +7,30 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le pr
 Chaque tag Git (`git tag 1.0.0 && git push origin 1.0.0`) déclenche la compilation et la publication du `.jar`
 dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 
+## [1.4.2] - 2026-11-01
+
+### Ajouté
+- **Atlas du Nether** (carte + éclat d'onyx + poussière d'âme) : carte des biomes et des structures parcourus, à faire glisser et zoomer.
+  Il se souvient de vos voyages, même d'avant sa fabrication.
+- **Équipement de boss** : chaque boss laisse une pièce nommée et enchantée, sans excès (Golem, Sorcier et Champion : diamant ;
+  Sentinelle et Cœur du Nether : netherite). Une épée ou une pièce d'armure, au hasard.
+- **Rôdeur de givre** (Gouffre de givre) : colosse de glace, ses coups gèlent et il fait jaillir des zones de givre annoncées.
+- **Rampant de quartz** (Récif de quartz) : araignée de cristal, en bande, sa carapace renvoie une partie des coups.
+- **Gardien des runes** : créature à part entière, avec son modèle, au fond des ailes de donjon.
+- **Modèle du Capitaine flétri** : cimier, épaulières, cape et plastron.
+
+### Modifié
+- **Beaucoup moins de lave** : 45 % → environ 6 à 10 % des sols dans les biomes du mod. La mer de lave est plus basse, et chaque biome a son
+  relief dessus : plateaux en terrasses (Prairie, Bosquet, Verrues), lacs gelés (Gouffre de givre), récifs blancs (Récif de quartz)...
+- **Biomes plus grands** : environ 120 à 240 blocs de côté au lieu de 90 à 170.
+- **Flore bien plus dense**, propre à chaque biome.
+- **Animaux plus faciles à trouver** : chaque biome du mod a les siens, par troupeaux, et les striders ne dominent plus.
+- La Forge, les Nids et les Catacombes s'ouvrent à plus de biomes.
+
+### Corrigé
+- **Escargot de cristal** et **Porteur de lanterne** n'apparaissaient presque jamais (seulement en pleine lumière).
+- Deux petites structures pouvaient se chevaucher et faire tomber leurs lanternes et tapis au sol.
+
 ## [1.4.1] - 2026-11-01
 
 ### Ajouté

@@ -2,7 +2,7 @@
   "name": "Poisson de magme",
   "icon": "netheryx:magmafish",
   "category": "netheryx:creatures",
-  "sortnum": 73,
+  "sortnum": 77,
   "pages": [
     {
       "type": "patchouli:entity",

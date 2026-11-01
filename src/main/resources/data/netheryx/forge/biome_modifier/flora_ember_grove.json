@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:ember_grove",
+  "features": [
+    "netheryx:flora_ember_grove_blazing_grass",
+    "netheryx:flora_ember_grove_ember_roots",
+    "netheryx:flora_ember_grove_ember_bloom"
+  ],
+  "step": "vegetal_decoration"
+}

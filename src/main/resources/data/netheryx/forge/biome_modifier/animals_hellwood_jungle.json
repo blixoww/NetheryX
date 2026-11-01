@@ -1,0 +1,18 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "netheryx:hellwood_jungle",
+  "spawners": [
+    {
+      "type": "netheryx:ember_cow",
+      "weight": 40,
+      "minCount": 3,
+      "maxCount": 5
+    },
+    {
+      "type": "netheryx:cinder_hen",
+      "weight": 40,
+      "minCount": 3,
+      "maxCount": 5
+    }
+  ]
+}

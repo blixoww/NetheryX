@@ -22,6 +22,11 @@ public final class ClientPacketHandler {
         Minecraft.getInstance().setScreen(new AdminCompassScreen(structures, biomes));
     }
 
+    public static void openAtlas(it.unimi.dsi.fastutil.longs.Long2IntMap cells, List<String> biomes, List<Integer> colors,
+                                 List<com.netheryx.world.NetherAtlasData.Marker> markers, int playerX, int playerZ) {
+        Minecraft.getInstance().setScreen(new com.netheryx.client.screen.NetherAtlasScreen(cells, biomes, colors, markers, playerX, playerZ));
+    }
+
     public static void openRecallSelection(List<PortalMemory.Portal> portals) {
         Minecraft.getInstance().setScreen(new RecallStoneScreen(portals));
     }

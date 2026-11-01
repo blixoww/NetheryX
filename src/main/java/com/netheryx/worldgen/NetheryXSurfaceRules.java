@@ -19,7 +19,7 @@ public final class NetheryXSurfaceRules {
 
     /** Sol (au-dessus de la mer de lave), sous-sol et voute du biome, puis sa roche dans toute la masse. */
     private static SurfaceRules.RuleSource skin(ResourceKey<Biome> biome, SurfaceRules.RuleSource floor, Block under, Block ceiling, SurfaceRules.RuleSource stone) {
-        SurfaceRules.ConditionSource aboveLavaSea = SurfaceRules.yBlockCheck(VerticalAnchor.absolute(31), 0);
+        SurfaceRules.ConditionSource aboveLavaSea = SurfaceRules.yBlockCheck(VerticalAnchor.absolute(21), 0);
         return SurfaceRules.ifTrue(SurfaceRules.isBiome(biome), SurfaceRules.sequence(
                 SurfaceRules.ifTrue(aboveLavaSea, SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, floor)),
                 SurfaceRules.ifTrue(aboveLavaSea, SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(under))),

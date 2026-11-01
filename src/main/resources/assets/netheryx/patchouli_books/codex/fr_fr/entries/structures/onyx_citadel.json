@@ -2,7 +2,7 @@
   "name": "Citadelle d'onyx",
   "icon": "netheryx:onyx_bricks",
   "category": "netheryx:structures",
-  "sortnum": 31,
+  "sortnum": 35,
   "pages": [
     {
       "type": "patchouli:text",

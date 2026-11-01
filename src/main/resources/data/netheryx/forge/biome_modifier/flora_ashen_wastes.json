@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:ashen_wastes",
+  "features": [
+    "netheryx:flora_ashen_wastes_charred_shrub",
+    "netheryx:flora_ashen_wastes_ash_daisy"
+  ],
+  "step": "vegetal_decoration"
+}

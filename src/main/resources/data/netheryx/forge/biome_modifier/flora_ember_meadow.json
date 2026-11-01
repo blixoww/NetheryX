@@ -1,0 +1,11 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:ember_meadow",
+  "features": [
+    "netheryx:flora_ember_meadow_ember_bloom",
+    "netheryx:flora_ember_meadow_ash_daisy",
+    "netheryx:flora_ember_meadow_blazing_grass",
+    "netheryx:flora_ember_meadow_crimson_roots"
+  ],
+  "step": "vegetal_decoration"
+}

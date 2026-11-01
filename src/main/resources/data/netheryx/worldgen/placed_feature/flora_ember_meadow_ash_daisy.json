@@ -1,0 +1,12 @@
+{
+  "feature": "netheryx:flora_ember_meadow_ash_daisy",
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 2
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:quartz_reef",
+  "features": [
+    "netheryx:flora_quartz_reef_glowcap"
+  ],
+  "step": "vegetal_decoration"
+}

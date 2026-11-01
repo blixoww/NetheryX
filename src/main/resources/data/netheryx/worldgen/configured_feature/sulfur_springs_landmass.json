@@ -1,0 +1,14 @@
+{
+  "type": "netheryx:landmass",
+  "config": {
+    "biome": "netheryx:sulfur_springs",
+    "top": {
+      "Name": "netheryx:sulfur_block"
+    },
+    "body": {
+      "Name": "netheryx:sulfur_rock"
+    },
+    "threshold": -0.15,
+    "height": 6
+  }
+}

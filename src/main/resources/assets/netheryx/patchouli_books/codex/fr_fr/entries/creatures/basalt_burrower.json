@@ -2,7 +2,7 @@
   "name": "Fouisseur de basalte",
   "icon": "netheryx:basalt_burrower_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 76,
+  "sortnum": 80,
   "pages": [
     {
       "type": "patchouli:entity",

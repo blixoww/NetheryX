@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:sulfur_springs",
+  "features": [
+    "netheryx:flora_sulfur_springs_sulfur_tulip",
+    "netheryx:flora_sulfur_springs_charred_shrub"
+  ],
+  "step": "vegetal_decoration"
+}

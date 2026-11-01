@@ -1,0 +1,18 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "netheryx:ashen_wastes",
+  "spawners": [
+    {
+      "type": "netheryx:blaze_pig",
+      "weight": 40,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "netheryx:crystal_snail",
+      "weight": 20,
+      "minCount": 2,
+      "maxCount": 3
+    }
+  ]
+}

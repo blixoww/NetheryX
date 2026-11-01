@@ -2,7 +2,7 @@
   "name": "Infernal Sanctum",
   "icon": "netheryx:magma_bricks",
   "category": "netheryx:structures",
-  "sortnum": 32,
+  "sortnum": 36,
   "pages": [
     {
       "type": "patchouli:text",

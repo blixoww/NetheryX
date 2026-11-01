@@ -2,7 +2,7 @@
   "name": "Tree Fruits",
   "icon": "netheryx:ember_fig",
   "category": "netheryx:farming",
-  "sortnum": 53,
+  "sortnum": 57,
   "pages": [
     {
       "type": "patchouli:spotlight",

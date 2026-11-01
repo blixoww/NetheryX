@@ -13,6 +13,13 @@
     "#minecraft:dirt",
     "netheryx:ossified_nylium",
     "netheryx:wart_moss",
-    "netheryx:rimestone"
+    "netheryx:rimestone",
+    "minecraft:calcite",
+    "minecraft:quartz_block",
+    "netheryx:sulfur_block",
+    "netheryx:withered_soil",
+    "minecraft:packed_ice",
+    "minecraft:snow_block",
+    "minecraft:brown_terracotta"
   ]
 }

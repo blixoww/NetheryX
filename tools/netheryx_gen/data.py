@@ -852,3 +852,5 @@ def generate():
     data_v140.generate()
     from . import data_v150
     data_v150.generate()
+    from . import data_v142
+    data_v142.generate()

@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:rimefrost_chasm",
+  "features": "netheryx:rimefrost_chasm_landmass",
+  "step": "local_modifications"
+}

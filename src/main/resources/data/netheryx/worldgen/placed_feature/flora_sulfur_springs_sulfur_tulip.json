@@ -1,0 +1,12 @@
+{
+  "feature": "netheryx:flora_sulfur_springs_sulfur_tulip",
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 3
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

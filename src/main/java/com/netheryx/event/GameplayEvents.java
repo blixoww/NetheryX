@@ -56,6 +56,12 @@ public final class GameplayEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        // Atlas du Nether : on note ce que le joueur explore, meme s'il n'a pas encore l'objet
+        if (event.phase == TickEvent.Phase.END && event.player.tickCount % 40 == 0 && event.player.level().dimension() == net.minecraft.world.level.Level.NETHER
+                && event.player.level() instanceof net.minecraft.server.level.ServerLevel server
+                && event.player instanceof net.minecraft.server.level.ServerPlayer serverPlayer) {
+            com.netheryx.world.NetherAtlasData.get(server).record(server, serverPlayer);
+        }
         Player player = event.player;
         if (event.phase != TickEvent.Phase.END) {
             return;

@@ -1,0 +1,18 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "netheryx:marrow_thicket",
+  "spawners": [
+    {
+      "type": "netheryx:ember_cow",
+      "weight": 40,
+      "minCount": 3,
+      "maxCount": 5
+    },
+    {
+      "type": "netheryx:crystal_snail",
+      "weight": 25,
+      "minCount": 2,
+      "maxCount": 3
+    }
+  ]
+}

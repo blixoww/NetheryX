@@ -353,6 +353,18 @@ Créatures : **Escargots de cristal**, lucioles des âmes, cubes d'onyx, spectre
 - Sous 25 % : appelle des Cubes d'onyx.
 
 
+### Rôdeur de givre
+
+- **Rôdeur de givre** : Colosse de glace du Gouffre de givre. Ses coups gèlent, et il fait jaillir sous vous des zones de givre annoncées. Il est lent : restez en mouvement entre ses assauts.
+
+### Rampant de quartz
+
+- **Rampant de quartz** : Araignée de cristal du Récif de quartz, qui chasse en petite bande. Rapide et fragile, elle bondit sur sa proie, et sa carapace vous renvoie une partie de vos coups.
+
+### Gardien des runes
+
+- **Gardien des runes** : Chevalier d'élite qui tient la chambre au fond de chaque aile de donjon. Robuste, il frappe fort : battez-le pour atteindre le trésor de l'aile.
+
 ### Poisson de magme
 
 - **Poisson de magme cru** : Nage dans les mers de lave. Chassez-le ou attrapez-le avec une *Nasse à magma*. Ses écailles servent à brasser la *Potion de plongée en lave*.
@@ -638,6 +650,13 @@ Le Cœur du Nether lâche des *Éclats abyssaux* et un *Gabarit d'amélioration 
 
 <a id="utility"></a>
 ## Objets utiles
+
+### Atlas du Nether
+
+Une **carte** de tout ce que vous avez exploré dans le Nether : les biomes dans leurs couleurs, et un repère pour chaque structure traversée. Survolez pour lire les noms, faites glisser pour vous déplacer, utilisez la molette pour zoomer. Elle se souvient de vos voyages, même d'avant sa fabrication.
+
+
+- Établi (sans forme) : Map + Éclat d'onyx + Poussière d'âme → **Atlas du Nether**
 
 ### Boussole des âmes
 
@@ -1311,6 +1330,8 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi (sans forme) : Chapeau de moelle → **Farine de moelle** ×3
 - **Éclat de verre en fusion** (`netheryx:molten_shard`)
   - Trouvé dans : butin de Golem de basalte, coffres : basalt forge
+- **Atlas du Nether** (`netheryx:nether_atlas`)
+  - Établi (sans forme) : Map + Éclat d'onyx + Poussière d'âme → **Atlas du Nether**
 - **Lanterne du Nether** (`netheryx:nether_lantern`)
   - Établi : `·O·` / `MLM` / `·M·` (`O` = Onyx, `M` = Éclat de verre en fusion, `L` = Lanterne des âmes) → **Lanterne du Nether**
   - Trouvé dans : coffres : basalt forge, coffres : wayside cache
@@ -1354,7 +1375,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi : `OOO` / `·R·` / `·R·` (`O` = Onyx, `R` = Bâton de blaze) → **Pioche en onyx**
   - Trouvé dans : coffres : infernal sanctum vault, coffres : onyx citadel vault, coffres : wayside cache, coffres : wing treasure, coffres : withered catacombs vault
 - **Éclat d'onyx** (`netheryx:onyx_shard`)
-  - Trouvé dans : butin de Cube d'onyx, butin de Escargot de cristal, butin de Fouisseur de basalte, butin de Ghast de feu, butin de Sentinelle d'onyx, butin de Spectre de cendre, coffres : mimic, coffres : nether garden, coffres : nomad caravan, coffres : onyx citadel, coffres : small treasure, coffres : wayside cache, coffres : wing treasure, coffres : withered catacombs, coffres : wyvern nest, pêche à la nasse
+  - Trouvé dans : butin de Cube d'onyx, butin de Escargot de cristal, butin de Fouisseur de basalte, butin de Gardien des runes, butin de Ghast de feu, butin de Rampant de quartz, butin de Sentinelle d'onyx, butin de Spectre de cendre, coffres : mimic, coffres : nether garden, coffres : nomad caravan, coffres : onyx citadel, coffres : small treasure, coffres : wayside cache, coffres : wing treasure, coffres : withered catacombs, coffres : wyvern nest, pêche à la nasse
 - **Pelle en onyx** (`netheryx:onyx_shovel`)
   - Établi : `O` / `R` / `R` (`O` = Onyx, `R` = Bâton de blaze) → **Pelle en onyx**
 - **Épée en onyx** (`netheryx:onyx_sword`)
@@ -1364,7 +1385,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi : `·D·` / `DOD` / `·D·` (`D` = Poussière d'âme, `O` = Obsidienne pleureuse) → **Pierre de rappel**
   - Trouvé dans : butin de Sorcier infernal, coffres : infernal sanctum, coffres : onyx citadel, coffres : small treasure, coffres : wayside cache
 - **Éclat de givre** (`netheryx:rime_shard`)
-  - Trouvé dans : coffres : nomad caravan
+  - Trouvé dans : butin de Rôdeur de givre, coffres : nomad caravan
 - **Cœur scellé** (`netheryx:sealed_heart`)
   - Établi : `OCO` / `SXW` / `OHO` (`O` = Bloc d'onyx, `C` = Obsidienne pleureuse, `S` = Œil de la Sentinelle, `X` = Couronne du Champion, `W` = Sceau du Sorcier, `H` = Pierre-cœur de basalte) → **Cœur scellé**
 - **Cœur de sentinelle** (`netheryx:sentinel_core`)
@@ -1401,7 +1422,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - **Lame flétrie** (`netheryx:withered_blade`)
   - Trouvé dans : butin de Champion flétri, butin de Chevalier flétri, coffres : withered catacombs vault
 - **Os flétri** (`netheryx:withered_bone`)
-  - Trouvé dans : butin de Champion flétri, butin de Chevalier flétri, coffres : withered catacombs
+  - Trouvé dans : butin de Champion flétri, butin de Chevalier flétri, butin de Gardien des runes, coffres : withered catacombs
 - **Prune flétrie** (`netheryx:withered_plum`)
 - **Bottes spectrales** (`netheryx:wraith_boots`)
   - Établi : `#·#` / `#·#` (`#` = Étoffe spectrale) → **Bottes spectrales**
@@ -1448,6 +1469,9 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - **Œuf d'apparition de luciole des âmes** (`netheryx:soul_firefly_spawn_egg`)
 - **Œuf d'apparition de cochon de blaze** (`netheryx:blaze_pig_spawn_egg`)
 - **Œuf d'apparition d'escargot de cristal** (`netheryx:crystal_snail_spawn_egg`)
+- **Œuf d'apparition de rôdeur de givre** (`netheryx:rime_lurker_spawn_egg`)
+- **Œuf d'apparition de rampant de quartz** (`netheryx:quartz_crawler_spawn_egg`)
+- **Œuf d'apparition de gardien des runes** (`netheryx:rune_warden_spawn_egg`)
 
 <a id="creatures-detail"></a>
 ## Créatures : apparitions et butin
@@ -1462,7 +1486,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 
 ### Sentinelle d'onyx
 - Apparition : structures, invocation ou objet spécial uniquement
-- Butin : Cœur de sentinelle, Onyx, Éclat d'onyx, Œil de la Sentinelle
+- Butin : Cœur de sentinelle, Netherite chestplate, Netherite sword, Onyx, Éclat d'onyx, Œil de la Sentinelle
 
 ### Crabe de magma
 - Apparition : Deltas de basalte, Désolation du Nether, Récifs de quartz, Sources sulfureuses
@@ -1482,18 +1506,18 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 
 ### Sorcier infernal
 - Apparition : structures, invocation ou objet spécial uniquement
-- Butin : Bâton de blaze, Bâton du sorcier, Onyx, Pierre de rappel, Sceau du Sorcier
+- Butin : Bâton de blaze, Bâton du sorcier, Diamond chestplate, Diamond sword, Onyx, Pierre de rappel, Sceau du Sorcier
 
 ### Champion flétri
 - Apparition : structures, invocation ou objet spécial uniquement
-- Butin : Couronne du Champion, Crâne de wither squelette, Lame flétrie, Onyx, Os flétri
+- Butin : Couronne du Champion, Crâne de wither squelette, Diamond helmet, Diamond sword, Lame flétrie, Onyx, Os flétri
 
 ### Vache de braise
-- Apparition : Enchevêtrement de verrues, Forêt carmin, Jungle infernale, Prairie de braise, Sources sulfureuses
+- Apparition : Enchevêtrement de verrues, Forêt carmin, Fourré de moelle, Jungle infernale, Prairie de braise, Sources sulfureuses
 - Butin : Bœuf infernal cru, Crème de magma, Cuir
 
 ### Poule de cendre
-- Apparition : Enchevêtrement de verrues, Forêt carmin, Jungle infernale, Prairie de braise
+- Apparition : Bosquet de braise, Enchevêtrement de verrues, Forêt carmin, Forêt flétrie, Jungle infernale, Prairie de braise
 - Butin : Feather, Poulet infernal cru, Œuf de braise
 
 ### Ghast de feu
@@ -1529,11 +1553,11 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 
 ### Cœur du Nether
 - Apparition : structures, invocation ou objet spécial uniquement
-- Butin : Amélioration abyssale, Lingot de netherite, Onyx, Pomme en onyx, Éclat abyssal, Œuf de wyverne de cendre
+- Butin : Amélioration abyssale, Lingot de netherite, Netherite leggings, Netherite sword, Onyx, Pomme en onyx, Éclat abyssal, Œuf de wyverne de cendre
 
 ### Golem de basalte
 - Apparition : Deltas de basalte, Lac de verre en fusion
-- Butin : Carapace de basalte, Carapace de magma, Livre, Onyx, Pierre-cœur de basalte, Éclat de verre en fusion
+- Butin : Carapace de basalte, Carapace de magma, Diamond boots, Diamond sword, Livre, Onyx, Pierre-cœur de basalte, Éclat de verre en fusion
 
 ### Wyverne de cendre
 - Apparition : Deltas de basalte, Lac de verre en fusion, Terres cendrées
@@ -1548,12 +1572,24 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - Butin : Poussière d'âme
 
 ### Cochon de blaze
-- Apparition : Bosquet de braise, Désolation du Nether, Jungle infernale, Lac de verre en fusion, Récifs de quartz
+- Apparition : Bosquet de braise, Désolation du Nether, Jungle infernale, Lac de verre en fusion, Récifs de quartz, Terres cendrées
 - Butin : Côtelette de blaze crue, Poudre de blaze
 
 ### Escargot de cristal
-- Apparition : Forêt pétrifiée d'onyx, Récifs de quartz
+- Apparition : Forêt flétrie, Forêt pétrifiée d'onyx, Fourré de moelle, Gouffre de givre, Récifs de quartz, Terres cendrées
 - Butin : Éclat d'onyx
+
+### Rôdeur de givre
+- Apparition : Gouffre de givre
+- Butin : Blue ice, Éclat de givre
+
+### Rampant de quartz
+- Apparition : Récifs de quartz
+- Butin : Quartz du Nether, Éclat d'onyx
+
+### Gardien des runes
+- Apparition : structures, invocation ou objet spécial uniquement
+- Butin : Os flétri, Éclat d'onyx
 
 <a id="configuration"></a>
 ## Configuration

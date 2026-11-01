@@ -1,0 +1,8 @@
+{
+  "feature": "netheryx:sulfur_springs_landmass",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:withered_forest",
+  "features": [
+    "netheryx:flora_withered_forest_charred_shrub",
+    "netheryx:flora_withered_forest_withered_fungus",
+    "netheryx:flora_withered_forest_warped_roots"
+  ],
+  "step": "vegetal_decoration"
+}

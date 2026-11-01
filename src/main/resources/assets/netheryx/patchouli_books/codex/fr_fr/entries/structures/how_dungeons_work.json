@@ -2,7 +2,7 @@
   "name": "Fonctionnement des donjons",
   "icon": "netheryx:guardian_seal",
   "category": "netheryx:structures",
-  "sortnum": 29,
+  "sortnum": 32,
   "pages": [
     {
       "type": "patchouli:text",

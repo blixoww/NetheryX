@@ -167,7 +167,7 @@ GENERATED_ITEMS = [
     "infernal_chicken", "cooked_infernal_chicken", "ember_egg", "fried_ember_egg", "obsidian_boat", "obsidian_bucket",
     "marrow_meal", "rime_shard", "wartfruit", "wartfruit_tart", "magmafish", "grilled_magmafish", "magmafish_scale",
     "wraith_cloth", "onyx_infusion_template", "burrower_fang", "admin_compass", "fire_veil",
-    "onyx_apple", "sentinel_eye", "warlock_sigil", "champion_crown", "basalt_heartstone", "sealed_heart", "abyssal_shard", "abyssal_upgrade_template",
+    "onyx_apple", "sentinel_eye", "warlock_sigil", "champion_crown", "basalt_heartstone", "sealed_heart", "nether_atlas", "abyssal_shard", "abyssal_upgrade_template",
     "abyssal_helmet", "abyssal_chestplate", "abyssal_leggings", "abyssal_boots",
     "blaze_pork", "cooked_blaze_pork", "molten_shard", "nether_lantern", "ash_wyvern_egg", "wyvern_whistle", "wyvern_crystal",
     "ember_helmet", "ember_chestplate", "ember_leggings", "ember_boots",
@@ -180,13 +180,13 @@ SPAWN_EGGS = ["ember_stalker_spawn_egg", "ash_wraith_spawn_egg", "onyx_sentinel_
               "onyx_cube_spawn_egg", "magmafish_spawn_egg", "piglin_merchant_spawn_egg", "mimic_spawn_egg",
               "basalt_burrower_spawn_egg", "lantern_bearer_spawn_egg", "cinder_lizard_spawn_egg",
               "nether_heart_spawn_egg", "basalt_golem_spawn_egg", "ash_wyvern_spawn_egg", "ember_firefly_spawn_egg",
-              "soul_firefly_spawn_egg", "blaze_pig_spawn_egg", "crystal_snail_spawn_egg"]
+              "soul_firefly_spawn_egg", "blaze_pig_spawn_egg", "crystal_snail_spawn_egg", "rime_lurker_spawn_egg", "quartz_crawler_spawn_egg", "rune_warden_spawn_egg"]
 ENTITIES = ["ember_stalker", "ash_wraith", "onyx_sentinel", "magma_crab", "sulfur_bomb",
             "soul_moth", "withered_knight", "basalt_beetle", "infernal_warlock", "withered_champion",
             "ember_cow", "cinder_hen", "fire_ghast", "onyx_cube", "obsidian_boat",
             "magmafish", "piglin_merchant", "mimic", "basalt_burrower", "lantern_bearer", "cinder_lizard",
             "nether_heart", "basalt_golem", "ash_wyvern", "ember_firefly", "soul_firefly", "blaze_pig", "crystal_snail",
-            "wyvern_fireball"]
+            "wyvern_fireball", "rime_lurker", "quartz_crawler", "rune_warden"]
 BIOMES = ["ember_meadow", "ember_grove", "ashen_wastes", "onyx_depths", "sulfur_springs", "soulfire_marsh", "withered_forest", "magma_rift",
           "marrow_thicket", "rimefrost_chasm", "wartvine_tangle", "quartz_reef", "hellwood_jungle",
           "molten_glass_lake", "petrified_onyx_forest"]
@@ -442,6 +442,13 @@ NAMES = {
     "entity.ember_firefly": ("Ember Firefly", "Luciole de braise"),
     "entity.soul_firefly": ("Soul Firefly", "Luciole des âmes"),
     "entity.blaze_pig": ("Blaze Pig", "Cochon de blaze"),
+    "entity.rime_lurker": ("Rime Lurker", "Rôdeur de givre"),
+    "entity.quartz_crawler": ("Quartz Crawler", "Rampant de quartz"),
+    "entity.rune_warden": ("Rune Warden", "Gardien des runes"),
+    "rime_lurker_spawn_egg": ("Rime Lurker Spawn Egg", "Œuf d'apparition de rôdeur de givre"),
+    "quartz_crawler_spawn_egg": ("Quartz Crawler Spawn Egg", "Œuf d'apparition de rampant de quartz"),
+    "rune_warden_spawn_egg": ("Rune Warden Spawn Egg", "Œuf d'apparition de gardien des runes"),
+    "nether_atlas": ("Nether Atlas", "Atlas du Nether"),
     "entity.crystal_snail": ("Crystal Snail", "Escargot de cristal"),
     "basalt_golem_spawn_egg": ("Basalt Golem Spawn Egg", "Œuf d'apparition de golem de basalte"),
     "ash_wyvern_spawn_egg": ("Ash Wyvern Spawn Egg", "Œuf d'apparition de wyverne de cendre"),
@@ -749,7 +756,19 @@ EXTRA_LANG = {
     "advancements.netheryx.firefly_jar.description": ("Catch fireflies with a glass bottle", "Attraper des lucioles avec une fiole"),
     # 1.4.0
     "boss.netheryx.awakens": ("awakens", "s'éveille"),
-    "entity.netheryx.rune_warden": ("Rune Warden", "Gardien des runes"),
+    # 1.4.2
+    "item.netheryx.boss_gear.basalt_boots": ('Basalt Boots', 'Bottes de basalte'),
+    "item.netheryx.boss_gear.basalt_edge": ('Basalt Edge', 'Lame de basalte'),
+    "item.netheryx.boss_gear.warlock_blade": ("Warlock's Blade", 'Lame du Sorcier'),
+    "item.netheryx.boss_gear.warlock_mantle": ("Warlock's Mantle", 'Cuirasse du Sorcier'),
+    "item.netheryx.boss_gear.champion_blade": ("Champion's Blade", 'Lame du Champion'),
+    "item.netheryx.boss_gear.champion_helm": ("Champion's Helm", 'Heaume du Champion'),
+    "item.netheryx.boss_gear.sentinel_edge": ("Sentinel's Edge", 'Tranchant de la Sentinelle'),
+    "item.netheryx.boss_gear.sentinel_plate": ("Sentinel's Plate", 'Plastron de la Sentinelle'),
+    "item.netheryx.boss_gear.heart_blade": ('Blade of the Heart', 'Lame du Cœur'),
+    "item.netheryx.boss_gear.heart_greaves": ('Greaves of the Heart', 'Jambières du Cœur'),
+    "item.netheryx.nether_atlas.tooltip": ("Map of the biomes and structures you explored in the Nether", "Carte des biomes et structures que vous avez explorés dans le Nether"),
+    "item.netheryx.nether_atlas.wrong_dimension": ("The Atlas only opens in the Nether", "L'Atlas ne s'ouvre que dans le Nether"),
     # 1.3.4
     "entity.netheryx.withered_knight_captain": ("Withered Captain", "Capitaine flétri"),
     "sign.netheryx.onyx_citadel.1": ('Turn back:', 'Demi-tour :'),

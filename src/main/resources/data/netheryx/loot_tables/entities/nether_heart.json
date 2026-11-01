@@ -92,6 +92,60 @@
           "name": "netheryx:ash_wyvern_egg"
         }
       ]
+    },
+    {
+      "rolls": 1,
+      "bonus_rolls": 0,
+      "conditions": [
+        {
+          "condition": "minecraft:killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_sword",
+          "functions": [
+            {
+              "function": "minecraft:set_enchantments",
+              "enchantments": {
+                "minecraft:sharpness": 5,
+                "minecraft:fire_aspect": 2,
+                "minecraft:looting": 2
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "item.netheryx.boss_gear.heart_blade",
+                "color": "gold",
+                "italic": false
+              }
+            }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:netherite_leggings",
+          "functions": [
+            {
+              "function": "minecraft:set_enchantments",
+              "enchantments": {
+                "minecraft:protection": 4,
+                "minecraft:unbreaking": 3
+              }
+            },
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "item.netheryx.boss_gear.heart_greaves",
+                "color": "gold",
+                "italic": false
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "feature": "netheryx:flora_petrified_onyx_forest_soul_lily",
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 1
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

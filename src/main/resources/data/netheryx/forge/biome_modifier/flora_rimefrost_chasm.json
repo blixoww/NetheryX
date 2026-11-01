@@ -1,0 +1,8 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:rimefrost_chasm",
+  "features": [
+    "netheryx:flora_rimefrost_chasm_snow"
+  ],
+  "step": "vegetal_decoration"
+}

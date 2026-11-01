@@ -2,7 +2,7 @@
   "name": "Soul Compass",
   "icon": "netheryx:soul_compass",
   "category": "netheryx:utility",
-  "sortnum": 42,
+  "sortnum": 46,
   "pages": [
     {
       "type": "patchouli:spotlight",

@@ -283,6 +283,17 @@ BOSS_TACTICS = {
         "ramène les fuyards et les ralentit.$(li)$(l)Ruée des âmes$() vers les cibles éloignées.$(li)Sous 50 % : des $(l)pointes d'os$() "
         "jaillissent en deux anneaux autour de lui. Reculez !", "Tactique"),
 }
+CREATURES += [
+    ("rime_lurker", "Rime Lurker", "Rôdeur de givre", 0.7,
+     "A colossus of ice from the Rimefrost Chasm. Its blows freeze, and it raises marked patches of frost under you. Slow: keep moving between its charges.",
+     "Colosse de glace du Gouffre de givre. Ses coups gèlent, et il fait jaillir sous vous des zones de givre annoncées. Il est lent : restez en mouvement entre ses assauts."),
+    ("quartz_crawler", "Quartz Crawler", "Rampant de quartz", 0.9,
+     "A crystal spider of the Quartz Reef, hunting in small packs. Fast and fragile, it leaps at its prey, and its shell sends part of your melee hits back at you.",
+     "Araignée de cristal du Récif de quartz, qui chasse en petite bande. Rapide et fragile, elle bondit sur sa proie, et sa carapace vous renvoie une partie de vos coups."),
+    ("rune_warden", "Rune Warden", "Gardien des runes", 0.6,
+     "An elite knight holding the chamber at the end of each dungeon wing. Tough and hard-hitting: beat it to reach the wing's treasure.",
+     "Chevalier d'élite qui tient la chambre au fond de chaque aile de donjon. Robuste, il frappe fort : battez-le pour atteindre le trésor de l'aile."),
+]
 for eid, en, fr, scale, ten, tfr in CREATURES:
     pages = [mob(eid, ten, tfr, scale=scale)]
     if eid in BOSS_TACTICS:
@@ -321,6 +332,14 @@ entry("structures", "How Dungeons Work", "Fonctionnement des donjons", "netheryx
          "retournent et se soignent lentement.",
          link=False),
 ], priority=True)
+
+entry("utility", "Nether Atlas", "Atlas du Nether", "netheryx:nether_atlas", [
+    text("A $(l)map$() of everything you have explored in the Nether: biomes in their colors, and a marker for each structure you have walked through. "
+         "Hover to read names, drag to move, scroll to zoom. It remembers your journeys even from before you made it.",
+         "Une $(l)carte$() de tout ce que vous avez exploré dans le Nether : les biomes dans leurs couleurs, et un repère pour chaque structure traversée. "
+         "Survolez pour lire les noms, faites glisser pour vous déplacer, utilisez la molette pour zoomer. Elle se souvient de vos voyages, même d'avant sa fabrication."),
+    craft("nether_atlas"),
+])
 
 entry("structures", "Wayside Finds", "Petites trouvailles", "minecraft:barrel", [
     text("All over the Nether, small sites hide a $(l)chest$() watched by two or three enemies: scorched outposts, overturned carts, bone "

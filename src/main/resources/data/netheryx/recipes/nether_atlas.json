@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:map"
+    },
+    {
+      "item": "netheryx:onyx_shard"
+    },
+    {
+      "item": "netheryx:soul_dust"
+    }
+  ],
+  "result": {
+    "item": "netheryx:nether_atlas"
+  }
+}

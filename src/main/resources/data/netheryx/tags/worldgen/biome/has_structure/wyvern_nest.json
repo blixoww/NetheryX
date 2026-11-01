@@ -8,6 +8,8 @@
     "minecraft:basalt_deltas",
     "netheryx:quartz_reef",
     "netheryx:wartvine_tangle",
-    "minecraft:nether_wastes"
+    "minecraft:nether_wastes",
+    "netheryx:ember_grove",
+    "netheryx:withered_forest"
   ]
 }

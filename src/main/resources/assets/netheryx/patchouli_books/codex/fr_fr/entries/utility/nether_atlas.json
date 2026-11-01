@@ -1,0 +1,16 @@
+{
+  "name": "Atlas du Nether",
+  "icon": "netheryx:nether_atlas",
+  "category": "netheryx:utility",
+  "sortnum": 33,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Une $(l)carte$() de tout ce que vous avez exploré dans le Nether : les biomes dans leurs couleurs, et un repère pour chaque structure traversée. Survolez pour lire les noms, faites glisser pour vous déplacer, utilisez la molette pour zoomer. Elle se souvient de vos voyages, même d'avant sa fabrication."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:nether_atlas"
+    }
+  ]
+}

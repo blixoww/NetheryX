@@ -1,0 +1,12 @@
+{
+  "feature": "netheryx:flora_petrified_onyx_forest_glowcap",
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 3
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

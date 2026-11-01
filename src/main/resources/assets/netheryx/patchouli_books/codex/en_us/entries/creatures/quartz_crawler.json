@@ -1,0 +1,15 @@
+{
+  "name": "Quartz Crawler",
+  "icon": "netheryx:quartz_crawler_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 30,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:quartz_crawler",
+      "scale": 0.9,
+      "offset": 0.0,
+      "text": "A crystal spider of the Quartz Reef, hunting in small packs. Fast and fragile, it leaps at its prey, and its shell sends part of your melee hits back at you."
+    }
+  ]
+}

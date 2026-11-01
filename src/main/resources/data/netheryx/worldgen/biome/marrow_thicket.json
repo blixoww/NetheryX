@@ -73,7 +73,7 @@
       },
       {
         "type": "minecraft:strider",
-        "weight": 60,
+        "weight": 8,
         "minCount": 1,
         "maxCount": 2
       }
@@ -94,11 +94,11 @@
   },
   "spawn_costs": {
     "netheryx:lantern_bearer": {
-      "energy_budget": 0.14,
-      "charge": 0.7
+      "energy_budget": 0.3,
+      "charge": 0.5
     }
   },
-  "creature_spawn_probability": 0.2,
+  "creature_spawn_probability": 0.35,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

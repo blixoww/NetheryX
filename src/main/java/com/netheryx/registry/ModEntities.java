@@ -26,6 +26,9 @@ import com.netheryx.entity.NetherHeart;
 import com.netheryx.entity.AshWyvern;
 import com.netheryx.entity.BasaltGolem;
 import com.netheryx.entity.BlazePig;
+import com.netheryx.entity.QuartzCrawler;
+import com.netheryx.entity.RimeLurker;
+import com.netheryx.entity.RuneWarden;
 import com.netheryx.entity.CrystalSnail;
 import com.netheryx.entity.Firefly;
 import com.netheryx.entity.PiglinMerchant;
@@ -99,6 +102,12 @@ public final class ModEntities {
             EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.5F, 0.5F).fireImmune().clientTrackingRange(6));
     public static final RegistryObject<EntityType<Firefly>> SOUL_FIREFLY = register("soul_firefly",
             EntityType.Builder.of(Firefly::new, MobCategory.AMBIENT).sized(0.5F, 0.5F).fireImmune().clientTrackingRange(6));
+    public static final RegistryObject<EntityType<RimeLurker>> RIME_LURKER = register("rime_lurker",
+            EntityType.Builder.of(RimeLurker::new, MobCategory.MONSTER).sized(0.9F, 2.3F).fireImmune().clientTrackingRange(10));
+    public static final RegistryObject<EntityType<QuartzCrawler>> QUARTZ_CRAWLER = register("quartz_crawler",
+            EntityType.Builder.of(QuartzCrawler::new, MobCategory.MONSTER).sized(0.9F, 0.6F).fireImmune().clientTrackingRange(8));
+    public static final RegistryObject<EntityType<RuneWarden>> RUNE_WARDEN = register("rune_warden",
+            EntityType.Builder.of(RuneWarden::new, MobCategory.MONSTER).sized(0.8F, 2.5F).fireImmune().clientTrackingRange(10));
     public static final RegistryObject<EntityType<BlazePig>> BLAZE_PIG = register("blaze_pig",
             EntityType.Builder.of(BlazePig::new, MobCategory.CREATURE).sized(0.8F, 0.8F).fireImmune().clientTrackingRange(10));
     public static final RegistryObject<EntityType<CrystalSnail>> CRYSTAL_SNAIL = register("crystal_snail",

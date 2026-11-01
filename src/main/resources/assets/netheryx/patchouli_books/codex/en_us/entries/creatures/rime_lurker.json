@@ -1,0 +1,15 @@
+{
+  "name": "Rime Lurker",
+  "icon": "netheryx:rime_lurker_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 29,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:rime_lurker",
+      "scale": 0.7,
+      "offset": 0.0,
+      "text": "A colossus of ice from the Rimefrost Chasm. Its blows freeze, and it raises marked patches of frost under you. Slow: keep moving between its charges."
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "netheryx:quartz_reef",
+  "spawners": [
+    {
+      "type": "netheryx:crystal_snail",
+      "weight": 40,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "netheryx:magma_crab",
+      "weight": 40,
+      "minCount": 3,
+      "maxCount": 5
+    }
+  ]
+}

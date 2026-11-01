@@ -1,0 +1,18 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "netheryx:withered_forest",
+  "spawners": [
+    {
+      "type": "netheryx:crystal_snail",
+      "weight": 40,
+      "minCount": 2,
+      "maxCount": 4
+    },
+    {
+      "type": "netheryx:cinder_hen",
+      "weight": 20,
+      "minCount": 2,
+      "maxCount": 4
+    }
+  ]
+}

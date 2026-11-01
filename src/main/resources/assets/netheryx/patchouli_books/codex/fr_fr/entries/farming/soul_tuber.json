@@ -2,7 +2,7 @@
   "name": "Tubercule d'âme",
   "icon": "netheryx:soul_tuber",
   "category": "netheryx:farming",
-  "sortnum": 52,
+  "sortnum": 56,
   "pages": [
     {
       "type": "patchouli:spotlight",

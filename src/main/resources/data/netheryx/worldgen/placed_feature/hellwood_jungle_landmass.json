@@ -1,0 +1,8 @@
+{
+  "feature": "netheryx:hellwood_jungle_landmass",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

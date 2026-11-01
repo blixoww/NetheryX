@@ -6,6 +6,7 @@ import com.netheryx.worldgen.feature.BoulderFeature;
 import com.netheryx.worldgen.feature.CeilingHangFeature;
 import com.netheryx.worldgen.feature.FallenLogFeature;
 import com.netheryx.worldgen.feature.HellTreeFeature;
+import com.netheryx.worldgen.feature.LandmassFeature;
 import com.netheryx.worldgen.feature.LavaIslandFeature;
 import com.netheryx.worldgen.feature.ObsidianSpireFeature;
 import com.netheryx.worldgen.feature.PetrifiedTreeFeature;
@@ -58,6 +59,10 @@ public final class ModFeatures {
             () -> new BiomeDecorFeatures.CrystalBurst(BiomeDecorFeatures.Config.CODEC));
     public static final RegistryObject<Feature<BiomeDecorFeatures.Config>> GLOW_CLUSTER = FEATURES.register("glow_cluster",
             () -> new BiomeDecorFeatures.GlowCluster(BiomeDecorFeatures.Config.CODEC));
+
+    /** Terres sur la mer de lave (1.4.2) : plateaux, banquises, recifs. */
+    public static final RegistryObject<Feature<LandmassFeature.Config>> LANDMASS = FEATURES.register("landmass",
+            () -> new LandmassFeature(LandmassFeature.Config.CODEC));
 
     private ModFeatures() {
     }

@@ -2,7 +2,7 @@
   "name": "Obsidian Boat",
   "icon": "netheryx:obsidian_boat",
   "category": "netheryx:utility",
-  "sortnum": 44,
+  "sortnum": 48,
   "pages": [
     {
       "type": "patchouli:spotlight",

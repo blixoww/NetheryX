@@ -10,6 +10,12 @@
     "minecraft:gravel",
     "netheryx:ossified_nylium",
     "netheryx:wart_moss",
-    "netheryx:rimestone"
+    "netheryx:rimestone",
+    "netheryx:withered_soil",
+    "netheryx:sulfur_block",
+    "netheryx:nether_grass_block",
+    "minecraft:snow_block",
+    "minecraft:snow",
+    "minecraft:packed_ice"
   ]
 }

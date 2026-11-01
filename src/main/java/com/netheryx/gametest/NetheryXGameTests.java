@@ -231,6 +231,7 @@ public final class NetheryXGameTests {
             int boss = 0;
             int seals = 0;
             int chests = 0;
+            List<BlockPos> containers = new java.util.ArrayList<>();
             AABB area = new AABB(center.getMinBlockX() - radius * 16, nether.getMinBuildHeight(), center.getMinBlockZ() - radius * 16,
                     center.getMaxBlockX() + radius * 16, nether.getMaxBuildHeight(), center.getMaxBlockZ() + radius * 16);
             for (int dx = -radius; dx <= radius; dx++) {
@@ -239,6 +240,9 @@ public final class NetheryXGameTests {
                     for (BlockEntity entity : chunk.getBlockEntities().values()) {
                         if (entity instanceof ChestBlockEntity) {
                             chests++;
+                        }
+                        if (entity instanceof net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity) {
+                            containers.add(entity.getBlockPos());
                         }
                     }
                     for (int y = 0; y < 128; y++) {
@@ -256,9 +260,13 @@ public final class NetheryXGameTests {
                     nether.setChunkForced(center.x + dx, center.z + dz, false);
                 }
             }
-            // La vegetation naturelle peut se detacher quand le terrain est retouche : seul le reste trahit un bug
-            List<ItemEntity> items = nether.getEntitiesOfClass(ItemEntity.class, area,
-                    item -> !(item.getItem().getItem() instanceof BlockItem block && block.getBlock() instanceof BushBlock));
+            // La decoration naturelle (plantes, amas de cristaux) peut se detacher quand le terrain est retouche. Ce qui trahit
+            // un bug : un objet tombe pres d'un conteneur (butin repandu), ou un bloc de structure (lanterne, tapis...).
+            List<ItemEntity> items = nether.getEntitiesOfClass(ItemEntity.class, area, item -> {
+                boolean nearContainer = containers.stream().anyMatch(pos -> pos.closerToCenterThan(item.position(), 3.5D));
+                boolean structureBlock = item.getItem().getItem() instanceof BlockItem block && !(block.getBlock() instanceof BushBlock);
+                return nearContainer || structureBlock;
+            });
             int dropped = items.size();
             items.forEach(item -> NetheryX.LOGGER.info("DONJON objet au sol : {} x{} en {}",
                     item.getItem().getItem(), item.getItem().getCount(), item.blockPosition()));
@@ -332,6 +340,27 @@ public final class NetheryXGameTests {
             }
             helper.succeed();
         });
+    }
+
+    /** L'Atlas note les cases autour du joueur et la structure traversee, et son paquet se relit a l'identique. */
+    @GameTest(template = AREA, batch = "atlas")
+    public static void atlasRecordsExploration(GameTestHelper helper) {
+        ServerLevel nether = helper.getLevel().getServer().getLevel(Level.NETHER);
+        FakePlayer player = new FakePlayer(nether, new GameProfile(UUID.randomUUID(), "netheryx-atlas"));
+        player.moveTo(100.5D, 60.0D, 100.5D);
+        com.netheryx.world.NetherAtlasData data = com.netheryx.world.NetherAtlasData.get(nether);
+        data.record(nether, player);
+        if (data.cellsOf(player.getUUID()).isEmpty()) {
+            helper.fail("Aucune case notee");
+        }
+        var packet = com.netheryx.item.NetherAtlasItem.packetFor(nether, player);
+        var buffer = new net.minecraft.network.FriendlyByteBuf(io.netty.buffer.Unpooled.buffer());
+        packet.encode(buffer);
+        var copy = new com.netheryx.network.OpenAtlasPacket(buffer);
+        if (copy.cellCount() != data.cellsOf(player.getUUID()).size()) {
+            helper.fail("Le paquet de l'Atlas perd des cases");
+        }
+        helper.succeed();
     }
 
     /** Galerie (seulement avec NETHERYX_DUMP=1) : copie un morceau de chaque biome genere, pour tools/render_preview.py. */

@@ -73,6 +73,7 @@ et les objets en onyx ne brûlent pas dans la lave. Au-delà : l'**équipement a
   facultatives cachent de beaux trésors. Le **coffre-fort**, aux murs indestructibles camouflés en briques, ne s'ouvre qu'à la mort
   du boss. Le plan et les salles changent d'un donjon à l'autre.
 - **Petites trouvailles** partout dans le Nether : deux ou trois ennemis, un coffre.
+- **Atlas du Nether** : la carte de vos explorations, biomes et structures compris.
 - Petites structures : Forge de basalte, Nids de wyverne, Caravane nomade, Campement de voyageur, Jardin du Nether,
   Cache secrète. Toutes se retrouvent avec la **Boussole des âmes**.
 - Sous la voûte : **nids de spectres** et **cages d'explorateurs** suspendus au-dessus des grands vides.

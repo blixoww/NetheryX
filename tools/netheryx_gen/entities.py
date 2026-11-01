@@ -512,7 +512,7 @@ def soul_moth():
     })
 
 
-def withered_knight(name="withered_knight", armor=("#4a4a4e", "#5a5a5e", "#6a6a6e"), trim="#8a8a80"):
+def withered_knight(name="withered_knight", armor=("#4a4a4e", "#5a5a5e", "#6a6a6e"), trim="#8a8a80", extra=None, extra_materials=None, animated=True):
     m = Model(name, 128, 64, (2, 3))
     m.bone("root", [0, 0, 0])
     m.bone("body", [0, 24, 0], "root", cubes=[
@@ -530,12 +530,18 @@ def withered_knight(name="withered_knight", armor=("#4a4a4e", "#5a5a5e", "#6a6a6
         Cube([-5.5, 20, -8], [1, 2, 9], "blade"), Cube([-6, 19.5, 0], [2, 3, 1], "armor"), Cube([-5.5, 20.5, 1], [1, 1, 3], "bone")])
     m.bone("leg_left", [2, 14, 0], "root", cubes=[Cube([1, 0, -1], [2, 14, 2], "bone")])
     m.bone("leg_right", [-2, 14, 0], "root", cubes=[Cube([-3, 0, -1], [2, 14, 2], "bone")])
-    save_model(m, {
+    if extra:
+        extra(m)
+    materials = {
         "bone": {"colors": ["#1e1e1e", "#2a2a2a", "#333333", "#3d3d3d"], "pattern": "fur"},
         "skull": {"colors": ["#1e1e1e", "#262626", "#303030", "#3a3a3a"]},
         "armor": {"colors": list(armor), "pattern": "plates", "trim": trim},
         "blade": {"colors": ["#1c1c20", "#2a2a30", "#7fe8ff"], "speckle": ("#7fe8ff", 0.1), "speckle_glow": True},
-    })
+    }
+    materials.update(extra_materials or {})
+    save_model(m, materials)
+    if not animated:
+        return
     save_animations(name, {
         "idle": anim(3.0, {"body": {"position": wave(3.0, 0.3, axis=1)},
                            "arm_left": {"rotation": wave(3.0, 4, axis=0)},
@@ -703,7 +709,83 @@ def cinder_hen():
     })
 
 
+def captain_parts(m):
+    """Capitaine : grand cimier, epaulieres larges, cape, plastron renforce."""
+    m.bone("crest", [0, 43, 0], "head", cubes=[Cube([-1, 43, -4], [2, 5, 8], "plume"), Cube([-0.5, 48, -2], [1, 2, 5], "plume")])
+    m.bone("pauldron_left", [6, 33, 0], "arm_left", cubes=[Cube([3, 32, -3], [5, 3, 6], "armor"), Cube([7, 33, -2], [2, 1, 4], "plume")])
+    m.bone("pauldron_right", [-6, 33, 0], "arm_right", cubes=[Cube([-8, 32, -3], [5, 3, 6], "armor"), Cube([-9, 33, -2], [2, 1, 4], "plume")])
+    m.bone("cape", [0, 33, 2], "body", rotation=[8, 0, 0], cubes=[Cube([-5, 14, 2], [10, 19, 1], "cape")])
+    m.bone("breastplate", [0, 28, -2], "body", cubes=[Cube([-4.5, 24, -3], [9, 9, 1], "armor")])
+
+
+def warden_parts(m):
+    """Gardien des runes : cornes, runes lumineuses sur le torse et les bras, grande lame runique."""
+    m.bone("horns", [0, 41, 0], "head", cubes=[Cube([-6, 41, -1], [2, 2, 2], "armor"), Cube([4, 41, -1], [2, 2, 2], "armor"),
+                                               Cube([-7, 43, -1], [2, 3, 2], "rune"), Cube([5, 43, -1], [2, 3, 2], "rune")])
+    m.bone("runes", [0, 28, -2], "body", cubes=[Cube([-3, 25, -3], [6, 8, 1], "rune")])
+    m.bone("rune_arm_left", [5, 26, 0], "arm_left", cubes=[Cube([3.5, 22, -2], [3, 3, 4], "rune")])
+    m.bone("rune_arm_right", [-5, 26, 0], "arm_right", cubes=[Cube([-6.5, 22, -2], [3, 3, 4], "rune")])
+    m.bone("rune_blade", [-5, 21, -8], "sword", cubes=[Cube([-5.5, 20, -15], [1, 2, 7], "rune")])
+    m.bone("skirt", [0, 22, 0], "body", cubes=[Cube([-5, 15, -3], [10, 7, 6], "armor")])
+
+
+def rime_lurker():
+    m = Model("rime_lurker", 128, 64, (2, 3))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 18, 0], "root", cubes=[Cube([-6, 18, -4], [12, 14, 8], "ice"), Cube([-3, 32, -5], [2, 4, 2], "crystal"), Cube([2, 32, -1], [2, 6, 2], "crystal"),
+                                              Cube([-5, 32, 1], [2, 5, 2], "crystal")])
+    m.bone("head", [0, 32, -2], "body", cubes=[Cube([-3.5, 30, -9], [7, 7, 7], "ice", detail=eyes("#7fe8ff", y_frac=0.35, spacing=0.25))])
+    m.bone("arm_left", [7, 30, 0], "body", cubes=[Cube([6, 12, -3], [5, 19, 6], "ice"), Cube([8, 28, -1], [2, 6, 2], "crystal"), Cube([6.5, 9, -2.5], [4, 3, 5], "crystal")])
+    m.bone("arm_right", [-7, 30, 0], "body", cubes=[Cube([-11, 12, -3], [5, 19, 6], "ice"), Cube([-10, 28, -1], [2, 6, 2], "crystal"), Cube([-10.5, 9, -2.5], [4, 3, 5], "crystal")])
+    m.bone("leg_left", [3, 18, 0], "root", cubes=[Cube([1, 0, -3], [5, 18, 6], "rock")])
+    m.bone("leg_right", [-3, 18, 0], "root", cubes=[Cube([-6, 0, -3], [5, 18, 6], "rock")])
+    save_model(m, {
+        "ice": {"colors": ["#3a6a90", "#4a7ca8", "#6aa0c8", "#8ac0dc", "#b0dcec"], "speckle": ("#e8fcff", 0.05), "speckle_glow": True},
+        "crystal": {"colors": ["#7fd0f8", "#a8e4fc", "#c8f0ff", "#ffffff"], "glow": True},
+        "rock": {"colors": ["#2c4c66", "#365a78", "#40688a", "#2a4258"], "pattern": "fur"},
+    })
+    save_animations("rime_lurker", {
+        "idle": anim(3.0, {"body": {"position": wave(3.0, 0.3, axis=1)}, "arm_left": {"rotation": wave(3.0, 3, axis=0)}, "arm_right": {"rotation": wave(3.0, 3, math.pi, axis=0)}}),
+        "walk": anim(1.6, {"leg_left": {"rotation": wave(1.6, 22)}, "leg_right": {"rotation": wave(1.6, 22, math.pi)}, "arm_left": {"rotation": wave(1.6, 18, math.pi)},
+                           "arm_right": {"rotation": wave(1.6, 18)}, "body": {"rotation": wave(1.6, 3, axis=2)}}),
+        "attack": anim(0.7, {"arm_left": {"rotation": keys((0, [0, 0, 0]), (0.25, [-130, 0, 0]), (0.45, [-10, 0, 0]), (0.7, [0, 0, 0]))},
+                             "arm_right": {"rotation": keys((0, [0, 0, 0]), (0.25, [-130, 0, 0]), (0.45, [-10, 0, 0]), (0.7, [0, 0, 0]))}}, loop=False),
+    })
+
+
+def quartz_crawler():
+    m = Model("quartz_crawler", 64, 64, (2, 2))
+    m.bone("root", [0, 0, 0])
+    m.bone("body", [0, 7, 0], "root", cubes=[Cube([-4, 4, -5], [8, 5, 10], "shell"), Cube([-1, 9, -3], [2, 4, 2], "crystal"), Cube([1, 9, 1], [2, 3, 2], "crystal"),
+                                             Cube([-3, 9, 0], [2, 5, 2], "crystal")])
+    m.bone("head", [0, 6, -5], "body", cubes=[Cube([-3, 4, -9], [6, 4, 4], "shell", detail=eyes("#ff4a7a", y_frac=0.3, spacing=0.2))])
+    for side, sx in (("left", 1), ("right", -1)):
+        for i, z in enumerate((-4, -1, 2, 4)):
+            x0 = 4 if sx > 0 else -11
+            m.bone(f"leg_{side}_{i}", [4 * sx, 6, z], "root", rotation=[0, 0, 20 * sx * -1], cubes=[Cube([x0, 5, z - 0.5], [7, 1, 1], "leg")])
+    save_model(m, {
+        "shell": {"colors": ["#b8aca0", "#d0c6ba", "#e8ddd0", "#f4ece0"], "pattern": "plates"},
+        "crystal": {"colors": ["#f4ece0", "#ffffff", "#ffd8e0"], "glow": True},
+        "leg": {"colors": ["#6a5e58", "#8a7c78", "#a09088"]},
+    })
+    legs = {}
+    for side, offset in (("left", 0.0), ("right", math.pi)):
+        for i in range(4):
+            legs[f"leg_{side}_{i}"] = {"rotation": wave(0.5, 20, offset + i * math.pi / 2, axis=1)}
+    save_animations("quartz_crawler", {
+        "idle": anim(2.0, {"body": {"position": wave(2.0, 0.2, axis=1)}}),
+        "walk": anim(0.5, legs),
+        "attack": anim(0.4, {"head": {"rotation": keys((0, [0, 0, 0]), (0.15, [-30, 0, 0]), (0.3, [20, 0, 0]), (0.4, [0, 0, 0]))}}, loop=False),
+    })
+
+
 def generate():
+    withered_knight("withered_knight_captain", ("#2a2a34", "#3c3c4c", "#50506a"), "#d8b050", captain_parts,
+                    {"plume": {"colors": ["#8a1a1a", "#b02020", "#d03030"]}, "cape": {"colors": ["#4a0e12", "#6a1418", "#801c20"], "pattern": "fur"}}, animated=False)
+    withered_knight("rune_warden", ("#1a1426", "#2a2038", "#3c2e50"), "#b88cff", warden_parts,
+                    {"rune": {"colors": ["#6a3cc8", "#9a70e8", "#c8a8ff", "#efe4ff"], "glow": True}}, animated=False)
+    rime_lurker()
+    quartz_crawler()
     magmafish()
     piglin_merchant()
     mimic()

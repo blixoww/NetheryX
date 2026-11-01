@@ -1,0 +1,8 @@
+{
+  "feature": "netheryx:ashen_wastes_landmass",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

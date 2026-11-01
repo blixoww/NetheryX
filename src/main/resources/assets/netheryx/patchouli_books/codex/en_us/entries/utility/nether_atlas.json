@@ -1,0 +1,16 @@
+{
+  "name": "Nether Atlas",
+  "icon": "netheryx:nether_atlas",
+  "category": "netheryx:utility",
+  "sortnum": 33,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "A $(l)map$() of everything you have explored in the Nether: biomes in their colors, and a marker for each structure you have walked through. Hover to read names, drag to move, scroll to zoom. It remembers your journeys even from before you made it."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "netheryx:nether_atlas"
+    }
+  ]
+}

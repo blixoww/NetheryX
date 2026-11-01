@@ -1,0 +1,8 @@
+{
+  "feature": "netheryx:wartvine_tangle_landmass",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

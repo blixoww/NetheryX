@@ -89,7 +89,13 @@ public final class ClientModEvents {
         event.registerEntityRenderer(ModEntities.SOUL_MOTH.get(),
                 context -> new NetheryXGeoRenderer<SoulMoth>(context, "soul_moth", 0.2F, 1.0F).glowing());
         event.registerEntityRenderer(ModEntities.WITHERED_KNIGHT.get(),
-                context -> new NetheryXGeoRenderer<WitheredKnight>(context, "withered_knight", 0.5F, 1.0F).glowing());
+                context -> new NetheryXGeoRenderer<WitheredKnight>(context, new com.netheryx.client.renderer.KnightModel<>("withered_knight"), 0.5F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.RUNE_WARDEN.get(),
+                context -> new NetheryXGeoRenderer<com.netheryx.entity.RuneWarden>(context, new com.netheryx.client.renderer.KnightModel<>("rune_warden"), 0.6F, 1.1F).glowing());
+        event.registerEntityRenderer(ModEntities.RIME_LURKER.get(),
+                context -> new NetheryXGeoRenderer<com.netheryx.entity.RimeLurker>(context, "rime_lurker", 0.7F, 1.0F).glowing());
+        event.registerEntityRenderer(ModEntities.QUARTZ_CRAWLER.get(),
+                context -> new NetheryXGeoRenderer<com.netheryx.entity.QuartzCrawler>(context, "quartz_crawler", 0.5F, 1.0F).glowing());
         event.registerEntityRenderer(ModEntities.BASALT_BEETLE.get(),
                 context -> new NetheryXGeoRenderer<BasaltBeetle>(context, "basalt_beetle", 0.7F, 1.0F).glowing());
         event.registerEntityRenderer(ModEntities.INFERNAL_WARLOCK.get(),

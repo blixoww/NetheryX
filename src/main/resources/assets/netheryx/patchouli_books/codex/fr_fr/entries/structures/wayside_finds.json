@@ -2,7 +2,7 @@
   "name": "Petites trouvailles",
   "icon": "minecraft:barrel",
   "category": "netheryx:structures",
-  "sortnum": 30,
+  "sortnum": 34,
   "pages": [
     {
       "type": "patchouli:text",

@@ -1,0 +1,12 @@
+{
+  "feature": "netheryx:flora_ember_meadow_ember_bloom",
+  "placement": [
+    {
+      "type": "minecraft:count_on_every_layer",
+      "count": 3
+    },
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

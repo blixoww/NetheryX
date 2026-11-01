@@ -1,0 +1,15 @@
+{
+  "name": "Rune Warden",
+  "icon": "netheryx:rune_warden_spawn_egg",
+  "category": "netheryx:creatures",
+  "sortnum": 31,
+  "pages": [
+    {
+      "type": "patchouli:entity",
+      "entity": "netheryx:rune_warden",
+      "scale": 0.6,
+      "offset": 0.0,
+      "text": "An elite knight holding the chamber at the end of each dungeon wing. Tough and hard-hitting: beat it to reach the wing's treasure."
+    }
+  ]
+}
