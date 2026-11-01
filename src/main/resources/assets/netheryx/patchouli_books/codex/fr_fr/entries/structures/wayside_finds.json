@@ -1,0 +1,12 @@
+{
+  "name": "Petites trouvailles",
+  "icon": "minecraft:barrel",
+  "category": "netheryx:structures",
+  "sortnum": 30,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Partout dans le Nether, de petits sites cachent un $(l)coffre$() gardé par deux ou trois ennemis : avant-postes calcinés, chariots renversés, cercles d'os, tombes isolées, recoins de cristal, trésors à mimiques, forges de lave et évents de soufre. Un combat rapide, une belle récompense : gardez l'œil ouvert en explorant !"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "type": "netheryx:crystal_burst",
+  "config": {
+    "main": {
+      "Name": "netheryx:molten_glass"
+    },
+    "accent": {
+      "Name": "netheryx:molten_crystal",
+      "Properties": {
+        "facing": "up",
+        "waterlogged": "false"
+      }
+    },
+    "size": 3
+  }
+}

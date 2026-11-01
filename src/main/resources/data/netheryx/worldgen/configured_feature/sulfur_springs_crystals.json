@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:crystal_burst",
+  "config": {
+    "main": {
+      "Name": "netheryx:sulfur_block"
+    },
+    "accent": {
+      "Name": "minecraft:ochre_froglight"
+    },
+    "size": 3
+  }
+}

@@ -29,6 +29,7 @@ import com.netheryx.entity.OnyxSentinel;
 import com.netheryx.registry.ModEntities;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Mob;
+import com.netheryx.entity.PassiveSpawns;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -82,7 +83,7 @@ public final class ModBusEvents {
         event.register(ModEntities.ONYX_SENTINEL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkAnyLightMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.MAGMA_CRAB.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                MagmaCrab::checkCrabSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+                PassiveSpawns::check, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.SOUL_MOTH.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.WITHERED_KNIGHT.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
@@ -90,9 +91,9 @@ public final class ModBusEvents {
         event.register(ModEntities.BASALT_BEETLE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 BasaltBeetle::checkBeetleSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.EMBER_COW.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                EmberCow::checkNetherAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+                PassiveSpawns::check, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.CINDER_HEN.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                EmberCow::checkNetherAnimalSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
+                PassiveSpawns::check, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.FIRE_GHAST.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 (type, level, reason, pos, random) -> level.getDifficulty() != Difficulty.PEACEFUL && random.nextInt(2) == 0
                         && Mob.checkMobSpawnRules(type, level, reason, pos, random),
@@ -105,10 +106,10 @@ public final class ModBusEvents {
         event.register(ModEntities.BASALT_BURROWER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkAnyLightMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.LANTERN_BEARER.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (type, level, reason, pos, random) -> level.getBlockState(pos.below()).isSolid(),
+                PassiveSpawns::check,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.CINDER_LIZARD.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (type, level, reason, pos, random) -> level.getBlockState(pos.below()).isSolid(),
+                PassiveSpawns::check,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.INFERNAL_WARLOCK.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Monster::checkAnyLightMonsterSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
@@ -122,10 +123,10 @@ public final class ModBusEvents {
         event.register(ModEntities.SOUL_FIREFLY.get(), SpawnPlacements.Type.NO_RESTRICTIONS, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 Mob::checkMobSpawnRules, SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.BLAZE_PIG.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (type, level, reason, pos, random) -> level.getBlockState(pos.below()).isSolid(),
+                PassiveSpawns::check,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
         event.register(ModEntities.CRYSTAL_SNAIL.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
-                (type, level, reason, pos, random) -> level.getBlockState(pos.below()).isSolid(),
+                PassiveSpawns::check,
                 SpawnPlacementRegisterEvent.Operation.REPLACE);
     }
 }

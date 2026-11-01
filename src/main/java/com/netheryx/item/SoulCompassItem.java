@@ -109,26 +109,34 @@ public class SoulCompassItem extends Item {
     }
 
     /**
-     * Cree une boussole deja accordee sur la structure donnee la plus proche de {@code origin}
-     * (vendue par le marchand piglin). Renvoie une pile vide si la structure est introuvable.
+     * Boussole vendue par le marchand piglin, reglee sur une structure : elle la localise dans les mains du joueur, et non
+     * a la creation de l'offre. Minecraft cree les offres d'un marchand quand il le sauvegarde, parfois pendant le
+     * dechargement de sa zone : y chercher une structure charge des chunks en plein dechargement et fait planter le jeu.
      */
-    public static ItemStack attuned(ServerLevel level, BlockPos origin, ResourceLocation structureId) {
+    public static ItemStack tunedTo(ResourceLocation structureId) {
+        ItemStack stack = new ItemStack(com.netheryx.registry.ModItems.SOUL_COMPASS.get());
+        stack.getOrCreateTag().putString(TAG_STRUCTURE, structureId.toString());
+        return stack;
+    }
+
+    /** Premiere prise en main d'une boussole vendue : on cherche enfin sa structure. */
+    private static void locatePending(ItemStack stack, ServerLevel level, BlockPos origin) {
+        CompoundTag tag = stack.getTag();
+        if (tag == null || !tag.contains(TAG_STRUCTURE) || tag.contains(TAG_TARGET)) {
+            return;
+        }
         Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
-        Optional<Holder.Reference<Structure>> structure = registry.getHolder(ResourceKey.create(Registries.STRUCTURE, structureId));
+        ResourceLocation id = ResourceLocation.tryParse(tag.getString(TAG_STRUCTURE));
+        Optional<Holder.Reference<Structure>> structure = id == null ? Optional.empty() : registry.getHolder(ResourceKey.create(Registries.STRUCTURE, id));
         if (structure.isEmpty()) {
-            return ItemStack.EMPTY;
+            return;
         }
         Pair<BlockPos, Holder<Structure>> found = level.getChunkSource().getGenerator().findNearestMapStructure(level,
-                HolderSet.direct(structure.get()), origin, 50, false);
-        if (found == null) {
-            return ItemStack.EMPTY;
+                HolderSet.direct(structure.get()), origin, NetheryXConfig.SOUL_COMPASS_SEARCH_RADIUS.get(), false);
+        if (found != null) {
+            tag.put(TAG_TARGET, NbtUtils.writeBlockPos(found.getFirst()));
+            tag.putString(TAG_DIMENSION, level.dimension().location().toString());
         }
-        ItemStack stack = new ItemStack(com.netheryx.registry.ModItems.SOUL_COMPASS.get());
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putString(TAG_STRUCTURE, structureId.toString());
-        tag.put(TAG_TARGET, NbtUtils.writeBlockPos(found.getFirst()));
-        tag.putString(TAG_DIMENSION, level.dimension().location().toString());
-        return stack;
     }
 
     private static ItemStack findCompass(Player player) {
@@ -145,6 +153,9 @@ public class SoulCompassItem extends Item {
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
         if (level.isClientSide || !selected || !(entity instanceof Player player) || level.getGameTime() % 10 != 0) {
             return;
+        }
+        if (level instanceof ServerLevel server) {
+            locatePending(stack, server, player.blockPosition());
         }
         getTarget(stack, level).ifPresent(target -> player.displayClientMessage(directionMessage(player, target), true));
     }

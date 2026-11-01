@@ -1,0 +1,18 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "minecraft:crimson_forest",
+  "spawners": [
+    {
+      "type": "netheryx:ember_cow",
+      "weight": 14,
+      "minCount": 2,
+      "maxCount": 3
+    },
+    {
+      "type": "netheryx:cinder_hen",
+      "weight": 12,
+      "minCount": 2,
+      "maxCount": 3
+    }
+  ]
+}

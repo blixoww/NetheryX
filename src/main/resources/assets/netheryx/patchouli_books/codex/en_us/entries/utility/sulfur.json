@@ -2,7 +2,7 @@
   "name": "Sulfur",
   "icon": "netheryx:sulfur",
   "category": "netheryx:utility",
-  "sortnum": 47,
+  "sortnum": 48,
   "pages": [
     {
       "type": "patchouli:spotlight",

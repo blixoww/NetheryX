@@ -477,14 +477,14 @@ Le *Cristal de wyverne* range votre wyverne pour l'emporter partout : clic droit
 
 **Donjons**
 
-Un donjon est un complexe **creusé sous terre** : seule son entrée se voit en surface, et des **ruines, restes et panneaux** le trahissent aux alentours. Descendez jusqu'à la **rotonde** : trois *Verrous runiques* barrent la route du boss.
+Un donjon est un complexe **creusé sous terre** : seule son entrée se voit en surface, et des **ruines, restes et panneaux** le trahissent aux alentours.
 
-Explorez les **trois ailes**, dans l'ordre qui vous plaît. Chacune finit par une chambre tenue par un **Gardien des runes**, où un coffre renferme une *Clef runique*. Utilisez chaque clef sur un verrou.
+Depuis la **rotonde** centrale, le grand escalier descend vers l'**arène du boss**. Trois **ailes** facultatives s'y greffent : chacune finit par une chambre tenue par un **Gardien des runes**, et un beau trésor.
 
 
-Quand les trois verrous brillent, les *Sceaux du gardien* de l'escalier se dissolvent et la descente vers l'**arène** s'ouvre. Le boss ne se contourne pas en creusant : près de lui, la **Fatigue de minage** arrête votre pioche.
+Le vrai trésor est le **coffre-fort** derrière l'arène. Ses murs ressemblent au reste du donjon, mais ce sont des blocs de *Maçonnerie scellée* : rien ne peut les casser, sur aucune des six faces. Sa porte de *Sceaux du gardien* ne s'ouvre qu'à la mort du boss, et la maçonnerie redevient alors de la brique ordinaire.
 
-Le **coffre-fort** derrière l'arène, en *Maçonnerie scellée* indestructible, ne s'ouvre qu'à la mort du boss. Le plan et les salles changent d'un donjon à l'autre.
+Le plan et les salles changent d'un donjon à l'autre.
 
 
 **Combats**
@@ -494,7 +494,12 @@ Chaque attaque de boss est **annoncée** : un cercle qui se remplit au sol (sort
 À chaque phase, le boss s'arrête, invulnérable, puis libère une onde : reculez. Plus il y a de joueurs, plus il a de vie.
 
 
-- **Sceau du gardien** : Indestructible. Les sceaux de l'escalier se dissolvent quand les trois Verrous runiques brillent ; ceux du coffre-fort à la mort du boss. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.
+- **Sceau du gardien** : Indestructible. Se dissout à la mort du boss du donjon. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.
+
+### Petites trouvailles
+
+Partout dans le Nether, de petits sites cachent un **coffre** gardé par deux ou trois ennemis : avant-postes calcinés, chariots renversés, cercles d'os, tombes isolées, recoins de cristal, trésors à mimiques, forges de lave et évents de soufre. Un combat rapide, une belle récompense : gardez l'œil ouvert en explorant !
+
 
 ### Citadelle d'onyx
 
@@ -537,7 +542,7 @@ Deux tentes, un enclos à lézards et un feu de camp : les Caravanes nomades abr
 
 **Coffres-forts**
 
-Chaque coffre-fort de donjon est une petite salle dont les six faces sont en *Maçonnerie scellée* : des briques marquées d'une rune discrète, indestructibles et insensibles aux explosions. Impossible de creuser autour ! À la mort du boss, les sceaux de la porte disparaissent et la maçonnerie redevient de la brique ordinaire.
+Chaque coffre-fort de donjon est une petite salle dont les six faces sont en *Maçonnerie scellée* : elles ressemblent aux briques du donjon, mais sont indestructibles et insensibles aux explosions. Impossible de creuser autour ! À la mort du boss, les sceaux de la porte disparaissent et la maçonnerie redevient de la brique ordinaire.
 
 Les donjons cachent aussi des **Mimiques** parmi leurs coffres.
 
@@ -1158,8 +1163,6 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi : `DCD` / `·P·` / `PPP` (`D` = Poussière d'âme, `C` = Obsidienne pleureuse, `P` = Pierre noire polie) → **Autel des âmes**
 - **Lanterne de garde** (`netheryx:ward_lantern`)
   - Établi : `OEO` / `ELE` / `OEO` (`O` = Éclat d'onyx, `E` = Essence de spectre, `L` = Lanterne des âmes) → **Lanterne de garde**
-- **Verrou runique** (`netheryx:rune_lock`)
-  - Se trouve dans le monde (génération, structures) ou se récupère en le minant.
 - **Fougere infernale** (`netheryx:hellfern`)
   - Se trouve dans le monde (génération, structures) ou se récupère en le minant.
 - **Herbe ardente** (`netheryx:blazing_grass`)
@@ -1269,7 +1272,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - **Jambières de braise** (`netheryx:ember_leggings`)
   - Établi : `###` / `#·#` / `#·#` (`#` = Carapace de magma) → **Jambières de braise**
 - **Baies de feu** (`netheryx:fire_berries`)
-  - Trouvé dans : coffres : nether garden
+  - Trouvé dans : coffres : nether garden, coffres : wayside cache
 - **Voile ignifuge** (`netheryx:fire_veil`)
   - Établi : `·C·` / `CMC` / `·C·` (`C` = Étoffe spectrale, `M` = Crème de magma) → **Voile ignifuge**
 - **Œuf de braise au plat** (`netheryx:fried_ember_egg`)
@@ -1279,7 +1282,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Trouvé dans : coffres : nether garden
 - **Élixir de lueur** (`netheryx:glimmer_elixir`)
   - Établi (sans forme) : Fiole + Poussière d'âme + Poudre lumineuse + Baies de feu → **Élixir de lueur**
-  - Trouvé dans : coffres : infernal sanctum, coffres : rune key chamber
+  - Trouvé dans : coffres : infernal sanctum, coffres : wayside cache, coffres : wing treasure
 - **Ragoût de luminelles** (`netheryx:glowcap_stew`)
   - Établi (sans forme) : Bol + Luminelle + Luminelle + Tubercule d'âme → **Ragoût de luminelles**
 - **Poisson de magme grillé** (`netheryx:grilled_magmafish`)
@@ -1296,7 +1299,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - **Ragoût infernal** (`netheryx:infernal_stew`)
   - Établi (sans forme) : Bol + Piment de blaze + Tubercule d'âme cuit + Crimson fungus + Warped fungus → **Ragoût infernal**
 - **Carapace de magma** (`netheryx:magma_shell`)
-  - Trouvé dans : butin de Crabe de magma, butin de Golem de basalte, butin de Lézard de cendre, coffres : basalt forge, coffres : wyvern nest
+  - Trouvé dans : butin de Crabe de magma, butin de Golem de basalte, butin de Lézard de cendre, coffres : basalt forge, coffres : wayside cache, coffres : wyvern nest
 - **Semelles de magma** (`netheryx:magma_treads`)
   - Établi : `M·M` / `M·M` (`M` = Carapace de magma) → **Semelles de magma**
   - Trouvé dans : coffres : infernal sanctum, coffres : infernal sanctum vault, coffres : onyx citadel
@@ -1310,7 +1313,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Trouvé dans : butin de Golem de basalte, coffres : basalt forge
 - **Lanterne du Nether** (`netheryx:nether_lantern`)
   - Établi : `·O·` / `MLM` / `·M·` (`O` = Onyx, `M` = Éclat de verre en fusion, `L` = Lanterne des âmes) → **Lanterne du Nether**
-  - Trouvé dans : coffres : basalt forge
+  - Trouvé dans : coffres : basalt forge, coffres : wayside cache
 - **Bateau d'obsidienne** (`netheryx:obsidian_boat`)
   - Établi : `O·O` / `OOO` (`O` = Obsidienne) → **Bateau d'obsidienne**
 - **Seau d'obsidienne** (`netheryx:obsidian_bucket`)
@@ -1321,7 +1324,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi (sans forme) : Bloc d'onyx → **Onyx** ×9
   - Établi : `###` / `###` / `###` (`#` = Éclat d'onyx) → **Onyx**
   - Four : Minerai d'onyx → **Onyx**
-  - Trouvé dans : butin de Champion flétri, butin de Cœur du Nether, butin de Golem de basalte, butin de Sentinelle d'onyx, butin de Sorcier infernal, coffres : basalt forge, coffres : infernal sanctum, coffres : infernal sanctum vault, coffres : mimic, coffres : onyx citadel, coffres : onyx citadel vault, coffres : rune key chamber, coffres : withered catacombs, coffres : withered catacombs vault
+  - Trouvé dans : butin de Champion flétri, butin de Cœur du Nether, butin de Golem de basalte, butin de Sentinelle d'onyx, butin de Sorcier infernal, coffres : basalt forge, coffres : infernal sanctum, coffres : infernal sanctum vault, coffres : mimic, coffres : onyx citadel, coffres : onyx citadel vault, coffres : wayside cache, coffres : wing treasure, coffres : withered catacombs, coffres : withered catacombs vault
 - **Pomme en onyx** (`netheryx:onyx_apple`)
   - Établi : `SSS` / `SAS` / `SSS` (`S` = Éclat d'onyx, `A` = Pomme dorée) → **Pomme en onyx**
   - Trouvé dans : butin de Cœur du Nether
@@ -1349,21 +1352,19 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Établi : `OOO` / `O·O` / `O·O` (`O` = Onyx) → **Jambières en onyx**
 - **Pioche en onyx** (`netheryx:onyx_pickaxe`)
   - Établi : `OOO` / `·R·` / `·R·` (`O` = Onyx, `R` = Bâton de blaze) → **Pioche en onyx**
-  - Trouvé dans : coffres : infernal sanctum vault, coffres : onyx citadel vault, coffres : rune key chamber, coffres : withered catacombs vault
+  - Trouvé dans : coffres : infernal sanctum vault, coffres : onyx citadel vault, coffres : wayside cache, coffres : wing treasure, coffres : withered catacombs vault
 - **Éclat d'onyx** (`netheryx:onyx_shard`)
-  - Trouvé dans : butin de Cube d'onyx, butin de Escargot de cristal, butin de Fouisseur de basalte, butin de Ghast de feu, butin de Sentinelle d'onyx, butin de Spectre de cendre, coffres : mimic, coffres : nether garden, coffres : nomad caravan, coffres : onyx citadel, coffres : rune key chamber, coffres : small treasure, coffres : withered catacombs, coffres : wyvern nest, pêche à la nasse
+  - Trouvé dans : butin de Cube d'onyx, butin de Escargot de cristal, butin de Fouisseur de basalte, butin de Ghast de feu, butin de Sentinelle d'onyx, butin de Spectre de cendre, coffres : mimic, coffres : nether garden, coffres : nomad caravan, coffres : onyx citadel, coffres : small treasure, coffres : wayside cache, coffres : wing treasure, coffres : withered catacombs, coffres : wyvern nest, pêche à la nasse
 - **Pelle en onyx** (`netheryx:onyx_shovel`)
   - Établi : `O` / `R` / `R` (`O` = Onyx, `R` = Bâton de blaze) → **Pelle en onyx**
 - **Épée en onyx** (`netheryx:onyx_sword`)
   - Établi : `O` / `O` / `R` (`O` = Onyx, `R` = Bâton de blaze) → **Épée en onyx**
-  - Trouvé dans : coffres : infernal sanctum, coffres : infernal sanctum vault, coffres : onyx citadel, coffres : onyx citadel vault, coffres : withered catacombs vault
+  - Trouvé dans : coffres : infernal sanctum, coffres : infernal sanctum vault, coffres : onyx citadel, coffres : onyx citadel vault, coffres : wayside cache, coffres : wing treasure, coffres : withered catacombs vault
 - **Pierre de rappel** (`netheryx:recall_stone`)
   - Établi : `·D·` / `DOD` / `·D·` (`D` = Poussière d'âme, `O` = Obsidienne pleureuse) → **Pierre de rappel**
-  - Trouvé dans : butin de Sorcier infernal, coffres : infernal sanctum, coffres : onyx citadel, coffres : small treasure
+  - Trouvé dans : butin de Sorcier infernal, coffres : infernal sanctum, coffres : onyx citadel, coffres : small treasure, coffres : wayside cache
 - **Éclat de givre** (`netheryx:rime_shard`)
   - Trouvé dans : coffres : nomad caravan
-- **Clef runique** (`netheryx:rune_key`)
-  - Trouvé dans : coffres : rune key chamber
 - **Cœur scellé** (`netheryx:sealed_heart`)
   - Établi : `OCO` / `SXW` / `OHO` (`O` = Bloc d'onyx, `C` = Obsidienne pleureuse, `S` = Œil de la Sentinelle, `X` = Couronne du Champion, `W` = Sceau du Sorcier, `H` = Pierre-cœur de basalte) → **Cœur scellé**
 - **Cœur de sentinelle** (`netheryx:sentinel_core`)
@@ -1375,7 +1376,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Trouvé dans : coffres : onyx citadel, coffres : small treasure
 - **Poussière d'âme** (`netheryx:soul_dust`)
   - Établi (sans forme) : Lys des âmes → **Poussière d'âme**
-  - Trouvé dans : butin de Luciole des âmes, butin de Phalène des âmes, butin de Porteur de lanterne, coffres : withered catacombs
+  - Trouvé dans : butin de Luciole des âmes, butin de Phalène des âmes, butin de Porteur de lanterne, coffres : wayside cache, coffres : withered catacombs
 - **Faux des âmes** (`netheryx:soul_scythe`)
   - Trouvé dans : coffres : onyx citadel vault, coffres : withered catacombs vault
 - **Tubercule d'âme** (`netheryx:soul_tuber`)
@@ -1386,7 +1387,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
   - Haut fourneau : Minerai de soufre → **Soufre**
   - Four : Minerai de soufre → **Soufre**
   - Établi (sans forme) : Bloc de soufre → **Soufre** ×9
-  - Trouvé dans : coffres : nomad caravan, coffres : rune key chamber, coffres : small treasure
+  - Trouvé dans : coffres : nomad caravan, coffres : small treasure, coffres : wayside cache, coffres : wing treasure
 - **Bombe de soufre** (`netheryx:sulfur_bomb`)
   - Établi (sans forme) : Soufre + Soufre + Poudre à canon + Ficelle → **Bombe de soufre** ×2
 - **Sceau du Sorcier** (`netheryx:warlock_sigil`)
@@ -1464,7 +1465,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - Butin : Cœur de sentinelle, Onyx, Éclat d'onyx, Œil de la Sentinelle
 
 ### Crabe de magma
-- Apparition : Récifs de quartz, Sources sulfureuses, tout le Nether
+- Apparition : Deltas de basalte, Désolation du Nether, Récifs de quartz, Sources sulfureuses
 - Butin : Carapace de magma, Patte de crabe crue
 
 ### Phalène des âmes
@@ -1488,11 +1489,11 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - Butin : Couronne du Champion, Crâne de wither squelette, Lame flétrie, Onyx, Os flétri
 
 ### Vache de braise
-- Apparition : Enchevêtrement de verrues, Jungle infernale, Prairie de braise, Sources sulfureuses, tout le Nether
+- Apparition : Enchevêtrement de verrues, Forêt carmin, Jungle infernale, Prairie de braise, Sources sulfureuses
 - Butin : Bœuf infernal cru, Crème de magma, Cuir
 
 ### Poule de cendre
-- Apparition : Enchevêtrement de verrues, Jungle infernale, Prairie de braise, tout le Nether
+- Apparition : Enchevêtrement de verrues, Forêt carmin, Jungle infernale, Prairie de braise
 - Butin : Feather, Poulet infernal cru, Œuf de braise
 
 ### Ghast de feu
@@ -1547,7 +1548,7 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - Butin : Poussière d'âme
 
 ### Cochon de blaze
-- Apparition : Bosquet de braise, Désolation du Nether, Jungle infernale, Lac de verre en fusion, Récifs de quartz, tout le Nether
+- Apparition : Bosquet de braise, Désolation du Nether, Jungle infernale, Lac de verre en fusion, Récifs de quartz
 - Butin : Côtelette de blaze crue, Poudre de blaze
 
 ### Escargot de cristal
@@ -1573,7 +1574,6 @@ Fichier `config/netheryx-common.toml` (créé au premier lancement).
 | `championMaxHealthV2` | `460.0D` | Points de vie du Champion fletri (boss des Catacombes fletries). (Nouvelle cle en 1.4.0.) |
 | `golemMaxHealth` | `260.0D` | Points de vie du Golem de basalte (mini-boss). |
 | `heartMaxHealth` | `1000.0D` | Points de vie du Coeur du Nether (boss final). |
-| `bossMiningFatigue` | `true` | Fatigue de minage autour d'un boss vivant : on n'entre pas dans son arene en creusant. |
 | `burrowerDigs` | `true` | Le Fouisseur de basalte creuse des tunnels (respecte aussi la regle mobGriefing). |
 | `netherEvents` | `true` | Active les evenements dynamiques du Nether. |
 | `minDelayMinutes` | `20` | Delai minimal (en minutes) entre deux evenements. |

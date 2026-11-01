@@ -1,0 +1,12 @@
+{
+  "name": "Wayside Finds",
+  "icon": "minecraft:barrel",
+  "category": "netheryx:structures",
+  "sortnum": 30,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "All over the Nether, small sites hide a $(l)chest$() watched by two or three enemies: scorched outposts, overturned carts, bone rings, lone tombs, crystal nooks, mimic troves, lava forges and sulfur vents. A quick fight, a nice reward: keep your eyes open while exploring!"
+    }
+  ]
+}

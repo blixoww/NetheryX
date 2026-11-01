@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:glow_cluster",
+  "config": {
+    "main": {
+      "Name": "netheryx:sulfur_rock"
+    },
+    "accent": {
+      "Name": "minecraft:ochre_froglight"
+    },
+    "size": 2
+  }
+}

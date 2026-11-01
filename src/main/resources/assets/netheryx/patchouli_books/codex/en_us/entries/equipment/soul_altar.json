@@ -2,7 +2,7 @@
   "name": "Soul Altar",
   "icon": "netheryx:soul_altar",
   "category": "netheryx:equipment",
-  "sortnum": 81,
+  "sortnum": 82,
   "pages": [
     {
       "type": "patchouli:text",

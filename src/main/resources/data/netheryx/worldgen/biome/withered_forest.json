@@ -3,7 +3,7 @@
   "temperature": 2.0,
   "downfall": 0.0,
   "effects": {
-    "fog_color": 2763310,
+    "fog_color": 3951688,
     "sky_color": 3344392,
     "water_color": 4159204,
     "water_fog_color": 329011,
@@ -11,7 +11,7 @@
       "options": {
         "type": "netheryx:wither_spore"
       },
-      "probability": 0.03
+      "probability": 0.05
     },
     "ambient_sound": "minecraft:ambient.warped_forest.loop",
     "mood_sound": {
@@ -75,7 +75,7 @@
     "misc": []
   },
   "spawn_costs": {},
-  "creature_spawn_probability": 0.3,
+  "creature_spawn_probability": 0.2,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

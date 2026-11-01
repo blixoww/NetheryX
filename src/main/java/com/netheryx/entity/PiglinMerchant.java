@@ -140,13 +140,7 @@ public class PiglinMerchant extends AbstractVillager implements GeoEntity {
     /** Boussole des ames accordee sur le donjon NetheryX le plus proche (choisi au hasard parmi les trois). */
     @Nullable
     private MerchantOffer compassOffer(Entity trader, RandomSource random) {
-        if (!(this.level() instanceof ServerLevel level)) {
-            return null;
-        }
-        ItemStack compass = SoulCompassItem.attuned(level, this.blockPosition(), DUNGEONS[random.nextInt(DUNGEONS.length)]);
-        if (compass.isEmpty()) {
-            return null;
-        }
+        ItemStack compass = SoulCompassItem.tunedTo(DUNGEONS[random.nextInt(DUNGEONS.length)]);
         return new MerchantOffer(new ItemStack(ModItems.ONYX.get(), 2), compass, 1, 20, 0.05F);
     }
 

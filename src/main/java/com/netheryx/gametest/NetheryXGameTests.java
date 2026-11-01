@@ -3,16 +3,13 @@ package com.netheryx.gametest;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import com.netheryx.NetheryX;
-import com.netheryx.block.RuneLockBlock;
 import com.netheryx.entity.boss.BossEncounter;
 import com.netheryx.entity.boss.BossEntity;
 import com.netheryx.registry.ModBlocks;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.registry.ModFeatures;
-import com.netheryx.registry.ModItems;
 import com.netheryx.worldgen.structure.StructureRestorer;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
@@ -22,15 +19,12 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -49,13 +43,12 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.gametest.GameTestHolder;
 import net.minecraftforge.gametest.PrefixGameTestTemplate;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -210,44 +203,8 @@ public final class NetheryXGameTests {
         fight(helper, ModEntities.NETHER_HEART.get(), 2, "circle", "wave", "beam");
     }
 
-    /** Les trois clefs allument les trois verrous : les sceaux tombent, et seulement a ce moment-la. */
-    @GameTest(template = AREA)
-    public static void runeLocksOpenGate(GameTestHelper helper) {
-        BlockPos[] locks = {new BlockPos(1, 12, 1), new BlockPos(5, 12, 1), new BlockPos(3, 12, 5)};
-        BlockPos seal = new BlockPos(3, 6, 3);
-        BlockPos vaultSeal = new BlockPos(3, 0, 3);
-        for (BlockPos lock : locks) {
-            helper.setBlock(lock, ModBlocks.RUNE_LOCK.get());
-        }
-        helper.setBlock(seal, ModBlocks.GUARDIAN_SEAL.get());
-        helper.setBlock(vaultSeal, ModBlocks.GUARDIAN_SEAL.get());
-        Player player = helper.makeMockSurvivalPlayer();
-        for (int i = 0; i < locks.length; i++) {
-            if (!helper.getBlockState(seal).is(ModBlocks.GUARDIAN_SEAL.get())) {
-                helper.fail("La herse s'est ouverte trop tot, apres " + i + " clef(s)");
-            }
-            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.RUNE_KEY.get()));
-            BlockPos lock = helper.absolutePos(locks[i]);
-            BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(lock), Direction.UP, lock, false);
-            helper.getBlockState(locks[i]).use(helper.getLevel(), player, InteractionHand.MAIN_HAND, hit);
-            if (!helper.getBlockState(locks[i]).getValue(RuneLockBlock.LIT)) {
-                helper.fail("Le verrou ne s'est pas allume");
-            }
-            if (!player.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
-                helper.fail("La clef n'a pas ete consommee");
-            }
-        }
-        if (helper.getBlockState(seal).is(ModBlocks.GUARDIAN_SEAL.get())) {
-            helper.fail("La herse est restee fermee apres les trois clefs");
-        }
-        if (!helper.getBlockState(vaultSeal).is(ModBlocks.GUARDIAN_SEAL.get())) {
-            helper.fail("Les verrous ont ouvert le sceau du coffre-fort");
-        }
-        helper.succeed();
-    }
-
     /**
-     * De bout en bout, dans un vrai Nether : un donjon genere contient ses verrous, sa herse et ses coffres, et le
+     * De bout en bout, dans un vrai Nether : un donjon genere contient son coffre-fort scelle et ses coffres, et le
      * restaurateur de structures ne repand aucun objet au sol (bug corrige en 1.4.0).
      */
     @GameTest(template = AREA, timeoutTicks = 400, batch = "worldgen")
@@ -271,7 +228,7 @@ public final class NetheryXGameTests {
             }
         }
         helper.runAtTickTime(200, () -> {
-            int locks = 0;
+            int boss = 0;
             int seals = 0;
             int chests = 0;
             AABB area = new AABB(center.getMinBlockX() - radius * 16, nether.getMinBuildHeight(), center.getMinBlockZ() - radius * 16,
@@ -288,8 +245,8 @@ public final class NetheryXGameTests {
                         for (int x = 0; x < 16; x++) {
                             for (int z = 0; z < 16; z++) {
                                 BlockState state = chunk.getBlockState(new BlockPos(chunk.getPos().getMinBlockX() + x, y, chunk.getPos().getMinBlockZ() + z));
-                                if (state.is(ModBlocks.RUNE_LOCK.get())) {
-                                    locks++;
+                                if (state.is(ModBlocks.WARDED_BRICKS.get())) {
+                                    boss++;
                                 } else if (state.is(ModBlocks.GUARDIAN_SEAL.get())) {
                                     seals++;
                                 }
@@ -305,9 +262,9 @@ public final class NetheryXGameTests {
             int dropped = items.size();
             items.forEach(item -> NetheryX.LOGGER.info("DONJON objet au sol : {} x{} en {}",
                     item.getItem().getItem(), item.getItem().getCount(), item.blockPosition()));
-            NetheryX.LOGGER.info("DONJON genere en {} : {} verrous, {} sceaux, {} coffres, {} objet(s) au sol", found.getFirst(), locks, seals, chests, dropped);
-            if (locks != 3) {
-                helper.fail("Verrous runiques : " + locks + " au lieu de 3");
+            NetheryX.LOGGER.info("DONJON genere en {} : {} blocs scelles, {} sceaux, {} coffres, {} objet(s) au sol", found.getFirst(), boss, seals, chests, dropped);
+            if (boss < 200) {
+                helper.fail("Coffre-fort incomplet : " + boss + " blocs scelles");
             }
             if (seals < 12) {
                 helper.fail("Sceaux : " + seals);
@@ -322,11 +279,109 @@ public final class NetheryXGameTests {
         });
     }
 
+    /**
+     * Crash 1.4.0 (ArrayIndexOutOfBounds dans LongOpenHashSet, en decharge d'une zone apres un teleport) : decharger toutes
+     * les creatures du mod, avec une structure generee autour, ne doit jamais modifier la liste des chunks en cours de parcours.
+     */
+    @GameTest(template = AREA, timeoutTicks = 1500, batch = "unload")
+    public static void unloadingEntitiesIsSafe(GameTestHelper helper) throws ReflectiveOperationException {
+        ServerLevel nether = helper.getLevel().getServer().getLevel(Level.NETHER);
+        UnloadWatch watch = UnloadWatch.install(nether);
+        ChunkPos center = new ChunkPos(new BlockPos(30000, 0, 30000));
+        int radius = 20;
+        for (int dx = -radius; dx <= radius; dx++) {
+            for (int dz = -radius; dz <= radius; dz++) {
+                nether.setChunkForced(center.x + dx, center.z + dz, true);
+            }
+        }
+        helper.runAtTickTime(60, () -> {
+            int spawned = 0;
+            int attempt = 0;
+            for (EntityType<?> type : net.minecraftforge.registries.ForgeRegistries.ENTITY_TYPES.getValues()) {
+                if (!EntityType.getKey(type).getNamespace().equals(NetheryX.MOD_ID)) {
+                    continue;
+                }
+                for (int copies = 0; copies < 3; copies++) {
+                    attempt++;
+                    BlockPos pos = new BlockPos(center.getMinBlockX() + (attempt % 40) * 8 - 160, 70, center.getMinBlockZ() + (attempt / 40) * 8 - 160);
+                    var entity = type.create(nether);
+                    if (entity != null) {
+                        entity.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+                        nether.addFreshEntity(entity);
+                        spawned++;
+                    }
+                }
+            }
+            NetheryX.LOGGER.info("DECHARGE : {} creatures du mod dans {} chunks", spawned, (radius * 2 + 1) * (radius * 2 + 1));
+        });
+        helper.runAtTickTime(160, () -> {
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    nether.setChunkForced(center.x + dx, center.z + dz, false);
+                }
+            }
+        });
+        helper.runAtTickTime(1200, () -> {
+            NetheryX.LOGGER.info("DECHARGE : {} chunks decharges, {} modification(s) pendant le parcours", watch.unloaded, watch.violations.size());
+            watch.violations.forEach(trace -> NetheryX.LOGGER.error("DECHARGE pile :{}", trace));
+            if (watch.unloaded < 100) {
+                helper.fail("Trop peu de chunks decharges pour conclure : " + watch.unloaded);
+            }
+            if (!watch.violations.isEmpty()) {
+                helper.fail("La liste des chunks a decharger a change pendant son parcours : voir DECHARGE pile");
+            }
+            helper.succeed();
+        });
+    }
+
+    /** Galerie (seulement avec NETHERYX_DUMP=1) : copie un morceau de chaque biome genere, pour tools/render_preview.py. */
+    @GameTest(template = AREA, timeoutTicks = 900, batch = "gallery")
+    public static void biomeGallery(GameTestHelper helper) {
+        if (System.getenv("NETHERYX_DUMP") == null) {
+            helper.succeed();
+            return;
+        }
+        ServerLevel nether = helper.getLevel().getServer().getLevel(Level.NETHER);
+        Map<String, BlockPos> centers = WorldgenProbe.biomeCenters(nether);
+        int size = 64;
+        int radius = size / 32 + 1;
+        centers.forEach((name, pos) -> {
+            ChunkPos chunk = new ChunkPos(pos);
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    nether.setChunkForced(chunk.x + dx, chunk.z + dz, true);
+                    nether.getChunk(chunk.x + dx, chunk.z + dz);
+                }
+            }
+        });
+        helper.runAtTickTime(700, () -> {
+            centers.forEach((name, pos) -> {
+                try {
+                    WorldgenProbe.dump(nether, pos, size, java.nio.file.Path.of("biome_dump", name.replace(':', '_') + ".bin"));
+                } catch (java.io.IOException e) {
+                    helper.fail("Releve impossible : " + e);
+                }
+            });
+            NetheryX.LOGGER.info("GALERIE : {} biomes copies", centers.size());
+            centers.forEach((name, pos) -> {
+                java.util.Map<String, Integer> counts = new java.util.TreeMap<>();
+                for (var mob : nether.getEntitiesOfClass(net.minecraft.world.entity.Mob.class, new AABB(pos).inflate(56.0D, 128.0D, 56.0D))) {
+                    if (mob instanceof net.minecraft.world.entity.animal.Animal) {
+                        counts.merge(EntityType.getKey(mob.getType()).getPath(), 1, Integer::sum);
+                    }
+                }
+                NetheryX.LOGGER.info("ANIMAUX {} : {}", name, counts);
+            });
+            helper.succeed();
+        });
+    }
+
     /** Releve de generation dans un vrai Nether (voir le journal, lignes SONDE). */
     @GameTest(template = AREA, timeoutTicks = 200)
     public static void worldgenReport(GameTestHelper helper) {
         WorldgenProbe.report(helper.getLevel(), NetheryX.LOGGER::info, "onyx_citadel", "infernal_sanctum", "withered_catacombs",
-                "basalt_forge", "wyvern_nest", "nomad_caravan", "nether_garden", "traveler_camp", "hidden_cache");
+                "basalt_forge", "wyvern_nest", "nomad_caravan", "nether_garden", "traveler_camp", "hidden_cache", "scorched_outpost", "bone_shrine",
+                "crystal_hollow", "lava_forge", "minecraft:fortress", "minecraft:bastion_remnant");
         helper.succeed();
     }
 

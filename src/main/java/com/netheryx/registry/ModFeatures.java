@@ -1,6 +1,7 @@
 package com.netheryx.registry;
 
 import com.netheryx.NetheryX;
+import com.netheryx.worldgen.feature.BiomeDecorFeatures;
 import com.netheryx.worldgen.feature.BoulderFeature;
 import com.netheryx.worldgen.feature.CeilingHangFeature;
 import com.netheryx.worldgen.feature.FallenLogFeature;
@@ -49,6 +50,14 @@ public final class ModFeatures {
     /** Nids de spectres et cages d'explorateurs suspendus sous la voute (1.3.4). */
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> CEILING_HANG = FEATURES.register("ceiling_hang",
             () -> new CeilingHangFeature(NoneFeatureConfiguration.CODEC));
+
+    /** Formes des biomes (1.5.0) : colonnes geantes, gerbes de cristaux, grappes lumineuses. */
+    public static final RegistryObject<Feature<BiomeDecorFeatures.Config>> BIOME_PILLAR = FEATURES.register("biome_pillar",
+            () -> new BiomeDecorFeatures.Pillar(BiomeDecorFeatures.Config.CODEC));
+    public static final RegistryObject<Feature<BiomeDecorFeatures.Config>> CRYSTAL_BURST = FEATURES.register("crystal_burst",
+            () -> new BiomeDecorFeatures.CrystalBurst(BiomeDecorFeatures.Config.CODEC));
+    public static final RegistryObject<Feature<BiomeDecorFeatures.Config>> GLOW_CLUSTER = FEATURES.register("glow_cluster",
+            () -> new BiomeDecorFeatures.GlowCluster(BiomeDecorFeatures.Config.CODEC));
 
     private ModFeatures() {
     }

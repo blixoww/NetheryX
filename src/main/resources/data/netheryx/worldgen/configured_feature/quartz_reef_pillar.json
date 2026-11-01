@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:biome_pillar",
+  "config": {
+    "main": {
+      "Name": "minecraft:calcite"
+    },
+    "accent": {
+      "Name": "minecraft:quartz_block"
+    },
+    "size": 4
+  }
+}

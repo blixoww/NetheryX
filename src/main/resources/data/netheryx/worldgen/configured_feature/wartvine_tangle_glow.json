@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:glow_cluster",
+  "config": {
+    "main": {
+      "Name": "minecraft:nether_wart_block"
+    },
+    "accent": {
+      "Name": "minecraft:shroomlight"
+    },
+    "size": 3
+  }
+}

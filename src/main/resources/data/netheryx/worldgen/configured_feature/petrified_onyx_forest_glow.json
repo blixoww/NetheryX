@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:glow_cluster",
+  "config": {
+    "main": {
+      "Name": "minecraft:blackstone"
+    },
+    "accent": {
+      "Name": "minecraft:crying_obsidian"
+    },
+    "size": 2
+  }
+}

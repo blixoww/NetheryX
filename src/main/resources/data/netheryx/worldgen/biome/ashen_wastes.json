@@ -3,7 +3,7 @@
   "temperature": 2.0,
   "downfall": 0.0,
   "effects": {
-    "fog_color": 5920340,
+    "fog_color": 8156788,
     "sky_color": 3344392,
     "water_color": 4159204,
     "water_fog_color": 329011,
@@ -11,7 +11,7 @@
       "options": {
         "type": "netheryx:ash_flake"
       },
-      "probability": 0.06
+      "probability": 0.09
     },
     "ambient_sound": "minecraft:ambient.basalt_deltas.loop",
     "mood_sound": {
@@ -80,7 +80,7 @@
     "misc": []
   },
   "spawn_costs": {},
-  "creature_spawn_probability": 0.3,
+  "creature_spawn_probability": 0.2,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

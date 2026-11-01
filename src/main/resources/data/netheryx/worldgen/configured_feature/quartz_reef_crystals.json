@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:crystal_burst",
+  "config": {
+    "main": {
+      "Name": "minecraft:quartz_block"
+    },
+    "accent": {
+      "Name": "minecraft:pearlescent_froglight"
+    },
+    "size": 4
+  }
+}

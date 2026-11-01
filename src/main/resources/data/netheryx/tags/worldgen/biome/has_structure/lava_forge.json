@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:molten_glass_lake",
+    "netheryx:sulfur_springs",
+    "minecraft:basalt_deltas",
+    "minecraft:nether_wastes"
+  ]
+}

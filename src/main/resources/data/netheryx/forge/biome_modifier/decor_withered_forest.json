@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:withered_forest",
+  "features": [
+    "netheryx:withered_forest_pillar",
+    "netheryx:withered_forest_glow"
+  ],
+  "step": "vegetal_decoration"
+}

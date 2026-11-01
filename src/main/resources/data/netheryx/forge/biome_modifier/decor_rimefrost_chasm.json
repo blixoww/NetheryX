@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:rimefrost_chasm",
+  "features": [
+    "netheryx:rimefrost_chasm_pillar",
+    "netheryx:rimefrost_chasm_crystals",
+    "netheryx:rimefrost_chasm_glow"
+  ],
+  "step": "vegetal_decoration"
+}

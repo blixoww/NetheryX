@@ -91,8 +91,13 @@
     "water_ambient": [],
     "misc": []
   },
-  "spawn_costs": {},
-  "creature_spawn_probability": 0.3,
+  "spawn_costs": {
+    "netheryx:basalt_beetle": {
+      "energy_budget": 0.14,
+      "charge": 0.7
+    }
+  },
+  "creature_spawn_probability": 0.2,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

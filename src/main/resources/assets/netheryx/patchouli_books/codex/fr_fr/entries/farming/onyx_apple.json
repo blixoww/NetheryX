@@ -2,7 +2,7 @@
   "name": "Pomme d'onyx",
   "icon": "netheryx:onyx_apple",
   "category": "netheryx:farming",
-  "sortnum": 95,
+  "sortnum": 96,
   "pages": [
     {
       "type": "patchouli:crafting",

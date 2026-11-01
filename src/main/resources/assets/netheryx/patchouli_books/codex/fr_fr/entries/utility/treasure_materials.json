@@ -2,7 +2,7 @@
   "name": "Matériaux de trésor",
   "icon": "netheryx:wraith_essence",
   "category": "netheryx:utility",
-  "sortnum": 49,
+  "sortnum": 50,
   "pages": [
     {
       "type": "patchouli:text",

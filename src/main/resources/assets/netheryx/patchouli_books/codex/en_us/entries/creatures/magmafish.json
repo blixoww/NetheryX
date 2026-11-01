@@ -2,7 +2,7 @@
   "name": "Magmafish",
   "icon": "netheryx:magmafish",
   "category": "netheryx:creatures",
-  "sortnum": 72,
+  "sortnum": 73,
   "pages": [
     {
       "type": "patchouli:entity",

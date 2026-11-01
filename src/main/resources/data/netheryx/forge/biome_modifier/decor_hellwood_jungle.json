@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:hellwood_jungle",
+  "features": [
+    "netheryx:hellwood_jungle_pillar",
+    "netheryx:hellwood_jungle_glow"
+  ],
+  "step": "vegetal_decoration"
+}

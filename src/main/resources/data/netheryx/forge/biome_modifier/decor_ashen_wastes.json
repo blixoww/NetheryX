@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:ashen_wastes",
+  "features": [
+    "netheryx:ashen_wastes_pillar",
+    "netheryx:ashen_wastes_glow"
+  ],
+  "step": "vegetal_decoration"
+}

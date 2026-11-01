@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:withered_forest",
+    "netheryx:ashen_wastes",
+    "netheryx:marrow_thicket",
+    "minecraft:soul_sand_valley",
+    "minecraft:warped_forest"
+  ]
+}

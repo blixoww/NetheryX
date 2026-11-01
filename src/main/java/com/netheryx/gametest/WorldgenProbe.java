@@ -13,8 +13,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeSource;
 import net.minecraft.world.level.biome.Climate;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -86,7 +89,7 @@ final class WorldgenProbe {
     /** Distance moyenne (en blocs) a la structure la plus proche depuis quelques points, ou -1 si introuvable. */
     static double meanDistance(ServerLevel nether, String structure, int origins, int searchChunks) {
         Registry<Structure> registry = nether.registryAccess().registryOrThrow(Registries.STRUCTURE);
-        Optional<Holder.Reference<Structure>> holder = registry.getHolder(ResourceKey.create(Registries.STRUCTURE, NetheryX.id(structure)));
+        Optional<Holder.Reference<Structure>> holder = registry.getHolder(ResourceKey.create(Registries.STRUCTURE, structure.contains(":") ? new net.minecraft.resources.ResourceLocation(structure) : NetheryX.id(structure)));
         if (holder.isEmpty()) {
             return -2.0D;
         }
@@ -102,6 +105,66 @@ final class WorldgenProbe {
             }
         }
         return found == 0 ? -1.0D : total / found;
+    }
+
+    /** Premier point du releve ou chaque biome occupe tout le voisinage : le centre d'une tache, pas sa bordure. */
+    static Map<String, BlockPos> biomeCenters(ServerLevel nether) {
+        BiomeSource source = nether.getChunkSource().getGenerator().getBiomeSource();
+        Climate.Sampler sampler = nether.getChunkSource().randomState().sampler();
+        Map<String, BlockPos> centers = new java.util.TreeMap<>();
+        for (int ring = 0; ring < 400; ring++) {
+            for (int side = 0; side < 40; side++) {
+                double angle = side * Math.PI * 2.0D / 40.0D;
+                int x = (int) (Math.cos(angle) * ring * 48.0D);
+                int z = (int) (Math.sin(angle) * ring * 48.0D);
+                String name = name(source, sampler, x, z);
+                if (!centers.containsKey(name) && name(source, sampler, x + 32, z) .equals(name) && name(source, sampler, x - 32, z).equals(name)
+                        && name(source, sampler, x, z + 32).equals(name) && name(source, sampler, x, z - 32).equals(name)) {
+                    centers.put(name, new BlockPos(x, 64, z));
+                }
+            }
+        }
+        return centers;
+    }
+
+    private static String name(BiomeSource source, Climate.Sampler sampler, int x, int z) {
+        return source.getNoiseBiome(x >> 2, BIOME_Y >> 2, z >> 2, sampler).unwrapKey().map(key -> key.location().toString()).orElse("?");
+    }
+
+    /** Copie un volume du monde dans un fichier : tools/render_preview.py en fait une image. */
+    static void dump(ServerLevel nether, BlockPos center, int size, Path out) throws java.io.IOException {
+        int height = 112;
+        Map<String, Integer> palette = new LinkedHashMap<>();
+        byte[] data = new byte[size * size * height * 2];
+        int i = 0;
+        int floorTotal = 0;
+        int floorCount = 0;
+        int minX = center.getX() - size / 2;
+        int minZ = center.getZ() - size / 2;
+        for (int x = 0; x < size; x++) {
+            for (int z = 0; z < size; z++) {
+                int floor = -1;
+                for (int y = 0; y < height; y++) {
+                    BlockState state = nether.getBlockState(new BlockPos(minX + x, y + 8, minZ + z));
+                    String key = net.minecraftforge.registries.ForgeRegistries.BLOCKS.getKey(state.getBlock()).toString();
+                    int index = palette.computeIfAbsent(key, k -> palette.size());
+                    data[i++] = (byte) (index >> 8);
+                    data[i++] = (byte) index;
+                    if (floor < 0 && y > 24 && state.isAir() && y < 90) {
+                        floor = y;
+                    }
+                }
+                if (floor > 0) {
+                    floorTotal += floor;
+                    floorCount++;
+                }
+            }
+        }
+        Files.createDirectories(out.getParent());
+        Files.write(out, data);
+        String names = palette.keySet().stream().map(n -> "\"" + n + "\"").collect(java.util.stream.Collectors.joining(","));
+        Files.writeString(Path.of(out + ".json"), "{\"size\":[" + size + "," + height + "," + size + "],\"floor\":" + (floorCount == 0 ? 40 : floorTotal / floorCount)
+                + ",\"palette\":[" + names + "]}");
     }
 
     static void report(ServerLevel overworld, Consumer<String> out, String... structures) {

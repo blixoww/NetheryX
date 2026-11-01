@@ -7,6 +7,37 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le pr
 Chaque tag Git (`git tag 1.0.0 && git push origin 1.0.0`) déclenche la compilation et la publication du `.jar`
 dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 
+## [1.4.1] - 2026-11-01
+
+### Ajouté
+- **Biomes transformés** : chaque biome a maintenant sa propre roche, du sol à la voûte, au lieu du netherrack rouge partout
+  (strates de terre cuite de la Prairie de braise, falaises dorées des Sources sulfureuses, récif blanc de calcite et de quartz,
+  roche noire veinée d'améthyste de la Forêt d'onyx, parois de glace du Gouffre de givre...). S'y ajoutent de **grandes colonnes** du
+  sol à la voûte, des **gerbes de cristaux**, des **grappes lumineuses** suspendues, des brouillards francs et plus de particules.
+- **Petites trouvailles**, à croiser souvent en explorant : deux ou trois ennemis et un coffre. Avant-poste calciné, chariot renversé,
+  cercle d'os, tombe isolée, recoin de cristal, trésor à mimiques, forge de lave, évent de soufre.
+- **Outil d'aperçu** (`tools/render_preview.py`) : vues isométriques des gabarits et des biomes réellement générés.
+
+### Modifié
+- **Biomes beaucoup moins rares et plus étendus** : ils couvrent 91 % du Nether (chacun de 5 à 11 %), répartis en trois familles de
+  contrées. Forteresses et bastions restent à portée. Nouvelle clé de configuration `netherRegionWeightV3`.
+- **Jardin du Nether** refait : parc rond, haie vivante, allée circulaire, fontaine à vraie eau, grands arbres, parterres, carrés de
+  culture et kiosque de verre qui abrite le coffre.
+- **Caravane nomade** refaite : trois tentes de couleurs, chariots bâchés, étal du marchand, feu de camp et bancs, atelier, enclos à lézards.
+- **Créatures passives** : elles vivent dans leurs biomes au lieu de partout, sur un vrai sol (jamais sur les briques d'une structure)
+  et par troupeaux espacés, avec un plafond local pour ne pas envahir le monde ni bloquer les autres apparitions.
+- **Coffre-fort des boss** : ses murs indestructibles sont maintenant **camouflés** en briques du donjon. Ils ne redeviennent
+  cassables qu'à la mort du boss, et le générateur vérifie qu'aucune des six faces n'a de trou.
+
+### Retiré
+- **Verrous et clefs runiques**, herse de la descente et fatigue de minage : la salle du boss est en accès libre. Les ailes restent
+  à explorer pour leur beau trésor (table de butin `wing_treasure`).
+
+### Corrigé
+- **Crash `ArrayIndexOutOfBoundsException` (« Exception ticking world »)** après un grand déplacement, quand la zone quittée se
+  décharge. La sauvegarde d'un Marchand piglin créait ses offres, dont une boussole qui cherchait sa structure et chargeait des chunks
+  en plein déchargement. La boussole se règle désormais dans les mains du joueur. Un test vérifie le déchargement de toutes les créatures.
+
 ## [1.4.0] - 2026-11-01
 
 ### Ajouté

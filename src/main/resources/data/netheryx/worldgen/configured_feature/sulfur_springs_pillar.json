@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:biome_pillar",
+  "config": {
+    "main": {
+      "Name": "netheryx:sulfur_rock"
+    },
+    "accent": {
+      "Name": "netheryx:sulfur_block"
+    },
+    "size": 3
+  }
+}

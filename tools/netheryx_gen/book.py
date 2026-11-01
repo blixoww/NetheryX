@@ -292,21 +292,18 @@ for eid, en, fr, scale, ten, tfr in CREATURES:
 # ---------------------------------------------------------------- Structures
 DUNGEON_INTRO = text(
     "A dungeon is a complex $(l)dug under the ground$(): only its entrance shows on the surface, and $(l)ruins, remains and signs$() "
-    "around it give it away. Go down to the $(l)rotunda$(): three $(item)Rune Locks$() guard the way to the boss.$(br2)Explore the "
-    "$(l)three wings$(), in any order. Each one ends with a chamber held by a $(l)Rune Warden$(), where a chest holds a "
-    "$(item)Rune Key$(). Use each key on a lock.",
+    "around it give it away.$(br2)From the central $(l)rotunda$(), the great stairs lead down to the $(l)boss arena$(). Three optional "
+    "$(l)wings$() branch off: each one ends with a chamber held by a $(l)Rune Warden$(), and a fine treasure.",
     "Un donjon est un complexe $(l)creusé sous terre$() : seule son entrée se voit en surface, et des $(l)ruines, restes et panneaux$() "
-    "le trahissent aux alentours. Descendez jusqu'à la $(l)rotonde$() : trois $(item)Verrous runiques$() barrent la route du boss.$(br2)"
-    "Explorez les $(l)trois ailes$(), dans l'ordre qui vous plaît. Chacune finit par une chambre tenue par un $(l)Gardien des runes$(), "
-    "où un coffre renferme une $(item)Clef runique$(). Utilisez chaque clef sur un verrou.", "Donjons")
+    "le trahissent aux alentours.$(br2)Depuis la $(l)rotonde$() centrale, le grand escalier descend vers l'$(l)arène du boss$(). Trois "
+    "$(l)ailes$() facultatives s'y greffent : chacune finit par une chambre tenue par un $(l)Gardien des runes$(), et un beau trésor.", "Donjons")
 DUNGEON_BOSS = text(
-    "When the three locks shine, the $(item)Guardian Seals$() on the stairs dissolve and the way down to the $(l)arena$() opens. "
-    "The boss is too strong to be dug around: near it, $(l)Mining Fatigue$() stops your pickaxe.$(br2)The $(l)vault$() behind the "
-    "arena, in unbreakable $(item)Warded Masonry$(), only opens when the boss dies. Plans and rooms change from one dungeon to the next.",
-    "Quand les trois verrous brillent, les $(item)Sceaux du gardien$() de l'escalier se dissolvent et la descente vers l'$(l)arène$() "
-    "s'ouvre. Le boss ne se contourne pas en creusant : près de lui, la $(l)Fatigue de minage$() arrête votre pioche.$(br2)Le "
-    "$(l)coffre-fort$() derrière l'arène, en $(item)Maçonnerie scellée$() indestructible, ne s'ouvre qu'à la mort du boss. Le plan et les "
-    "salles changent d'un donjon à l'autre.")
+    "The real prize is the $(l)vault$() behind the arena. Its walls look like the rest of the dungeon, but they are $(item)Warded "
+    "Masonry$(): nothing can break them, on any of the six faces. Its door of $(item)Guardian Seals$() only opens when the boss "
+    "dies, and the masonry then becomes ordinary bricks.$(br2)Plans and rooms change from one dungeon to the next.",
+    "Le vrai trésor est le $(l)coffre-fort$() derrière l'arène. Ses murs ressemblent au reste du donjon, mais ce sont des blocs de "
+    "$(item)Maçonnerie scellée$() : rien ne peut les casser, sur aucune des six faces. Sa porte de $(item)Sceaux du gardien$() ne s'ouvre "
+    "qu'à la mort du boss, et la maçonnerie redevient alors de la brique ordinaire.$(br2)Le plan et les salles changent d'un donjon à l'autre.")
 DUNGEON_FIGHT = text(
     "Every boss attack is $(l)announced$(): a circle filling up on the ground (leave it before it is full), a ring running along the "
     "floor (jump over it), a marked line (step aside), a sweeping beam ($(l)hide behind a pillar$()).$(br2)At each phase the boss "
@@ -314,16 +311,25 @@ DUNGEON_FIGHT = text(
     "Chaque attaque de boss est $(l)annoncée$() : un cercle qui se remplit au sol (sortez-en avant qu'il soit plein), un anneau qui "
     "court au sol (sautez par-dessus), une ligne balisée (écartez-vous), un faisceau qui balaie ($(l)abritez-vous derrière un pilier$()).$(br2)"
     "À chaque phase, le boss s'arrête, invulnérable, puis libère une onde : reculez. Plus il y a de joueurs, plus il a de vie.", "Combats")
-entry("structures", "How Dungeons Work", "Fonctionnement des donjons", "netheryx:rune_lock", [
+entry("structures", "How Dungeons Work", "Fonctionnement des donjons", "netheryx:guardian_seal", [
     DUNGEON_INTRO,
     DUNGEON_BOSS,
     DUNGEON_FIGHT,
-    spot("guardian_seal", "Unbreakable. The seals on the stairs dissolve when the three Rune Locks shine; those of the vault when the "
-                          "boss dies. Bosses never leave their arena: if you flee, they go back and slowly heal.",
-         "Indestructible. Les sceaux de l'escalier se dissolvent quand les trois Verrous runiques brillent ; ceux du coffre-fort à la "
-         "mort du boss. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.",
+    spot("guardian_seal", "Unbreakable. Dissolves when the dungeon boss dies. Bosses never leave their arena: if you flee, they go "
+                          "back and slowly heal.",
+         "Indestructible. Se dissout à la mort du boss du donjon. Les boss ne quittent jamais leur arène : si vous fuyez, ils y "
+         "retournent et se soignent lentement.",
          link=False),
 ], priority=True)
+
+entry("structures", "Wayside Finds", "Petites trouvailles", "minecraft:barrel", [
+    text("All over the Nether, small sites hide a $(l)chest$() watched by two or three enemies: scorched outposts, overturned carts, bone "
+         "rings, lone tombs, crystal nooks, mimic troves, lava forges and sulfur vents. A quick fight, a nice reward: keep your eyes open "
+         "while exploring!",
+         "Partout dans le Nether, de petits sites cachent un $(l)coffre$() gardé par deux ou trois ennemis : avant-postes calcinés, chariots "
+         "renversés, cercles d'os, tombes isolées, recoins de cristal, trésors à mimiques, forges de lave et évents de soufre. Un combat "
+         "rapide, une belle récompense : gardez l'œil ouvert en explorant !"),
+])
 
 STRUCTURES = [
     ("Onyx Citadel", "Citadelle d'onyx", "netheryx:onyx_bricks", [
@@ -772,11 +778,11 @@ entry("biomes", "Hellwood Jungle", "Jungle infernale", "netheryx:hellfern", [
          "et de Vaches de braise.", "Jungle infernale"),
 ])
 entry("structures", "Warded Masonry", "Maçonnerie scellée", "netheryx:guardian_seal", [
-    text("Each dungeon vault is a small room whose six faces are made of $(item)Warded Masonry$(): bricks marked with a faint rune, "
+    text("Each dungeon vault is a small room whose six faces are made of $(item)Warded Masonry$(): they look like the dungeon's ordinary bricks, but are "
          "unbreakable and explosion-proof. No way to dig around it! When the boss dies, the seals of the door vanish and the masonry "
          "turns back into ordinary bricks.$(br2)Dungeons also hide $(l)Mimics$() among their chests.",
-         "Chaque coffre-fort de donjon est une petite salle dont les six faces sont en $(item)Maçonnerie scellée$() : des briques "
-         "marquées d'une rune discrète, indestructibles et insensibles aux explosions. Impossible de creuser autour ! À la mort du "
+         "Chaque coffre-fort de donjon est une petite salle dont les six faces sont en $(item)Maçonnerie scellée$() : elles ressemblent "
+         "aux briques du donjon, mais sont indestructibles et insensibles aux explosions. Impossible de creuser autour ! À la mort du "
          "boss, les sceaux de la porte disparaissent et la maçonnerie redevient de la brique ordinaire.$(br2)Les donjons cachent "
          "aussi des $(l)Mimiques$() parmi leurs coffres.", "Coffres-forts"),
 ])

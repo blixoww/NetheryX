@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:glow_cluster",
+  "config": {
+    "main": {
+      "Name": "minecraft:deepslate"
+    },
+    "accent": {
+      "Name": "minecraft:verdant_froglight"
+    },
+    "size": 2
+  }
+}

@@ -2,7 +2,7 @@
   "name": "Boussole des âmes",
   "icon": "netheryx:soul_compass",
   "category": "netheryx:utility",
-  "sortnum": 41,
+  "sortnum": 42,
   "pages": [
     {
       "type": "patchouli:spotlight",

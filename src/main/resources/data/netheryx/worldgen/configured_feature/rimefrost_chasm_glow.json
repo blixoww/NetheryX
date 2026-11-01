@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:glow_cluster",
+  "config": {
+    "main": {
+      "Name": "minecraft:packed_ice"
+    },
+    "accent": {
+      "Name": "minecraft:sea_lantern"
+    },
+    "size": 2
+  }
+}

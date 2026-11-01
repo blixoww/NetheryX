@@ -2,7 +2,7 @@
   "name": "Caravane nomade",
   "icon": "netheryx:wartstalk_planks",
   "category": "netheryx:structures",
-  "sortnum": 78,
+  "sortnum": 79,
   "pages": [
     {
       "type": "patchouli:text",

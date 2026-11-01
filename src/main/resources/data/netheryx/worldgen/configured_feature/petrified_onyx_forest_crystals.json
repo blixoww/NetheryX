@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:crystal_burst",
+  "config": {
+    "main": {
+      "Name": "minecraft:amethyst_block"
+    },
+    "accent": {
+      "Name": "minecraft:crying_obsidian"
+    },
+    "size": 4
+  }
+}

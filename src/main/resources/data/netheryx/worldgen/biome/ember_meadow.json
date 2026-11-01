@@ -3,7 +3,7 @@
   "temperature": 2.0,
   "downfall": 0.0,
   "effects": {
-    "fog_color": 6958614,
+    "fog_color": 12608540,
     "sky_color": 3344392,
     "water_color": 4159204,
     "water_fog_color": 329011,
@@ -11,7 +11,7 @@
       "options": {
         "type": "netheryx:ember_pollen"
       },
-      "probability": 0.012
+      "probability": 0.03
     },
     "ambient_sound": "minecraft:ambient.crimson_forest.loop",
     "mood_sound": {
@@ -80,8 +80,17 @@
     "water_ambient": [],
     "misc": []
   },
-  "spawn_costs": {},
-  "creature_spawn_probability": 0.3,
+  "spawn_costs": {
+    "netheryx:ember_cow": {
+      "energy_budget": 0.14,
+      "charge": 0.7
+    },
+    "netheryx:cinder_hen": {
+      "energy_budget": 0.14,
+      "charge": 0.7
+    }
+  },
+  "creature_spawn_probability": 0.2,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

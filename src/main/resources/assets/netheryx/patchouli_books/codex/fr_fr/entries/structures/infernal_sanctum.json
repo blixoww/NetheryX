@@ -2,7 +2,7 @@
   "name": "Sanctuaire infernal",
   "icon": "netheryx:magma_bricks",
   "category": "netheryx:structures",
-  "sortnum": 31,
+  "sortnum": 32,
   "pages": [
     {
       "type": "patchouli:text",

@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:ember_grove",
+  "features": [
+    "netheryx:ember_grove_pillar",
+    "netheryx:ember_grove_glow"
+  ],
+  "step": "vegetal_decoration"
+}

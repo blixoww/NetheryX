@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:glow_cluster",
+  "config": {
+    "main": {
+      "Name": "minecraft:tuff"
+    },
+    "accent": {
+      "Name": "minecraft:glowstone"
+    },
+    "size": 1
+  }
+}

@@ -2,7 +2,7 @@
   "name": "Lanterne du Nether",
   "icon": "netheryx:nether_lantern",
   "category": "netheryx:utility",
-  "sortnum": 105,
+  "sortnum": 106,
   "pages": [
     {
       "type": "patchouli:spotlight",

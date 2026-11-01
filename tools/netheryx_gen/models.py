@@ -406,15 +406,12 @@ def layered(name, base_faces, overlay_faces, textures, with_state=True):
 
 
 def gen_warded(name):
+    """Maconnerie scellee : camouflee, elle a exactement l'aspect des briques du donjon qui l'entourent."""
     bases = {"onyx": f"{MOD_ID}:block/onyx_bricks", "magma": f"{MOD_ID}:block/magma_bricks",
              "blackstone": "minecraft:block/polished_blackstone_bricks"}
-    all_faces = ("north", "south", "east", "west", "up", "down")
     variants = {}
     for variant, base in bases.items():
-        model_name = f"{name}_{variant}"
-        layered(model_name, {d: "#base" for d in all_faces}, {d: "#overlay" for d in all_faces},
-                {"base": base, "overlay": block_tex("warded_runes")}, with_state=False)
-        variants[f"variant={variant}"] = v(f"{MOD_ID}:block/{model_name}")
+        variants[f"variant={variant}"] = {"model": base}
     blockstate(name, variants)
 
 
@@ -465,8 +462,6 @@ def generate_blocks():
             item_parent = gen_soil(name)
         elif kind == "warded":
             gen_warded(name)
-        elif kind == "rune_lock":
-            item_parent = gen_rune_lock(name)
         elif kind == "nether_ore":
             item_parent = gen_nether_ore(name)
         elif kind == "cross":
@@ -549,16 +544,6 @@ def french(text):
     for pattern, repl in FR_ACCENTS:
         text = re.sub(pattern, repl, text)
     return text
-
-
-def gen_rune_lock(name):
-    """Deux etats : eteint et allume."""
-    for suffix in ("", "_lit"):
-        write_json(asset_path("models", "block", f"{name}{suffix}.json"),
-                   {"parent": "minecraft:block/cube_all", "textures": {"all": f"{MOD_ID}:block/{name}{suffix}"}})
-    write_json(asset_path("blockstates", f"{name}.json"), {"variants": {
-        "lit=false": {"model": f"{MOD_ID}:block/{name}"}, "lit=true": {"model": f"{MOD_ID}:block/{name}_lit"}}})
-    return f"{MOD_ID}:block/{name}"
 
 
 def generate_lang():

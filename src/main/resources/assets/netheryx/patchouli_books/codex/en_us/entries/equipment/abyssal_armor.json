@@ -2,7 +2,7 @@
   "name": "Abyssal Armor",
   "icon": "netheryx:abyssal_chestplate",
   "category": "netheryx:equipment",
-  "sortnum": 94,
+  "sortnum": 95,
   "pages": [
     {
       "type": "patchouli:text",

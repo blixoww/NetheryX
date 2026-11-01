@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:ember_meadow",
+  "features": [
+    "netheryx:ember_meadow_pillar",
+    "netheryx:ember_meadow_glow"
+  ],
+  "step": "vegetal_decoration"
+}

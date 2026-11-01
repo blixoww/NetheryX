@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:molten_glass_lake",
+  "features": [
+    "netheryx:molten_glass_lake_pillar",
+    "netheryx:molten_glass_lake_crystals",
+    "netheryx:molten_glass_lake_glow"
+  ],
+  "step": "vegetal_decoration"
+}

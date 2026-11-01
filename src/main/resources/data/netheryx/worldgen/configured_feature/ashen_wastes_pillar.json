@@ -1,0 +1,15 @@
+{
+  "type": "netheryx:biome_pillar",
+  "config": {
+    "main": {
+      "Name": "minecraft:basalt",
+      "Properties": {
+        "axis": "y"
+      }
+    },
+    "accent": {
+      "Name": "minecraft:tuff"
+    },
+    "size": 4
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": "minecraft:basalt_deltas",
+  "spawners": [
+    {
+      "type": "netheryx:magma_crab",
+      "weight": 12,
+      "minCount": 1,
+      "maxCount": 3
+    }
+  ]
+}

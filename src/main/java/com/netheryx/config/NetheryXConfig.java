@@ -22,7 +22,6 @@ public final class NetheryXConfig {
     public static final ForgeConfigSpec.DoubleValue CHAMPION_MAX_HEALTH;
     public static final ForgeConfigSpec.DoubleValue GOLEM_MAX_HEALTH;
     public static final ForgeConfigSpec.DoubleValue HEART_MAX_HEALTH;
-    public static final ForgeConfigSpec.BooleanValue BOSS_MINING_FATIGUE;
     public static final ForgeConfigSpec.BooleanValue BURROWER_DIGS;
     public static final ForgeConfigSpec.BooleanValue NETHER_EVENTS;
     public static final ForgeConfigSpec.IntValue NETHER_EVENT_MIN_DELAY;
@@ -35,9 +34,9 @@ public final class NetheryXConfig {
         builder.comment("Generation du monde").push("worldgen");
         REGION_WEIGHT = builder
                 .comment("Poids de la region NetheryX dans le Nether (TerraBlender, la region vanilla pese 10).",
-                        "0 desactive les biomes NetheryX. (Nouvelle cle en 1.2.0 : l'ancienne 'netherRegionWeight' est ignoree.)")
+                        "0 desactive les biomes NetheryX. (Nouvelle cle en 1.5.0 : poids total, reparti entre trois regions.)")
                 .worldRestart()
-                .defineInRange("netherRegionWeightV2", 33, 0, 100);
+                .defineInRange("netherRegionWeightV3", 90, 0, 300);
         builder.pop();
 
         builder.comment("Equipements et objets").push("items");
@@ -80,9 +79,6 @@ public final class NetheryXConfig {
         HEART_MAX_HEALTH = builder
                 .comment("Points de vie du Coeur du Nether (boss final).")
                 .defineInRange("heartMaxHealth", 1000.0D, 100.0D, 1024.0D);
-        BOSS_MINING_FATIGUE = builder
-                .comment("Fatigue de minage autour d'un boss vivant : on n'entre pas dans son arene en creusant.")
-                .define("bossMiningFatigue", true);
         BURROWER_DIGS = builder
                 .comment("Le Fouisseur de basalte creuse des tunnels (respecte aussi la regle mobGriefing).")
                 .define("burrowerDigs", true);

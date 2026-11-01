@@ -1,0 +1,15 @@
+{
+  "type": "netheryx:biome_pillar",
+  "config": {
+    "main": {
+      "Name": "minecraft:bone_block",
+      "Properties": {
+        "axis": "y"
+      }
+    },
+    "accent": {
+      "Name": "minecraft:calcite"
+    },
+    "size": 3
+  }
+}

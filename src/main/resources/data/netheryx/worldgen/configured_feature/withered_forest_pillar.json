@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:biome_pillar",
+  "config": {
+    "main": {
+      "Name": "minecraft:deepslate"
+    },
+    "accent": {
+      "Name": "minecraft:tuff"
+    },
+    "size": 4
+  }
+}

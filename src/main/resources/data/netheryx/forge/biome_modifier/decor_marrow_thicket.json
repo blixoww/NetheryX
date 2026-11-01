@@ -1,0 +1,9 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:marrow_thicket",
+  "features": [
+    "netheryx:marrow_thicket_pillar",
+    "netheryx:marrow_thicket_glow"
+  ],
+  "step": "vegetal_decoration"
+}

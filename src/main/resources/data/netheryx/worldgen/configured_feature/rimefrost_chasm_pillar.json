@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:biome_pillar",
+  "config": {
+    "main": {
+      "Name": "netheryx:rimestone"
+    },
+    "accent": {
+      "Name": "minecraft:packed_ice"
+    },
+    "size": 3
+  }
+}

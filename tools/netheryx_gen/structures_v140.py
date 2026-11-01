@@ -1,11 +1,10 @@
 """Donjons 1.4.0 : de vrais complexes a explorer, creuses sous une petite entree en surface.
 
 Parcours d'un donjon :
-    entree en surface -> escalier -> salle d'accueil -> ROTONDE (trois verrous runiques, porte vers le hall de la descente)
-    -> trois AILES a explorer dans l'ordre qu'on veut, chacune finissant par une chambre gardee qui contient une clef runique
-    -> les trois clefs allument les verrous -> la herse de sceaux se dissout -> descente -> ARENE du boss
-    -> a la mort du boss -> COFFRE-FORT scelle.
-Des salles optionnelles (tresors derriere une porte de fer, mimiques) se greffent sur la salle d'accueil.
+    entree en surface -> escalier -> salle d'accueil -> ROTONDE -> hall de la descente -> ARENE du boss
+    -> a la mort du boss -> COFFRE-FORT, enferme dans une maconnerie indestructible (camouflee en briques du donjon).
+Autour de ce chemin, trois AILES facultatives finissent chacune par une chambre gardee et un beau tresor. Des salles
+optionnelles (tresors derriere une porte de fer, mimiques) se greffent sur la salle d'accueil.
 
 Chaque donjon existe en plusieurs gabarits : le plan des ailes et le contenu des salles sont tires au sort a la generation
 des ressources, parmi un pool de salles (couloir de pieges, fosse a franchir, salle gardee, tresor aux mimiques...).
@@ -27,7 +26,6 @@ ENTRANCE = (37, 69)  # centre de l'entree : c'est elle qui doit tenir en surface
 ENTRANCE_FOOTPRINT = 15
 ARENA = (21, 25, 53, 57)  # x0, z0, x1, z1 de l'interieur de l'arene (rayon 16 autour du boss)
 BOSS_POS = (37, 2, 41)
-GATE_Y = range(9, 13)  # section du tunnel a la herse (la marche est a y = 8)
 ARENA_TOP = 13
 
 THEMES = {
@@ -77,7 +75,6 @@ class Keep:
         self.index = index
         self.rooms = []       # salles a meubler une fois toutes les portes percees
         self.keys = []        # positions des coffres a clef
-        self.locks = []
 
     # --- Briques de base --------------------------------------------------------------------------
 
@@ -185,11 +182,11 @@ class Keep:
         self.lights(x0, z0, x1, z1)
 
     def key_chamber(self, x0, z0, x1, z1):
-        """Fin d'aile : le coffre de la clef sur son autel, un gardien d'elite et ses renforts."""
+        """Fin d'aile : un beau tresor sur son autel, un gardien d'elite et ses renforts."""
         d, t = self.d, self.t
         cx, cz = (x0 + x1) // 2, (z0 + z1) // 2
         d.box(cx - 1, FLOOR + 1, cz - 1, cx + 1, FLOOR + 1, cz + 1, t["pedestal"])
-        d.chest(cx, FLOOR + 2, cz, "rune_key_chamber", facing="south")
+        d.chest(cx, FLOOR + 2, cz, "wing_treasure", facing="south")
         self.keys.append((cx, FLOOR + 2, cz))
         d.entity(cx + 0.5, FLOOR + 1, z0 + 2.5, t["warden"], {
             "Attributes": TypedList(TAG_COMPOUND, [
@@ -248,7 +245,7 @@ class Keep:
         x0, z0, x1, z1 = interior((2, 2))
         cx, cz = (x0 + x1) // 2, (z0 + z1) // 2
         self.room(x0, z0, x1, z1)
-        # Sol a motif et verrous : le joueur comprend d'un regard ce qu'on attend de lui
+        # Sol a motif et braseros : le coeur du donjon
         for x in range(x0, x1 + 1):
             for z in range(z0, z1 + 1):
                 if (x - cx) ** 2 + (z - cz) ** 2 <= 9:
@@ -257,12 +254,11 @@ class Keep:
             d.pillar(x, z, FLOOR + 1, TOP, t["pillar"])
         for (x, z) in ((cx - 3, cz - 3), (cx + 3, cz - 3), (cx, cz + 3)):
             d.set(x, FLOOR + 1, z, t["pedestal"])
-            d.set(x, FLOOR + 2, z, "rune_lock", lit="false")
-            self.locks.append((x, FLOOR + 2, z))
+            d.set(x, FLOOR + 2, z, t["lantern"], hanging="false", waterlogged="false")
         d.hanging_lantern(cx, TOP + 1, cz, 2, t["lantern"])
 
     def descent(self):
-        """Hall de la descente : trois cases d'un seul tenant, un escalier ferme par une herse de sceaux."""
+        """Hall de la descente : trois cases d'un seul tenant et le grand escalier vers l'arene."""
         d, t = self.d, self.t
         hx0, hz0, hx1, hz1 = interior((1, 1))[0], interior((1, 1))[1], interior((3, 1))[2], interior((3, 1))[3]
         self.room(hx0, hz0, hx1, hz1, None)
@@ -275,10 +271,6 @@ class Keep:
         d.rail(40, FLOOR + 1, 19, 45, 19, t["rail"])
         d.rail(40, FLOOR + 1, 23, 45, 23, t["rail"])
         d.rail(40, FLOOR + 1, 20, 40, 22, t["rail"])
-        # Herse : la section du tunnel est barree, de la marche au plafond (le verrou la dissout, le coffre-fort reste ferme)
-        for z in (20, 21, 22):
-            for y in GATE_Y:
-                d.set(35, y, z, "guardian_seal")
         for x in (hx0 + 3, hx1 - 3):
             d.pillar(x, 18, FLOOR + 1, TOP, t["pillar"])
             d.pillar(x, 26, FLOOR + 1, TOP, t["pillar"])
@@ -392,7 +384,7 @@ NON_SOLID = ("minecraft:air", "minecraft:cobweb", "minecraft:ladder", "minecraft
              "minecraft:candle", "minecraft:skeleton_skull", "minecraft:wither_skeleton_skull")
 
 
-def _passable(keep, pos, open_seals):
+def _passable(keep, pos):
     name = keep.d.blocks.get(pos)
     if name is None:
         return False  # roche : infranchissable
@@ -401,8 +393,6 @@ def _passable(keep, pos, open_seals):
         return True
     if name == "minecraft:iron_door":
         return True  # le levier est juste a cote
-    if name == "netheryx:guardian_seal":
-        return open_seals and pos[1] in GATE_Y  # les verrous n'ouvrent que la herse, pas le coffre-fort
     return False
 
 
@@ -411,7 +401,7 @@ def _standable(keep, pos):
     return name is not None and name[0] not in ("minecraft:air", "minecraft:lava") and "fire" not in name[0]
 
 
-def _walk(keep, start, open_seals, open_vault):
+def _walk(keep, start, open_vault):
     """Toutes les cases ou un joueur peut se tenir, a partir de start (marche, chute, saut d'un bloc de vide, echelles)."""
     def free(p):
         if not (0 <= p[0] < SIZE and 0 <= p[1] < keep.d.size[1] and 0 <= p[2] < SIZE):
@@ -419,7 +409,7 @@ def _walk(keep, start, open_seals, open_vault):
         name = keep.d.blocks.get(p)
         if open_vault and name is not None and name[0] in ("netheryx:warded_bricks", "netheryx:guardian_seal"):
             return True
-        return _passable(keep, p, open_seals)
+        return _passable(keep, p)
 
     seen = {start}
     queue = deque([start])
@@ -504,23 +494,23 @@ def verify(keep):
     assert not problems, f"{label} : blocs sans support {problems[:8]}"
     start = (37, GROUND + 1, 74)
     assert keep.d.blocks.get(start, ("",))[0] == AIR, f"{label} : entree bouchee"
-    closed = _walk(keep, start, False, False)
-    assert len(keep.keys) == 3 and len(keep.locks) == 3, f"{label} : il faut trois clefs et trois verrous"
+    alive = _walk(keep, start, False)
+    assert len(keep.keys) == 3, f"{label} : il faut trois tresors d'aile"
     for key in keep.keys:
-        assert _near(closed, key), f"{label} : clef inaccessible en {key}"
-    for lock in keep.locks:
-        assert _near(closed, lock), f"{label} : verrou inaccessible en {lock}"
-    boss = BOSS_POS
-    x0, z0, x1, z1 = ARENA
-    in_arena = [p for p in closed if x0 <= p[0] <= x1 and z0 <= p[2] <= z1 and p[1] <= ARENA_TOP]
-    assert not in_arena, f"{label} : arene accessible avant la herse ({in_arena[:3]})"
-    opened = _walk(keep, start, True, False)
-    assert _near(opened, boss), f"{label} : arene inaccessible apres l'ouverture de la herse"
-    in_vault = [p for p in opened if 32 <= p[0] <= 42 and 61 <= p[2] <= 69 and p[1] <= 7]
+        assert _near(alive, key), f"{label} : tresor inaccessible en {key}"
+    assert _near(alive, BOSS_POS), f"{label} : arene inaccessible"
+    in_vault = [p for p in alive if 32 <= p[0] <= 42 and 61 <= p[2] <= 69 and p[1] <= 7]
     assert not in_vault, f"{label} : coffre-fort accessible avant la mort du boss ({in_vault[:3]})"
-    after = _walk(keep, start, True, True)
+    # Coque du coffre-fort : six faces completes, sans aucun trou
+    shell = {p for p, b in keep.d.blocks.items() if b[0] in ("netheryx:warded_bricks", "netheryx:guardian_seal")}
+    for x in range(31, 44):
+        for y in range(1, 9):
+            for z in range(60, 71):
+                if x in (31, 43) or y in (1, 8) or z in (60, 70):
+                    assert (x, y, z) in shell, f"{label} : trou dans la coque du coffre-fort en {(x, y, z)}"
+    after = _walk(keep, start, True)
     assert _near(after, (34, 2, 68)), f"{label} : coffre-fort inaccessible apres la mort du boss"
-    print(f"NetheryX : {label} verifie ({len(closed)} cases avant la herse, {len(opened)} apres)")
+    print(f"NetheryX : {label} verifie ({len(alive)} cases accessibles)")
 
 
 def generate():

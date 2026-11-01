@@ -300,10 +300,6 @@ public final class ModItems {
             () -> new WyvernEggItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
     public static final RegistryObject<Item> WYVERN_WHISTLE = register("wyvern_whistle",
             () -> new WyvernWhistleItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).fireResistant()));
-    /** Clef runique : allume un verrou de la rotonde des donjons (1.4.0). */
-    public static final RegistryObject<Item> RUNE_KEY = register("rune_key",
-            () -> new com.netheryx.item.RuneKeyItem(new Item.Properties().fireResistant().stacksTo(16).rarity(Rarity.RARE)));
-
     public static final RegistryObject<Item> WYVERN_CRYSTAL = register("wyvern_crystal",
             () -> new WyvernCrystalItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC).fireResistant()));
     public static final RegistryObject<Item> BASALT_GOLEM_SPAWN_EGG = register("basalt_golem_spawn_egg",

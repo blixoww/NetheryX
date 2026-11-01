@@ -2,7 +2,7 @@
   "name": "Withered Catacombs",
   "icon": "minecraft:wither_skeleton_skull",
   "category": "netheryx:structures",
-  "sortnum": 32,
+  "sortnum": 33,
   "pages": [
     {
       "type": "patchouli:text",

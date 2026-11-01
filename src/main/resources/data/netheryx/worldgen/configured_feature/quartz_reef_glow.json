@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:glow_cluster",
+  "config": {
+    "main": {
+      "Name": "minecraft:calcite"
+    },
+    "accent": {
+      "Name": "minecraft:pearlescent_froglight"
+    },
+    "size": 2
+  }
+}

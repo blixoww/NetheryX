@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:biome_pillar",
+  "config": {
+    "main": {
+      "Name": "minecraft:nether_wart_block"
+    },
+    "accent": {
+      "Name": "minecraft:red_terracotta"
+    },
+    "size": 3
+  }
+}

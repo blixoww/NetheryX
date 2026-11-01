@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:petrified_onyx_forest",
+  "features": [
+    "netheryx:petrified_onyx_forest_pillar",
+    "netheryx:petrified_onyx_forest_crystals",
+    "netheryx:petrified_onyx_forest_glow"
+  ],
+  "step": "vegetal_decoration"
+}

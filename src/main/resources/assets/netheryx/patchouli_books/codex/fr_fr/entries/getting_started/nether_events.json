@@ -2,7 +2,7 @@
   "name": "Événements du Nether",
   "icon": "netheryx:sulfur",
   "category": "netheryx:getting_started",
-  "sortnum": 67,
+  "sortnum": 68,
   "pages": [
     {
       "type": "patchouli:text",

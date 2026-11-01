@@ -2,7 +2,7 @@
   "name": "Traveler's Camp",
   "icon": "minecraft:campfire",
   "category": "netheryx:structures",
-  "sortnum": 33,
+  "sortnum": 34,
   "pages": [
     {
       "type": "patchouli:text",

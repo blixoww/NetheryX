@@ -6,7 +6,6 @@ import com.netheryx.config.NetheryXConfig;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Climate;
 import terrablender.api.Region;
 import terrablender.api.RegionType;
@@ -20,57 +19,58 @@ import java.util.function.Consumer;
  * monde, ce qui garantit la compatibilite avec Biomes O' Plenty, Incendium (Forge), etc.
  */
 public class NetheryXRegion extends Region {
-    private static final float COLD = -0.345F;
-    private static final float COOL = -0.1F;
-    private static final float WARM = 0.1F;
-    private static final float HOT = 0.345F;
-    private static final float DRY = -0.345F;
-    private static final float DAMP = -0.1F;
-    private static final float MOIST = 0.1F;
-    private static final float WET = 0.345F;
+    private static final float LOW = -0.22F;
+    private static final float MID = 0.0F;
+    private static final float HIGH = 0.22F;
+    private static final float[] STEPS = {LOW, MID, HIGH};
 
-    public NetheryXRegion(int weight) {
-        super(NetheryX.id("nether"), RegionType.NETHER, weight);
+    /**
+     * Trois regions, chacune avec une famille de biomes sur une grille de 3 x 3 (temperature en ligne, humidite en colonne).
+     * Avec peu de biomes par region, chacun s'etend bien plus largement, et le Nether alterne de vraies contrees. Un biome
+     * repete sur des cases voisines forme une seule grande etendue.
+     */
+    private final ResourceKey<Biome>[][] grid;
+
+    @SafeVarargs
+    private NetheryXRegion(String name, int weight, ResourceKey<Biome>[]... grid) {
+        super(NetheryX.id(name), RegionType.NETHER, weight);
+        this.grid = grid;
+    }
+
+    @SafeVarargs
+    private static ResourceKey<Biome>[] row(ResourceKey<Biome>... biomes) {
+        return biomes;
     }
 
     public static void registerRegionAndSurfaceRules() {
         int weight = NetheryXConfig.REGION_WEIGHT.get();
         if (weight > 0) {
-            Regions.register(new NetheryXRegion(weight));
+            int each = Math.max(1, weight / 3);
+            // Contrees de feu : prairies et forets embrasees, soufre et verre en fusion
+            Regions.register(new NetheryXRegion("nether_ember", each,
+                    row(ModBiomes.MOLTEN_GLASS_LAKE, ModBiomes.EMBER_GROVE, ModBiomes.HELLWOOD_JUNGLE),
+                    row(ModBiomes.SULFUR_SPRINGS, ModBiomes.EMBER_MEADOW, ModBiomes.HELLWOOD_JUNGLE),
+                    row(ModBiomes.SULFUR_SPRINGS, ModBiomes.EMBER_MEADOW, ModBiomes.EMBER_GROVE)));
+            // Contrees mortes : cendre, bois fletri, os et givre
+            Regions.register(new NetheryXRegion("nether_ash", each,
+                    row(ModBiomes.ASHEN_WASTES, ModBiomes.ASHEN_WASTES, ModBiomes.WITHERED_FOREST),
+                    row(ModBiomes.RIMEFROST_CHASM, ModBiomes.WITHERED_FOREST, ModBiomes.MARROW_THICKET),
+                    row(ModBiomes.RIMEFROST_CHASM, ModBiomes.RIMEFROST_CHASM, ModBiomes.MARROW_THICKET)));
+            // Contrees minerales et vivantes : quartz, onyx et verrues
+            Regions.register(new NetheryXRegion("nether_crystal", each,
+                    row(ModBiomes.QUARTZ_REEF, ModBiomes.QUARTZ_REEF, ModBiomes.PETRIFIED_ONYX_FOREST),
+                    row(ModBiomes.QUARTZ_REEF, ModBiomes.WARTVINE_TANGLE, ModBiomes.PETRIFIED_ONYX_FOREST),
+                    row(ModBiomes.WARTVINE_TANGLE, ModBiomes.WARTVINE_TANGLE, ModBiomes.PETRIFIED_ONYX_FOREST)));
         }
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.NETHER, NetheryX.MOD_ID, NetheryXSurfaceRules.makeRules());
     }
 
-    /**
-     * Grille de 4 x 4 cases temperature / humidite. Le climat du Nether se concentre pres de zero : les graduations
-     * sont les quartiles de sa distribution (mesures avec la sonde des GameTests), pour que chaque biome ait une part
-     * comparable. Un point place aux extremes (+/- 0,95) ne genere presque rien.
-     */
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
-        add(mapper, COLD, DRY, ModBiomes.ASHEN_WASTES);
-        add(mapper, COLD, DAMP, ModBiomes.WITHERED_FOREST);
-        add(mapper, COLD, MOIST, ModBiomes.RIMEFROST_CHASM);
-        add(mapper, COLD, WET, ModBiomes.MARROW_THICKET);
-
-        add(mapper, COOL, DRY, ModBiomes.QUARTZ_REEF);
-        add(mapper, COOL, DAMP, Biomes.NETHER_WASTES);
-        add(mapper, COOL, MOIST, Biomes.SOUL_SAND_VALLEY);
-        add(mapper, COOL, WET, ModBiomes.PETRIFIED_ONYX_FOREST);
-
-        add(mapper, WARM, DRY, ModBiomes.SULFUR_SPRINGS);
-        add(mapper, WARM, DAMP, Biomes.BASALT_DELTAS);
-        add(mapper, WARM, MOIST, ModBiomes.WARTVINE_TANGLE);
-        add(mapper, WARM, WET, ModBiomes.EMBER_MEADOW);
-
-        add(mapper, HOT, DRY, ModBiomes.MOLTEN_GLASS_LAKE);
-        add(mapper, HOT, DAMP, ModBiomes.EMBER_GROVE);
-        add(mapper, HOT, MOIST, ModBiomes.HELLWOOD_JUNGLE);
-        add(mapper, HOT, WET, Biomes.CRIMSON_FOREST);
-    }
-
-    private void add(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper,
-                     float temperature, float humidity, ResourceKey<Biome> biome) {
-        this.addBiome(mapper, Climate.parameters(temperature, humidity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), biome);
+        for (int t = 0; t < 3; t++) {
+            for (int h = 0; h < 3; h++) {
+                this.addBiome(mapper, Climate.parameters(STEPS[t], STEPS[h], 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), this.grid[t][h]);
+            }
+        }
     }
 }

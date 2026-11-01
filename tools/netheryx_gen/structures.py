@@ -1347,4 +1347,6 @@ def generate():
     structures_v134.generate_gametest()
     from . import structures_v140
     structures_v140.generate()
+    from . import structures_v150
+    structures_v150.generate()
     structures_v134.save_check()

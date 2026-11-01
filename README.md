@@ -69,9 +69,10 @@ et les objets en onyx ne brûlent pas dans la lave. Au-delà : l'**équipement a
 
 ### Structures
 - **Citadelle d'onyx**, **Sanctuaire infernal**, **Catacombes flétries** : complexes souterrains sous une petite entrée, trahis
-  en surface par des **indices** (ruines, restes d'explorateurs, panneaux). On y explore **trois ailes** pour gagner trois **Clefs
-  runiques**, qui allument les verrous de la rotonde et ouvrent la descente vers l'**arène du boss**, puis le **coffre-fort scellé**.
-  Le plan et les salles changent d'un donjon à l'autre.
+  en surface par des **indices** (ruines, restes d'explorateurs, panneaux). Un grand escalier mène à l'**arène du boss** ; **trois ailes**
+  facultatives cachent de beaux trésors. Le **coffre-fort**, aux murs indestructibles camouflés en briques, ne s'ouvre qu'à la mort
+  du boss. Le plan et les salles changent d'un donjon à l'autre.
+- **Petites trouvailles** partout dans le Nether : deux ou trois ennemis, un coffre.
 - Petites structures : Forge de basalte, Nids de wyverne, Caravane nomade, Campement de voyageur, Jardin du Nether,
   Cache secrète. Toutes se retrouvent avec la **Boussole des âmes**.
 - Sous la voûte : **nids de spectres** et **cages d'explorateurs** suspendus au-dessus des grands vides.
@@ -127,8 +128,11 @@ référence quelque chose qui existe ; la CI lance les deux scripts.
 **Textures dérivées du vanilla** : `tools/diamond_armor.py` (armures) et `tools/vanilla_textures.py` (armes, nourritures, bois...)
 recolorent les textures de Minecraft dans `art/` à partir du jar du cache Gradle.
 
-**Vérification des donjons** : `structures_v140.py` parcourt chaque gabarit à pied (clefs et verrous accessibles, arène fermée avant
-la herse, coffre-fort fermé avant le boss, aucun bloc sans support) ; un plan invalide fait échouer la génération.
+**Vérification des donjons** : `structures_v140.py` parcourt chaque gabarit à pied (trésors et arène accessibles, coffre-fort fermé
+sur ses six faces avant la mort du boss, aucun bloc sans support) ; un plan invalide fait échouer la génération.
+
+**Aperçus** : `tools/render_preview.py` dessine un gabarit (`structure nether_garden/v2 sortie.png`) ou les biomes réellement générés
+(`NETHERYX_DUMP=1 ./gradlew runGameTestServer`, puis `dump run-gametest/biome_dump sortie.png`).
 
 **Textures faites main** : placez-les dans `art/assets/netheryx/...` (même chemin que dans les ressources). Le
 générateur les copie par-dessus les textures générées, elles ne sont donc jamais écrasées (voir [`art/README.md`](art/README.md)).

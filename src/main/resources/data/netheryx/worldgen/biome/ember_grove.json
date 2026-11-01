@@ -3,7 +3,7 @@
   "temperature": 2.0,
   "downfall": 0.0,
   "effects": {
-    "fog_color": 6035976,
+    "fog_color": 10499340,
     "sky_color": 3344392,
     "water_color": 4159204,
     "water_fog_color": 329011,
@@ -11,7 +11,7 @@
       "options": {
         "type": "netheryx:ember_spark"
       },
-      "probability": 0.02
+      "probability": 0.04
     },
     "ambient_sound": "minecraft:ambient.crimson_forest.loop",
     "mood_sound": {
@@ -74,7 +74,7 @@
     "misc": []
   },
   "spawn_costs": {},
-  "creature_spawn_probability": 0.3,
+  "creature_spawn_probability": 0.2,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

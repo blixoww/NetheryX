@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:biome_pillar",
+  "config": {
+    "main": {
+      "Name": "minecraft:orange_terracotta"
+    },
+    "accent": {
+      "Name": "minecraft:yellow_terracotta"
+    },
+    "size": 3
+  }
+}

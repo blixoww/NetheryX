@@ -2,7 +2,7 @@
   "name": "Mimic",
   "icon": "netheryx:mimic_spawn_egg",
   "category": "netheryx:creatures",
-  "sortnum": 77,
+  "sortnum": 78,
   "pages": [
     {
       "type": "patchouli:entity",

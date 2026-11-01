@@ -1,0 +1,10 @@
+{
+  "type": "forge:add_features",
+  "biomes": "netheryx:sulfur_springs",
+  "features": [
+    "netheryx:sulfur_springs_pillar",
+    "netheryx:sulfur_springs_crystals",
+    "netheryx:sulfur_springs_glow"
+  ],
+  "step": "vegetal_decoration"
+}

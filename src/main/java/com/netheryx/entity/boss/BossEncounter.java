@@ -1,6 +1,5 @@
 package com.netheryx.entity.boss;
 
-import com.netheryx.config.NetheryXConfig;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -10,8 +9,6 @@ import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
@@ -27,8 +24,7 @@ import java.util.function.IntConsumer;
 
 /**
  * Deroulement commun des combats de boss : reveil (titre, rugissement), points de vie adaptes au nombre de joueurs,
- * phases separees par une courte transition (le boss est invulnerable, l'arene tremble), dangers annonces, et fatigue
- * de minage autour du boss vivant (comme le gardien ancien : on n'entre pas dans l'arene en creusant).
+ * phases separees par une courte transition (le boss est invulnerable, l'arene tremble) et dangers annonces.
  */
 public final class BossEncounter {
     private static final UUID PLAYER_SCALE_ID = UUID.fromString("5d9b0f21-7a44-4c3e-9f16-0a7d2b6c8e11");
@@ -37,7 +33,6 @@ public final class BossEncounter {
     private static final int MAX_EXTRA_PLAYERS = 5;
     private static final int TRANSITION_TICKS = 50;
     private static final double ENGAGE_RANGE = 14.0D;
-    private static final double FATIGUE_RANGE = 44.0D;
 
     private final Mob boss;
     private final int color;
@@ -78,11 +73,6 @@ public final class BossEncounter {
     /** A appeler a chaque tick serveur du boss. */
     public void tick(ServerLevel level) {
         this.hazards.tick(level);
-        if (this.boss.tickCount % 40 == 0 && NetheryXConfig.BOSS_MINING_FATIGUE.get()) {
-            for (Player player : this.near(level, FATIGUE_RANGE)) {
-                player.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 100, 2, true, false, true));
-            }
-        }
         if (!this.engaged) {
             if (!this.near(level, ENGAGE_RANGE).isEmpty()) {
                 this.engage(level);

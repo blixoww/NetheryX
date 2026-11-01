@@ -1,0 +1,15 @@
+{
+  "type": "netheryx:glow_cluster",
+  "config": {
+    "main": {
+      "Name": "minecraft:bone_block",
+      "Properties": {
+        "axis": "y"
+      }
+    },
+    "accent": {
+      "Name": "minecraft:ochre_froglight"
+    },
+    "size": 2
+  }
+}

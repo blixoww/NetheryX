@@ -66,44 +66,5 @@ def generate_particles():
     write_json(asset_path("particles", "rune_glyph.json"), {"textures": names})
 
 
-def rune_lock(lit):
-    base = ((42, 30, 62), (58, 42, 86), (30, 22, 46))
-    rune = (235, 200, 255, 255) if lit else (92, 70, 130, 255)
-    glow = (172, 112, 255, 255) if lit else (66, 50, 98, 255)
-    img = Image.new("RGBA", (16, 16), base[0] + (255,))
-    for i in range(16):
-        for (x, y) in ((i, 0), (i, 15), (0, i), (15, i)):
-            img.putpixel((x, y), base[2] + (255,))
-        for (x, y) in ((i, 1), (1, i)):
-            if 0 < i < 15:
-                img.putpixel((x, y), base[1] + (255,))
-    pattern = ["..........", "....##....", "...#..#...", "..#.##.#..", ".#.#..#.#.", ".#.#..#.#.", "..#.##.#..", "...#..#...", "....##....", ".........."]
-    for y, row in enumerate(pattern):
-        for x, ch in enumerate(row):
-            if ch == "#":
-                img.putpixel((3 + x, 3 + y), rune)
-    for (x, y) in ((7, 7), (8, 7), (7, 8), (8, 8)):
-        img.putpixel((x, y), glow)
-    return img
-
-
-def rune_key():
-    rows = ["................", "...........ooo..", "..........oAAAo.", ".........oAooAo.", ".........oAooAo.", ".........oAAAAo.",
-            "........oAAoo...", ".......oAAo.....", "......oAAo......", ".....oAAo.......", "....oAAo........", "..ooAAo.........",
-            ".oAAoAo.........", ".oAoooo.........", "..oo............", "................"]
-    colors = {"o": (34, 22, 54, 255), "A": (190, 140, 255, 255)}
-    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
-    for y, row in enumerate(rows):
-        for x, ch in enumerate(row):
-            if ch in colors:
-                img.putpixel((x, y), colors[ch])
-    img.putpixel((11, 2), (255, 240, 255, 255))
-    img.putpixel((7, 8), (255, 240, 255, 255))
-    return img
-
-
 def generate():
     generate_particles()
-    save(rune_lock(False), "block", "rune_lock.png")
-    save(rune_lock(True), "block", "rune_lock_lit.png")
-    save(rune_key(), "item", "rune_key.png")

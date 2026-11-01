@@ -2,7 +2,7 @@
   "name": "Butin vanilla",
   "icon": "minecraft:chest",
   "category": "netheryx:structures",
-  "sortnum": 35,
+  "sortnum": 36,
   "pages": [
     {
       "type": "patchouli:text",

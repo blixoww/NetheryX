@@ -2,7 +2,7 @@
   "name": "Nasse à magma",
   "icon": "netheryx:lava_trap",
   "category": "netheryx:utility",
-  "sortnum": 82,
+  "sortnum": 83,
   "pages": [
     {
       "type": "patchouli:spotlight",

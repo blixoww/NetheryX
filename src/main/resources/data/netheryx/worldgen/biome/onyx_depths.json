@@ -80,7 +80,7 @@
     "misc": []
   },
   "spawn_costs": {},
-  "creature_spawn_probability": 0.3,
+  "creature_spawn_probability": 0.2,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

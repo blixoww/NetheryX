@@ -334,7 +334,14 @@ def generate_v124_features():
     placed("petrified_tree", "petrified_tree", [every_layer(5), BIOME_FILTER])
 
 
+# Brouillards francs et particules plus denses : on sait d'un regard ou l'on est (1.5.0)
+FOG_V150 = {"ember_grove": ("#a0350c", 0.04), "ember_meadow": ("#c0641c", 0.03), "hellwood_jungle": ("#a82a08", 0.04), "wartvine_tangle": ("#7a1016", 0.05),
+            "sulfur_springs": ("#a08a18", 0.025), "quartz_reef": ("#b8a0b0", 0.05), "marrow_thicket": ("#8a7c5c", 0.06), "rimefrost_chasm": ("#4a7ca8", 0.05),
+            "withered_forest": ("#3c4c48", 0.05), "petrified_onyx_forest": ("#44286c", 0.04), "ashen_wastes": ("#7c7674", 0.09), "molten_glass_lake": ("#d04410", 0.04)}
+
+
 def biome(name, fog, particle, probability, ambient, music, monsters, creatures, underground, vegetal, ambient_mobs=()):
+    fog, probability = FOG_V150.get(name, (fog, probability))
     features = [[] for _ in range(11)]
     features[2] = organic(name)
     features[7] = underground
@@ -352,8 +359,9 @@ def biome(name, fog, particle, probability, ambient, music, monsters, creatures,
         "effects": effects,
         "spawners": {"monster": monsters, "creature": creatures, "ambient": list(ambient_mobs), "axolotls": [],
                      "underground_water_creature": [], "water_creature": [], "water_ambient": [], "misc": []},
-        "spawn_costs": {},
-        "creature_spawn_probability": 0.3,
+        # Les troupeaux s'espacent : chaque animal "coute" de l'energie autour de lui (comme les striders et les piglins vanilla)
+        "spawn_costs": {c["type"]: {"energy_budget": 0.14, "charge": 0.7} for c in creatures if c["type"] != "minecraft:strider"},
+        "creature_spawn_probability": 0.2,
         "carvers": {"air": "minecraft:nether_cave"},
         "features": features,
     })
@@ -485,10 +493,8 @@ def generate_biome_modifiers():
     # Les creatures "standard" (pas les boss) apparaissent ici ou la dans tout le Nether, biomes moddes compris
     biome_modifier("add_netheryx_spawns_everywhere", {"type": "forge:add_spawns", "biomes": "#minecraft:is_nether", "spawners": [
         spawner("ember_stalker", 14, 1, 2), spawner("ash_wraith", 10, 1, 2), spawner("withered_knight", 10, 1, 2),
-        spawner("fire_ghast", 24, 1, 1), spawner("onyx_cube", 10, 1, 3),
-        spawner("magma_crab", 32, 2, 4), spawner("basalt_beetle", 26, 2, 4), spawner("ember_cow", 40, 2, 5),
-        spawner("cinder_hen", 40, 2, 5), spawner("soul_moth", 14, 2, 4), spawner("magmafish", 18, 2, 5),
-        spawner("blaze_pig", 20, 2, 4), spawner("ember_firefly", 25, 8, 14)]})
+        spawner("fire_ghast", 24, 1, 1), spawner("onyx_cube", 10, 1, 3), spawner("basalt_beetle", 12, 2, 3),
+        spawner("soul_moth", 14, 2, 4), spawner("magmafish", 18, 2, 5), spawner("ember_firefly", 25, 8, 14)]})
     biome_modifier("add_v120_vanilla_spawns_basalt", {"type": "forge:add_spawns", "biomes": "minecraft:basalt_deltas", "spawners": [
         spawner("basalt_burrower", 15, 1, 1), spawner("cinder_lizard", 6, 1, 2)]})
     biome_modifier("add_v120_vanilla_spawns_soul", {"type": "forge:add_spawns", "biomes": "minecraft:soul_sand_valley", "spawners": [
@@ -530,7 +536,15 @@ STRUCTURES = {
     "nomad_caravan": (14, 5, 902817364, 7, 33, 0, 25, "beard_thin"),
     "basalt_forge": (18, 6, 640918273, 12, 33, 0, 25, "beard_thin"),
     "wyvern_nest": (16, 6, 418273650, 18, 33, 1, 12, "beard_thin"),
+    # 1.5.0 : petites trouvailles (deux ou trois ennemis, un coffre), qu'on croise souvent
+    "scorched_outpost": (9, 3, 310442771, 5, 33, 0, 9, "beard_thin"),
+    "bone_shrine": (9, 3, 905511263, 5, 33, 0, 9, "beard_thin"),
+    "crystal_hollow": (9, 3, 127340955, 5, 33, 0, 9, "beard_thin"),
+    "lava_forge": (9, 3, 688201397, 5, 33, 0, 9, "beard_thin"),
 }
+
+FILES_V150 = {"nether_garden": ["v2"], "nomad_caravan": ["v2"], "scorched_outpost": ["find_0", "find_1"], "bone_shrine": ["find_0", "find_1"],
+              "crystal_hollow": ["find_0", "find_1"], "lava_forge": ["find_0", "find_1"]}
 
 PROCESSORS = {
 }
@@ -550,7 +564,7 @@ def generate_structures():
         # Grands donjons : le gabarit historique et ses variantes thematiques, tires au sort a chaque generation
         # Les mondes existants gardent leurs gabarits (main, variant_*) ; les nouveaux donjons sont les complexes 1.4.0.
         from .structures_v140 import ENTRANCE, ENTRANCE_FOOTPRINT, GROUND, KEEPS
-        files = [f"keep_{k}" for k in range(KEEPS)] if name in APPROACH else ["main"]
+        files = [f"keep_{k}" for k in range(KEEPS)] if name in APPROACH else FILES_V150.get(name, ["main"])
         write_json(data_path("worldgen", "template_pool", name, "start.json"), {
             "fallback": "minecraft:empty",
             "elements": [{"weight": 1, "element": {"element_type": "minecraft:single_pool_element",

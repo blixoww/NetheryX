@@ -2,7 +2,7 @@
   "name": "Fourré de moelle",
   "icon": "netheryx:ossified_nylium",
   "category": "netheryx:biomes",
-  "sortnum": 68,
+  "sortnum": 69,
   "pages": [
     {
       "type": "patchouli:text",

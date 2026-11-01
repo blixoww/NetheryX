@@ -33,28 +33,10 @@
       "maxCount": 3
     },
     {
-      "type": "netheryx:magma_crab",
-      "weight": 32,
-      "minCount": 2,
-      "maxCount": 4
-    },
-    {
       "type": "netheryx:basalt_beetle",
-      "weight": 26,
+      "weight": 12,
       "minCount": 2,
-      "maxCount": 4
-    },
-    {
-      "type": "netheryx:ember_cow",
-      "weight": 40,
-      "minCount": 2,
-      "maxCount": 5
-    },
-    {
-      "type": "netheryx:cinder_hen",
-      "weight": 40,
-      "minCount": 2,
-      "maxCount": 5
+      "maxCount": 3
     },
     {
       "type": "netheryx:soul_moth",
@@ -67,12 +49,6 @@
       "weight": 18,
       "minCount": 2,
       "maxCount": 5
-    },
-    {
-      "type": "netheryx:blaze_pig",
-      "weight": 20,
-      "minCount": 2,
-      "maxCount": 4
     },
     {
       "type": "netheryx:ember_firefly",

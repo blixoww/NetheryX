@@ -3,7 +3,7 @@
   "temperature": 2.0,
   "downfall": 0.0,
   "effects": {
-    "fog_color": 2366000,
+    "fog_color": 4466796,
     "sky_color": 3344392,
     "water_color": 4159204,
     "water_fog_color": 329011,
@@ -11,7 +11,7 @@
       "options": {
         "type": "netheryx:onyx_glint"
       },
-      "probability": 0.015
+      "probability": 0.04
     },
     "ambient_sound": "minecraft:ambient.soul_sand_valley.loop",
     "mood_sound": {
@@ -86,8 +86,13 @@
     "water_ambient": [],
     "misc": []
   },
-  "spawn_costs": {},
-  "creature_spawn_probability": 0.3,
+  "spawn_costs": {
+    "netheryx:crystal_snail": {
+      "energy_budget": 0.14,
+      "charge": 0.7
+    }
+  },
+  "creature_spawn_probability": 0.2,
   "carvers": {
     "air": "minecraft:nether_cave"
   },

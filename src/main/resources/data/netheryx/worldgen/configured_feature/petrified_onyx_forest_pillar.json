@@ -1,0 +1,12 @@
+{
+  "type": "netheryx:biome_pillar",
+  "config": {
+    "main": {
+      "Name": "minecraft:blackstone"
+    },
+    "accent": {
+      "Name": "minecraft:amethyst_block"
+    },
+    "size": 4
+  }
+}

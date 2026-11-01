@@ -2,7 +2,7 @@
   "name": "Fruits des arbres",
   "icon": "netheryx:ember_fig",
   "category": "netheryx:farming",
-  "sortnum": 52,
+  "sortnum": 53,
   "pages": [
     {
       "type": "patchouli:spotlight",

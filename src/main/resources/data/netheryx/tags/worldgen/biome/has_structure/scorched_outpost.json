@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "netheryx:ember_meadow",
+    "netheryx:ember_grove",
+    "netheryx:hellwood_jungle",
+    "netheryx:wartvine_tangle",
+    "minecraft:crimson_forest",
+    "minecraft:nether_wastes"
+  ]
+}
