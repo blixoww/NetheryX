@@ -20,6 +20,15 @@ import java.util.function.Consumer;
  * monde, ce qui garantit la compatibilite avec Biomes O' Plenty, Incendium (Forge), etc.
  */
 public class NetheryXRegion extends Region {
+    private static final float COLD = -0.345F;
+    private static final float COOL = -0.1F;
+    private static final float WARM = 0.1F;
+    private static final float HOT = 0.345F;
+    private static final float DRY = -0.345F;
+    private static final float DAMP = -0.1F;
+    private static final float MOIST = 0.1F;
+    private static final float WET = 0.345F;
+
     public NetheryXRegion(int weight) {
         super(NetheryX.id("nether"), RegionType.NETHER, weight);
     }
@@ -32,49 +41,36 @@ public class NetheryXRegion extends Region {
         SurfaceRuleManager.addSurfaceRules(SurfaceRuleManager.RuleCategory.NETHER, NetheryX.MOD_ID, NetheryXSurfaceRules.makeRules());
     }
 
+    /**
+     * Grille de 4 x 4 cases temperature / humidite. Le climat du Nether se concentre pres de zero : les graduations
+     * sont les quartiles de sa distribution (mesures avec la sonde des GameTests), pour que chaque biome ait une part
+     * comparable. Un point place aux extremes (+/- 0,95) ne genere presque rien.
+     */
     @Override
     public void addBiomes(Registry<Biome> registry, Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper) {
-        // Un seul point vanilla pour garder des transitions naturelles ; chaque biome NetheryX occupe deux points
-        // du climat, ce qui les rend nettement plus frequents dans la region.
-        add(mapper, 0.0F, 0.0F, 0.0F, Biomes.NETHER_WASTES);
+        add(mapper, COLD, DRY, ModBiomes.ASHEN_WASTES);
+        add(mapper, COLD, DAMP, ModBiomes.WITHERED_FOREST);
+        add(mapper, COLD, MOIST, ModBiomes.RIMEFROST_CHASM);
+        add(mapper, COLD, WET, ModBiomes.MARROW_THICKET);
 
-        add(mapper, 0.5F, 0.7F, 0.0F, ModBiomes.EMBER_MEADOW);
-        add(mapper, 0.2F, 0.2F, 0.05F, ModBiomes.EMBER_MEADOW);
-        add(mapper, 0.7F, 0.3F, 0.0F, ModBiomes.EMBER_GROVE);
-        add(mapper, 0.4F, 0.0F, 0.05F, ModBiomes.EMBER_GROVE);
-        add(mapper, -0.4F, -0.4F, 0.1F, ModBiomes.ASHEN_WASTES);
-        add(mapper, -0.1F, -0.6F, 0.05F, ModBiomes.ASHEN_WASTES);
-        // Profondeurs d'onyx, Marais des ames et Faille de magma (trop proches des biomes vanilla) ne sont plus generes :
-        // leurs places reviennent a la Foret petrifiee, a la Vallee des ames vanilla et au Lac de verre en fusion.
-        // Leurs fichiers restent enregistres pour que les mondes existants se chargent sans erreur.
-        add(mapper, -0.6F, 0.5F, 0.2F, ModBiomes.PETRIFIED_ONYX_FOREST);
-        add(mapper, -0.3F, 0.25F, 0.15F, ModBiomes.PETRIFIED_ONYX_FOREST);
-        add(mapper, 0.35F, -0.7F, 0.1F, ModBiomes.SULFUR_SPRINGS);
-        add(mapper, 0.6F, -0.5F, 0.05F, ModBiomes.SULFUR_SPRINGS);
-        add(mapper, -0.2F, 0.8F, 0.1F, Biomes.SOUL_SAND_VALLEY);
-        add(mapper, 0.0F, -0.5F, 0.0F, ModBiomes.SULFUR_SPRINGS);
-        add(mapper, -0.8F, -0.1F, 0.15F, ModBiomes.WITHERED_FOREST);
-        add(mapper, -0.6F, -0.7F, 0.1F, ModBiomes.WITHERED_FOREST);
-        add(mapper, 0.9F, -0.3F, 0.2F, ModBiomes.MOLTEN_GLASS_LAKE);
-        add(mapper, 0.85F, 0.0F, 0.15F, ModBiomes.HELLWOOD_JUNGLE);
-        add(mapper, -0.5F, 0.95F, 0.15F, ModBiomes.MARROW_THICKET);
-        add(mapper, -0.75F, 0.75F, 0.1F, ModBiomes.MARROW_THICKET);
-        add(mapper, -0.95F, 0.4F, 0.2F, ModBiomes.RIMEFROST_CHASM);
-        add(mapper, -0.95F, 0.0F, 0.15F, ModBiomes.RIMEFROST_CHASM);
-        add(mapper, 0.25F, 0.45F, 0.1F, ModBiomes.WARTVINE_TANGLE);
-        add(mapper, 0.45F, 0.9F, 0.05F, ModBiomes.WARTVINE_TANGLE);
-        add(mapper, 0.1F, -0.95F, 0.15F, ModBiomes.QUARTZ_REEF);
-        add(mapper, 0.35F, -0.3F, 0.1F, ModBiomes.QUARTZ_REEF);
-        add(mapper, 0.65F, 0.6F, 0.1F, ModBiomes.HELLWOOD_JUNGLE);
-        add(mapper, 0.3F, 0.75F, 0.05F, ModBiomes.HELLWOOD_JUNGLE);
-        add(mapper, 0.95F, 0.5F, 0.15F, ModBiomes.MOLTEN_GLASS_LAKE);
-        add(mapper, 0.75F, -0.85F, 0.1F, ModBiomes.MOLTEN_GLASS_LAKE);
-        add(mapper, -0.7F, 0.15F, 0.2F, ModBiomes.PETRIFIED_ONYX_FOREST);
-        add(mapper, -0.35F, -0.25F, 0.15F, ModBiomes.PETRIFIED_ONYX_FOREST);
+        add(mapper, COOL, DRY, ModBiomes.QUARTZ_REEF);
+        add(mapper, COOL, DAMP, Biomes.NETHER_WASTES);
+        add(mapper, COOL, MOIST, Biomes.SOUL_SAND_VALLEY);
+        add(mapper, COOL, WET, ModBiomes.PETRIFIED_ONYX_FOREST);
+
+        add(mapper, WARM, DRY, ModBiomes.SULFUR_SPRINGS);
+        add(mapper, WARM, DAMP, Biomes.BASALT_DELTAS);
+        add(mapper, WARM, MOIST, ModBiomes.WARTVINE_TANGLE);
+        add(mapper, WARM, WET, ModBiomes.EMBER_MEADOW);
+
+        add(mapper, HOT, DRY, ModBiomes.MOLTEN_GLASS_LAKE);
+        add(mapper, HOT, DAMP, ModBiomes.EMBER_GROVE);
+        add(mapper, HOT, MOIST, ModBiomes.HELLWOOD_JUNGLE);
+        add(mapper, HOT, WET, Biomes.CRIMSON_FOREST);
     }
 
     private void add(Consumer<Pair<Climate.ParameterPoint, ResourceKey<Biome>>> mapper,
-                     float temperature, float humidity, float offset, ResourceKey<Biome> biome) {
-        this.addBiome(mapper, Climate.parameters(temperature, humidity, 0.0F, 0.0F, 0.0F, 0.0F, offset), biome);
+                     float temperature, float humidity, ResourceKey<Biome> biome) {
+        this.addBiome(mapper, Climate.parameters(temperature, humidity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F), biome);
     }
 }

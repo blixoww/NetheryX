@@ -3,6 +3,8 @@ package com.netheryx.entity;
 import com.netheryx.registry.ModParticles;
 import com.netheryx.util.MobParticles;
 import com.netheryx.config.NetheryXConfig;
+import com.netheryx.entity.boss.BossEncounter;
+import com.netheryx.entity.boss.BossFx;
 import com.netheryx.util.GuardianSeals;
 import com.netheryx.entity.ai.SentinelSlamGoal;
 import net.minecraft.core.BlockPos;
@@ -51,11 +53,12 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 
 /**
  * Sentinelle d'Onyx : boss gardien des Citadelles d'Onyx.
- * Phase 1 : coups, onde de choc, bond ecrasant sur les cibles eloignees, pluie de cristaux telegraphiee.
- * Phase 2 (50 %) : rage, lignes de crocs de cristal, carapace d'onyx (degats reduits de 75 % quelques secondes).
- * Phase 3 (25 %) : appelle des cubes d'onyx.
+ * Phase 1 : coups, frappe annoncee au sol, bond ecrasant sur les cibles eloignees, pluie de cristaux.
+ * Phase 2 (66 %) : rage, ondes de choc a sauter, lignes de crocs de cristal, faisceau d'onyx (les piliers de l'arene
+ * l'arretent) et carapace (degats reduits de 75 %, mais six coups la brisent et etourdissent la Sentinelle).
+ * Phase 3 (33 %) : appelle des cubes d'onyx, pluie plus dense.
  */
-public class OnyxSentinel extends Monster implements GeoEntity {
+public class OnyxSentinel extends Monster implements com.netheryx.entity.boss.BossEntity, GeoEntity {
     private static final String NAME = "onyx_sentinel";
     private static final RawAnimation IDLE = NetheryXAnimations.loop(NAME, "idle");
     private static final RawAnimation WALK = NetheryXAnimations.loop(NAME, "walk");
@@ -70,7 +73,8 @@ public class OnyxSentinel extends Monster implements GeoEntity {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     /** Le boss reste cloisonne dans son arene (rayon 11 blocs autour de son point d'apparition). */
-    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(11.0D, 10.0D);
+    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(15.0D, 10.0D);
+    private final BossEncounter encounter = new BossEncounter(this, BossFx.ONYX, new float[]{0.66F, 0.33F}, this::onPhase);
     private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(this.getDisplayName(),
             BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.NOTCHED_10).setDarkenScreen(true);
     private int slamCooldown = 60;
@@ -85,6 +89,10 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     private final java.util.List<Vec3> rainTargets = new java.util.ArrayList<>();
     private int shellCooldown = 300;
     private int shellTicks;
+    private int shellHits;
+    private int stunTicks;
+    private int beamCooldown = 120;
+    private int beamTicks;
     private static final String TAG_ENRAGED = "Enraged";
     private static final java.util.UUID RAGE_SPEED_ID = java.util.UUID.fromString("6f1b5d2a-3c1e-4c8b-9a51-2f6c7d9e1a01");
 
@@ -132,7 +140,19 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     // --- Onde de choc ------------------------------------------------------------------------
 
     public boolean canSlam() {
-        return this.slamCooldown <= 0;
+        return this.slamCooldown <= 0 && !this.isBusy();
+    }
+
+    /** Transition de phase, etourdissement ou faisceau : la Sentinelle ne marche ni ne frappe. */
+    private boolean isBusy() {
+        return this.encounter.inTransition() || this.stunTicks > 0 || this.beamTicks > 0;
+    }
+
+    /** Reste sur place sans couper l'IA (isImmobile() de Minecraft arreterait aussi le code du boss). */
+    private void holdStill() {
+        this.getNavigation().stop();
+        this.getMoveControl().setWantedPosition(this.getX(), this.getY(), this.getZ(), 0.0D);
+        this.setZza(0.0F);
     }
 
     public void resetSlamCooldown() {
@@ -142,6 +162,9 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     public void startSlamAnimation() {
         this.triggerAnim("attack", "slam");
         this.playSound(SoundEvents.RAVAGER_ROAR, 1.5F, 0.6F);
+        if (this.level() instanceof ServerLevel server) {
+            BossFx.telegraph(server, BossFx.onGround(server, this.position()), SLAM_RADIUS + 1.0D, 14, BossFx.ONYX);
+        }
     }
 
     public void performSlam() {
@@ -162,10 +185,19 @@ public class OnyxSentinel extends Monster implements GeoEntity {
                 this.getX(), this.getY() + 0.1D, this.getZ(), 80, SLAM_RADIUS / 2.0D, 0.1D, SLAM_RADIUS / 2.0D, 0.15D);
         server.sendParticles(ParticleTypes.EXPLOSION, this.getX(), this.getY() + 0.5D, this.getZ(), 3, 1.0D, 0.2D, 1.0D, 0.0D);
         this.playSound(SoundEvents.GENERIC_EXPLODE, 1.2F, 0.7F);
+        BossFx.shake(server, this.position(), 28.0D, 0.7F, 12);
+        BossFx.shockwave(server, BossFx.onGround(server, this.position()), SLAM_RADIUS + 1.0D, 8, BossFx.ONYX);
+        if (this.encounter.phase() >= 1) {
+            // En rage, la frappe se prolonge en onde : il faut sauter par-dessus
+            this.encounter.hazards().wave(server, this.position(), 14.0D, 0.6D, 7.0F, BossFx.ONYX);
+        }
     }
 
     @Override
     public boolean doHurtTarget(Entity target) {
+        if (this.isBusy()) {
+            return false;
+        }
         this.triggerAnim("attack", "punch");
         return super.doHurtTarget(target);
     }
@@ -174,23 +206,66 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     protected void customServerAiStep() {
         super.customServerAiStep();
         this.arena.tick(this);
+        if (!(this.level() instanceof ServerLevel server)) {
+            return;
+        }
+        this.encounter.tick(server);
+        this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+        if (this.isBusy()) {
+            this.holdStill();
+        }
+        if (this.encounter.inTransition()) {
+            return;
+        }
+        if (this.stunTicks > 0) {
+            this.stunTicks--;
+            server.sendParticles(ParticleTypes.CRIT, this.getX(), this.getY() + this.getBbHeight() + 0.2D, this.getZ(), 2, 0.5D, 0.1D, 0.5D, 0.1D);
+            return;
+        }
+        if (this.beamTicks > 0) {
+            this.beamTicks--;
+            BossFx.runes(server, BossFx.onGround(server, this.position()), 2.2D, 3, this.tickCount);
+            return;
+        }
         if (this.slamCooldown > 0) {
             this.slamCooldown--;
         }
-        this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
-        if (!this.enraged && this.getHealth() < this.getMaxHealth() / 2.0F) {
-            this.enterRage();
-        }
         if (this.enraged && this.getTarget() != null && --this.eruptionCooldown <= 0) {
             this.crystalEruption(this.getTarget());
-            this.eruptionCooldown = 90 + this.random.nextInt(40);
-        }
-        if (!this.lastStand && this.getHealth() < this.getMaxHealth() * 0.25F) {
-            this.enterLastStand();
+            this.eruptionCooldown = 110 + this.random.nextInt(50);
         }
         this.tickLeap();
         this.tickCrystalRain();
         this.tickShell();
+        this.tickBeam(server);
+    }
+
+    private void onPhase(int phase) {
+        if (phase == 1) {
+            this.enterRage();
+        } else if (phase == 2) {
+            this.enterLastStand();
+        }
+    }
+
+    // --- Faisceau d'onyx : balaie l'arene ; on tourne avec lui ou on s'abrite derriere un pilier --------
+
+    private void tickBeam(ServerLevel server) {
+        LivingEntity target = this.getTarget();
+        if (this.encounter.phase() < 1 || --this.beamCooldown > 0 || target == null || this.shellTicks > 0) {
+            return;
+        }
+        this.beamCooldown = 320 + this.random.nextInt(100);
+        int windup = 35;
+        int duration = 110;
+        this.beamTicks = windup + duration;
+        this.getNavigation().stop();
+        this.triggerAnim("attack", "roar");
+        this.playSound(SoundEvents.BEACON_ACTIVATE, 2.0F, 0.6F);
+        Vec3 toward = target.position().subtract(this.position());
+        double side = this.random.nextBoolean() ? 1.0D : -1.0D;
+        double start = Math.atan2(toward.z, toward.x) - side * Math.toRadians(35.0D);
+        this.encounter.hazards().beam(server, this.position().add(0.0D, 1.0D, 0.0D), start, side * 2.6D, windup, duration, 22.0D, 6.0F, BossFx.ONYX);
     }
 
     // --- Bond ecrasant : saute sur une cible eloignee et provoque une onde de choc a la reception -----
@@ -211,6 +286,9 @@ public class OnyxSentinel extends Monster implements GeoEntity {
         double distance = this.distanceToSqr(target);
         if (distance > 49.0D && distance < 400.0D) {
             this.triggerAnim("attack", "leap");
+            if (this.level() instanceof ServerLevel server) {
+                BossFx.telegraph(server, BossFx.onGround(server, target.position()), SLAM_RADIUS + 1.0D, 22, BossFx.ONYX);
+            }
             Vec3 toward = target.position().subtract(this.position());
             this.setDeltaMovement(toward.x * 0.16D, 1.1D, toward.z * 0.16D);
             this.hurtMarked = true;
@@ -221,47 +299,24 @@ public class OnyxSentinel extends Monster implements GeoEntity {
         this.leapCooldown = (this.enraged ? 100 : 160) + this.random.nextInt(60);
     }
 
-    // --- Pluie de cristaux : zones marquees au sol, puis crocs de cristal deux secondes plus tard -------
+    // --- Pluie de cristaux : cercles au sol sous chaque joueur, puis impact ------------------------------
 
     private void tickCrystalRain() {
-        if (this.rainTicks > 0) {
-            this.rainTicks--;
-            if (this.level() instanceof ServerLevel server) {
-                for (Vec3 point : this.rainTargets) {
-                    for (int i = 0; i < 12; i++) {
-                        double angle = i * Math.PI / 6.0D + this.tickCount * 0.2D;
-                        server.sendParticles(ModParticles.ONYX_GLINT.get(), point.x + Math.cos(angle) * 1.5D, point.y + 0.1D,
-                                point.z + Math.sin(angle) * 1.5D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-                    }
-                }
-                if (this.rainTicks == 0) {
-                    for (Vec3 point : this.rainTargets) {
-                        for (int dx = -1; dx <= 1; dx++) {
-                            for (int dz = -1; dz <= 1; dz++) {
-                                this.level().addFreshEntity(new net.minecraft.world.entity.projectile.EvokerFangs(this.level(),
-                                        point.x + dx, point.y, point.z + dz, 0.0F, this.random.nextInt(4), this));
-                            }
-                        }
-                    }
-                    this.playSound(SoundEvents.AMETHYST_CLUSTER_BREAK, 2.0F, 0.5F);
-                    this.rainTargets.clear();
-                }
-            }
+        if (--this.rainCooldown > 0 || this.getTarget() == null || !(this.level() instanceof ServerLevel server)) {
             return;
         }
-        if (--this.rainCooldown > 0 || this.getTarget() == null) {
-            return;
-        }
-        for (Player player : this.level().getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(20.0D),
+        int perPlayer = 2 + this.encounter.phase();
+        for (Player player : this.level().getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(24.0D),
                 player -> !player.isCreative() && !player.isSpectator())) {
-            this.rainTargets.add(player.position());
+            this.encounter.hazards().circle(server, player.position(), 2.6D, 38, 8.0F, BossFx.ONYX);
+            for (int i = 1; i < perPlayer; i++) {
+                Vec3 around = player.position().add(this.random.nextGaussian() * 4.5D, 0.0D, this.random.nextGaussian() * 4.5D);
+                this.encounter.hazards().circle(server, around, 2.6D, 38 + i * 9, 8.0F, BossFx.ONYX);
+            }
         }
-        if (!this.rainTargets.isEmpty()) {
-            this.rainTicks = 40;
-            this.triggerAnim("attack", "slam");
-            this.playSound(SoundEvents.AMETHYST_BLOCK_RESONATE, 2.0F, 0.5F);
-        }
-        this.rainCooldown = 200 + this.random.nextInt(80);
+        this.triggerAnim("attack", "slam");
+        this.playSound(SoundEvents.AMETHYST_BLOCK_RESONATE, 2.0F, 0.5F);
+        this.rainCooldown = 190 + this.random.nextInt(80);
     }
 
     // --- Carapace d'onyx : reduit fortement les degats pendant quelques secondes -----------------------
@@ -275,8 +330,9 @@ public class OnyxSentinel extends Monster implements GeoEntity {
             return;
         }
         if (this.enraged && --this.shellCooldown <= 0) {
-            this.shellTicks = 80;
-            this.shellCooldown = 360 + this.random.nextInt(120);
+            this.shellTicks = 100;
+            this.shellHits = 0;
+            this.shellCooldown = 420 + this.random.nextInt(120);
             this.triggerAnim("attack", "shell");
             this.playSound(SoundEvents.AMETHYST_BLOCK_CHIME, 2.0F, 0.4F);
         }
@@ -284,11 +340,36 @@ public class OnyxSentinel extends Monster implements GeoEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
-        if (this.shellTicks > 0 && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+        boolean bypass = source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY);
+        if (this.encounter.inTransition() && !bypass) {
+            this.playSound(SoundEvents.ANVIL_LAND, 0.5F, 1.8F);
+            return false;
+        }
+        if (this.stunTicks > 0) {
+            amount *= 1.4F; // Carapace brisee : la Sentinelle baisse sa garde
+        }
+        if (this.shellTicks > 0 && !bypass) {
             amount *= 0.25F;
             this.playSound(SoundEvents.AMETHYST_BLOCK_HIT, 1.5F, 0.6F);
+            if (source.getEntity() instanceof Player && ++this.shellHits >= 6) {
+                this.shatterShell();
+            }
         }
         return super.hurt(source, amount);
+    }
+
+    /** Six coups sur la carapace la brisent : la Sentinelle reste etourdie et encaisse davantage. */
+    private void shatterShell() {
+        this.shellTicks = 0;
+        this.stunTicks = 70;
+        this.getNavigation().stop();
+        this.playSound(SoundEvents.AMETHYST_CLUSTER_BREAK, 2.0F, 0.5F);
+        this.playSound(SoundEvents.ANVIL_BREAK, 1.0F, 0.6F);
+        if (this.level() instanceof ServerLevel server) {
+            server.sendParticles(ModParticles.ONYX_GLINT.get(), this.getX(), this.getY(1.0D), this.getZ(), 80, 1.4D, 1.6D, 1.4D, 0.1D);
+            BossFx.shockwave(server, BossFx.onGround(server, this.position()), 5.0D, 10, BossFx.ONYX);
+            BossFx.shake(server, this.position(), 24.0D, 0.6F, 10);
+        }
     }
 
     /** Derniere phase : appelle des cubes d'onyx et reste en rage. */
@@ -328,6 +409,12 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     private void crystalEruption(LivingEntity target) {
         this.triggerAnim("attack", "slam");
         Vec3 direction = target.position().subtract(this.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
+        if (this.level() instanceof ServerLevel server) {
+            for (int i = 1; i <= 12; i += 2) {
+                Vec3 mark = this.position().add(direction.scale(1.25D * i));
+                server.sendParticles(ModParticles.ONYX_GLINT.get(), mark.x, this.getY() + 0.15D, mark.z, 6, 0.3D, 0.0D, 0.3D, 0.0D);
+            }
+        }
         float yaw = (float) Math.atan2(direction.z, direction.x);
         for (int i = 1; i <= 12; i++) {
             Vec3 point = this.position().add(direction.scale(1.25D * i));
@@ -338,10 +425,16 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     }
 
     @Override
+    public com.netheryx.entity.boss.BossEncounter encounter() {
+        return this.encounter;
+    }
+
+    @Override
     public void die(DamageSource source) {
         super.die(source);
         if (this.level() instanceof ServerLevel server) {
             GuardianSeals.breakSealsAround(server, this.blockPosition());
+            this.encounter.deathBurst(server);
         }
     }
 
@@ -369,6 +462,7 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         this.arena.save(tag);
+        this.encounter.save(tag);
         tag.putBoolean(TAG_ENRAGED, this.enraged);
         tag.putBoolean("LastStand", this.lastStand);
     }
@@ -377,6 +471,7 @@ public class OnyxSentinel extends Monster implements GeoEntity {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.arena.load(tag);
+        this.encounter.load(tag);
         this.enraged = tag.getBoolean(TAG_ENRAGED);
         this.lastStand = tag.getBoolean("LastStand");
         if (this.hasCustomName()) {

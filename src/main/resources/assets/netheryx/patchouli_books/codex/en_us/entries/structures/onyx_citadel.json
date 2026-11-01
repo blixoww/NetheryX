@@ -6,11 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Petrified Onyx Forest, Withered Forest, Ashen Wastes, Rimefrost Chasm, Quartz Reef and several vanilla biomes. A walled fortress whose four towers hold Ash Wraith spawners and chests. In the middle stands a $(l)three-storey keep$() that you climb:"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "$(l)1.$() Great hall: knights and Ember Stalker spawners; stairs along the west wall. $(l)2.$() Armory, library (chests, a mimic) and the $(l)sealed vault$() in the centre. $(l)3.$() Under the roof, the arena of the $(l)Onyx Sentinel$(), with balconies (wraiths, chests, mimics). Kill it, then go back down to the vault."
+      "text": "Petrified Onyx Forest, Withered Forest, Ashen Wastes, Rimefrost Chasm, Quartz Reef and several vanilla biomes. Its halls hide the $(l)Onyx Sentinel$(): a slow colossus whose crystal beam sweeps the arena. Use the pillars, and break its shell with six hits to stun it."
     }
   ]
 }

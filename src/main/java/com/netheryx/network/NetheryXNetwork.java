@@ -7,7 +7,7 @@ import net.minecraftforge.network.simple.SimpleChannel;
 
 /** Canal reseau du mod (boussole des ames et pierre de rappel : listes envoyees au client et choix du joueur). */
 public final class NetheryXNetwork {
-    private static final String PROTOCOL = "4";
+    private static final String PROTOCOL = "5";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(NetheryX.id("main"),
             () -> PROTOCOL, PROTOCOL::equals, PROTOCOL::equals);
 
@@ -50,6 +50,11 @@ public final class NetheryXNetwork {
                 .encoder(AdminTeleportPacket::encode)
                 .decoder(AdminTeleportPacket::new)
                 .consumerMainThread(AdminTeleportPacket::handle)
+                .add();
+        CHANNEL.messageBuilder(ScreenShakePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .encoder(ScreenShakePacket::encode)
+                .decoder(ScreenShakePacket::new)
+                .consumerMainThread(ScreenShakePacket::handle)
                 .add();
     }
 }

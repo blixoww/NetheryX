@@ -291,59 +291,61 @@ for eid, en, fr, scale, ten, tfr in CREATURES:
 
 # ---------------------------------------------------------------- Structures
 DUNGEON_INTRO = text(
-    "NetheryX dungeons are built on several levels: guards, spawners and side rooms with chests, then the $(l)boss arena$(). "
-    "The treasure lies in a small $(l)vault$() entirely made of $(item)Warded Masonry$() (unbreakable on all six faces) and closed "
-    "by a door of $(item)Guardian Seals$(): it only opens when the boss dies.$(br2)Use the $(item)Soul Compass$() to find a dungeon. "
-    "Bring armor, food and a $(item)Recall Stone$()!",
-    "Les donjons NetheryX sont bâtis sur plusieurs niveaux : gardes, générateurs et salles annexes avec coffres, puis l'$(l)arène "
-    "du boss$(). Le trésor est dans un petit $(l)coffre-fort$() entièrement en $(item)Maçonnerie scellée$() (indestructible sur ses "
-    "six faces) et fermé par une porte de $(item)Sceaux du gardien$() : il ne s'ouvre qu'à la mort du boss.$(br2)La $(item)Boussole "
-    "des âmes$() vous mène aux donjons. Prévoyez armure, nourriture et une $(item)Pierre de rappel$() !", "Donjons")
-entry("structures", "How Dungeons Work", "Fonctionnement des donjons", "netheryx:guardian_seal", [
+    "A dungeon is a complex $(l)dug under the ground$(): only its entrance shows on the surface, and $(l)ruins, remains and signs$() "
+    "around it give it away. Go down to the $(l)rotunda$(): three $(item)Rune Locks$() guard the way to the boss.$(br2)Explore the "
+    "$(l)three wings$(), in any order. Each one ends with a chamber held by a $(l)Rune Warden$(), where a chest holds a "
+    "$(item)Rune Key$(). Use each key on a lock.",
+    "Un donjon est un complexe $(l)creusé sous terre$() : seule son entrée se voit en surface, et des $(l)ruines, restes et panneaux$() "
+    "le trahissent aux alentours. Descendez jusqu'à la $(l)rotonde$() : trois $(item)Verrous runiques$() barrent la route du boss.$(br2)"
+    "Explorez les $(l)trois ailes$(), dans l'ordre qui vous plaît. Chacune finit par une chambre tenue par un $(l)Gardien des runes$(), "
+    "où un coffre renferme une $(item)Clef runique$(). Utilisez chaque clef sur un verrou.", "Donjons")
+DUNGEON_BOSS = text(
+    "When the three locks shine, the $(item)Guardian Seals$() on the stairs dissolve and the way down to the $(l)arena$() opens. "
+    "The boss is too strong to be dug around: near it, $(l)Mining Fatigue$() stops your pickaxe.$(br2)The $(l)vault$() behind the "
+    "arena, in unbreakable $(item)Warded Masonry$(), only opens when the boss dies. Plans and rooms change from one dungeon to the next.",
+    "Quand les trois verrous brillent, les $(item)Sceaux du gardien$() de l'escalier se dissolvent et la descente vers l'$(l)arène$() "
+    "s'ouvre. Le boss ne se contourne pas en creusant : près de lui, la $(l)Fatigue de minage$() arrête votre pioche.$(br2)Le "
+    "$(l)coffre-fort$() derrière l'arène, en $(item)Maçonnerie scellée$() indestructible, ne s'ouvre qu'à la mort du boss. Le plan et les "
+    "salles changent d'un donjon à l'autre.")
+DUNGEON_FIGHT = text(
+    "Every boss attack is $(l)announced$(): a circle filling up on the ground (leave it before it is full), a ring running along the "
+    "floor (jump over it), a marked line (step aside), a sweeping beam ($(l)hide behind a pillar$()).$(br2)At each phase the boss "
+    "stops, invulnerable, then releases a wave: take a step back. The more players, the more health it has.",
+    "Chaque attaque de boss est $(l)annoncée$() : un cercle qui se remplit au sol (sortez-en avant qu'il soit plein), un anneau qui "
+    "court au sol (sautez par-dessus), une ligne balisée (écartez-vous), un faisceau qui balaie ($(l)abritez-vous derrière un pilier$()).$(br2)"
+    "À chaque phase, le boss s'arrête, invulnérable, puis libère une onde : reculez. Plus il y a de joueurs, plus il a de vie.", "Combats")
+entry("structures", "How Dungeons Work", "Fonctionnement des donjons", "netheryx:rune_lock", [
     DUNGEON_INTRO,
-    spot("guardian_seal", "Unbreakable. Breaks by itself when the dungeon boss is defeated; the vault's masonry then turns back into "
-                          "ordinary bricks. Bosses never leave their arena: if you flee, they go back and slowly heal.",
-         "Indestructible. Se brise tout seul quand le boss du donjon est vaincu ; la maçonnerie du coffre-fort redevient alors de la "
-         "brique ordinaire. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.",
+    DUNGEON_BOSS,
+    DUNGEON_FIGHT,
+    spot("guardian_seal", "Unbreakable. The seals on the stairs dissolve when the three Rune Locks shine; those of the vault when the "
+                          "boss dies. Bosses never leave their arena: if you flee, they go back and slowly heal.",
+         "Indestructible. Les sceaux de l'escalier se dissolvent quand les trois Verrous runiques brillent ; ceux du coffre-fort à la "
+         "mort du boss. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.",
          link=False),
 ], priority=True)
 
 STRUCTURES = [
     ("Onyx Citadel", "Citadelle d'onyx", "netheryx:onyx_bricks", [
-        ("Petrified Onyx Forest, Withered Forest, Ashen Wastes, Rimefrost Chasm, Quartz Reef and several vanilla biomes. A walled "
-         "fortress whose four towers hold Ash Wraith spawners and chests. In the middle stands a $(l)three-storey keep$() that you climb:",
-         "Forêt pétrifiée d'onyx, Forêt flétrie, Terres cendrées, Gouffre de givre, Récifs de quartz et plusieurs biomes vanilla. Une "
-         "forteresse dont les quatre tours abritent des générateurs de Spectres et des coffres. Au centre se dresse un $(l)donjon à "
-         "trois étages$() qu'on gravit :"),
-        ("$(l)1.$() Great hall: knights and Ember Stalker spawners; stairs along the west wall. $(l)2.$() Armory, library (chests, "
-         "a mimic) and the $(l)sealed vault$() in the centre. $(l)3.$() Under the roof, the arena of the $(l)Onyx Sentinel$(), with "
-         "balconies (wraiths, chests, mimics). Kill it, then go back down to the vault.",
-         "$(l)1.$() Grand hall : chevaliers et générateurs de Traqueurs ; escalier le long du mur ouest. $(l)2.$() Armurerie, "
-         "bibliothèque (coffres, une mimique) et le $(l)coffre-fort scellé$() au centre. $(l)3.$() Sous le toit, l'arène de la "
-         "$(l)Sentinelle d'onyx$(), avec des balcons (spectres, coffres, mimiques). Vainquez-la, puis redescendez au coffre-fort."),
+        ("Petrified Onyx Forest, Withered Forest, Ashen Wastes, Rimefrost Chasm, Quartz Reef and several vanilla biomes. Its halls hide "
+         "the $(l)Onyx Sentinel$(): a slow colossus whose crystal beam sweeps the arena. Use the pillars, and break its shell with six "
+         "hits to stun it.",
+         "Forêt pétrifiée d'onyx, Forêt flétrie, Terres cendrées, Gouffre de givre, Récifs de quartz et plusieurs biomes vanilla. Ses salles "
+         "cachent la $(l)Sentinelle d'onyx$() : un colosse lent dont le faisceau de cristal balaie l'arène. Servez-vous des piliers, et "
+         "brisez sa carapace en six coups pour l'étourdir."),
     ]),
     ("Infernal Sanctum", "Sanctuaire infernal", "netheryx:magma_bricks", [
-        ("Ember Grove, Sulfur Springs, Ember Meadow, Wartvine Tangle, Hellwood Jungle, Molten Glass Lake and vanilla biomes. A temple "
-         "surrounded by a $(l)lava moat$(): cross the bridge and survive the Blaze altars of the courtyard. Inside, two ritual rooms "
-         "(spawners, chests, mimics).",
+        ("Ember Grove, Sulfur Springs, Ember Meadow, Wartvine Tangle, Hellwood Jungle, Molten Glass Lake and vanilla biomes. At its heart, "
+         "the $(l)Infernal Warlock$(): walls of fire advance across the arena, find the gap. Kill his Stalkers first, they shield him.",
          "Bosquet de braise, Sources sulfureuses, Prairie de braise, Enchevêtrement, Jungle infernale, Lac de verre en fusion et biomes "
-         "vanilla. Un temple entouré de $(l)douves de lave$() : traversez le pont et survivez aux autels à Blazes de la cour. À "
-         "l'intérieur, deux salles rituelles (générateurs, coffres, mimiques)."),
-        ("A great staircase $(l)goes down$() to the underground nave lit by lava, where the $(l)Infernal Warlock$() waits. The sealed "
-         "vault opens in the north wall of the nave.",
-         "Un grand escalier $(l)descend$() vers la nef souterraine éclairée par la lave, où attend le $(l)Sorcier infernal$(). Le "
-         "coffre-fort scellé s'ouvre dans le mur nord de la nef."),
+         "vanilla. En son cœur, le $(l)Sorcier infernal$() : des murs de flammes traversent l'arène, trouvez la brèche. Tuez d'abord ses "
+         "Traqueurs, ils le protègent."),
     ]),
     ("Withered Catacombs", "Catacombes flétries", "minecraft:wither_skeleton_skull", [
-        ("Withered Forest, Ashen Wastes, Marrow Thicket and vanilla biomes. Only a $(l)mausoleum$() shows on the surface. Its stairs "
-         "lead to the $(l)upper crypt$(): a ring gallery lined with skulls, four side crypts and a chapel (spawners, chests, mimics).",
-         "Forêt flétrie, Terres cendrées, Fourré de moelle et biomes vanilla. Seul un $(l)mausolée$() est visible en surface. Son "
-         "escalier mène à la $(l)crypte supérieure$() : une galerie circulaire bordée de crânes, quatre cryptes et une chapelle "
-         "(générateurs, coffres, mimiques)."),
-        ("From the south gallery, a second staircase goes down to the $(l)deep crypt$(): two ossuaries and the tomb of the "
-         "$(l)Withered Champion$(). The sealed vault lies north of the tomb.",
-         "Depuis la galerie sud, un second escalier descend vers la $(l)crypte profonde$() : deux ossuaires et le tombeau du "
-         "$(l)Champion flétri$(). Le coffre-fort scellé est au nord du tombeau."),
+        ("Withered Forest, Ashen Wastes, Marrow Thicket and vanilla biomes. Below lies the $(l)Withered Champion$(), a duellist: his "
+         "dashes follow a marked line, and in his last phase he vanishes and strikes from behind, in the dark.",
+         "Forêt flétrie, Terres cendrées, Fourré de moelle et biomes vanilla. Tout en bas attend le $(l)Champion flétri$(), un duelliste : "
+         "ses ruées suivent une ligne balisée, et dans sa dernière phase il disparaît et frappe dans le dos, dans l'obscurité."),
     ]),
 ]
 for en, fr, icon, pages in STRUCTURES:

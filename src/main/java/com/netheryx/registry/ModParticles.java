@@ -38,6 +38,11 @@ public final class ModParticles {
     public static final RegistryObject<SimpleParticleType> DRAGON_FLAME_CORE = register("dragon_flame_core");
     /** Fumee epaisse qui monte au bout du jet et a l'impact. */
     public static final RegistryObject<SimpleParticleType> DRAGON_SMOKE = register("dragon_smoke");
+    /** Annonces au sol des attaques de boss : contour et remplissage (voir GroundDecalParticle). */
+    public static final RegistryObject<SimpleParticleType> TELEGRAPH_RING = register("telegraph_ring");
+    public static final RegistryObject<SimpleParticleType> TELEGRAPH_FILL = register("telegraph_fill");
+    /** Glyphe lumineux : un boss se prepare, un verrou runique reagit. */
+    public static final RegistryObject<SimpleParticleType> RUNE_GLYPH = register("rune_glyph");
 
     private ModParticles() {
     }

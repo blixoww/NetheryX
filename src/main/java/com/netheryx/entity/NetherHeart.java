@@ -1,5 +1,8 @@
 package com.netheryx.entity;
 
+import com.netheryx.config.NetheryXConfig;
+import com.netheryx.entity.boss.BossEncounter;
+import com.netheryx.entity.boss.BossFx;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.registry.ModParticles;
 import net.minecraft.core.particles.ParticleTypes;
@@ -48,13 +51,14 @@ import java.util.UUID;
  * Il flotte au-dessus de l'arene et enchaine :
  * <ul>
  *     <li>salves de boules de feu ;</li>
- *     <li>pulsation : onde de choc enflammee au contact ;</li>
- *     <li>pluie de meteores annoncee par un cercle de flammes ;</li>
+ *     <li>pulsation : une onde part de sous le Coeur, il faut sauter par-dessus ;</li>
+ *     <li>pluie de meteores : cercles au sol qui se remplissent ;</li>
  *     <li>a 66 % et 33 % : une garde (traqueurs, chevaliers, spectres) et un bouclier tant qu'elle vit ;</li>
- *     <li>sous 33 % : geysers de lave annonces par des cercles d'etincelles.</li>
+ *     <li>des 66 % : rayons qui balaient l'arene depuis le sol sous le Coeur ;</li>
+ *     <li>sous 33 % : geysers de lave annonces et pulsations doublees.</li>
  * </ul>
  */
-public class NetherHeart extends Monster implements GeoEntity {
+public class NetherHeart extends Monster implements com.netheryx.entity.boss.BossEntity, GeoEntity {
     private static final String NAME = "nether_heart";
     private static final EntityDataAccessor<Integer> AWAKEN = SynchedEntityData.defineId(NetherHeart.class, EntityDataSerializers.INT);
     private static final RawAnimation IDLE = NetheryXAnimations.loop(NAME, "idle");
@@ -66,17 +70,15 @@ public class NetherHeart extends Monster implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     /** Le boss reste cloisonne dans son arene (rayon 28 blocs autour de son point d'apparition). */
     private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(28.0D, 26.0D, 18.0D).noRegeneration();
+    private final BossEncounter encounter = new BossEncounter(this, BossFx.FIRE, new float[]{0.66F, 0.33F}, this::onPhase);
     private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(this.getDisplayName(),
             BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_12).setDarkenScreen(true).setCreateWorldFog(true);
     private final List<UUID> guards = new ArrayList<>();
     private int volleyCooldown = 40;
     private int pulseCooldown = 80;
     private int meteorCooldown = 120;
-    private int meteorTicks;
-    private Vec3 meteorTarget;
     private int geyserCooldown = 100;
-    private int geyserTicks;
-    private final List<Vec3> geysers = new ArrayList<>();
+    private int rayCooldown = 60;
     private int guardWaves;
 
     public NetherHeart(EntityType<? extends NetherHeart> type, Level level) {
@@ -88,7 +90,7 @@ public class NetherHeart extends Monster implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 600.0D)
+                .add(Attributes.MAX_HEALTH, 1000.0D)
                 .add(Attributes.ARMOR, 16.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 8.0D)
                 .add(Attributes.ATTACK_DAMAGE, 12.0D)
@@ -112,6 +114,11 @@ public class NetherHeart extends Monster implements GeoEntity {
 
     /** Appele par le Coeur scelle : le boss se reveille lentement, invulnerable. */
     public void startAwakening() {
+        var maxHealth = this.getAttribute(Attributes.MAX_HEALTH);
+        if (maxHealth != null) {
+            maxHealth.setBaseValue(NetheryXConfig.HEART_MAX_HEALTH.get());
+            this.setHealth(this.getMaxHealth());
+        }
         this.entityData.set(AWAKEN, AWAKEN_TICKS);
         this.triggerAnim("attack", "awaken");
     }
@@ -127,6 +134,10 @@ public class NetherHeart extends Monster implements GeoEntity {
 
     @Override
     public boolean hurt(DamageSource source, float amount) {
+        if (this.encounter.inTransition() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            this.playSound(SoundEvents.AMETHYST_BLOCK_HIT, 1.0F, 0.5F);
+            return false;
+        }
         if (this.shielded() && !source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) {
             amount *= 0.1F;
             if (this.level() instanceof ServerLevel server) {
@@ -168,29 +179,42 @@ public class NetherHeart extends Monster implements GeoEntity {
             }
             return;
         }
+        if (this.level() instanceof ServerLevel server) {
+            this.encounter.tick(server);
+        }
         LivingEntity target = this.getTarget();
         this.hover(target);
-        int expectedWaves = ratio < 0.33F ? 2 : ratio < 0.66F ? 1 : 0;
-        if (this.guardWaves < expectedWaves) {
-            this.guardWaves++;
-            this.summonGuard();
-        }
-        if (target == null) {
+        if (target == null || this.encounter.inTransition() || !(this.level() instanceof ServerLevel server)) {
             return;
         }
+        int phase = this.encounter.phase();
         if (--this.volleyCooldown <= 0) {
-            this.volleyCooldown = ratio < 0.33F ? 25 : 40;
+            this.volleyCooldown = phase >= 2 ? 30 : 45;
             this.volley(target);
         }
-        if (--this.pulseCooldown <= 0 && this.distanceToSqr(target) < 64.0D) {
-            this.pulseCooldown = 100;
+        if (--this.pulseCooldown <= 0) {
+            this.pulseCooldown = phase >= 2 ? 90 : 130;
             this.triggerAnim("attack", "pulse");
-            this.knockbackAround(8.0D, 1.4D, 8.0F);
+            Vec3 under = BossFx.onGround(server, this.position());
+            this.encounter.hazards().wave(server, under, 22.0D, 0.65D, 8.0F, BossFx.FIRE);
+            if (phase >= 2) {
+                this.encounter.hazards().circle(server, under, 6.0D, 18, 9.0F, BossFx.FIRE);
+            }
+            BossFx.shake(server, under, 32.0D, 0.6F, 10);
+            this.playSound(SoundEvents.WARDEN_HEARTBEAT, 3.0F, 0.6F);
         }
-        this.tickMeteors(target);
-        if (ratio < 0.33F) {
-            this.tickGeysers();
+        this.tickMeteors(server, target);
+        if (phase >= 1) {
+            this.tickRays(server, target);
         }
+        if (phase >= 2) {
+            this.tickGeysers(server);
+        }
+    }
+
+    private void onPhase(int phase) {
+        this.guardWaves++;
+        this.summonGuard();
     }
 
     /** Flotte a quelques blocs au-dessus de sa cible en tournant lentement autour. */
@@ -242,67 +266,47 @@ public class NetherHeart extends Monster implements GeoEntity {
         this.playSound(SoundEvents.GENERIC_EXPLODE, 2.0F, 0.6F);
     }
 
-    private void tickMeteors(LivingEntity target) {
-        if (this.meteorTicks > 0 && this.meteorTarget != null && this.level() instanceof ServerLevel server) {
-            this.meteorTicks--;
-            for (int i = 0; i < 20; i++) {
-                double angle = i * Math.PI / 10.0D;
-                server.sendParticles(ParticleTypes.FLAME, this.meteorTarget.x + Math.cos(angle) * 3.5D, this.meteorTarget.y + 0.1D,
-                        this.meteorTarget.z + Math.sin(angle) * 3.5D, 1, 0.0D, 0.02D, 0.0D, 0.0D);
-            }
-            if (this.meteorTicks % 4 == 0 && this.meteorTicks <= 28) {
-                SmallFireball meteor = new SmallFireball(this.level(), this, 0.0D, -1.0D, 0.0D);
-                meteor.setPos(this.meteorTarget.x + (this.random.nextDouble() - 0.5D) * 6.0D, this.meteorTarget.y + 14.0D,
-                        this.meteorTarget.z + (this.random.nextDouble() - 0.5D) * 6.0D);
-                this.level().addFreshEntity(meteor);
-            }
+    private void tickMeteors(ServerLevel server, LivingEntity target) {
+        if (--this.meteorCooldown > 0) {
             return;
         }
-        if (--this.meteorCooldown <= 0) {
-            this.meteorCooldown = 180;
-            this.meteorTarget = target.position();
-            this.meteorTicks = 50;
-            this.triggerAnim("attack", "cast");
-            this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, 2.0F, 0.4F);
+        this.meteorCooldown = 170 + this.random.nextInt(40);
+        this.triggerAnim("attack", "cast");
+        this.playSound(SoundEvents.EVOKER_PREPARE_ATTACK, 2.0F, 0.4F);
+        this.encounter.hazards().circle(server, target.position(), 3.2D, 34, 9.0F, BossFx.FIRE);
+        int extra = 5 + this.encounter.phase() * 2;
+        for (int i = 0; i < extra; i++) {
+            Vec3 around = target.position().add(this.random.nextGaussian() * 7.0D, 0.0D, this.random.nextGaussian() * 7.0D);
+            this.encounter.hazards().circle(server, around, 3.2D, 40 + i * 6, 9.0F, BossFx.FIRE);
         }
     }
 
-    /** Geysers de lave (derniere phase) : cercles d'etincelles puis colonne de flammes qui projette en l'air. */
-    private void tickGeysers() {
-        if (!(this.level() instanceof ServerLevel server)) {
+    /** Rayons (des 66 %) : deux faisceaux opposes balaient l'arene depuis le sol sous le Coeur. */
+    private void tickRays(ServerLevel server, LivingEntity target) {
+        if (--this.rayCooldown > 0) {
             return;
         }
-        if (this.geyserTicks > 0) {
-            this.geyserTicks--;
-            for (Vec3 point : this.geysers) {
-                server.sendParticles(ModParticles.EMBER_SPARK.get(), point.x, point.y + 0.1D, point.z, 4, 0.8D, 0.0D, 0.8D, 0.0D);
-                if (this.geyserTicks == 0) {
-                    server.sendParticles(ParticleTypes.LAVA, point.x, point.y + 0.5D, point.z, 30, 0.4D, 2.0D, 0.4D, 0.1D);
-                    server.sendParticles(ParticleTypes.FLAME, point.x, point.y + 2.0D, point.z, 60, 0.3D, 2.5D, 0.3D, 0.05D);
-                    for (LivingEntity victim : server.getEntitiesOfClass(LivingEntity.class,
-                            new net.minecraft.world.phys.AABB(point, point).inflate(1.3D, 3.0D, 1.3D), e -> e != this)) {
-                        victim.hurt(this.damageSources().indirectMagic(this, this), 10.0F);
-                        victim.setSecondsOnFire(6);
-                        victim.push(0.0D, 1.2D, 0.0D);
-                        victim.hurtMarked = true;
-                    }
-                }
-            }
-            if (this.geyserTicks == 0) {
-                this.geysers.clear();
-                this.playSound(SoundEvents.BLAZE_SHOOT, 2.0F, 0.3F);
-            }
+        this.rayCooldown = 300 + this.random.nextInt(100);
+        this.playSound(SoundEvents.BEACON_ACTIVATE, 3.0F, 0.5F);
+        Vec3 origin = BossFx.onGround(server, this.position()).add(0.0D, 1.0D, 0.0D);
+        double start = Math.atan2(target.getZ() - origin.z, target.getX() - origin.x);
+        double side = this.random.nextBoolean() ? 2.2D : -2.2D;
+        this.encounter.hazards().beam(server, origin, start, side, 36, 120, 26.0D, 7.0F, BossFx.FIRE);
+        this.encounter.hazards().beam(server, origin, start + Math.PI, side, 36, 120, 26.0D, 7.0F, BossFx.FIRE);
+    }
+
+    /** Geysers de lave (derniere phase) : cercles sous chaque joueur, puis colonne de flammes qui projette en l'air. */
+    private void tickGeysers(ServerLevel server) {
+        if (--this.geyserCooldown > 0) {
             return;
         }
-        if (--this.geyserCooldown <= 0) {
-            this.geyserCooldown = 140;
-            for (Player player : server.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(32.0D),
-                    p -> !p.isCreative() && !p.isSpectator())) {
-                for (int i = 0; i < 3; i++) {
-                    this.geysers.add(player.position().add((this.random.nextDouble() - 0.5D) * 6.0D, 0.0D, (this.random.nextDouble() - 0.5D) * 6.0D));
-                }
+        this.geyserCooldown = 150;
+        for (Player player : server.getEntitiesOfClass(Player.class, this.getBoundingBox().inflate(32.0D),
+                p -> !p.isCreative() && !p.isSpectator())) {
+            for (int i = 0; i < 3; i++) {
+                Vec3 at = player.position().add((this.random.nextDouble() - 0.5D) * 7.0D, 0.0D, (this.random.nextDouble() - 0.5D) * 7.0D);
+                this.encounter.hazards().circle(server, at, 2.0D, 30 + i * 6, 9.0F, BossFx.FIRE);
             }
-            this.geyserTicks = 30;
         }
     }
 
@@ -358,6 +362,19 @@ public class NetherHeart extends Monster implements GeoEntity {
     }
 
     @Override
+    public com.netheryx.entity.boss.BossEncounter encounter() {
+        return this.encounter;
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        if (this.level() instanceof ServerLevel server) {
+            this.encounter.deathBurst(server);
+        }
+    }
+
+    @Override
     public boolean causeFallDamage(float distance, float multiplier, DamageSource source) {
         return false;
     }
@@ -394,6 +411,7 @@ public class NetherHeart extends Monster implements GeoEntity {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         this.arena.save(tag);
+        this.encounter.save(tag);
         tag.putInt("GuardWaves", this.guardWaves);
         tag.putInt("Awaken", this.getAwakenTicks());
     }
@@ -402,6 +420,7 @@ public class NetherHeart extends Monster implements GeoEntity {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.arena.load(tag);
+        this.encounter.load(tag);
         this.guardWaves = tag.getInt("GuardWaves");
         this.entityData.set(AWAKEN, tag.getInt("Awaken"));
         if (this.hasCustomName()) {

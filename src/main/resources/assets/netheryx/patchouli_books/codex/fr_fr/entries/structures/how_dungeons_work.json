@@ -1,18 +1,27 @@
 {
   "name": "Fonctionnement des donjons",
-  "icon": "netheryx:guardian_seal",
+  "icon": "netheryx:rune_lock",
   "category": "netheryx:structures",
   "sortnum": 29,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Les donjons NetheryX sont bâtis sur plusieurs niveaux : gardes, générateurs et salles annexes avec coffres, puis l'$(l)arène du boss$(). Le trésor est dans un petit $(l)coffre-fort$() entièrement en $(item)Maçonnerie scellée$() (indestructible sur ses six faces) et fermé par une porte de $(item)Sceaux du gardien$() : il ne s'ouvre qu'à la mort du boss.$(br2)La $(item)Boussole des âmes$() vous mène aux donjons. Prévoyez armure, nourriture et une $(item)Pierre de rappel$() !",
+      "text": "Un donjon est un complexe $(l)creusé sous terre$() : seule son entrée se voit en surface, et des $(l)ruines, restes et panneaux$() le trahissent aux alentours. Descendez jusqu'à la $(l)rotonde$() : trois $(item)Verrous runiques$() barrent la route du boss.$(br2)Explorez les $(l)trois ailes$(), dans l'ordre qui vous plaît. Chacune finit par une chambre tenue par un $(l)Gardien des runes$(), où un coffre renferme une $(item)Clef runique$(). Utilisez chaque clef sur un verrou.",
       "title": "Donjons"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Quand les trois verrous brillent, les $(item)Sceaux du gardien$() de l'escalier se dissolvent et la descente vers l'$(l)arène$() s'ouvre. Le boss ne se contourne pas en creusant : près de lui, la $(l)Fatigue de minage$() arrête votre pioche.$(br2)Le $(l)coffre-fort$() derrière l'arène, en $(item)Maçonnerie scellée$() indestructible, ne s'ouvre qu'à la mort du boss. Le plan et les salles changent d'un donjon à l'autre."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Chaque attaque de boss est $(l)annoncée$() : un cercle qui se remplit au sol (sortez-en avant qu'il soit plein), un anneau qui court au sol (sautez par-dessus), une ligne balisée (écartez-vous), un faisceau qui balaie ($(l)abritez-vous derrière un pilier$()).$(br2)À chaque phase, le boss s'arrête, invulnérable, puis libère une onde : reculez. Plus il y a de joueurs, plus il a de vie.",
+      "title": "Combats"
     },
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:guardian_seal",
-      "text": "Indestructible. Se brise tout seul quand le boss du donjon est vaincu ; la maçonnerie du coffre-fort redevient alors de la brique ordinaire. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.",
+      "text": "Indestructible. Les sceaux de l'escalier se dissolvent quand les trois Verrous runiques brillent ; ceux du coffre-fort à la mort du boss. Les boss ne quittent jamais leur arène : si vous fuyez, ils y retournent et se soignent lentement.",
       "link_recipe": false
     }
   ],

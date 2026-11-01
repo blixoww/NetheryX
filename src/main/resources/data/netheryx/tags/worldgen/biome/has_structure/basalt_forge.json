@@ -3,6 +3,10 @@
   "values": [
     "netheryx:ashen_wastes",
     "netheryx:molten_glass_lake",
-    "minecraft:basalt_deltas"
+    "minecraft:basalt_deltas",
+    "netheryx:sulfur_springs",
+    "netheryx:quartz_reef",
+    "netheryx:hellwood_jungle",
+    "minecraft:nether_wastes"
   ]
 }

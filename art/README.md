@@ -23,3 +23,13 @@ Pour les refaire après avoir changé une palette :
 python3 tools/diamond_armor.py      # lit le jar Minecraft du cache Gradle (après un premier ./gradlew build)
 python3 tools/generate_resources.py
 ```
+
+## Armes, nourritures, matériaux et bois dérivés du vanilla
+
+`tools/vanilla_textures.py` applique la même idée : mêmes silhouettes et même ombrage que Minecraft, couleurs du mod. Les tableaux
+en tête du script donnent, pour chaque texture, sa source vanilla et sa couleur. Pour en changer une :
+
+```bash
+python3 tools/vanilla_textures.py
+python3 tools/generate_resources.py
+```

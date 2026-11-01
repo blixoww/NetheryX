@@ -6,11 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Forêt flétrie, Terres cendrées, Fourré de moelle et biomes vanilla. Seul un $(l)mausolée$() est visible en surface. Son escalier mène à la $(l)crypte supérieure$() : une galerie circulaire bordée de crânes, quatre cryptes et une chapelle (générateurs, coffres, mimiques)."
-    },
-    {
-      "type": "patchouli:text",
-      "text": "Depuis la galerie sud, un second escalier descend vers la $(l)crypte profonde$() : deux ossuaires et le tombeau du $(l)Champion flétri$(). Le coffre-fort scellé est au nord du tombeau."
+      "text": "Forêt flétrie, Terres cendrées, Fourré de moelle et biomes vanilla. Tout en bas attend le $(l)Champion flétri$(), un duelliste : ses ruées suivent une ligne balisée, et dans sa dernière phase il disparaît et frappe dans le dos, dans l'obscurité."
     }
   ]
 }

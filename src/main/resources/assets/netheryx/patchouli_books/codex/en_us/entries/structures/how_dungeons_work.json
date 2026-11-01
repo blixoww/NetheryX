@@ -1,18 +1,27 @@
 {
   "name": "How Dungeons Work",
-  "icon": "netheryx:guardian_seal",
+  "icon": "netheryx:rune_lock",
   "category": "netheryx:structures",
   "sortnum": 29,
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "NetheryX dungeons are built on several levels: guards, spawners and side rooms with chests, then the $(l)boss arena$(). The treasure lies in a small $(l)vault$() entirely made of $(item)Warded Masonry$() (unbreakable on all six faces) and closed by a door of $(item)Guardian Seals$(): it only opens when the boss dies.$(br2)Use the $(item)Soul Compass$() to find a dungeon. Bring armor, food and a $(item)Recall Stone$()!",
+      "text": "A dungeon is a complex $(l)dug under the ground$(): only its entrance shows on the surface, and $(l)ruins, remains and signs$() around it give it away. Go down to the $(l)rotunda$(): three $(item)Rune Locks$() guard the way to the boss.$(br2)Explore the $(l)three wings$(), in any order. Each one ends with a chamber held by a $(l)Rune Warden$(), where a chest holds a $(item)Rune Key$(). Use each key on a lock.",
       "title": "Donjons"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "When the three locks shine, the $(item)Guardian Seals$() on the stairs dissolve and the way down to the $(l)arena$() opens. The boss is too strong to be dug around: near it, $(l)Mining Fatigue$() stops your pickaxe.$(br2)The $(l)vault$() behind the arena, in unbreakable $(item)Warded Masonry$(), only opens when the boss dies. Plans and rooms change from one dungeon to the next."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Every boss attack is $(l)announced$(): a circle filling up on the ground (leave it before it is full), a ring running along the floor (jump over it), a marked line (step aside), a sweeping beam ($(l)hide behind a pillar$()).$(br2)At each phase the boss stops, invulnerable, then releases a wave: take a step back. The more players, the more health it has.",
+      "title": "Combats"
     },
     {
       "type": "patchouli:spotlight",
       "item": "netheryx:guardian_seal",
-      "text": "Unbreakable. Breaks by itself when the dungeon boss is defeated; the vault's masonry then turns back into ordinary bricks. Bosses never leave their arena: if you flee, they go back and slowly heal.",
+      "text": "Unbreakable. The seals on the stairs dissolve when the three Rune Locks shine; those of the vault when the boss dies. Bosses never leave their arena: if you flee, they go back and slowly heal.",
       "link_recipe": false
     }
   ],

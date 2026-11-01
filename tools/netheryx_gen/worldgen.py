@@ -546,9 +546,11 @@ def generate_structures():
                 "rules": [{"input_predicate": {"predicate_type": "minecraft:random_block_match", "block": block, "probability": p},
                            "location_predicate": {"predicate_type": "minecraft:always_true"},
                            "output_state": {"Name": out}} for (block, p, out) in PROCESSORS[name]]}]})
-        from .structures_v134 import APPROACH, VARIANTS, template_file
+        from .structures_v134 import APPROACH
         # Grands donjons : le gabarit historique et ses variantes thematiques, tires au sort a chaque generation
-        files = [template_file(v) for v in range(VARIANTS)] if name in APPROACH else ["main"]
+        # Les mondes existants gardent leurs gabarits (main, variant_*) ; les nouveaux donjons sont les complexes 1.4.0.
+        from .structures_v140 import ENTRANCE, ENTRANCE_FOOTPRINT, GROUND, KEEPS
+        files = [f"keep_{k}" for k in range(KEEPS)] if name in APPROACH else ["main"]
         write_json(data_path("worldgen", "template_pool", name, "start.json"), {
             "fallback": "minecraft:empty",
             "elements": [{"weight": 1, "element": {"element_type": "minecraft:single_pool_element",
@@ -563,7 +565,9 @@ def generate_structures():
                                                             "location": mid(f"{name}_approach/{kind}"), "projection": "rigid",
                                                             "processors": "minecraft:empty"}}
                              for kind, weight in (("ruin", 3), ("remains", 2), ("signpost", 2))]})
-            approach = {"approach_pool": mid(f"{name}_approach/start"), "approach_count": 5}
+            approach = {"approach_pool": mid(f"{name}_approach/start"), "approach_count": 5,
+                        "entrance_x": ENTRANCE[0], "entrance_z": ENTRANCE[1]}
+            sink, footprint, adaptation, min_y = GROUND, ENTRANCE_FOOTPRINT, "none", 40
         write_json(data_path("worldgen", "structure", f"{name}.json"), {
             "type": mid("nether_floor"),
             "biomes": f"#{MOD_ID}:has_structure/{name}",
@@ -581,12 +585,14 @@ def generate_structures():
             "required_air": air,
             "max_distance_from_center": 80,
             **approach,
+            # Le terrain s'adapte sous ces structures : elles acceptent un sol plus irregulier
+            **({"floor_tolerance": 7} if adaptation == "beard_thin" else {}),
         })
         write_json(data_path("worldgen", "structure_set", f"{name}.json"), {
             "structures": [{"structure": mid(name), "weight": 1}],
             "placement": {"type": "minecraft:random_spread", "spacing": spacing, "separation": separation, "salt": salt,
                           # Jamais par-dessus un bastion ou une forteresse
-                          "exclusion_zone": {"other_set": "minecraft:nether_complexes", "chunk_count": 3 if footprint > 20 else 2}}})
+                          "exclusion_zone": {"other_set": "minecraft:nether_complexes", "chunk_count": 6 if name in APPROACH else 3 if footprint > 20 else 2}}})
 
 
 def generate():

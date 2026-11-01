@@ -2,7 +2,9 @@ package com.netheryx.client;
 
 import com.netheryx.NetheryX;
 import com.netheryx.client.particle.DragonFlameParticle;
+import com.netheryx.client.particle.GroundDecalParticle;
 import com.netheryx.client.particle.NetheryXParticle;
+import com.netheryx.client.particle.RuneParticle;
 import com.netheryx.client.renderer.FireGhastRenderer;
 import com.netheryx.client.screen.SoulAltarScreen;
 import com.netheryx.client.renderer.ObsidianBoatRenderer;
@@ -154,6 +156,9 @@ public final class ClientModEvents {
         flame(event, ModParticles.DRAGON_FLAME, DragonFlameParticle.Kind.FLAME);
         flame(event, ModParticles.DRAGON_FLAME_CORE, DragonFlameParticle.Kind.CORE);
         flame(event, ModParticles.DRAGON_SMOKE, DragonFlameParticle.Kind.SMOKE);
+        event.registerSpriteSet(ModParticles.TELEGRAPH_RING.get(), sprites -> new GroundDecalParticle.Provider(sprites, false));
+        event.registerSpriteSet(ModParticles.TELEGRAPH_FILL.get(), sprites -> new GroundDecalParticle.Provider(sprites, true));
+        event.registerSpriteSet(ModParticles.RUNE_GLYPH.get(), RuneParticle.Provider::new);
     }
 
     private static void flame(RegisterParticleProvidersEvent event, RegistryObject<SimpleParticleType> type,

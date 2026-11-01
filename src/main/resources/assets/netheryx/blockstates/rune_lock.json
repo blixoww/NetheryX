@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "netheryx:block/rune_lock"
+    },
+    "lit=true": {
+      "model": "netheryx:block/rune_lock_lit"
+    }
+  }
+}

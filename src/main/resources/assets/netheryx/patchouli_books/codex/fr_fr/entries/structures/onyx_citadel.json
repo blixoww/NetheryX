@@ -6,11 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Forêt pétrifiée d'onyx, Forêt flétrie, Terres cendrées, Gouffre de givre, Récifs de quartz et plusieurs biomes vanilla. Une forteresse dont les quatre tours abritent des générateurs de Spectres et des coffres. Au centre se dresse un $(l)donjon à trois étages$() qu'on gravit :"
-    },
-    {
-      "type": "patchouli:text",
-      "text": "$(l)1.$() Grand hall : chevaliers et générateurs de Traqueurs ; escalier le long du mur ouest. $(l)2.$() Armurerie, bibliothèque (coffres, une mimique) et le $(l)coffre-fort scellé$() au centre. $(l)3.$() Sous le toit, l'arène de la $(l)Sentinelle d'onyx$(), avec des balcons (spectres, coffres, mimiques). Vainquez-la, puis redescendez au coffre-fort."
+      "text": "Forêt pétrifiée d'onyx, Forêt flétrie, Terres cendrées, Gouffre de givre, Récifs de quartz et plusieurs biomes vanilla. Ses salles cachent la $(l)Sentinelle d'onyx$() : un colosse lent dont le faisceau de cristal balaie l'arène. Servez-vous des piliers, et brisez sa carapace en six coups pour l'étourdir."
     }
   ]
 }

@@ -58,7 +58,8 @@ et les objets en onyx ne brûlent pas dans la lave. Au-delà : l'**équipement a
 
 ### Créatures (GeckoLib)
 - **Boss** : Sentinelle d'onyx, Sorcier infernal et Champion flétri (un par donjon), **Cœur du Nether** (boss final,
-  invoqué avec le Cœur scellé), Golem de basalte (mini-boss, Forge de basalte). Toutes leurs attaques sont annoncées.
+  invoqué avec le Cœur scellé), Golem de basalte (mini-boss, Forge de basalte). Toutes leurs attaques sont annoncées au sol et se
+  contrent : cercles à quitter, ondes à sauter, lignes à éviter, faisceaux arrêtés par les piliers. Leur vie s'adapte au nombre de joueurs.
 - **Montures et compagnons** : Wyverne de cendre (monture volante, une par joueur), Lézard de cendre (monture qui
   marche sur la lave), Porteur de lanterne (lumière dynamique).
 - **Hostiles** : Traqueur de braise (tourne autour de sa proie avant de bondir), Spectre de cendre (fuit la lumière),
@@ -67,10 +68,10 @@ et les objets en onyx ne brûlent pas dans la lave. Au-delà : l'**équipement a
   Poule de cendre, Cochon de blaze, Escargot de cristal, Poisson de magme, lucioles de braise et des âmes, Marchand piglin.
 
 ### Structures
-- **Citadelle d'onyx**, **Sanctuaire infernal**, **Catacombes flétries** : donjons sur plusieurs niveaux, gardes,
-  générateurs, coffres et mimiques, **arène de boss** et **coffre-fort scellé** qui ne s'ouvre qu'à la mort du boss.
-  Chacun existe en **quatre versions** (salles annexes à thèmes tirées au sort) et s'annonce de loin par des
-  **indices** : ruines, restes d'explorateurs et panneaux.
+- **Citadelle d'onyx**, **Sanctuaire infernal**, **Catacombes flétries** : complexes souterrains sous une petite entrée, trahis
+  en surface par des **indices** (ruines, restes d'explorateurs, panneaux). On y explore **trois ailes** pour gagner trois **Clefs
+  runiques**, qui allument les verrous de la rotonde et ouvrent la descente vers l'**arène du boss**, puis le **coffre-fort scellé**.
+  Le plan et les salles changent d'un donjon à l'autre.
 - Petites structures : Forge de basalte, Nids de wyverne, Caravane nomade, Campement de voyageur, Jardin du Nether,
   Cache secrète. Toutes se retrouvent avec la **Boussole des âmes**.
 - Sous la voûte : **nids de spectres** et **cages d'explorateurs** suspendus au-dessus des grands vides.
@@ -105,7 +106,7 @@ est dans [`docs/DOCUMENTATION.md`](docs/DOCUMENTATION.md#configuration).
 ```bash
 ./gradlew runClient      # lancer le jeu de développement (avec JEI)
 ./gradlew build          # produire build/libs/netheryx-1.20.1-<version>.jar
-./gradlew runGameTestServer   # tests en jeu (com.netheryx.gametest), aussi lancés par la CI
+./gradlew runGameTestServer   # tests en jeu, dans un monde neuf (combats de boss, donjon réel), aussi lancés par la CI
 ```
 
 Le plan de test en jeu est dans [`docs/PLAN_DE_TEST.md`](docs/PLAN_DE_TEST.md).
@@ -122,6 +123,12 @@ python3 tools/generate_resources.py
 Le contenu est décrit dans `tools/netheryx_gen/content.py`, le livre dans `tools/netheryx_gen/book.py`.
 `python3 tools/check_resources.py` vérifie que chaque modèle, texture, traduction, recette et page du livre
 référence quelque chose qui existe ; la CI lance les deux scripts.
+
+**Textures dérivées du vanilla** : `tools/diamond_armor.py` (armures) et `tools/vanilla_textures.py` (armes, nourritures, bois...)
+recolorent les textures de Minecraft dans `art/` à partir du jar du cache Gradle.
+
+**Vérification des donjons** : `structures_v140.py` parcourt chaque gabarit à pied (clefs et verrous accessibles, arène fermée avant
+la herse, coffre-fort fermé avant le boss, aucun bloc sans support) ; un plan invalide fait échouer la génération.
 
 **Textures faites main** : placez-les dans `art/assets/netheryx/...` (même chemin que dans les ressources). Le
 générateur les copie par-dessus les textures générées, elles ne sont donc jamais écrasées (voir [`art/README.md`](art/README.md)).

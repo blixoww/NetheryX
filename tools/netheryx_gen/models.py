@@ -465,6 +465,8 @@ def generate_blocks():
             item_parent = gen_soil(name)
         elif kind == "warded":
             gen_warded(name)
+        elif kind == "rune_lock":
+            item_parent = gen_rune_lock(name)
         elif kind == "nether_ore":
             item_parent = gen_nether_ore(name)
         elif kind == "cross":
@@ -547,6 +549,16 @@ def french(text):
     for pattern, repl in FR_ACCENTS:
         text = re.sub(pattern, repl, text)
     return text
+
+
+def gen_rune_lock(name):
+    """Deux etats : eteint et allume."""
+    for suffix in ("", "_lit"):
+        write_json(asset_path("models", "block", f"{name}{suffix}.json"),
+                   {"parent": "minecraft:block/cube_all", "textures": {"all": f"{MOD_ID}:block/{name}{suffix}"}})
+    write_json(asset_path("blockstates", f"{name}.json"), {"variants": {
+        "lit=false": {"model": f"{MOD_ID}:block/{name}"}, "lit=true": {"model": f"{MOD_ID}:block/{name}_lit"}}})
+    return f"{MOD_ID}:block/{name}"
 
 
 def generate_lang():

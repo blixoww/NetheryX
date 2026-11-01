@@ -4,6 +4,7 @@ import com.netheryx.NetheryX;
 import com.netheryx.registry.ModStructureTypes;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceKey;
@@ -12,7 +13,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
@@ -21,6 +26,8 @@ import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 import net.minecraft.world.level.levelgen.structure.pools.StructurePoolElement;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessorType;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.event.TickEvent;
@@ -28,6 +35,7 @@ import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Queue;
@@ -119,11 +127,50 @@ public final class StructureRestorer {
                 if (template.isEmpty()) {
                     continue;
                 }
-                StructurePlaceSettings settings = new StructurePlaceSettings().setRotation(pool.getRotation())
-                        .setBoundingBox(chunkBox).setKnownShape(true).setIgnoreEntities(true);
-                template.get().placeInWorld(level, pool.getPosition(), pool.getPosition(), settings, level.getRandom(),
-                        Block.UPDATE_CLIENTS);
+                template.get().placeInWorld(level, pool.getPosition(), pool.getPosition(),
+                        restoreSettings(pool.getRotation(), chunkBox), level.getRandom(), Block.UPDATE_CLIENTS);
             }
+        }
+    }
+
+    /** Reglages de la repose d'un gabarit (blocs et air, sans les creatures, sans toucher aux conteneurs en place). */
+    public static StructurePlaceSettings restoreSettings(Rotation rotation, BoundingBox box) {
+        return new StructurePlaceSettings().setRotation(rotation).setBoundingBox(box).setKnownShape(true).setIgnoreEntities(true)
+                .addProcessor(KeepBlockEntities.INSTANCE);
+    }
+
+    /**
+     * Minecraft remplace un bloc a contenu en le vidant sans effacer sa table de butin, puis en le retirant : le retrait
+     * tire le butin et le repand au sol, et le nouveau coffre se remplit une seconde fois. On laisse donc en place tout
+     * bloc a contenu deja correct (coffre, tonneau, generateur, panneau) ; un conteneur qui doit vraiment etre ecrase
+     * perd d'abord sa table de butin.
+     */
+    private static final class KeepBlockEntities extends StructureProcessor {
+        private static final KeepBlockEntities INSTANCE = new KeepBlockEntities();
+
+        @Nullable
+        @Override
+        public StructureTemplate.StructureBlockInfo processBlock(LevelReader level, BlockPos offset, BlockPos pivot,
+                                                                 StructureTemplate.StructureBlockInfo original,
+                                                                 StructureTemplate.StructureBlockInfo current,
+                                                                 StructurePlaceSettings settings) {
+            BlockEntity existing = level.getBlockEntity(current.pos());
+            if (existing == null) {
+                return current;
+            }
+            if (current.nbt() != null && level.getBlockState(current.pos()).is(current.state().getBlock())) {
+                return null;
+            }
+            if (existing instanceof RandomizableContainerBlockEntity container) {
+                container.setLootTable(null, 0L);
+                container.clearContent();
+            }
+            return current;
+        }
+
+        @Override
+        protected StructureProcessorType<?> getType() {
+            return StructureProcessorType.NOP;
         }
     }
 

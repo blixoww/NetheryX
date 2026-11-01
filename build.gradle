@@ -44,6 +44,7 @@ minecraft {
         }
 
         gameTestServer {
+            workingDirectory project.file('run-gametest')
             property 'forge.enabledGameTestNamespaces', mod_id
         }
 
@@ -74,7 +75,6 @@ repositories {
         }
     }
     maven {
-        // TerraBlender est publie sur le maven de Forge
         name = 'MinecraftForge'
         url = 'https://maven.minecraftforge.net/'
         content {
@@ -146,4 +146,10 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
     options.compilerArgs << '-Xlint:deprecation'
+}
+
+tasks.matching { it.name == 'runGameTestServer' }.configureEach {
+    doFirst {
+        delete file('run-gametest/world')
+    }
 }

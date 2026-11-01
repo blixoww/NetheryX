@@ -56,7 +56,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
  * Il resiste aux projectiles. Sous la moitie de sa vie, son coeur entre en fusion : plus rapide, il enchaine plus
  * vite, ses eruptions sont plus nombreuses et il enflamme ceux qui le frappent au corps a corps.
  */
-public class BasaltGolem extends Monster implements GeoEntity {
+public class BasaltGolem extends Monster implements com.netheryx.entity.boss.BossEntity, GeoEntity {
     private static final String NAME = "basalt_golem";
     private static final RawAnimation IDLE = NetheryXAnimations.loop(NAME, "idle");
     private static final RawAnimation WALK = NetheryXAnimations.loop(NAME, "walk");
@@ -106,6 +106,8 @@ public class BasaltGolem extends Monster implements GeoEntity {
     }
     /** Le golem garde sa forge : il reste dans un rayon de 12 blocs autour de son point d'apparition. */
     private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(12.0D, 8.0D);
+    private final com.netheryx.entity.boss.BossEncounter encounter = new com.netheryx.entity.boss.BossEncounter(this,
+            com.netheryx.entity.boss.BossFx.GOLD, new float[0], phase -> { });
 
     public BasaltGolem(EntityType<? extends BasaltGolem> type, Level level) {
         super(type, level);
@@ -115,7 +117,7 @@ public class BasaltGolem extends Monster implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 160.0D)
+                .add(Attributes.MAX_HEALTH, 260.0D)
                 .add(Attributes.ARMOR, 12.0D)
                 .add(Attributes.ARMOR_TOUGHNESS, 4.0D)
                 .add(Attributes.ATTACK_DAMAGE, 12.0D)
@@ -147,6 +149,7 @@ public class BasaltGolem extends Monster implements GeoEntity {
         ServerLevel level = (ServerLevel) this.level();
         this.tickWave(level);
         this.tickEruptions(level);
+        this.encounter.tick(level);
         if (this.busy()) {
             this.holdStill();
         }
@@ -189,6 +192,8 @@ public class BasaltGolem extends Monster implements GeoEntity {
         double distance = this.distanceToSqr(target);
         if (this.slamCooldown <= 0 && distance < 25.0D && this.onGround()) {
             this.slamWindup = 14;
+            com.netheryx.entity.boss.BossFx.telegraph(level, com.netheryx.entity.boss.BossFx.onGround(level, this.position()), 3.5D, 14,
+                    com.netheryx.entity.boss.BossFx.GOLD);
             this.slamCooldown = (this.molten ? 80 : 120) + this.random.nextInt(40);
             this.triggerAnim("attack", "slam");
             this.playSound(SoundEvents.RAVAGER_ROAR, 1.2F, 0.6F);
@@ -242,6 +247,9 @@ public class BasaltGolem extends Monster implements GeoEntity {
         // L'onde de choc se propage ensuite en anneau : sauter par-dessus permet de l'eviter
         this.waveRadius = 2.0D;
         this.waveHit.clear();
+        com.netheryx.entity.boss.BossFx.shake(level, this.position(), 28.0D, 0.7F, 12);
+        com.netheryx.entity.boss.BossFx.shockwave(level, com.netheryx.entity.boss.BossFx.onGround(level, this.position()), 12.0D, 22,
+                com.netheryx.entity.boss.BossFx.GOLD);
     }
 
     private void tickWave(ServerLevel level) {
@@ -364,11 +372,15 @@ public class BasaltGolem extends Monster implements GeoEntity {
         int count = this.molten ? 5 : 3;
         for (LivingEntity victim : victims) {
             this.eruptions.add(new Eruption(victim.position(), ERUPTION_DELAY));
+            com.netheryx.entity.boss.BossFx.telegraph(level, com.netheryx.entity.boss.BossFx.onGround(level, victim.position()), 2.5D,
+                    ERUPTION_DELAY, com.netheryx.entity.boss.BossFx.FIRE);
             count--;
         }
         for (int i = 0; i < count; i++) {
             Vec3 around = target.position().add(this.random.nextGaussian() * 3.5D, 0.0D, this.random.nextGaussian() * 3.5D);
             this.eruptions.add(new Eruption(around, ERUPTION_DELAY + 4 + i * 5));
+            com.netheryx.entity.boss.BossFx.telegraph(level, com.netheryx.entity.boss.BossFx.onGround(level, around), 2.5D,
+                    ERUPTION_DELAY + 4 + i * 5, com.netheryx.entity.boss.BossFx.FIRE);
         }
     }
 
@@ -422,6 +434,33 @@ public class BasaltGolem extends Monster implements GeoEntity {
     public void aiStep() {
         super.aiStep();
         MobParticles.ambient(this, this.molten ? ParticleTypes.LAVA : ModParticles.ASH_FLAKE.get(), this.molten ? 4 : 10, 1.0D, 0.02D);
+    }
+
+    @Override
+    public net.minecraft.world.entity.SpawnGroupData finalizeSpawn(net.minecraft.world.level.ServerLevelAccessor level,
+                                                                   net.minecraft.world.DifficultyInstance difficulty,
+                                                                   net.minecraft.world.entity.MobSpawnType reason,
+                                                                   @Nullable net.minecraft.world.entity.SpawnGroupData data,
+                                                                   @Nullable net.minecraft.nbt.CompoundTag tag) {
+        var maxHealth = this.getAttribute(Attributes.MAX_HEALTH);
+        if (maxHealth != null) {
+            maxHealth.setBaseValue(com.netheryx.config.NetheryXConfig.GOLEM_MAX_HEALTH.get());
+            this.setHealth(this.getMaxHealth());
+        }
+        return super.finalizeSpawn(level, difficulty, reason, data, tag);
+    }
+
+    @Override
+    public com.netheryx.entity.boss.BossEncounter encounter() {
+        return this.encounter;
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        if (this.level() instanceof ServerLevel server) {
+            this.encounter.deathBurst(server);
+        }
     }
 
     @Override

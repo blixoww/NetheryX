@@ -223,9 +223,13 @@ def approach_signpost(dungeon):
 
 
 def generate_approach():
+    from .structures_v140 import unsupported
     for dungeon in APPROACH:
         for kind, build in (("ruin", approach_ruin), ("remains", approach_remains), ("signpost", approach_signpost)):
-            build(dungeon).save(f"{dungeon}_approach", kind)
+            template = build(dungeon)
+            problems = unsupported(template, world_rock=False)
+            assert not problems, f"{dungeon}_approach/{kind} : blocs sans support {problems}"
+            template.save(f"{dungeon}_approach", kind)
 
 
 def save_check():
@@ -242,3 +246,7 @@ def generate_gametest():
     d.box(0, 0, 0, 6, 0, 6, "minecraft:polished_blackstone")
     d.air(0, 1, 0, 6, 25, 6)
     d.save("gametest", "column")
+    arena = Dungeon(33, 14, 33, "gametest_arena")
+    arena.box(0, 0, 0, 32, 0, 32, "minecraft:polished_blackstone")
+    arena.air(0, 1, 0, 32, 13, 32)
+    arena.save("gametest", "arena")

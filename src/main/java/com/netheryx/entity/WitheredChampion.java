@@ -3,6 +3,8 @@ package com.netheryx.entity;
 import com.netheryx.registry.ModParticles;
 import com.netheryx.util.MobParticles;
 import com.netheryx.config.NetheryXConfig;
+import com.netheryx.entity.boss.BossEncounter;
+import com.netheryx.entity.boss.BossFx;
 import com.netheryx.registry.ModEntities;
 import com.netheryx.util.GuardianSeals;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,13 +28,17 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Champion fletri : boss des Catacombes fletries. Version geante du Chevalier fletri : balayage spectral
- * (fletrissement), ruee des ames, chaines d'ames qui attirent les fuyards, anneaux de pointes d'os sous 50 %,
- * renforts a 66 % et 33 % de vie. Sa mort brise les sceaux de la salle au tresor.
+ * Champion fletri : boss des Catacombes fletries. Version geante du Chevalier fletri, un duelliste :
+ * balayage spectral annonce (on passe derriere lui), ruee des ames dans une direction fixee a l'avance (on s'ecarte),
+ * chaines d'ames qui attirent les fuyards.
+ * Phase 2 (66 %) : ruees enchainees, ames errantes (cercles au sol), anneaux de pointes d'os et onde a sauter.
+ * Phase 3 (33 %) : danse macabre, il disparait et reapparait dans le dos de sa cible, dans l'obscurite.
+ * Renforts a chaque phase. Sa mort brise les sceaux de la salle au tresor.
  */
-public class WitheredChampion extends WitheredKnight {
+public class WitheredChampion extends WitheredKnight implements com.netheryx.entity.boss.BossEntity {
     /** Le boss reste cloisonne dans son arene (rayon 7 blocs autour de son point d\'apparition). */
-    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(7.0D, 5.0D);
+    private final com.netheryx.util.BossArena arena = new com.netheryx.util.BossArena(14.0D, 5.0D);
+    private final BossEncounter encounter = new BossEncounter(this, BossFx.SOUL, new float[]{0.66F, 0.33F}, this::onPhase);
     private static final String TAG_WAVES = "SummonWaves";
 
     private final ServerBossEvent bossEvent = (ServerBossEvent) new ServerBossEvent(this.getDisplayName(),
@@ -44,6 +50,14 @@ public class WitheredChampion extends WitheredKnight {
     private int chainsCooldown = 140;
     private int spikesCooldown = 100;
     private int spikesTicks;
+    private int sweepWindup;
+    private int dashWindup;
+    private int dashChain;
+    private net.minecraft.world.phys.Vec3 dashDirection = net.minecraft.world.phys.Vec3.ZERO;
+    private int soulsCooldown = 60;
+    private int danceCooldown = 80;
+    private int danceWindup;
+    private net.minecraft.world.phys.Vec3 danceSpot = net.minecraft.world.phys.Vec3.ZERO;
 
     public WitheredChampion(EntityType<? extends WitheredChampion> type, Level level) {
         super(type, level);
@@ -73,40 +87,136 @@ public class WitheredChampion extends WitheredKnight {
         return super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
     }
 
+    /** Transition de phase ou attaque en preparation : il reste sur place, ce qui laisse le temps de reagir. */
+    private boolean isBusy() {
+        return this.encounter.inTransition() || this.sweepWindup > 0 || this.dashWindup > 0 || this.danceWindup > 0;
+    }
+
+    /** Reste sur place sans couper l'IA (isImmobile() de Minecraft arreterait aussi le code du boss). */
+    private void holdStill() {
+        this.getNavigation().stop();
+        this.getMoveControl().setWantedPosition(this.getX(), this.getY(), this.getZ(), 0.0D);
+        this.setZza(0.0F);
+    }
+
     @Override
     protected void customServerAiStep() {
         super.customServerAiStep();
         this.arena.tick(this);
-        float ratio = this.getHealth() / this.getMaxHealth();
+        this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+        if (!(this.level() instanceof ServerLevel server)) {
+            return;
+        }
+        this.encounter.tick(server);
+        if (this.isBusy()) {
+            this.holdStill();
+        }
+        if (this.encounter.inTransition()) {
+            return;
+        }
+        if (this.danceWindup > 0) {
+            this.tickDanceWindup(server);
+            return;
+        }
         this.tickSoulDash();
         this.tickSweep();
         this.tickChains();
-        this.tickSpikes(ratio);
-        this.bossEvent.setProgress(ratio);
-        int expectedWaves = ratio < 0.33F ? 2 : (ratio < 0.66F ? 1 : 0);
-        if (this.summonWaves < expectedWaves && this.level() instanceof ServerLevel server) {
-            this.summonWaves++;
-            this.triggerAnim("attack", "attack");
-            for (int i = 0; i < 2; i++) {
-                WitheredKnight knight = ModEntities.WITHERED_KNIGHT.get().create(server);
-                if (knight != null) {
-                    knight.moveTo(this.getX() + (i == 0 ? 2.5D : -2.5D), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-                    knight.setTarget(this.getTarget());
-                    server.addFreshEntity(knight);
-                    server.sendParticles(ParticleTypes.SOUL, knight.getX(), knight.getY(0.5D), knight.getZ(), 30, 0.4D, 0.8D, 0.4D, 0.05D);
-                }
+        this.tickSpikes();
+        this.tickSouls(server);
+        this.tickDance(server);
+    }
+
+    private void onPhase(int phase) {
+        if (!(this.level() instanceof ServerLevel server)) {
+            return;
+        }
+        this.summonWaves++;
+        this.triggerAnim("attack", "attack");
+        for (int i = 0; i < 2; i++) {
+            WitheredKnight knight = ModEntities.WITHERED_KNIGHT.get().create(server);
+            if (knight != null) {
+                knight.moveTo(this.getX() + (i == 0 ? 2.5D : -2.5D), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                knight.setTarget(this.getTarget());
+                server.addFreshEntity(knight);
+                server.sendParticles(ParticleTypes.SOUL, knight.getX(), knight.getY(0.5D), knight.getZ(), 30, 0.4D, 0.8D, 0.4D, 0.05D);
             }
-            this.playSound(SoundEvents.WITHER_AMBIENT, 1.5F, 0.7F);
+        }
+        this.playSound(SoundEvents.WITHER_AMBIENT, 1.5F, 0.7F);
+    }
+
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (this.encounter.inTransition() && !source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            this.playSound(SoundEvents.SOUL_ESCAPE, 1.0F, 1.5F);
+            return false;
+        }
+        return super.hurt(source, amount);
+    }
+
+    // --- Ames errantes : cercles sous chaque joueur -----------------------------------------------
+
+    private void tickSouls(ServerLevel server) {
+        if (this.encounter.phase() < 1 || --this.soulsCooldown > 0 || this.getTarget() == null) {
+            return;
+        }
+        this.soulsCooldown = 170 + this.random.nextInt(60);
+        this.triggerAnim("boss", "spikes");
+        this.playSound(SoundEvents.SOUL_ESCAPE, 2.0F, 0.5F);
+        for (net.minecraft.world.entity.player.Player player : server.getEntitiesOfClass(net.minecraft.world.entity.player.Player.class,
+                this.getBoundingBox().inflate(24.0D), p -> !p.isCreative() && !p.isSpectator())) {
+            this.encounter.hazards().circle(server, player.position(), 2.6D, 32, 8.0F, BossFx.SOUL);
+            for (int i = 1; i < 3; i++) {
+                net.minecraft.world.phys.Vec3 around = player.position().add(this.random.nextGaussian() * 4.0D, 0.0D, this.random.nextGaussian() * 4.0D);
+                this.encounter.hazards().circle(server, around, 2.6D, 32 + i * 8, 8.0F, BossFx.SOUL);
+            }
         }
     }
 
-    /** Ruee des ames : le Champion fonce sur une cible eloignee en laissant une trainee d'ames. */
+    // --- Danse macabre : un cercle marque le dos de la cible, puis il y surgit et balaie -------------
+
+    private void tickDance(ServerLevel server) {
+        net.minecraft.world.entity.LivingEntity target = this.getTarget();
+        if (this.encounter.phase() < 2 || --this.danceCooldown > 0 || target == null) {
+            return;
+        }
+        this.danceCooldown = 220 + this.random.nextInt(80);
+        this.danceSpot = target.position().subtract(target.getLookAngle().multiply(2.5D, 0.0D, 2.5D));
+        this.danceWindup = 18;
+        this.getNavigation().stop();
+        this.playSound(SoundEvents.WITHER_AMBIENT, 2.0F, 0.5F);
+        BossFx.telegraph(server, BossFx.onGround(server, this.danceSpot), 4.5D, 18, BossFx.SOUL);
+        target.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.DARKNESS, 80, 0), this);
+    }
+
+    private void tickDanceWindup(ServerLevel server) {
+        server.sendParticles(ParticleTypes.SOUL, this.getX(), this.getY(0.5D), this.getZ(), 6, 0.4D, 0.8D, 0.4D, 0.03D);
+        if (--this.danceWindup > 0) {
+            return;
+        }
+        if (this.randomTeleport(this.danceSpot.x, this.danceSpot.y, this.danceSpot.z, true)) {
+            this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.2F, 0.5F);
+        }
+        this.encounter.hazards().circle(server, this.position(), 4.5D, 1, 9.0F, BossFx.SOUL);
+        this.sweepCooldown = 30;
+    }
+
+    /** Ruee des ames : la ligne s'affiche, la direction est figee, puis le Champion fonce. On s'ecarte de la ligne. */
     private void tickSoulDash() {
         net.minecraft.world.entity.LivingEntity target = this.getTarget();
+        if (this.dashWindup > 0) {
+            if (--this.dashWindup == 0) {
+                this.setDeltaMovement(this.dashDirection.x * 1.6D, 0.3D, this.dashDirection.z * 1.6D);
+                this.hurtMarked = true;
+                this.dashTicks = 12;
+                this.playSound(SoundEvents.SOUL_ESCAPE, 2.0F, 0.6F);
+            }
+            return;
+        }
         if (this.dashTicks > 0) {
             this.dashTicks--;
             if (this.level() instanceof ServerLevel server) {
-                server.sendParticles(ParticleTypes.SOUL, this.getX(), this.getY(0.5D), this.getZ(), 4, 0.3D, 0.5D, 0.3D, 0.01D);
+                server.sendParticles(ParticleTypes.SOUL, this.getX(), this.getY(0.5D), this.getZ(), 6, 0.3D, 0.5D, 0.3D, 0.01D);
+                server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getX(), this.getY() + 0.2D, this.getZ(), 4, 0.3D, 0.1D, 0.3D, 0.01D);
             }
             if (target != null && this.distanceToSqr(target) < 6.0D) {
                 this.doHurtTarget(target);
@@ -116,20 +226,24 @@ public class WitheredChampion extends WitheredKnight {
         }
         if (target != null && --this.dashCooldown <= 0) {
             double distance = this.distanceToSqr(target);
-            if (distance > 36.0D && distance < 400.0D) {
-                net.minecraft.world.phys.Vec3 direction = target.position().subtract(this.position()).normalize();
-                this.setDeltaMovement(direction.x * 1.6D, 0.35D, direction.z * 1.6D);
-                this.hurtMarked = true;
-                this.dashTicks = 12;
-                this.playSound(SoundEvents.SOUL_ESCAPE, 2.0F, 0.6F);
+            if (distance > 25.0D && distance < 400.0D && this.level() instanceof ServerLevel server) {
+                this.dashDirection = target.position().subtract(this.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
+                this.dashWindup = 12;
+                this.getNavigation().stop();
+                this.encounter.hazards().line(server, this.position(), this.dashDirection, 16.0D, 1.2D, 12, 6.0F, BossFx.SOUL);
+                this.dashChain = this.dashChain > 0 ? this.dashChain - 1 : this.encounter.phase();
             }
-            this.dashCooldown = 100 + this.random.nextInt(60);
+            // Ruees enchainees en phase 2 et 3
+            this.dashCooldown = this.dashChain > 0 ? 24 : 110 + this.random.nextInt(60);
         }
     }
 
     /** Chaque coup du Champion affaiblit : lenteur, faiblesse et cecite. */
     @Override
     public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+        if (this.isBusy()) {
+            return false;
+        }
         boolean hit = super.doHurtTarget(target);
         if (hit && target instanceof net.minecraft.world.entity.LivingEntity living) {
             applyCurses(living, 1.0F);
@@ -150,30 +264,51 @@ public class WitheredChampion extends WitheredKnight {
 
     private void tickSweep() {
         net.minecraft.world.entity.LivingEntity target = this.getTarget();
+        if (this.sweepWindup > 0) {
+            if (target != null) {
+                this.getLookControl().setLookAt(target, 30.0F, 30.0F);
+            }
+            if (--this.sweepWindup == 0) {
+                this.performSweep();
+            }
+            return;
+        }
         if (--this.sweepCooldown > 0 || target == null || this.distanceToSqr(target) > 16.0D) {
             return;
         }
         this.sweepCooldown = 70 + this.random.nextInt(40);
+        this.sweepWindup = 12;
+        this.getNavigation().stop();
         this.triggerAnim("boss", "sweep");
+        this.playSound(SoundEvents.WITHER_SHOOT, 1.0F, 0.6F);
+        if (this.level() instanceof ServerLevel server) {
+            BossFx.telegraph(server, BossFx.onGround(server, this.position()), 4.5D, 12, BossFx.SOUL);
+        }
+    }
+
+    private void performSweep() {
         net.minecraft.world.phys.Vec3 facing = this.getLookAngle().multiply(1.0D, 0.0D, 1.0D).normalize();
         for (net.minecraft.world.entity.LivingEntity victim : this.level().getEntitiesOfClass(net.minecraft.world.entity.LivingEntity.class,
                 this.getBoundingBox().inflate(4.5D, 1.0D, 4.5D), e -> e != this && e.isAlive() && !(e instanceof WitheredKnight))) {
             net.minecraft.world.phys.Vec3 toVictim = victim.position().subtract(this.position()).multiply(1.0D, 0.0D, 1.0D).normalize();
-            if (toVictim.dot(facing) < 0.2D) {
+            if (toVictim.dot(facing) < 0.0D) {
                 continue;
             }
-            victim.hurt(this.damageSources().mobAttack(this), 10.0F);
-            victim.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WITHER, 100, 1));
-            this.applyCurses(victim, 1.5F);
+            victim.hurt(this.damageSources().indirectMagic(this, this), 7.0F);
+            victim.addEffect(new net.minecraft.world.effect.MobEffectInstance(net.minecraft.world.effect.MobEffects.WITHER, 80, 1));
+            this.applyCurses(victim, 1.0F);
             victim.push(toVictim.x * 0.8D, 0.3D, toVictim.z * 0.8D);
             victim.hurtMarked = true;
         }
         if (this.level() instanceof ServerLevel server) {
-            for (int i = -4; i <= 4; i++) {
-                double angle = Math.atan2(facing.z, facing.x) + i * 0.25D;
-                server.sendParticles(ParticleTypes.SWEEP_ATTACK, this.getX() + Math.cos(angle) * 2.5D, this.getY(1.0D),
-                        this.getZ() + Math.sin(angle) * 2.5D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+            for (int i = -6; i <= 6; i++) {
+                double angle = Math.atan2(facing.z, facing.x) + i * 0.26D;
+                server.sendParticles(ParticleTypes.SWEEP_ATTACK, this.getX() + Math.cos(angle) * 2.8D, this.getY(1.0D),
+                        this.getZ() + Math.sin(angle) * 2.8D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+                server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getX() + Math.cos(angle) * 4.0D, this.getY(0.6D),
+                        this.getZ() + Math.sin(angle) * 4.0D, 2, 0.1D, 0.2D, 0.1D, 0.02D);
             }
+            BossFx.shake(server, this.position(), 16.0D, 0.4F, 6);
         }
         this.playSound(SoundEvents.PLAYER_ATTACK_SWEEP, 2.0F, 0.6F);
     }
@@ -207,7 +342,7 @@ public class WitheredChampion extends WitheredKnight {
 
     // --- Pointes d'os (sous 50 %) : deux anneaux de crocs successifs autour du Champion --------------
 
-    private void tickSpikes(float ratio) {
+    private void tickSpikes() {
         if (this.spikesTicks > 0) {
             this.spikesTicks--;
             if (this.spikesTicks == 10 || this.spikesTicks == 0) {
@@ -222,13 +357,14 @@ public class WitheredChampion extends WitheredKnight {
             }
             return;
         }
-        if (ratio < 0.5F && this.getTarget() != null && --this.spikesCooldown <= 0) {
-            this.spikesCooldown = 160 + this.random.nextInt(60);
+        if (this.encounter.phase() >= 1 && this.getTarget() != null && --this.spikesCooldown <= 0) {
+            this.spikesCooldown = 170 + this.random.nextInt(60);
             this.spikesTicks = 20;
             this.triggerAnim("boss", "spikes");
             this.playSound(SoundEvents.SKELETON_HORSE_DEATH, 1.5F, 0.5F);
             if (this.level() instanceof ServerLevel server) {
-                server.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, this.getX(), this.getY() + 0.1D, this.getZ(), 40, 3.0D, 0.0D, 3.0D, 0.0D);
+                BossFx.telegraph(server, BossFx.onGround(server, this.position()), 6.0D, 20, BossFx.SOUL);
+                this.encounter.hazards().wave(server, this.position(), 13.0D, 0.55D, 7.0F, BossFx.SOUL);
             }
         }
     }
@@ -244,10 +380,16 @@ public class WitheredChampion extends WitheredKnight {
     }
 
     @Override
+    public com.netheryx.entity.boss.BossEncounter encounter() {
+        return this.encounter;
+    }
+
+    @Override
     public void die(DamageSource source) {
         super.die(source);
         if (this.level() instanceof ServerLevel server) {
             GuardianSeals.breakSealsAround(server, this.blockPosition());
+            this.encounter.deathBurst(server);
         }
     }
 
@@ -255,6 +397,7 @@ public class WitheredChampion extends WitheredKnight {
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
         this.arena.save(tag);
+        this.encounter.save(tag);
         tag.putInt(TAG_WAVES, this.summonWaves);
     }
 
@@ -262,6 +405,7 @@ public class WitheredChampion extends WitheredKnight {
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
         this.arena.load(tag);
+        this.encounter.load(tag);
         this.summonWaves = tag.getInt(TAG_WAVES);
         if (this.hasCustomName()) {
             this.bossEvent.setName(this.getDisplayName());

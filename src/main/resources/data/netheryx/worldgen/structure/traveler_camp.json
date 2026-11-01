@@ -11,5 +11,6 @@
   "sink": 0,
   "footprint": 12,
   "required_air": 6,
-  "max_distance_from_center": 80
+  "max_distance_from_center": 80,
+  "floor_tolerance": 7
 }

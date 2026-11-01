@@ -3,15 +3,17 @@
   "biomes": "#netheryx:has_structure/onyx_citadel",
   "step": "top_layer_modification",
   "spawn_overrides": {},
-  "terrain_adaptation": "beard_box",
+  "terrain_adaptation": "none",
   "start_pool": "netheryx:onyx_citadel/start",
   "size": 1,
   "max_y": 100,
-  "min_y": 33,
-  "sink": 0,
-  "footprint": 44,
+  "min_y": 40,
+  "sink": 27,
+  "footprint": 15,
   "required_air": 14,
   "max_distance_from_center": 80,
   "approach_pool": "netheryx:onyx_citadel_approach/start",
-  "approach_count": 5
+  "approach_count": 5,
+  "entrance_x": 37,
+  "entrance_z": 69
 }

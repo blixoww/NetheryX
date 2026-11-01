@@ -1345,4 +1345,6 @@ def generate():
         withered_catacombs(variant)
     structures_v134.generate_approach()
     structures_v134.generate_gametest()
+    from . import structures_v140
+    structures_v140.generate()
     structures_v134.save_check()

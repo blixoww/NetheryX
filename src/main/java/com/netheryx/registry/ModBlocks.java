@@ -15,6 +15,7 @@ import com.netheryx.block.WartvinePlantBlock;
 import net.minecraft.core.particles.ParticleTypes;
 import com.netheryx.block.QuartzGlassBlock;
 import com.netheryx.block.QuartzGlassPaneBlock;
+import com.netheryx.block.RuneLockBlock;
 import com.netheryx.block.AmbientBlock;
 import com.netheryx.block.AmbientClusterBlock;
 import com.netheryx.block.AmbientFungusBlock;
@@ -31,6 +32,7 @@ import com.netheryx.block.NetherDoublePlantBlock;
 import com.netheryx.block.NetherPlantBlock;
 import com.netheryx.block.OnyxAnvilBlock;
 import com.netheryx.block.OnyxFurnaceBlock;
+import com.netheryx.block.RuneLockBlock;
 import com.netheryx.block.SoulLilyBlock;
 import com.netheryx.block.SoulTuberCropBlock;
 import com.netheryx.block.StrippableLogBlock;
@@ -296,6 +298,13 @@ public final class ModBlocks {
     public static final RegistryObject<Block> WARDED_BRICKS = BLOCKS.register("warded_bricks",
             () -> new WardedBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK)
                     .strength(-1.0F, 3600000.0F).noLootTable().sound(SoundType.DEEPSLATE_BRICKS)
+                    .isValidSpawn((state, level, pos, type) -> false).pushReaction(PushReaction.BLOCK)));
+
+    /** Verrou runique de la rotonde des donjons : indestructible, s'allume avec une clef runique. */
+    public static final RegistryObject<Block> RUNE_LOCK = register("rune_lock",
+            () -> new RuneLockBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE)
+                    .strength(-1.0F, 3600000.0F).noLootTable().sound(SoundType.DEEPSLATE_TILES)
+                    .lightLevel(state -> state.getValue(RuneLockBlock.LIT) ? 13 : 3)
                     .isValidSpawn((state, level, pos, type) -> false).pushReaction(PushReaction.BLOCK)));
 
     // --- Technique -------------------------------------------------------------------------

@@ -7,6 +7,44 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le pr
 Chaque tag Git (`git tag 1.0.0 && git push origin 1.0.0`) déclenche la compilation et la publication du `.jar`
 dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 
+## [1.4.0] - 2026-11-01
+
+### Ajouté
+- **Grands donjons entièrement refaits** (pour les nouvelles zones ; les donjons déjà générés ne changent pas). Une entrée en
+  surface, puis un complexe creusé sous terre : rotonde aux **trois Verrous runiques**, **trois ailes** à explorer dans l'ordre de
+  son choix, chacune finissant par une chambre tenue par un **Gardien des runes**, avec une **Clef runique**. Les trois clefs
+  dissolvent la herse de sceaux et ouvrent la descente vers l'arène, puis le coffre-fort à la mort du boss. Plan et salles varient
+  (couloir de fléchettes, fosse à franchir, salle aux mimiques, gardes, salles au trésor derrière une porte de fer).
+- **Combats de boss repensés**, pour tous : annonces plaquées au sol (un cercle qui se remplit jusqu'à l'impact), ondes à sauter,
+  lignes balisées, faisceaux que les piliers arrêtent, transitions de phase invulnérables, titre et rugissement au réveil,
+  tremblements de caméra, explosion finale.
+  - **Sentinelle d'onyx** : faisceau d'onyx, ondes en rage, carapace qui se brise en six coups (Sentinelle étourdie et vulnérable).
+  - **Sorcier infernal** : murs de flammes avec une brèche à trouver, spirale de feu, pluie de météores annoncée.
+  - **Champion flétri** : ruées enchaînées sur une ligne balisée, âmes errantes, danse macabre (il surgit dans le dos, dans le noir).
+  - **Cœur du Nether** : rayons qui balaient l'arène, pulsations à sauter, geysers annoncés.
+  - **Golem de basalte** : annonces au sol et tremblements sur ses attaques.
+- **Points de vie selon le nombre de joueurs** : +60 % par joueur supplémentaire (Minecraft plafonne la vie à 1024).
+- **Fatigue de minage autour d'un boss vivant** : on n'entre pas dans une arène en creusant (option `bossMiningFatigue`).
+- **Tests en jeu de bout en bout** : combat complet de chaque boss, ouverture de la herse, génération réelle d'un donjon.
+
+### Modifié
+- **Biomes équilibrés** : nouvelle répartition du climat. Tous les biomes du mod font maintenant 3 à 7 % du Nether ; le Gouffre de
+  givre (0,2 %), le Lac de verre (0,4 %) et le Fourré de moelle (0,5 %) étaient presque introuvables.
+- **Donjons bien plus faciles à trouver** : seule l'entrée doit tenir en surface. Distance moyenne mesurée de 400 à 700 blocs
+  (Citadelle 5000, Catacombes 7800 auparavant).
+- **Petites structures** : tolérance de terrain augmentée là où le sol s'adapte, Forge et Nids dans plus de biomes.
+- **Équilibrage** : points de vie relevés pour des combats de plusieurs minutes (Sorcier 360, Champion 460, Sentinelle 560, Golem
+  260, Cœur 1000 ; nouvelles clés de configuration), attaques annoncées en dégâts magiques qui traversent l'armure.
+- **Textures** : épées, outils, arc, nourritures, matériaux, bois, briques d'onyx et de givre, verrues, dérivés du vanilla pour des
+  silhouettes lisibles (`tools/vanilla_textures.py`).
+
+### Corrigé
+- **Butin répandu au sol et aussi dans les coffres** des structures : la remise en état des gabarits tirait la table de butin deux
+  fois. Elle ne touche plus aux coffres, tonneaux, générateurs et panneaux déjà en place.
+- La Cache secrète pouvait se creuser dans le plafond d'une salle de donjon ; forteresses et bastions s'écartent aussi des donjons.
+- Les indices d'approche ne se posent plus au-dessus d'une salle enterrée.
+- `.gitignore` contenait une ligne en UTF-16 qui le faisait traiter comme un fichier binaire.
+
 ## [1.3.4] - 2026-11-01
 
 ### Ajouté

@@ -5,7 +5,7 @@
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "netheryx:infernal_sanctum/main",
+        "location": "netheryx:infernal_sanctum/keep_0",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }
@@ -14,7 +14,7 @@
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "netheryx:infernal_sanctum/variant_1",
+        "location": "netheryx:infernal_sanctum/keep_1",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }
@@ -23,16 +23,7 @@
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "netheryx:infernal_sanctum/variant_2",
-        "projection": "rigid",
-        "processors": "minecraft:empty"
-      }
-    },
-    {
-      "weight": 1,
-      "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "netheryx:infernal_sanctum/variant_3",
+        "location": "netheryx:infernal_sanctum/keep_2",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }

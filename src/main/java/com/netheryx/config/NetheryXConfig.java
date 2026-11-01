@@ -20,6 +20,9 @@ public final class NetheryXConfig {
     public static final ForgeConfigSpec.IntValue RECALL_STONE_COOLDOWN;
     public static final ForgeConfigSpec.DoubleValue WARLOCK_MAX_HEALTH;
     public static final ForgeConfigSpec.DoubleValue CHAMPION_MAX_HEALTH;
+    public static final ForgeConfigSpec.DoubleValue GOLEM_MAX_HEALTH;
+    public static final ForgeConfigSpec.DoubleValue HEART_MAX_HEALTH;
+    public static final ForgeConfigSpec.BooleanValue BOSS_MINING_FATIGUE;
     public static final ForgeConfigSpec.BooleanValue BURROWER_DIGS;
     public static final ForgeConfigSpec.BooleanValue NETHER_EVENTS;
     public static final ForgeConfigSpec.IntValue NETHER_EVENT_MIN_DELAY;
@@ -63,14 +66,23 @@ public final class NetheryXConfig {
 
         builder.comment("Creatures").push("entities");
         SENTINEL_MAX_HEALTH = builder
-                .comment("Points de vie de la Sentinelle d'Onyx (boss).")
-                .defineInRange("sentinelMaxHealth", 250.0D, 50.0D, 2048.0D);
+                .comment("Points de vie de la Sentinelle d'Onyx (boss). (Nouvelle cle en 1.4.0 : combats rallonges.)")
+                .defineInRange("sentinelMaxHealthV2", 560.0D, 50.0D, 2048.0D);
         WARLOCK_MAX_HEALTH = builder
-                .comment("Points de vie du Sorcier infernal (mini-boss).")
-                .defineInRange("warlockMaxHealth", 150.0D, 20.0D, 2048.0D);
+                .comment("Points de vie du Sorcier infernal (boss). (Nouvelle cle en 1.4.0.)")
+                .defineInRange("warlockMaxHealthV2", 360.0D, 20.0D, 2048.0D);
         CHAMPION_MAX_HEALTH = builder
-                .comment("Points de vie du Champion fletri (boss des Catacombes fletries).")
-                .defineInRange("championMaxHealth", 200.0D, 50.0D, 2048.0D);
+                .comment("Points de vie du Champion fletri (boss des Catacombes fletries). (Nouvelle cle en 1.4.0.)")
+                .defineInRange("championMaxHealthV2", 460.0D, 50.0D, 2048.0D);
+        GOLEM_MAX_HEALTH = builder
+                .comment("Points de vie du Golem de basalte (mini-boss).")
+                .defineInRange("golemMaxHealth", 260.0D, 50.0D, 2048.0D);
+        HEART_MAX_HEALTH = builder
+                .comment("Points de vie du Coeur du Nether (boss final).")
+                .defineInRange("heartMaxHealth", 1000.0D, 100.0D, 1024.0D);
+        BOSS_MINING_FATIGUE = builder
+                .comment("Fatigue de minage autour d'un boss vivant : on n'entre pas dans son arene en creusant.")
+                .define("bossMiningFatigue", true);
         BURROWER_DIGS = builder
                 .comment("Le Fouisseur de basalte creuse des tunnels (respecte aussi la regle mobGriefing).")
                 .define("burrowerDigs", true);

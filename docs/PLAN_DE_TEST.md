@@ -77,6 +77,10 @@ Avec la **Boussole des âmes** (structures NetheryX en tête de liste) ou par co
 Pour chaque donjon, **en survie** (`/gamemode survival`) avec une bonne armure :
 - [ ] Parcours complet : escaliers praticables (Sanctuaire : descente vers la nef ; Catacombes : deux niveaux).
 - [ ] Coffres et **mimiques** (approchez accroupi).
+- [ ] Les trois **ailes** mènent chacune à une chambre (Gardien des runes) avec une **Clef runique** dans le coffre.
+- [ ] Les trois clefs allument les **Verrous runiques** de la rotonde : la herse de l'escalier se dissout.
+- [ ] Aucun objet ne traîne par terre à côté des coffres en arrivant dans une structure neuve.
+- [ ] Lisibilité des **annonces au sol** pendant les combats, tremblements de caméra (option d'accessibilité du jeu pour les couper).
 - [ ] Le coffre-fort est **impossible à ouvrir ou à contourner** avant la mort du boss (essayez de creuser autour).
 - [ ] Le boss **reste dans son arène** : fuyez, il doit y retourner et se soigner lentement.
 - [ ] À la mort du boss : les sceaux disparaissent, la maçonnerie redevient de la brique, le trophée tombe.

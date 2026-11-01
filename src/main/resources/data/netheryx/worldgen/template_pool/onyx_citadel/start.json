@@ -5,7 +5,7 @@
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "netheryx:onyx_citadel/main",
+        "location": "netheryx:onyx_citadel/keep_0",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }
@@ -14,7 +14,7 @@
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "netheryx:onyx_citadel/variant_1",
+        "location": "netheryx:onyx_citadel/keep_1",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }
@@ -23,16 +23,7 @@
       "weight": 1,
       "element": {
         "element_type": "minecraft:single_pool_element",
-        "location": "netheryx:onyx_citadel/variant_2",
-        "projection": "rigid",
-        "processors": "minecraft:empty"
-      }
-    },
-    {
-      "weight": 1,
-      "element": {
-        "element_type": "minecraft:single_pool_element",
-        "location": "netheryx:onyx_citadel/variant_3",
+        "location": "netheryx:onyx_citadel/keep_2",
         "projection": "rigid",
         "processors": "minecraft:empty"
       }
