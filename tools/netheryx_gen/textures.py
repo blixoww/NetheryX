@@ -904,6 +904,16 @@ def generate_v11():
                    (3, 12), (10, 10), (11, 11), (12, 12), (7, 2), (8, 2), (7, 13), (8, 13), (2, 7), (2, 8), (13, 7), (13, 8)):
         seal.putpixel((x, y), hexc("#d07cff"))
     save(bevel(seal, 1.6, 0.5), "block", "guardian_seal.png")
+    # Mecanisme de donjon : une plaque de fer noir, un oeil qui rougeoie. On doit pouvoir le reperer et le casser.
+    mech = noise_fill(new(), ["#17151a", "#211d24", "#2b2630"], "dungeon_trap", blur=1, jitter=0.08)
+    for k in range(3, 13):
+        for (x, y) in ((k, 2), (k, 13), (2, k), (13, k)):
+            mech.putpixel((x, y), hexc("#4a4250"))
+    for (x, y) in ((6, 6), (7, 6), (8, 6), (9, 6), (6, 7), (9, 7), (6, 8), (9, 8), (6, 9), (7, 9), (8, 9), (9, 9)):
+        mech.putpixel((x, y), hexc("#a3321a"))
+    for (x, y) in ((7, 7), (8, 7), (7, 8), (8, 8)):
+        mech.putpixel((x, y), hexc("#ffb24a"))
+    save(bevel(mech, 1.4, 0.5), "block", "dungeon_trap.png")
     save(armor_layer("#3a3a40", "#ff6a1a", 1, "carapace1"), "models", "armor", "carapace_layer_1.png")
     save(armor_layer("#3a3a40", "#ff6a1a", 2, "carapace2"), "models", "armor", "carapace_layer_2.png")
 

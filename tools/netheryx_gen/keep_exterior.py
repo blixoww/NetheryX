@@ -1,4 +1,4 @@
-"""Exterieur des donjons (1.4.3) : une vraie forteresse, a la maniere des forteresses du Nether, posee sur les salles enterrees.
+"""Forteresse de surface (1.4.3), utilisee telle quelle par la Citadelle d'onyx (keep_variants.py) : une vraie forteresse, a la maniere des forteresses du Nether, posee sur les salles enterrees.
 
 Vu du dehors :
     - une ENCEINTE crenelee, a contreforts, qui repose sur des arcades (visibles quand le terrain est plus bas) ;
@@ -20,7 +20,6 @@ FRAME = 8                # debord du gabarit (corniches des tours comprises)
 SOUTH = 13               # pont d'entree, en plus de la marge, au sud
 RING = (4, 5)            # profondeur du mur d'enceinte (a partir du bord des salles)
 WALK = G + 7             # sol du chemin de ronde et des ponts
-HEIGHT = G + 31
 ARCH_TOP = 12            # sommet des arcades de fondation
 GATE_TIP = LAST + MARGIN + SOUTH - 1
 CX = 37                  # axe du donjon
@@ -385,7 +384,11 @@ class Exterior:
         d.air(28, WALK + 1, LAST + 2, 46, WALK + 3, LAST + 3)
         d.box(36, WALK, LAST, 38, WALK, LAST + 1, t["floor"])
         d.air(36, WALK + 1, LAST, 38, WALK + 3, LAST + 1)
-        # Pont d'entree, puis marches jusqu'au sol
+        self.gate_bridge(south)
+
+    def gate_bridge(self, south):
+        """Pont d'entree, puis marches jusqu'au sol."""
+        d, t = self.d, self.t
         deck_end = GATE_TIP - 3
         d.air(35, G + 1, south + 1, 39, G + 5, GATE_TIP)
         for z in range(south + 1, deck_end + 1):
@@ -538,6 +541,9 @@ class Exterior:
                 self.tower(flip_x, flip_z)
         self.gatehouse()
         self.keep.entrance()
+        self.keep.spots += [(-2, FLOOR + 1, 37), (LAST + 2, FLOOR + 1, 37), (37, FLOOR + 1, -2)]
+        for tower in ((-2, G + 15, -2), (LAST + 2, G + 15, -2), (-2, G + 15, LAST + 2), (LAST + 2, G + 15, LAST + 2)):
+            self.keep.spots.append(tower)
         for z in range(67, 73):
             for x in (35, 39):
                 if self.d.blocks.get((x, G + 1, z), (AIR,))[0] == AIR:
@@ -548,7 +554,3 @@ class Exterior:
             self.postern(side)
         self.yards()
         self.lamp_posts()
-
-
-def build_exterior(keep):
-    Exterior(keep).build()

@@ -5,7 +5,9 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.player.Player;
@@ -40,11 +42,27 @@ public final class BossHazards {
     }
 
     private final Mob boss;
+    private Entity anchor;
     private final List<Hazard> active = new ArrayList<>();
     private final Map<String, Integer> started = new HashMap<>();
 
     public BossHazards(Mob boss) {
         this.boss = boss;
+        this.anchor = boss;
+    }
+
+    /** Sans boss : les memes dangers, lances par un mecanisme de donjon. */
+    public BossHazards() {
+        this.boss = null;
+    }
+
+    /** Entite de reference des tests de vue du faisceau, quand il n'y a pas de boss pour tenir ce role. */
+    public void anchor(Entity entity) {
+        this.anchor = entity;
+    }
+
+    private SoundSource sounds() {
+        return this.boss != null ? this.boss.getSoundSource() : SoundSource.HOSTILE;
     }
 
     public void tick(ServerLevel level) {
@@ -78,7 +96,7 @@ public final class BossHazards {
     }
 
     private void hurt(Player victim, float damage, int color, double pushX, double pushY, double pushZ) {
-        DamageSource source = this.boss.damageSources().indirectMagic(this.boss, this.boss);
+        DamageSource source = this.boss != null ? this.boss.damageSources().indirectMagic(this.boss, this.boss) : victim.damageSources().magic();
         if (victim.hurt(source, damage)) {
             if (color == BossFx.FIRE) {
                 victim.setSecondsOnFire(4);
@@ -110,7 +128,7 @@ public final class BossHazards {
                 BossFx.ring(server, flash(color), center.add(0.0D, 0.15D, 0.0D), radius * 0.6D, 18, 0.14D);
                 BossFx.column(server, flash(color), center, 3.5D, 12, radius * 0.2D);
                 BossFx.shockwave(server, center, radius * 1.15D, 7, color);
-                server.playSound(null, center.x, center.y, center.z, SoundEvents.GENERIC_EXPLODE, BossHazards.this.boss.getSoundSource(), 0.8F, 1.2F);
+                server.playSound(null, center.x, center.y, center.z, SoundEvents.GENERIC_EXPLODE, BossHazards.this.sounds(), 0.8F, 1.2F);
                 for (Player victim : BossHazards.this.playersIn(server, new AABB(center, center).inflate(radius, 3.0D, radius))) {
                     double dx = victim.getX() - center.x;
                     double dz = victim.getZ() - center.z;
@@ -178,7 +196,7 @@ public final class BossHazards {
                     server.sendParticles(debris(color), at.x, at.y + 0.2D, at.z, 5, width * 0.4D, 0.1D, width * 0.4D, 0.15D);
                     BossFx.column(server, flash(color), at, 2.0D, 3, 0.15D);
                 }
-                server.playSound(null, from.x, from.y, from.z, SoundEvents.BLAZE_SHOOT, BossHazards.this.boss.getSoundSource(), 1.2F, 0.5F);
+                server.playSound(null, from.x, from.y, from.z, SoundEvents.BLAZE_SHOOT, BossHazards.this.sounds(), 1.2F, 0.5F);
                 Vec3 end = from.add(dir.scale(length));
                 for (Player victim : BossHazards.this.playersIn(server, new AABB(from, end).inflate(width + 0.5D, 2.5D, width + 0.5D))) {
                     if (distanceToSegment(victim.position().multiply(1.0D, 0.0D, 1.0D), from.multiply(1.0D, 0.0D, 1.0D),
@@ -208,7 +226,7 @@ public final class BossHazards {
                 int moving = Math.max(0, this.age - windup);
                 double angle = startAngle + Math.toRadians(degreesPerTick * moving);
                 Vec3 dir = new Vec3(Math.cos(angle), 0.0D, Math.sin(angle));
-                var hit = server.clip(new ClipContext(origin, origin.add(dir.scale(length)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, BossHazards.this.boss));
+                var hit = server.clip(new ClipContext(origin, origin.add(dir.scale(length)), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, BossHazards.this.anchor));
                 Vec3 end = hit.getType() == HitResult.Type.MISS ? origin.add(dir.scale(length)) : hit.getLocation();
                 double reach = end.distanceTo(origin);
                 if (this.age <= windup) {
@@ -226,7 +244,7 @@ public final class BossHazards {
                 }
                 server.sendParticles(debris(color), end.x, end.y, end.z, 4, 0.2D, 0.2D, 0.2D, 0.1D);
                 if (moving % 8 == 0) {
-                    server.playSound(null, origin.x, origin.y, origin.z, SoundEvents.BEACON_AMBIENT, BossHazards.this.boss.getSoundSource(), 1.5F, 1.6F);
+                    server.playSound(null, origin.x, origin.y, origin.z, SoundEvents.BEACON_AMBIENT, BossHazards.this.sounds(), 1.5F, 1.6F);
                 }
                 for (Player victim : BossHazards.this.playersIn(server, new AABB(origin, end).inflate(1.5D, 3.0D, 1.5D))) {
                     Vec3 chest = victim.position().add(0.0D, 0.9D, 0.0D);

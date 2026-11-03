@@ -65,6 +65,7 @@ BLOCKS = [
     ("onyx_lantern", "lantern", None),
     ("ember_lamp", "cube", None),
     ("guardian_seal", "cube", None),
+    ("dungeon_trap", "cube", None),
     # v1.3 : prairie de braise, fleurs, cultures, pots
     ("nether_grass_block", "grass_block", None),
     ("nether_grass", "cross", None),
@@ -305,6 +306,7 @@ NAMES = {
     "basalt_beetle_spawn_egg": ("Basalt Beetle Spawn Egg", "Oeuf d'apparition de scarabee de basalte"),
     "infernal_warlock_spawn_egg": ("Infernal Warlock Spawn Egg", "Oeuf d'apparition de sorcier infernal"),
     "guardian_seal": ("Guardian Seal", "Sceau du gardien"),
+    "dungeon_trap": ("Dungeon Mechanism", "Mécanisme de donjon"),
     "nether_grass_block": ("Nether Grass Block", "Bloc d'herbe du Nether"),
     "onyx_anvil": ("Onyx Anvil", "Enclume en onyx"),
     "onyx_furnace": ("Onyx Furnace", "Four en onyx"),

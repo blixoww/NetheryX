@@ -29,6 +29,8 @@ public final class ModBlockEntities {
     public static final RegistryObject<BlockEntityType<SoulAltarBlockEntity>> SOUL_ALTAR = BLOCK_ENTITIES.register("soul_altar",
             () -> BlockEntityType.Builder.of(SoulAltarBlockEntity::new, ModBlocks.SOUL_ALTAR.get()).build(null));
     @SuppressWarnings("DataFlowIssue")
+    public static final RegistryObject<BlockEntityType<com.netheryx.blockentity.DungeonTrapBlockEntity>> DUNGEON_TRAP = BLOCK_ENTITIES.register("dungeon_trap",
+            () -> BlockEntityType.Builder.of(com.netheryx.blockentity.DungeonTrapBlockEntity::new, ModBlocks.DUNGEON_TRAP.get()).build(null));
     public static final RegistryObject<BlockEntityType<WardLanternBlockEntity>> WARD_LANTERN = BLOCK_ENTITIES.register("ward_lantern",
             () -> BlockEntityType.Builder.of(WardLanternBlockEntity::new, ModBlocks.WARD_LANTERN.get()).build(null));
 

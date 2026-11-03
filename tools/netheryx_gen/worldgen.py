@@ -527,7 +527,7 @@ def generate_biome_modifiers():
 STRUCTURES = {
     # nom : (espacement, separation, sel, air requis, y min, enfoncement, emprise, adaptation au terrain)
     # Espacements reduits : un donjon tous les ~300 blocs environ, une petite structure tous les ~130 blocs.
-    "onyx_citadel": (20, 8, 761234019, 14, 33, 0, 44, "beard_box"),
+    "onyx_citadel": (14, 5, 761234019, 14, 33, 0, 44, "beard_box"),
     "infernal_sanctum": (20, 8, 663901247, 10, 33, 10, 40, "none"),
     "withered_catacombs": (18, 7, 518230457, 8, 45, 16, 38, "none"),
     "traveler_camp": (9, 3, 734029118, 6, 33, 0, 12, "beard_thin"),
@@ -542,6 +542,9 @@ STRUCTURES = {
     "crystal_hollow": (9, 3, 127340955, 5, 33, 0, 9, "beard_thin"),
     "lava_forge": (9, 3, 688201397, 5, 33, 0, 9, "beard_thin"),
 }
+
+# Le sommet d'un donjon ne doit jamais atteindre la bedrock du plafond (voir keep_variants.py)
+KEEP_MAX_FLOOR = {"onyx_citadel": 74, "infernal_sanctum": 84, "withered_catacombs": 90}
 
 FILES_V150 = {"nether_garden": ["v2"], "nomad_caravan": ["v2"], "scorched_outpost": ["find_0", "find_1"], "bone_shrine": ["find_0", "find_1"],
               "crystal_hollow": ["find_0", "find_1"], "lava_forge": ["find_0", "find_1"]}
@@ -592,7 +595,7 @@ def generate_structures():
             "terrain_adaptation": adaptation,
             "start_pool": mid(f"{name}/start"),
             "size": 1,
-            "max_y": 100,
+            "max_y": KEEP_MAX_FLOOR.get(name, 100),
             "min_y": min_y,
             "sink": sink,
             "footprint": footprint,

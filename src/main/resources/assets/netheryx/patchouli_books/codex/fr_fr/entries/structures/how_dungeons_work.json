@@ -6,8 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "Un donjon est une $(l)forteresse$() : tours, ponts et cours en surface, complexe $(l)creusé sous terre$() en dessous, et des $(l)ruines, restes et panneaux$() la trahissent aux alentours.$(br2)Depuis la $(l)rotonde$() centrale, le grand escalier descend vers l'$(l)arène du boss$(). Trois $(l)ailes$() facultatives s'y greffent : chacune finit par une chambre tenue par un $(l)Gardien des runes$(), et un beau trésor.",
-      "title": "Donjons"
+      "text": "Chaque donjon a son architecture et ses épreuves, tirées de son $(l)boss$() : ce qu'on y apprend en chemin sauve pendant le combat. Des $(l)ruines, restes et panneaux$() le trahissent aux alentours. Trois $(l)trésors$() facultatifs sont tenus chacun par un $(l)Gardien des runes$().$(br2)Des $(l)mécanismes$() au sol rejouent les attaques du boss. Ils se cassent à la pioche."
     },
     {
       "type": "patchouli:text",

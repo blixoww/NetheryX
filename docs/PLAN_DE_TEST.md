@@ -59,6 +59,12 @@ Biomes à vérifier : `ember_meadow`, `ember_grove`, `ashen_wastes`, `sulfur_spr
 
 ## 4. Structures et donjons
 
+- [ ] **Sanctuaire** : gravir le temple, traverser la chaussée (murs de flammes, brèche lisible), passerelles, sortir de la lave par les marches de secours, potions du seuil.
+- [ ] **Catacombes** : se repérer dans le labyrinthe, esquiver une ruée en s'écartant dans un couloir de 3, embuscade (le temps de se retourner suffit ?), obscurité supportable.
+- [ ] **Citadelle** : les 3 étages dans l'ordre (s'abriter du faisceau, sauter les ondes, crocs), arène du sommet, coffre-fort dans l'abside après la mort du boss.
+- [ ] **Dosage des mécanismes** : dégâts et fréquence justes, surtout aux Catacombes (jusqu'à 17 mécanismes).
+- [ ] **Terrain autour** : aucun relief ou cristal gênant dans les cours et sur les terrasses.
+
 - [ ] **Forteresses** : silhouette de loin (tours, flèche), aucune boîte de salle visible, fondations jusqu'au sol sur terrain bas.
 - [ ] **Accès** : pont et châtelet, trois poternes et leurs escaliers, échelle du donjon central vers la rotonde, échelles des tours.
 - [ ] **Surface** : les quatre cours, le chemin de ronde, les ponts ; butin et gardes en haut des tours.

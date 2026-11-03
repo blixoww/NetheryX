@@ -205,6 +205,61 @@ public final class NetheryXGameTests {
     }
 
     /**
+     * Chaque mode de mecanisme lance bien son attaque quand un joueur vulnerable est a portee, et touche un joueur qui ne bouge pas.
+     * Un mecanisme lit son reglage dans le gabarit : c'est donc aussi le chemin suivi en jeu.
+     */
+    @GameTest(template = ARENA, timeoutTicks = 200, batch = "traps")
+    public static void dungeonTrapsFire(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        String[] modes = {"wave", "beam", "line", "spikes", "circles", "flame_wall", "gloom"};
+        String[] kinds = {"wave", "beam", "line", "line", "circle", "line", "circle"};
+        float[] damage = new float[1];
+        BlockPos center = helper.absolutePos(new BlockPos(16, 2, 16));
+        FakePlayer player = new FakePlayer(level, new GameProfile(UUID.randomUUID(), "netheryx-trap")) {
+            @Override
+            public boolean isInvulnerableTo(DamageSource source) {
+                return false;
+            }
+
+            @Override
+            public boolean hurt(DamageSource source, float amount) {
+                damage[0] += amount;
+                return true;
+            }
+        };
+        player.moveTo(center.getX() + 0.5D, center.getY(), center.getZ() - 2.5D);
+        level.addFreshEntity(player);
+        com.netheryx.blockentity.DungeonTrapBlockEntity[] traps = new com.netheryx.blockentity.DungeonTrapBlockEntity[modes.length];
+        for (int i = 0; i < modes.length; i++) {
+            BlockPos pos = center.offset(i * 2 - modes.length, -1, 0);
+            level.setBlock(pos, ModBlocks.DUNGEON_TRAP.get().defaultBlockState(), Block.UPDATE_ALL);
+            net.minecraft.nbt.CompoundTag tag = new net.minecraft.nbt.CompoundTag();
+            tag.putString("Mode", modes[i]);
+            tag.putInt("Period", 40);
+            tag.putFloat("Damage", 3.0F);
+            tag.putInt("Length", 12);
+            tag.putInt("Width", 3);
+            traps[i] = (com.netheryx.blockentity.DungeonTrapBlockEntity) level.getBlockEntity(pos);
+            traps[i].load(tag);
+        }
+        helper.runAtTickTime(180, () -> {
+            player.discard();
+            for (int i = 0; i < modes.length; i++) {
+                if (traps[i].hazards().started().getOrDefault(kinds[i], 0) == 0) {
+                    helper.fail("Mecanisme muet : " + modes[i] + " (lances : " + traps[i].hazards().started() + ")");
+                    return;
+                }
+            }
+            if (damage[0] <= 0.0F) {
+                helper.fail("Aucun mecanisme n'a touche le joueur");
+                return;
+            }
+            NetheryX.LOGGER.info("MECANISMES : {} modes actifs, {} degats subis", modes.length, damage[0]);
+            helper.succeed();
+        });
+    }
+
+    /**
      * Sur une grande zone d'un vrai Nether, on calcule les pieces de toutes les structures qui y naissent reellement : aucune
      * ne doit en recouvrir une autre (vu du ciel, indices d'approche compris), ni recouvrir un bastion ou une forteresse.
      */
@@ -212,7 +267,6 @@ public final class NetheryXGameTests {
     public static void structuresNeverOverlap(GameTestHelper helper) {
         ServerLevel nether = helper.getLevel().getServer().getLevel(Level.NETHER);
         var sets = nether.registryAccess().registryOrThrow(Registries.STRUCTURE_SET);
-        var structures = nether.registryAccess().registryOrThrow(Registries.STRUCTURE);
         var generator = nether.getChunkSource().getGenerator();
         long seed = nether.getSeed();
         Structure.GenerationContext context = new Structure.GenerationContext(nether.registryAccess(), generator, generator.getBiomeSource(),
@@ -235,12 +289,9 @@ public final class NetheryXGameTests {
             for (int rx = Math.floorDiv(-radius, spacing); rx <= Math.floorDiv(radius, spacing); rx++) {
                 for (int rz = Math.floorDiv(-radius, spacing); rz <= Math.floorDiv(radius, spacing); rz++) {
                     ChunkPos candidate = placement.getPotentialStructureChunk(seed, rx * spacing, rz * spacing);
-                    for (var entry : set.structures()) {
-                        Structure structure = entry.structure().value();
-                        List<BoundingBox> boxes = NetherFloorStructure.piecesOf(context, structure, structures.getKey(structure), candidate);
-                        if (!boxes.isEmpty()) {
-                            (mod ? ours : vanilla).add(new Placed(mod ? name : structures.getKey(structure).toString(), candidate.toLong(), boxes));
-                        }
+                    List<BoundingBox> boxes = NetherFloorStructure.chosenPieces(context, set, candidate);
+                    if (!boxes.isEmpty()) {
+                        (mod ? ours : vanilla).add(new Placed(name, candidate.toLong(), boxes));
                     }
                 }
             }
@@ -277,9 +328,23 @@ public final class NetheryXGameTests {
      */
     @GameTest(template = AREA, timeoutTicks = 400, batch = "worldgen")
     public static void generatedDungeonIsComplete(GameTestHelper helper) {
+        checkGeneratedDungeon(helper, "onyx_citadel");
+    }
+
+    @GameTest(template = AREA, timeoutTicks = 400, batch = "worldgen2")
+    public static void generatedSanctumIsComplete(GameTestHelper helper) {
+        checkGeneratedDungeon(helper, "infernal_sanctum");
+    }
+
+    @GameTest(template = AREA, timeoutTicks = 400, batch = "worldgen3")
+    public static void generatedCatacombsAreComplete(GameTestHelper helper) {
+        checkGeneratedDungeon(helper, "withered_catacombs");
+    }
+
+    private static void checkGeneratedDungeon(GameTestHelper helper, String name) {
         ServerLevel nether = helper.getLevel().getServer().getLevel(Level.NETHER);
         Registry<Structure> registry = nether.registryAccess().registryOrThrow(Registries.STRUCTURE);
-        Holder<Structure> structure = registry.getHolderOrThrow(ResourceKey.create(Registries.STRUCTURE, NetheryX.id("onyx_citadel")));
+        Holder<Structure> structure = registry.getHolderOrThrow(ResourceKey.create(Registries.STRUCTURE, NetheryX.id(name)));
         Pair<BlockPos, Holder<Structure>> found = nether.getChunkSource().getGenerator().findNearestMapStructure(nether,
                 HolderSet.direct(structure), BlockPos.ZERO, 64, false);
         if (found == null) {
@@ -298,7 +363,7 @@ public final class NetheryXGameTests {
         helper.runAtTickTime(200, () -> {
             if (System.getenv("NETHERYX_DUMP") != null) {
                 try {
-                    WorldgenProbe.dump(nether, center.getMiddleBlockPosition(64), 112, java.nio.file.Path.of("keep_dump", "fortress.bin"));
+                    WorldgenProbe.dump(nether, center.getMiddleBlockPosition(64), 112, java.nio.file.Path.of("keep_dump", name + ".bin"));
                 } catch (java.io.IOException exception) {
                     helper.fail("Copie de la forteresse impossible : " + exception);
                 }
@@ -306,6 +371,7 @@ public final class NetheryXGameTests {
             int boss = 0;
             int seals = 0;
             int chests = 0;
+            int traps = 0;
             List<BlockPos> containers = new java.util.ArrayList<>();
             AABB area = new AABB(center.getMinBlockX() - radius * 16, nether.getMinBuildHeight(), center.getMinBlockZ() - radius * 16,
                     center.getMaxBlockX() + radius * 16, nether.getMaxBuildHeight(), center.getMaxBlockZ() + radius * 16);
@@ -315,6 +381,9 @@ public final class NetheryXGameTests {
                     for (BlockEntity entity : chunk.getBlockEntities().values()) {
                         if (entity instanceof ChestBlockEntity) {
                             chests++;
+                        }
+                        if (entity instanceof com.netheryx.blockentity.DungeonTrapBlockEntity) {
+                            traps++;
                         }
                         if (entity instanceof net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity) {
                             containers.add(entity.getBlockPos());
@@ -338,14 +407,21 @@ public final class NetheryXGameTests {
             // La decoration naturelle (plantes, amas de cristaux) peut se detacher quand le terrain est retouche. Ce qui trahit
             // un bug : un objet tombe pres d'un conteneur (butin repandu), ou un bloc de structure (lanterne, tapis...).
             List<ItemEntity> items = nether.getEntitiesOfClass(ItemEntity.class, area, item -> {
+                // Decor des voutes (CeilingHangFeature) et amas de soufre : naturels, ils se detachent quand la forteresse creuse la roche
+                if (item.getItem().is(net.minecraft.world.item.Items.SOUL_LANTERN) || item.getItem().is(com.netheryx.registry.ModItems.SULFUR.get())) {
+                    return false;
+                }
                 boolean nearContainer = containers.stream().anyMatch(pos -> pos.closerToCenterThan(item.position(), 3.5D));
                 boolean structureBlock = item.getItem().getItem() instanceof BlockItem block && !(block.getBlock() instanceof BushBlock);
                 return nearContainer || structureBlock;
             });
             int dropped = items.size();
-            items.forEach(item -> NetheryX.LOGGER.info("DONJON objet au sol : {} x{} en {}",
-                    item.getItem().getItem(), item.getItem().getCount(), item.blockPosition()));
-            NetheryX.LOGGER.info("DONJON genere en {} : {} blocs scelles, {} sceaux, {} coffres, {} objet(s) au sol", found.getFirst(), boss, seals, chests, dropped);
+            items.forEach(item -> NetheryX.LOGGER.info("DONJON objet au sol : {} x{} en {} (age {})",
+                    item.getItem().getItem(), item.getItem().getCount(), item.blockPosition(), item.getAge()));
+            NetheryX.LOGGER.info("DONJON {} genere en {} : {} blocs scelles, {} sceaux, {} coffres, {} mecanismes, {} objet(s) au sol", name, found.getFirst(), boss, seals, chests, traps, dropped);
+            if (traps < 1) {
+                helper.fail("Aucun mecanisme dans le donjon genere");
+            }
             if (boss < 200) {
                 helper.fail("Coffre-fort incomplet : " + boss + " blocs scelles");
             }

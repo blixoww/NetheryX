@@ -7,6 +7,10 @@
     {
       "type": "patchouli:text",
       "text": "Ember Grove, Sulfur Springs, Ember Meadow, Wartvine Tangle, Hellwood Jungle, Molten Glass Lake and vanilla biomes. At its heart, the $(l)Infernal Warlock$(): walls of fire advance across the arena, find the gap. Kill his Stalkers first, they shield him."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A stepped temple ringed by a lava moat. Beneath it, $(l)walkways over a lake of lava$(): find the gap in the walls of fire, leave the meteor circles, and do not fall. The chest on the threshold holds $(l)fire resistance$(). The temple can be climbed."
     }
   ]
 }

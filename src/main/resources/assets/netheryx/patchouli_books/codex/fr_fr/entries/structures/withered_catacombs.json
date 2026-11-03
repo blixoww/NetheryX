@@ -7,6 +7,10 @@
     {
       "type": "patchouli:text",
       "text": "Forêt flétrie, Terres cendrées, Fourré de moelle et biomes vanilla. Tout en bas attend le $(l)Champion flétri$(), un duelliste : ses ruées suivent une ligne balisée, et dans sa dernière phase il disparaît et frappe dans le dos, dans l'obscurité."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Une nécropole en ruine au-dessus d'un $(l)labyrinthe$() obscur. Les longs couloirs portent des ruées balisées : écartez-vous. Les carrefours amènent l'obscurité et des embuscades dans le dos : un cercle laisse le temps de se retourner. Les trésors dorment au fond des culs-de-sac les plus profonds."
     }
   ]
 }

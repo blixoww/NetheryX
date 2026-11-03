@@ -302,12 +302,12 @@ for eid, en, fr, scale, ten, tfr in CREATURES:
 
 # ---------------------------------------------------------------- Structures
 DUNGEON_INTRO = text(
-    "A dungeon is a $(l)fortress$(): towers, bridges and courtyards above, a complex $(l)dug under the ground$() below, and $(l)ruins, remains and signs$() "
-    "around it give it away.$(br2)From the central $(l)rotunda$(), the great stairs lead down to the $(l)boss arena$(). Three optional "
-    "$(l)wings$() branch off: each one ends with a chamber held by a $(l)Rune Warden$(), and a fine treasure.",
-    "Un donjon est une $(l)forteresse$() : tours, ponts et cours en surface, complexe $(l)creusé sous terre$() en dessous, et des $(l)ruines, restes et panneaux$() "
-    "la trahissent aux alentours.$(br2)Depuis la $(l)rotonde$() centrale, le grand escalier descend vers l'$(l)arène du boss$(). Trois "
-    "$(l)ailes$() facultatives s'y greffent : chacune finit par une chambre tenue par un $(l)Gardien des runes$(), et un beau trésor.", "Donjons")
+    "Each dungeon has its own architecture and its own trials, drawn from its $(l)boss$(): what you learn on the way in is what saves "
+    "you in the fight. $(l)Ruins, remains and signs$() around it give it away. Three optional $(l)treasures$() are each held by a "
+    "$(l)Rune Warden$().$(br2)$(l)Mechanisms$() set in the floor replay the boss's attacks. They can be mined.",
+    "Chaque donjon a son architecture et ses épreuves, tirées de son $(l)boss$() : ce qu'on y apprend en chemin sauve pendant le combat. "
+    "Des $(l)ruines, restes et panneaux$() le trahissent aux alentours. Trois $(l)trésors$() facultatifs sont tenus chacun par un "
+    "$(l)Gardien des runes$().$(br2)Des $(l)mécanismes$() au sol rejouent les attaques du boss. Ils se cassent à la pioche.")
 DUNGEON_BOSS = text(
     "The real prize is the $(l)vault$() behind the arena. Its walls look like the rest of the dungeon, but they are $(item)Warded "
     "Masonry$(): nothing can break them, on any of the six faces. Its door of $(item)Guardian Seals$() only opens when the boss "
@@ -358,6 +358,11 @@ STRUCTURES = [
          "Forêt pétrifiée d'onyx, Forêt flétrie, Terres cendrées, Gouffre de givre, Récifs de quartz et plusieurs biomes vanilla. Ses salles "
          "cachent la $(l)Sentinelle d'onyx$() : un colosse lent dont le faisceau de cristal balaie l'arène. Servez-vous des piliers, et "
          "brisez sa carapace en six coups pour l'étourdir."),
+        ("Here you $(l)climb$(): the boss waits on top of the great tower. Three trials on the way up: a sweeping beam (hide behind the "
+         "pillars), shockwaves (jump them), crystal fangs and falling shards (keep moving). Rooms below hold optional treasures.",
+         "Ici, on $(l)monte$() : le boss attend au sommet de la grande tour. Trois épreuves en chemin : un faisceau qui balaie (abritez-vous "
+         "derrière les piliers), des ondes (sautez-les), des crocs et des éclats de cristal (ne restez pas en place). Les salles du dessous "
+         "cachent des trésors facultatifs."),
     ]),
     ("Infernal Sanctum", "Sanctuaire infernal", "netheryx:magma_bricks", [
         ("Ember Grove, Sulfur Springs, Ember Meadow, Wartvine Tangle, Hellwood Jungle, Molten Glass Lake and vanilla biomes. At its heart, "
@@ -365,12 +370,22 @@ STRUCTURES = [
          "Bosquet de braise, Sources sulfureuses, Prairie de braise, Enchevêtrement, Jungle infernale, Lac de verre en fusion et biomes "
          "vanilla. En son cœur, le $(l)Sorcier infernal$() : des murs de flammes traversent l'arène, trouvez la brèche. Tuez d'abord ses "
          "Traqueurs, ils le protègent."),
+        ("A stepped temple ringed by a lava moat. Beneath it, $(l)walkways over a lake of lava$(): find the gap in the walls of fire, leave "
+         "the meteor circles, and do not fall. The chest on the threshold holds $(l)fire resistance$(). The temple can be climbed.",
+         "Un temple à gradins, ceint de douves de lave. Dessous, des $(l)passerelles sur un lac de lave$() : trouvez la brèche dans les murs "
+         "de flammes, sortez des cercles de météores, et ne tombez pas. Le coffre du seuil contient de la $(l)résistance au feu$(). Le "
+         "temple peut se gravir."),
     ]),
     ("Withered Catacombs", "Catacombes flétries", "minecraft:wither_skeleton_skull", [
         ("Withered Forest, Ashen Wastes, Marrow Thicket and vanilla biomes. Below lies the $(l)Withered Champion$(), a duellist: his "
          "dashes follow a marked line, and in his last phase he vanishes and strikes from behind, in the dark.",
          "Forêt flétrie, Terres cendrées, Fourré de moelle et biomes vanilla. Tout en bas attend le $(l)Champion flétri$(), un duelliste : "
          "ses ruées suivent une ligne balisée, et dans sa dernière phase il disparaît et frappe dans le dos, dans l'obscurité."),
+        ("A ruined necropolis above a dark $(l)labyrinth$(). Long corridors carry marked dashes: step aside. Crossroads bring darkness and "
+         "ambushes behind your back: a circle gives you time to turn. The treasures lie in the deepest dead ends.",
+         "Une nécropole en ruine au-dessus d'un $(l)labyrinthe$() obscur. Les longs couloirs portent des ruées balisées : écartez-vous. Les "
+         "carrefours amènent l'obscurité et des embuscades dans le dos : un cercle laisse le temps de se retourner. Les trésors dorment au "
+         "fond des culs-de-sac les plus profonds."),
     ]),
 ]
 for en, fr, icon, pages in STRUCTURES:

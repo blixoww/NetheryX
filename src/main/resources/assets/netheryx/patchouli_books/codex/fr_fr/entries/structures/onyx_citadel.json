@@ -7,6 +7,10 @@
     {
       "type": "patchouli:text",
       "text": "Forêt pétrifiée d'onyx, Forêt flétrie, Terres cendrées, Gouffre de givre, Récifs de quartz et plusieurs biomes vanilla. Ses salles cachent la $(l)Sentinelle d'onyx$() : un colosse lent dont le faisceau de cristal balaie l'arène. Servez-vous des piliers, et brisez sa carapace en six coups pour l'étourdir."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Ici, on $(l)monte$() : le boss attend au sommet de la grande tour. Trois épreuves en chemin : un faisceau qui balaie (abritez-vous derrière les piliers), des ondes (sautez-les), des crocs et des éclats de cristal (ne restez pas en place). Les salles du dessous cachent des trésors facultatifs."
     }
   ]
 }

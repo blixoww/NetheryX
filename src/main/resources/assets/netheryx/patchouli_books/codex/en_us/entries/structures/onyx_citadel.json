@@ -7,6 +7,10 @@
     {
       "type": "patchouli:text",
       "text": "Petrified Onyx Forest, Withered Forest, Ashen Wastes, Rimefrost Chasm, Quartz Reef and several vanilla biomes. Its halls hide the $(l)Onyx Sentinel$(): a slow colossus whose crystal beam sweeps the arena. Use the pillars, and break its shell with six hits to stun it."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "Here you $(l)climb$(): the boss waits on top of the great tower. Three trials on the way up: a sweeping beam (hide behind the pillars), shockwaves (jump them), crystal fangs and falling shards (keep moving). Rooms below hold optional treasures."
     }
   ]
 }

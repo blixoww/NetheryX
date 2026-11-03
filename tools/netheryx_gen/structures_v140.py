@@ -75,9 +75,9 @@ def interior(cell):
 class KeepTemplate(Dungeon):
     """Gabarit dont le repere est celui des salles (0..74) : l'exterieur deborde en negatif, finish() decale le tout."""
 
-    def __init__(self, seed):
-        from .keep_exterior import GATE_TIP, HEIGHT
-        super().__init__(SIZE, HEIGHT, SIZE, seed)
+    def __init__(self, seed, height):
+        from .keep_exterior import GATE_TIP
+        super().__init__(SIZE, height, SIZE, seed)
         self.x_range = (-FRAME, SIZE + FRAME)
         self.z_range = (-FRAME, GATE_TIP + 1)
 
@@ -103,10 +103,18 @@ class KeepTemplate(Dungeon):
 
 
 class Keep:
+    """Base commune aux trois donjons (keep_variants.py) : salles, ailes, arene et coffre-fort, a la hauteur dy."""
+    dy = 0            # hauteur de l'arene dans le gabarit
+    height = GROUND + 40
+    max_floor = 100   # sol le plus haut ou la structure tient sous la bedrock
+    color = 0
+
     def __init__(self, name, index):
         self.name = name
         self.t = THEMES[name]
-        self.d = KeepTemplate(f"{name}_keep_{index}")
+        self.d = KeepTemplate(f"{name}_keep_{index}", self.height)
+        self.traps = []       # mecanismes poses
+        self.spots = []       # lieux que la verification a pied doit atteindre
         self.index = index
         self.rooms = []       # salles a meubler une fois toutes les portes percees
         self.keys = []        # positions des coffres a clef
@@ -286,55 +294,56 @@ class Keep:
             d.set(x, FLOOR + 2, z, t["lantern"], hanging="false", waterlogged="false")
         d.hanging_lantern(cx, TOP + 1, cz, 2, t["lantern"])
 
+    def stair_down(self):
+        """Massif de l'escalier vers l'arene : il monte vers l'est, de l'arene au sol du niveau des salles."""
+        self.d.box(25, 0, 18, 47, FLOOR - 1, 24, self.t["wall"])
+
+    def stair_rails(self):
+        """Parapet sur le sol plein, autour de la tremie : le sol s'arrete a x = 39, l'arrivee reste libre a l'est."""
+        d, t = self.d, self.t
+        d.air(26, 2, 20, 28, 5, 22)
+        d.box(26, 1, 20, 28, 1, 22, t["floor"])
+        d.air(26, 2, 23, 28, 5, 24)
+        d.rail(39, FLOOR + 1, 19, 43, 19, t["rail"])
+        d.rail(39, FLOOR + 1, 23, 43, 23, t["rail"])
+        d.rail(39, FLOOR + 1, 20, 39, 22, t["rail"])
+
     def descent(self):
         """Hall de la descente : trois cases d'un seul tenant et le grand escalier vers l'arene."""
         d, t = self.d, self.t
         hx0, hz0, hx1, hz1 = interior((1, 1))[0], interior((1, 1))[1], interior((3, 1))[2], interior((3, 1))[3]
         self.room(hx0, hz0, hx1, hz1, None)
-        # Massif de l'escalier, puis l'escalier lui-meme (monte vers l'est, de l'arene au hall)
-        d.box(25, 0, 18, 47, FLOOR - 1, 24, t["wall"])
+        self.stair_down()
         d.stairs_run_x(29, (20, 21, 22), 2, 16, 1, t["stairs"], t["wall"])
-        d.air(26, 2, 20, 28, 5, 22)
-        d.box(26, 1, 20, 28, 1, 22, t["floor"])
-        d.air(26, 2, 23, 28, 5, 24)
-        # Parapet sur le sol plein, autour de la tremie : le sol s'arrete a x = 39, l'arrivee reste libre a l'est
-        d.rail(39, FLOOR + 1, 19, 43, 19, t["rail"])
-        d.rail(39, FLOOR + 1, 23, 43, 23, t["rail"])
-        d.rail(39, FLOOR + 1, 20, 39, 22, t["rail"])
+        self.stair_rails()
         for x in (hx0 + 3, hx1 - 3):
             d.pillar(x, 18, FLOOR + 1, TOP, t["pillar"])
             d.pillar(x, 26, FLOOR + 1, TOP, t["pillar"])
         for (x, z) in ((hx0 + 8, 22), (hx1 - 8, 22), (37, 18), (37, 26)):
             d.hanging_lantern(x, TOP + 1, z, 2, t["lantern"])
 
+    def arena_style(self, cx, cz, x0, z0, x1, z1):
+        """Decor propre a chaque donjon : colonnes, sol, lumiere."""
+        raise NotImplementedError
+
     def arena(self):
         d, t = self.d, self.t
+        dy = self.dy
         x0, z0, x1, z1 = ARENA
         cx, cz = BOSS_POS[0], BOSS_POS[2]
-        d.box(x0 - 2, 0, z0 - 2, x1 + 2, ARENA_TOP + 2, z1 + 2, t["wall"])
-        d.box(x0, 1, z0, x1, 1, z1, t["floor"])
-        d.air(x0, 2, z0, x1, ARENA_TOP, z1)
-        d.air(26, 2, 23, 28, 5, 24)
-        # Piliers : les faisceaux s'y arretent, les ondes les contournent. Ils sont le coeur tactique du combat.
-        for (dx, dz) in ((-10, -10), (10, -10), (-10, 10), (10, 10), (-13, 0), (13, 0), (0, -13), (0, 13)):
-            d.box(cx + dx, 2, cz + dz, cx + dx + 1, ARENA_TOP, cz + dz + 1, t["pillar"])
-        for x in range(x0, x1 + 1):
-            for z in range(z0, z1 + 1):
-                r2 = (x - cx) ** 2 + (z - cz) ** 2
-                if 36 <= r2 <= 49:
-                    d.set(x, 1, z, t["accent"])
-        # Lumiere et eclairage du haut : l'arene doit rester lisible, les annonces au sol aussi
-        for (dx, dz) in ((-6, -6), (6, -6), (-6, 6), (6, 6), (-14, -14), (14, -14), (-14, 14), (14, 14)):
-            d.hanging_lantern(cx + dx, ARENA_TOP + 1, cz + dz, 2, t["lantern"])
-        d.guard(BOSS_POS[0], BOSS_POS[1], BOSS_POS[2], t["boss"])
+        d.box(x0 - 2, dy, z0 - 2, x1 + 2, dy + ARENA_TOP + 2, z1 + 2, t["wall"])
+        d.box(x0, dy + 1, z0, x1, dy + 1, z1, t["floor"])
+        d.air(x0, dy + 2, z0, x1, dy + ARENA_TOP, z1)
+        self.arena_style(cx, cz, x0, z0, x1, z1)
+        d.guard(BOSS_POS[0], dy + BOSS_POS[1], BOSS_POS[2], t["boss"])
         # Coffre-fort, ouvert dans le mur sud
-        d.air(35, 2, 58, 39, 4, 59)
-        d.vault(31, 1, 60, 43, 8, 70, t["warded"], (35, 2, 60, 39, 4, 60))
+        d.air(35, dy + 2, 58, 39, dy + 4, 59)
+        d.vault(31, dy + 1, 60, 43, dy + 8, 70, t["warded"], (35, dy + 2, 60, 39, dy + 4, 60))
         for x in (34, 40):
-            d.chest(x, 2, 68, t["vault_loot"], facing="north")
-        d.set(37, 2, 68, t["accent"])
-        d.lantern(32, 2, 62, t["lantern"])
-        d.lantern(42, 2, 62, t["lantern"])
+            d.chest(x, dy + 2, 68, t["vault_loot"], facing="north")
+        d.set(37, dy + 2, 68, t["accent"])
+        d.lantern(32, dy + 2, 62, t["lantern"])
+        d.lantern(42, dy + 2, 62, t["lantern"])
 
     def entrance(self):
         """Grand escalier, de la cour de la forteresse a la salle d'accueil."""
@@ -367,16 +376,21 @@ class Keep:
             if cell not in taken:
                 self.treasure_room(cell, (2, 3))
         # La forteresse de surface : enceinte, tours, ponts, cours, et tous les acces aux salles
-        from .keep_exterior import build_exterior
-        build_exterior(self)
+        self.exterior()
         # Meubles en dernier : toutes les portes sont percees, le passage en croix reste libre
         for (x0, z0, x1, z1, theme) in self.rooms:
             cx, cz = (x0 + x1) // 2, (z0 + z1) // 2
             cross = {(x, z) for x in range(x0, x1 + 1) for z in range(z0, z1 + 1) if abs(x - cx) <= 1 or abs(z - cz) <= 1}
             furnish(d, x0, FLOOR, z0, x1, z1, TOP, theme, t["loot"], t["pedestal"], cross)
+        self.finish_build()
+
+    def exterior(self):
+        raise NotImplementedError
+
+    def finish_build(self):
         verify(self)
-        d.finish()
-        d.save(self.name, f"keep_{self.index}")
+        self.d.finish()
+        self.d.save(self.name, f"keep_{self.index}")
 
 
 # ------------------------------------------------------------------------------------------------
@@ -506,27 +520,27 @@ def verify(keep):
     assert len(keep.keys) == 3, f"{label} : il faut trois tresors d'aile"
     for key in keep.keys:
         assert _near(alive, key), f"{label} : tresor inaccessible en {key}"
-    assert _near(alive, BOSS_POS), f"{label} : arene inaccessible"
-    # Tous les acces : les escaliers de service, et l'echelle du donjon vers la rotonde
-    for spot in ((-2, FLOOR + 1, 37), (LAST_CELL + 2, FLOOR + 1, 37), (37, FLOOR + 1, -2), (32, FLOOR + 1, 36), (32, GROUND + 20, 36)):
+    dy = keep.dy
+    assert _near(alive, (BOSS_POS[0], dy + BOSS_POS[1], BOSS_POS[2])), f"{label} : arene inaccessible"
+    assert keep.traps, f"{label} : aucun mecanisme"
+    for spot in keep.spots:
         assert _near(alive, spot), f"{label} : acces inaccessible en {spot}"
-    for tower in ((-2, GROUND + 15, -2), (76, GROUND + 15, -2), (-2, GROUND + 15, 76), (76, GROUND + 15, 76)):
-        assert _near(alive, tower), f"{label} : tour inaccessible en {tower}"
-    in_vault = [p for p in alive if 32 <= p[0] <= 42 and 61 <= p[2] <= 69 and p[1] <= 7]
+    in_vault = [p for p in alive if 32 <= p[0] <= 42 and 61 <= p[2] <= 69 and dy < p[1] <= dy + 7]
     assert not in_vault, f"{label} : coffre-fort accessible avant la mort du boss ({in_vault[:3]})"
     # Coque du coffre-fort : six faces completes, sans aucun trou
     shell = {p for p, b in keep.d.blocks.items() if b[0] in ("netheryx:warded_bricks", "netheryx:guardian_seal")}
     for x in range(31, 44):
-        for y in range(1, 9):
+        for y in range(dy + 1, dy + 9):
             for z in range(60, 71):
-                if x in (31, 43) or y in (1, 8) or z in (60, 70):
+                if x in (31, 43) or y in (dy + 1, dy + 8) or z in (60, 70):
                     assert (x, y, z) in shell, f"{label} : trou dans la coque du coffre-fort en {(x, y, z)}"
     after = _walk(keep, start, True)
-    assert _near(after, (34, 2, 68)), f"{label} : coffre-fort inaccessible apres la mort du boss"
-    print(f"NetheryX : {label} verifie ({len(alive)} cases accessibles)")
+    assert _near(after, (34, dy + 2, 68)), f"{label} : coffre-fort inaccessible apres la mort du boss"
+    print(f"NetheryX : {label} verifie ({len(alive)} cases accessibles, {len(keep.traps)} mecanismes)")
 
 
 def generate():
+    from .keep_variants import KEEP_CLASSES
     for name in THEMES:
         for index in range(KEEPS):
-            Keep(name, index).build()
+            KEEP_CLASSES[name](name, index).build()

@@ -487,11 +487,9 @@ Le *Cristal de wyverne* range votre wyverne pour l'emporter partout : clic droit
 
 ### Fonctionnement des donjons
 
-**Donjons**
+Chaque donjon a son architecture et ses épreuves, tirées de son **boss** : ce qu'on y apprend en chemin sauve pendant le combat. Des **ruines, restes et panneaux** le trahissent aux alentours. Trois **trésors** facultatifs sont tenus chacun par un **Gardien des runes**.
 
-Un donjon est une **forteresse** : tours, ponts et cours en surface, complexe **creusé sous terre** en dessous, et des **ruines, restes et panneaux** la trahissent aux alentours.
-
-Depuis la **rotonde** centrale, le grand escalier descend vers l'**arène du boss**. Trois **ailes** facultatives s'y greffent : chacune finit par une chambre tenue par un **Gardien des runes**, et un beau trésor.
+Des **mécanismes** au sol rejouent les attaques du boss. Ils se cassent à la pioche.
 
 
 Le vrai trésor est le **coffre-fort** derrière l'arène. Ses murs ressemblent au reste du donjon, mais ce sont des blocs de *Maçonnerie scellée* : rien ne peut les casser, sur aucune des six faces. Sa porte de *Sceaux du gardien* ne s'ouvre qu'à la mort du boss, et la maçonnerie redevient alors de la brique ordinaire.
@@ -518,14 +516,23 @@ Partout dans le Nether, de petits sites cachent un **coffre** gardé par deux ou
 Forêt pétrifiée d'onyx, Forêt flétrie, Terres cendrées, Gouffre de givre, Récifs de quartz et plusieurs biomes vanilla. Ses salles cachent la **Sentinelle d'onyx** : un colosse lent dont le faisceau de cristal balaie l'arène. Servez-vous des piliers, et brisez sa carapace en six coups pour l'étourdir.
 
 
+Ici, on **monte** : le boss attend au sommet de la grande tour. Trois épreuves en chemin : un faisceau qui balaie (abritez-vous derrière les piliers), des ondes (sautez-les), des crocs et des éclats de cristal (ne restez pas en place). Les salles du dessous cachent des trésors facultatifs.
+
+
 ### Sanctuaire infernal
 
 Bosquet de braise, Sources sulfureuses, Prairie de braise, Enchevêtrement, Jungle infernale, Lac de verre en fusion et biomes vanilla. En son cœur, le **Sorcier infernal** : des murs de flammes traversent l'arène, trouvez la brèche. Tuez d'abord ses Traqueurs, ils le protègent.
 
 
+Un temple à gradins, ceint de douves de lave. Dessous, des **passerelles sur un lac de lave** : trouvez la brèche dans les murs de flammes, sortez des cercles de météores, et ne tombez pas. Le coffre du seuil contient de la **résistance au feu**. Le temple peut se gravir.
+
+
 ### Catacombes flétries
 
 Forêt flétrie, Terres cendrées, Fourré de moelle et biomes vanilla. Tout en bas attend le **Champion flétri**, un duelliste : ses ruées suivent une ligne balisée, et dans sa dernière phase il disparaît et frappe dans le dos, dans l'obscurité.
+
+
+Une nécropole en ruine au-dessus d'un **labyrinthe** obscur. Les longs couloirs portent des ruées balisées : écartez-vous. Les carrefours amènent l'obscurité et des embuscades dans le dos : un cercle laisse le temps de se retourner. Les trésors dorment au fond des culs-de-sac les plus profonds.
 
 
 ### Campement de voyageur
@@ -1060,6 +1067,8 @@ Chaque bloc et objet du mod, avec la façon de l'obtenir.
 - **Lampe de braise** (`netheryx:ember_lamp`)
   - Établi : `·W·` / `WGW` / `·W·` (`W` = Bloc de verrue de braise, `G` = Glowstone) → **Lampe de braise** ×2
 - **Sceau du gardien** (`netheryx:guardian_seal`)
+  - Se trouve dans le monde (génération, structures) ou se récupère en le minant.
+- **Mécanisme de donjon** (`netheryx:dungeon_trap`)
   - Se trouve dans le monde (génération, structures) ou se récupère en le minant.
 - **Bloc d'herbe du Nether** (`netheryx:nether_grass_block`)
   - Établi : `GG` / `GG` (`G` = Herbe du Nether) → **Bloc d'herbe du Nether**

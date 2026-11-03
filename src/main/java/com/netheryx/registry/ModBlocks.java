@@ -287,6 +287,11 @@ public final class ModBlocks {
 
     // --- Donjons --------------------------------------------------------------------------------
     /** Indestructible : ferme les salles au tresor et se brise a la mort du boss du donjon. */
+    public static final RegistryObject<Block> DUNGEON_TRAP = register("dungeon_trap",
+            () -> new com.netheryx.block.DungeonTrapBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_BLACK)
+                    .strength(2.5F, 6.0F).noLootTable().lightLevel(state -> 5).sound(SoundType.NETHERITE_BLOCK)
+                    .isValidSpawn((state, level, pos, type) -> false)));
+
     public static final RegistryObject<Block> GUARDIAN_SEAL = register("guardian_seal",
             () -> new GuardianSealBlock(BlockBehaviour.Properties.of().mapColor(MapColor.COLOR_PURPLE)
                     .strength(-1.0F, 3600000.0F).noLootTable().lightLevel(state -> 9).sound(SoundType.DEEPSLATE_TILES)

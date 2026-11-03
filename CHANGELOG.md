@@ -7,6 +7,23 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le pr
 Chaque tag Git (`git tag 1.0.0 && git push origin 1.0.0`) déclenche la compilation et la publication du `.jar`
 dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 
+## [1.4.4] - 2026-11-03
+
+### Modifié
+- **Trois donjons vraiment différents**, chacun construit autour de son boss : architecture, parcours et épreuves ne se ressemblent plus.
+  - **Sanctuaire infernal** (Sorcier) : temple à gradins à gravir, ceint de douves de lave ; dessous, des passerelles sur un lac de lave
+    et des casemates. Murs de flammes à brèche, pluie de météores. Le coffre du seuil contient de la résistance au feu.
+  - **Catacombes flétries** (Champion) : nécropole en ruine et mausolées ; dessous, un labyrinthe sombre différent à chaque gabarit.
+    Ruées dans les couloirs, obscurité, embuscades dans le dos. Les trésors dorment au fond des culs-de-sac.
+  - **Citadelle d'onyx** (Sentinelle) : ici, on monte. Trois étages d'épreuves dans une tour géante (faisceau, ondes, crocs de cristal),
+    et le boss au sommet, dans une arène ronde à ciel ouvert.
+- **Arènes propres à chaque boss** : nef bordée de lave, salle de duel basse et sombre, couronne de la tour.
+- **Donjons plus faciles à trouver** : le choix de leur emplacement est plus souple, et une forteresse ou un bastion qui n'existe pas réellement ne les écarte plus.
+
+### Ajouté
+- **Mécanisme de donjon** : bloc encastré au sol qui rejoue les attaques du boss, avec les mêmes annonces. On apprend le combat en
+  explorant. Il ne s'active que près d'un joueur et se casse à la pioche.
+
 ## [1.4.3] - 2026-11-01
 
 ### Modifié

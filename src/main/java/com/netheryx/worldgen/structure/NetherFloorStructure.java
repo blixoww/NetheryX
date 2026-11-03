@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.PoolElementStructurePiece;
@@ -132,11 +133,11 @@ public class NetherFloorStructure extends Structure {
     private static final double OPEN_SHARE = 0.85D;
     /** Hauteur de l'enceinte des forteresses au-dessus du sol : c'est elle, pas la fleche, qui doit etre degagee. */
     private static final int FORTRESS_WALLS = 10;
-    private static final double FORTRESS_GROUNDED = 0.5D;
-    private static final double FORTRESS_OPEN = 0.7D;
+    private static final double FORTRESS_GROUNDED = 0.4D;
+    private static final double FORTRESS_OPEN = 0.55D;
     /** Hauteurs atteignables depuis les marches du pont d'entree, par rapport au sol du centre. */
-    private static final int GATE_DROP = 6;
-    private static final int GATE_RISE = 3;
+    private static final int GATE_DROP = 8;
+    private static final int GATE_RISE = 5;
 
     public NetherFloorStructure(StructureSettings settings, Holder<StructureTemplatePool> startPool,
                                 Optional<ResourceLocation> startJigsawName, int size, int maxY, int minY,
@@ -174,6 +175,42 @@ public class NetherFloorStructure extends Structure {
         return boxes;
     }
 
+    /**
+     * Pieces de ce qui nait vraiment sur ce chunk : un ensemble a plusieurs structures (bastion ou forteresse) n'en genere qu'une,
+     * tiree comme le fait ChunkGenerator.createStructures. Compter les deux ecarterait nos structures de batiments qui n'existent pas.
+     */
+    public static List<BoundingBox> chosenPieces(GenerationContext context, StructureSet set, ChunkPos chunk) {
+        var structures = context.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        List<StructureSet.StructureSelectionEntry> entries = new ArrayList<>(set.structures());
+        if (entries.size() == 1) {
+            Structure only = entries.get(0).structure().value();
+            return piecesOf(context, only, structures.getKey(only), chunk);
+        }
+        WorldgenRandom random = new WorldgenRandom(new LegacyRandomSource(0L));
+        random.setLargeFeatureSeed(context.seed(), chunk.x, chunk.z);
+        int total = entries.stream().mapToInt(StructureSet.StructureSelectionEntry::weight).sum();
+        while (!entries.isEmpty()) {
+            int roll = random.nextInt(total);
+            int index = 0;
+            for (StructureSet.StructureSelectionEntry entry : entries) {
+                roll -= entry.weight();
+                if (roll < 0) {
+                    break;
+                }
+                index++;
+            }
+            StructureSet.StructureSelectionEntry entry = entries.get(index);
+            Structure structure = entry.structure().value();
+            List<BoundingBox> boxes = piecesOf(context, structure, structures.getKey(structure), chunk);
+            if (!boxes.isEmpty()) {
+                return boxes;
+            }
+            entries.remove(index);
+            total -= entry.weight();
+        }
+        return List.of();
+    }
+
     /** Vrai si deux boites se recouvrent vu du ciel : l'une creuserait ou couperait forcement l'autre. */
     public static boolean overlapsFromAbove(BoundingBox a, BoundingBox b, int margin) {
         return a.minX() - margin <= b.maxX() && a.maxX() + margin >= b.minX() && a.minZ() - margin <= b.maxZ() && a.maxZ() + margin >= b.minZ();
@@ -181,7 +218,6 @@ public class NetherFloorStructure extends Structure {
 
     private boolean blockedBySet(GenerationContext context, ResourceLocation setId, BoundingBox box, int reach) {
         var sets = context.registryAccess().registryOrThrow(Registries.STRUCTURE_SET);
-        var structures = context.registryAccess().registryOrThrow(Registries.STRUCTURE);
         StructureSet set = sets.get(setId);
         if (set == null || !(set.placement() instanceof RandomSpreadStructurePlacement placement)) {
             return false;
@@ -194,13 +230,9 @@ public class NetherFloorStructure extends Structure {
                 if (Math.abs(candidate.x - here.x) > reach || Math.abs(candidate.z - here.z) > reach) {
                     continue;
                 }
-                for (StructureSet.StructureSelectionEntry entry : set.structures()) {
-                    Structure other = entry.structure().value();
-                    ResourceLocation id = structures.getKey(other);
-                    for (BoundingBox piece : piecesOf(context, other, id, candidate)) {
-                        if (overlapsFromAbove(box, piece, CLEARANCE)) {
-                            return true;
-                        }
+                for (BoundingBox piece : chosenPieces(context, set, candidate)) {
+                    if (overlapsFromAbove(box, piece, CLEARANCE)) {
+                        return true;
                     }
                 }
             }

@@ -7,6 +7,10 @@
     {
       "type": "patchouli:text",
       "text": "Withered Forest, Ashen Wastes, Marrow Thicket and vanilla biomes. Below lies the $(l)Withered Champion$(), a duellist: his dashes follow a marked line, and in his last phase he vanishes and strikes from behind, in the dark."
+    },
+    {
+      "type": "patchouli:text",
+      "text": "A ruined necropolis above a dark $(l)labyrinth$(). Long corridors carry marked dashes: step aside. Crossroads bring darkness and ambushes behind your back: a circle gives you time to turn. The treasures lie in the deepest dead ends."
     }
   ]
 }
