@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "netheryx:ember_grove",
-  "features": "netheryx:ember_grove_landmass",
-  "step": "local_modifications"
-}

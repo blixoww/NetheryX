@@ -25,7 +25,7 @@ particles = names_in("registry/ModParticles.java")
 reg -= particles
 # Enregistrements sans objet (entites, enchantements, effets, potions, features, recettes, butins...)
 entities = names_in("registry/ModEntities.java")
-technical = names_in("registry/ModFeatures.java", "registry/ModRecipes.java", "registry/ModLootModifiers.java") | {"netheryx", "nether_floor"}
+technical = names_in("registry/ModFeatures.java", "registry/ModPlacements.java", "registry/ModRecipes.java", "registry/ModLootModifiers.java") | {"netheryx", "nether_floor"}
 effects = names_in("registry/ModEffects.java", "registry/ModEnchantments.java")
 block_only = set(re.findall(r'BLOCKS\.register\("([a-z_]+)"', java))
 item_registered = set(re.findall(r'ITEMS\.register\(', java))

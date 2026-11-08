@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "netheryx:quartz_reef",
-  "features": "netheryx:quartz_reef_landmass",
-  "step": "local_modifications"
-}

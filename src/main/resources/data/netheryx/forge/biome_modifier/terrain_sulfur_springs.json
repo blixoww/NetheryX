@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "netheryx:sulfur_springs",
-  "features": "netheryx:sulfur_springs_landmass",
-  "step": "local_modifications"
-}

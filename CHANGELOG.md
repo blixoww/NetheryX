@@ -7,6 +7,23 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le pr
 Chaque tag Git (`git tag 1.0.0 && git push origin 1.0.0`) déclenche la compilation et la publication du `.jar`
 dans une Release GitHub ; les notes de version sont extraites de ce fichier.
 
+## [1.4.5] - 2026-11-07
+
+### Modifié
+- **La lave du Nether redevient celle de Minecraft** : mer de lave à son niveau d'origine (32) et plus de plateaux, banquises ou récifs
+  qui la recouvraient. Les biomes gardent leur roche, leur flore et leur taille.
+- **Les structures dégagent leur terrain** : tout le volume d'une structure est creusé dans la roche et comblé dessous (adaptation du
+  terrain « boîte »), au lieu de s'enfoncer dans les parois. La partie souterraine des donjons reste dans la roche.
+
+### Corrigé
+- **Décors à travers les structures** : grandes colonnes, flèches, arbres et cristaux ne poussent plus dans l'emprise d'une structure,
+  ni dans celle des forteresses, bastions, portails en ruine et fossiles vanilla.
+- Les structures du mod évitent aussi les **portails en ruine** et les **fossiles** du Nether.
+- **Boussole du créateur** : elle téléportait à partir du fond du monde (la hauteur 0 que donne Minecraft) et pouvait déposer le joueur
+  dans une grotte, sous la structure ou dans une paroi. Elle vise maintenant l'entrée des forteresses du mod (devant le pont) ou le sol
+  des petites structures, le haut des structures vanilla, choisit un emplacement dégagé hors de la lave et sous le plafond de bedrock,
+  et tourne le joueur vers la structure.
+
 ## [1.4.4] - 2026-11-03
 
 ### Modifié

@@ -1,25 +1,9 @@
-"""Donnees 1.4.2 : relief sur la lave, flore des biomes, animaux, equipement des boss, Atlas du Nether, nouvelles creatures."""
+"""Donnees 1.4.2 : flore des biomes, animaux, equipement des boss, Atlas du Nether, nouvelles creatures."""
 import json
 
 from .common import MOD_ID, data_path, mid, write_json
 from .data import count, entity_table, item, m, tag, LOOTING
-from .worldgen import BIOME_FILTER, biome_modifier, configured, patch, placed, spawner, state
-
-# biome : (dessus, masse, seuil (plus bas = plus de terre), hauteur des plateaux)
-LANDMASS = {
-    "ember_meadow": ("nether_grass_block", "minecraft:brown_terracotta", -0.65, 12),
-    "ember_grove": ("ember_nylium", "minecraft:red_terracotta", -0.55, 10),
-    "hellwood_jungle": ("ember_nylium", "minecraft:brown_terracotta", -0.9, 8),
-    "wartvine_tangle": ("minecraft:crimson_nylium", "minecraft:nether_wart_block", -0.55, 10),
-    "sulfur_springs": ("sulfur_block", "sulfur_rock", -0.15, 6),  # des sources de lave restent visibles
-    "quartz_reef": ("minecraft:quartz_block", "minecraft:calcite", -0.3, 10),  # recif en terrasses, autour de bassins
-    "marrow_thicket": ("ossified_nylium", "minecraft:dripstone_block", -0.8, 10),
-    "rimefrost_chasm": ("minecraft:packed_ice", "minecraft:packed_ice", -1.2, 0),  # lacs geles : une banquise plate
-    "withered_forest": ("withered_soil", "minecraft:deepslate", -0.75, 6),
-    "petrified_onyx_forest": ("minecraft:smooth_basalt", "minecraft:blackstone", -0.5, 8),
-    "ashen_wastes": ("ash_block", "minecraft:basalt", -0.55, 6),
-    "molten_glass_lake": ("minecraft:obsidian", "minecraft:blackstone", 0.15, 3),  # ce biome garde ses lacs de lave
-}
+from .worldgen import biome_modifier, patch, spawner, state
 
 # Flore dense, comme les grands packs de biomes : (bloc, essais, etalement, tirages par etage)
 FLORA = {
@@ -66,19 +50,6 @@ BOSS_GEAR = {
     "nether_heart": [("minecraft:netherite_sword", "heart_blade", {"minecraft:sharpness": 5, "minecraft:fire_aspect": 2, "minecraft:looting": 2}),
                      ("minecraft:netherite_leggings", "heart_greaves", {"minecraft:protection": 4, "minecraft:fire_protection": 0, "minecraft:unbreaking": 3})],
 }
-
-
-def plain_state(name):
-    return state(name, axis="y") if name == "minecraft:basalt" else state(name)
-
-
-def generate_landmass():
-    for biome_name, (top, body, threshold, height) in LANDMASS.items():
-        name = f"{biome_name}_landmass"
-        configured(name, mid("landmass"), {"biome": mid(biome_name), "top": plain_state(top), "body": plain_state(body), "threshold": threshold, "height": height})
-        # Une passe par chunk, a sa propre origine : elle traite elle-meme chaque colonne de son biome
-        placed(name, name, [BIOME_FILTER])
-        biome_modifier(f"terrain_{biome_name}", {"type": "forge:add_features", "biomes": mid(biome_name), "features": mid(name), "step": "local_modifications"})
 
 
 def generate_flora():
@@ -151,7 +122,6 @@ def generate_structure_biomes():
 
 def generate():
     generate_structure_biomes()
-    generate_landmass()
     generate_flora()
     generate_animals()
     generate_boss_gear()

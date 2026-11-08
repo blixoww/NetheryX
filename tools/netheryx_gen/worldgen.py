@@ -27,8 +27,12 @@ def configured(name, feature_type, config):
     write_json(data_path("worldgen", "configured_feature", f"{name}.json"), {"type": feature_type, "config": config})
 
 
+# Aucun decor (colonne, arbre, cristal...) ne pousse dans l'emprise d'une structure NetheryX : il la traverserait.
+OUTSIDE_STRUCTURES = {"type": mid("outside_structures")}
+
+
 def placed(name, feature, placement):
-    write_json(data_path("worldgen", "placed_feature", f"{name}.json"), {"feature": mid(feature), "placement": placement})
+    write_json(data_path("worldgen", "placed_feature", f"{name}.json"), {"feature": mid(feature), "placement": [*placement, OUTSIDE_STRUCTURES]})
 
 
 BIOME_FILTER = {"type": "minecraft:biome"}
@@ -555,6 +559,11 @@ PROCESSORS = {
 
 def generate_structures():
     for name, (spacing, separation, salt, air, min_y, sink, footprint, adaptation) in STRUCTURES.items():
+        # Le terrain s'adapte sous la structure : il est creuse dans tout son volume (plus de paroi ni de roche qui la
+        # traverse) et comble sous elle. Seule la cache, enterree expres, garde le terrain tel quel.
+        adapts = adaptation != "none"
+        if adapts:
+            adaptation = "beard_box"
         processors = "minecraft:empty"
         if name in PROCESSORS:
             processors = mid(f"{name}_decay")
@@ -584,7 +593,8 @@ def generate_structures():
                              for kind, weight in (("ruin", 3), ("remains", 2), ("signpost", 2))]})
             approach = {"approach_pool": mid(f"{name}_approach/start"), "approach_count": 5,
                         "entrance_x": ENTRANCE[0], "entrance_z": ENTRANCE[1], "gate_reach": GATE_REACH, "floor_tolerance": 14}
-            sink, footprint, adaptation, min_y = GROUND, ENTRANCE_FOOTPRINT, "none", 40
+            # Donjon : le volume au-dessus du sol est degage, la partie souterraine reste dans la roche (voir NetherFloorStructure)
+            sink, footprint, adaptation, adapts, min_y = GROUND, ENTRANCE_FOOTPRINT, "beard_box", False, 40
         write_json(data_path("worldgen", "structure", f"{name}.json"), {
             "type": mid("nether_floor"),
             "biomes": f"#{MOD_ID}:has_structure/{name}",
@@ -603,7 +613,7 @@ def generate_structures():
             "max_distance_from_center": 80,
             **approach,
             # Le terrain s'adapte sous ces structures : elles acceptent un sol plus irregulier
-            **({"floor_tolerance": 7} if adaptation == "beard_thin" else {}),
+            **({"floor_tolerance": 7} if adapts else {}),
         })
         write_json(data_path("worldgen", "structure_set", f"{name}.json"), {
             "structures": [{"structure": mid(name), "weight": 1}],

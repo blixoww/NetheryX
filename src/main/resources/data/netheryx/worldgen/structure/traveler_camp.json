@@ -3,7 +3,7 @@
   "biomes": "#netheryx:has_structure/traveler_camp",
   "step": "top_layer_modification",
   "spawn_overrides": {},
-  "terrain_adaptation": "beard_thin",
+  "terrain_adaptation": "beard_box",
   "start_pool": "netheryx:traveler_camp/start",
   "size": 1,
   "max_y": 100,

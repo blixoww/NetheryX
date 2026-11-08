@@ -11,6 +11,9 @@
     },
     {
       "type": "minecraft:biome"
+    },
+    {
+      "type": "netheryx:outside_structures"
     }
   ]
 }

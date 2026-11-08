@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "netheryx:ashen_wastes",
-  "features": "netheryx:ashen_wastes_landmass",
-  "step": "local_modifications"
-}

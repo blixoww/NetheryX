@@ -3,7 +3,7 @@
   "biomes": "#netheryx:has_structure/basalt_forge",
   "step": "top_layer_modification",
   "spawn_overrides": {},
-  "terrain_adaptation": "beard_thin",
+  "terrain_adaptation": "beard_box",
   "start_pool": "netheryx:basalt_forge/start",
   "size": 1,
   "max_y": 100,

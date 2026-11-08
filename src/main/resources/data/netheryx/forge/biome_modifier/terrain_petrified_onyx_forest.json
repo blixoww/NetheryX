@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "netheryx:petrified_onyx_forest",
-  "features": "netheryx:petrified_onyx_forest_landmass",
-  "step": "local_modifications"
-}

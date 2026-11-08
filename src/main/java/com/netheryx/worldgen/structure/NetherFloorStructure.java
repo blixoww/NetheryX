@@ -109,6 +109,9 @@ public class NetherFloorStructure extends Structure {
     public static final List<String> PRIORITY = List.of("onyx_citadel", "infernal_sanctum", "withered_catacombs",
             "nether_garden", "nomad_caravan", "basalt_forge", "wyvern_nest", "traveler_camp", "scorched_outpost",
             "bone_shrine", "crystal_hollow", "lava_forge", "hidden_cache");
+    /** Petites structures vanilla du Nether que nos structures evitent aussi. */
+    private static final List<ResourceLocation> VANILLA_SMALL = List.of(new ResourceLocation("minecraft", "ruined_portals"),
+            new ResourceLocation("minecraft", "nether_fossils"));
     private static final Set<String> LARGE = Set.of("onyx_citadel", "infernal_sanctum", "withered_catacombs");
     /** Distance maximale (en chunks) entre le chunk d'origine d'une structure et ses pieces. */
     private static final int LARGE_REACH = 9;
@@ -249,6 +252,13 @@ public class NetherFloorStructure extends Structure {
         if (self == null || this.blockedBySet(context, new ResourceLocation("minecraft", "nether_complexes"), box, LARGE_REACH + (box.getXSpan() >> 5))) {
             return self != null;
         }
+        // Portails en ruine et fossiles du Nether : poses avant nos structures, ils se melangeraient a elles
+        int smallReach = SMALL_REACH + (Math.max(box.getXSpan(), box.getZSpan()) >> 5) + 1;
+        for (ResourceLocation vanilla : VANILLA_SMALL) {
+            if (this.blockedBySet(context, vanilla, box, smallReach)) {
+                return true;
+            }
+        }
         for (String name : PRIORITY) {
             if (name.equals(self.getPath())) {
                 return false;
@@ -307,8 +317,10 @@ public class NetherFloorStructure extends Structure {
                     offsetZ = z - turned.getZ();
                 }
                 BlockPos origin = new BlockPos(offsetX, y + 1 - this.sink, offsetZ);
+                // Niveau du sol pour l'adaptation du terrain : au-dessus, le volume est creuse ; dessous (partie souterraine
+                // d'un donjon), la roche reste en place
                 PoolElementStructurePiece piece = new PoolElementStructurePiece(templates, element, origin,
-                        element.getGroundLevelDelta(), rotation, element.getBoundingBox(templates, origin, rotation));
+                        Math.max(element.getGroundLevelDelta(), this.sink), rotation, element.getBoundingBox(templates, origin, rotation));
                 // La hauteur ne change rien ici : deux structures l'une au-dessus de l'autre se couperaient quand meme
                 if (this.blocked(context, piece.getBoundingBox())) {
                     return Optional.empty();
@@ -322,6 +334,33 @@ public class NetherFloorStructure extends Structure {
             airRun = 0;
         }
         return Optional.empty();
+    }
+
+    /**
+     * Point d'arrivee d'une teleportation vers cette structure (boussole du createur) : devant le pont d'entree d'une
+     * forteresse, au milieu du sol d'une petite structure. Hauteur des pieds.
+     */
+    public BlockPos arrival(StructureStart start) {
+        if (start.getPieces().isEmpty() || !(start.getPieces().get(0) instanceof PoolElementStructurePiece main)) {
+            BoundingBox box = start.getBoundingBox();
+            return new BlockPos((box.minX() + box.maxX()) / 2, box.minY() + 1, (box.minZ() + box.maxZ()) / 2);
+        }
+        BlockPos origin = main.getPosition();
+        int feetY = origin.getY() + this.sink;
+        if (this.entranceX >= 0) {
+            BlockPos center = origin.offset(StructureTemplate.transform(new BlockPos(this.entranceX, 0, this.entranceZ), Mirror.NONE,
+                    main.getRotation(), BlockPos.ZERO));
+            BlockPos gate = StructureTemplate.transform(new BlockPos(0, 0, this.gateReach + 3), Mirror.NONE, main.getRotation(), BlockPos.ZERO);
+            return new BlockPos(center.getX() + gate.getX(), feetY, center.getZ() + gate.getZ());
+        }
+        BoundingBox box = main.getBoundingBox();
+        return new BlockPos((box.minX() + box.maxX()) / 2, feetY, (box.minZ() + box.maxZ()) / 2);
+    }
+
+    /** Centre de la piece principale (pour orienter le joueur vers la structure a son arrivee). */
+    public static BlockPos center(StructureStart start) {
+        BoundingBox box = start.getPieces().isEmpty() ? start.getBoundingBox() : start.getPieces().get(0).getBoundingBox();
+        return new BlockPos((box.minX() + box.maxX()) / 2, (box.minY() + box.maxY()) / 2, (box.minZ() + box.maxZ()) / 2);
     }
 
     /** Rotation qui amene le bout du pont d'entree sur un sol praticable, en commencant par celle tiree au sort ; null s'il n'y en a pas. */

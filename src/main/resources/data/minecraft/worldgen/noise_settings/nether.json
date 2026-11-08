@@ -3,7 +3,7 @@
  "ore_veins_enabled": false,
  "legacy_random_source": true,
  "spawn_target": [],
- "sea_level": 22,
+ "sea_level": 32,
  "disable_mob_generation": false,
  "default_fluid": {
   "Properties": {

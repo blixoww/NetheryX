@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "netheryx:marrow_thicket",
-  "features": "netheryx:marrow_thicket_landmass",
-  "step": "local_modifications"
-}

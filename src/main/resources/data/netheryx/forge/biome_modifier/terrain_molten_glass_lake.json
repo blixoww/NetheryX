@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "netheryx:molten_glass_lake",
-  "features": "netheryx:molten_glass_lake_landmass",
-  "step": "local_modifications"
-}

@@ -15,6 +15,7 @@ import com.netheryx.registry.ModEntities;
 import com.netheryx.registry.ModItems;
 import com.netheryx.registry.ModLootModifiers;
 import com.netheryx.registry.ModParticles;
+import com.netheryx.registry.ModPlacements;
 import com.netheryx.registry.ModStructureTypes;
 import com.netheryx.registry.ModTiers;
 import com.netheryx.util.CompatSetup;
@@ -58,6 +59,7 @@ public final class NetheryX {
         ModEffects.EFFECTS.register(modBus);
         ModEffects.POTIONS.register(modBus);
         ModFeatures.FEATURES.register(modBus);
+        ModPlacements.PLACEMENT_MODIFIERS.register(modBus);
         ModRecipes.SERIALIZERS.register(modBus);
 
         NetheryXNetwork.register();

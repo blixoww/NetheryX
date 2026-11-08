@@ -3,7 +3,7 @@
   "biomes": "#netheryx:has_structure/infernal_sanctum",
   "step": "top_layer_modification",
   "spawn_overrides": {},
-  "terrain_adaptation": "none",
+  "terrain_adaptation": "beard_box",
   "start_pool": "netheryx:infernal_sanctum/start",
   "size": 1,
   "max_y": 84,

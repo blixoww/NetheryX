@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "netheryx:wartvine_tangle",
-  "features": "netheryx:wartvine_tangle_landmass",
-  "step": "local_modifications"
-}

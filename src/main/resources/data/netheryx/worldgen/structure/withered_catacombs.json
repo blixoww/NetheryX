@@ -3,7 +3,7 @@
   "biomes": "#netheryx:has_structure/withered_catacombs",
   "step": "top_layer_modification",
   "spawn_overrides": {},
-  "terrain_adaptation": "none",
+  "terrain_adaptation": "beard_box",
   "start_pool": "netheryx:withered_catacombs/start",
   "size": 1,
   "max_y": 90,

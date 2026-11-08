@@ -1,6 +1,0 @@
-{
-  "type": "forge:add_features",
-  "biomes": "netheryx:hellwood_jungle",
-  "features": "netheryx:hellwood_jungle_landmass",
-  "step": "local_modifications"
-}

@@ -3,7 +3,7 @@
   "biomes": "#netheryx:has_structure/onyx_citadel",
   "step": "top_layer_modification",
   "spawn_overrides": {},
-  "terrain_adaptation": "none",
+  "terrain_adaptation": "beard_box",
   "start_pool": "netheryx:onyx_citadel/start",
   "size": 1,
   "max_y": 74,

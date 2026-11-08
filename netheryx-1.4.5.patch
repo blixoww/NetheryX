@@ -1,0 +1,3179 @@
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+index 98d3bc9..5266751 100644
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -7,6 +7,23 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/) et le pr
+ Chaque tag Git (`git tag 1.0.0 && git push origin 1.0.0`) déclenche la compilation et la publication du `.jar`
+ dans une Release GitHub ; les notes de version sont extraites de ce fichier.
+ 
++## [1.4.5] - 2026-11-07
++
++### Modifié
++- **La lave du Nether redevient celle de Minecraft** : mer de lave à son niveau d'origine (32) et plus de plateaux, banquises ou récifs
++  qui la recouvraient. Les biomes gardent leur roche, leur flore et leur taille.
++- **Les structures dégagent leur terrain** : tout le volume d'une structure est creusé dans la roche et comblé dessous (adaptation du
++  terrain « boîte »), au lieu de s'enfoncer dans les parois. La partie souterraine des donjons reste dans la roche.
++
++### Corrigé
++- **Décors à travers les structures** : grandes colonnes, flèches, arbres et cristaux ne poussent plus dans l'emprise d'une structure,
++  ni dans celle des forteresses, bastions, portails en ruine et fossiles vanilla.
++- Les structures du mod évitent aussi les **portails en ruine** et les **fossiles** du Nether.
++- **Boussole du créateur** : elle téléportait à partir du fond du monde (la hauteur 0 que donne Minecraft) et pouvait déposer le joueur
++  dans une grotte, sous la structure ou dans une paroi. Elle vise maintenant l'entrée des forteresses du mod (devant le pont) ou le sol
++  des petites structures, le haut des structures vanilla, choisit un emplacement dégagé hors de la lave et sous le plafond de bedrock,
++  et tourne le joueur vers la structure.
++
+ ## [1.4.4] - 2026-11-03
+ 
+ ### Modifié
+diff --git a/art/data/minecraft/worldgen/noise_settings/nether.json b/art/data/minecraft/worldgen/noise_settings/nether.json
+index 9577d2d..1757076 100644
+--- a/art/data/minecraft/worldgen/noise_settings/nether.json
++++ b/art/data/minecraft/worldgen/noise_settings/nether.json
+@@ -3,7 +3,7 @@
+  "ore_veins_enabled": false,
+  "legacy_random_source": true,
+  "spawn_target": [],
+- "sea_level": 22,
++ "sea_level": 32,
+  "disable_mob_generation": false,
+  "default_fluid": {
+   "Properties": {
+diff --git a/gradle.properties b/gradle.properties
+index ea91692..4a016e2 100644
+--- a/gradle.properties
++++ b/gradle.properties
+@@ -31,7 +31,7 @@ mod_id=netheryx
+ mod_name=NetheryX
+ mod_license=GPL-3.0-only
+ # Versionnage semantique : MAJEUR.MINEUR.CORRECTIF (voir CHANGELOG.md)
+-mod_version=1.4.4
++mod_version=1.4.5
+ mod_group_id=com.netheryx
+ mod_authors=Valentin
+ mod_description=NetheryX est une refonte complete du Nether : minerai d'Onyx, nouveaux biomes, creatures animees, structures, cultures, nourritures, outils et objets utiles.
+diff --git a/src/main/java/com/netheryx/NetheryX.java b/src/main/java/com/netheryx/NetheryX.java
+index 727a67d..ce979fa 100644
+--- a/src/main/java/com/netheryx/NetheryX.java
++++ b/src/main/java/com/netheryx/NetheryX.java
+@@ -15,6 +15,7 @@ import com.netheryx.registry.ModEntities;
+ import com.netheryx.registry.ModItems;
+ import com.netheryx.registry.ModLootModifiers;
+ import com.netheryx.registry.ModParticles;
++import com.netheryx.registry.ModPlacements;
+ import com.netheryx.registry.ModStructureTypes;
+ import com.netheryx.registry.ModTiers;
+ import com.netheryx.util.CompatSetup;
+@@ -58,6 +59,7 @@ public final class NetheryX {
+         ModEffects.EFFECTS.register(modBus);
+         ModEffects.POTIONS.register(modBus);
+         ModFeatures.FEATURES.register(modBus);
++        ModPlacements.PLACEMENT_MODIFIERS.register(modBus);
+         ModRecipes.SERIALIZERS.register(modBus);
+ 
+         NetheryXNetwork.register();
+diff --git a/src/main/java/com/netheryx/item/AdminCompassItem.java b/src/main/java/com/netheryx/item/AdminCompassItem.java
+index f0f8432..1962428 100644
+--- a/src/main/java/com/netheryx/item/AdminCompassItem.java
++++ b/src/main/java/com/netheryx/item/AdminCompassItem.java
+@@ -3,6 +3,7 @@ package com.netheryx.item;
+ import com.mojang.datafixers.util.Pair;
+ import com.netheryx.network.NetheryXNetwork;
+ import com.netheryx.network.OpenAdminCompassPacket;
++import com.netheryx.worldgen.structure.NetherFloorStructure;
+ import net.minecraft.ChatFormatting;
+ import net.minecraft.core.BlockPos;
+ import net.minecraft.core.Direction;
+@@ -17,16 +18,22 @@ import net.minecraft.server.level.ServerLevel;
+ import net.minecraft.server.level.ServerPlayer;
+ import net.minecraft.sounds.SoundEvents;
+ import net.minecraft.sounds.SoundSource;
++import net.minecraft.util.Mth;
+ import net.minecraft.world.InteractionHand;
+ import net.minecraft.world.InteractionResultHolder;
+ import net.minecraft.world.entity.player.Player;
+ import net.minecraft.world.item.Item;
+ import net.minecraft.world.item.ItemStack;
+ import net.minecraft.world.item.TooltipFlag;
++import net.minecraft.world.level.ChunkPos;
+ import net.minecraft.world.level.Level;
+ import net.minecraft.world.level.biome.Biome;
++import net.minecraft.world.level.block.Blocks;
++import net.minecraft.world.level.chunk.ChunkStatus;
+ import net.minecraft.world.level.levelgen.Heightmap;
++import net.minecraft.world.level.levelgen.structure.BoundingBox;
+ import net.minecraft.world.level.levelgen.structure.Structure;
++import net.minecraft.world.level.levelgen.structure.StructureStart;
+ import net.minecraftforge.network.PacketDistributor;
+ import org.jetbrains.annotations.Nullable;
+ 
+@@ -66,6 +73,10 @@ public class AdminCompassItem extends Item {
+         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+     }
+ 
++    /** Destination : ou poser les pieds, et le point a regarder en arrivant. */
++    private record Destination(BlockPos feet, BlockPos lookAt) {
++    }
++
+     /** Teleporte le joueur vers la structure ou le biome choisi (verifie de nouveau les droits cote serveur). */
+     public static void teleport(ServerPlayer player, ResourceLocation id, boolean biome) {
+         if (!canUse(player) || !(player.getMainHandItem().getItem() instanceof AdminCompassItem
+@@ -73,21 +84,33 @@ public class AdminCompassItem extends Item {
+             return;
+         }
+         ServerLevel level = player.serverLevel();
+-        BlockPos found = biome ? locateBiome(level, player.blockPosition(), id) : locateStructure(level, player.blockPosition(), id);
+-        if (found == null) {
++        Destination destination = biome ? locateBiome(level, player.blockPosition(), id) : locateStructure(level, player.blockPosition(), id);
++        BlockPos safe = destination == null ? null : safeSpot(level, destination.feet());
++        if (safe == null) {
+             player.displayClientMessage(Component.translatable("item.netheryx.admin_compass.not_found", id.toString())
+                     .withStyle(ChatFormatting.RED), true);
+             return;
+         }
+-        BlockPos safe = safeSpot(level, found);
+-        player.teleportTo(level, safe.getX() + 0.5D, safe.getY(), safe.getZ() + 0.5D, player.getYRot(), player.getXRot());
++        // Regard tourne vers la structure (ou droit devant pour un biome)
++        float yaw = player.getYRot();
++        double dx = destination.lookAt().getX() + 0.5D - (safe.getX() + 0.5D);
++        double dz = destination.lookAt().getZ() + 0.5D - (safe.getZ() + 0.5D);
++        if (dx * dx + dz * dz > 4.0D) {
++            yaw = (float) Math.toDegrees(Mth.atan2(dz, dx)) - 90.0F;
++        }
++        player.teleportTo(level, safe.getX() + 0.5D, safe.getY(), safe.getZ() + 0.5D, yaw, 0.0F);
++        player.fallDistance = 0.0F;
+         level.playSound(null, safe, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.0F);
+         player.displayClientMessage(Component.translatable("item.netheryx.admin_compass.teleported", id.toString(),
+                 safe.getX(), safe.getY(), safe.getZ()).withStyle(ChatFormatting.GREEN), false);
+     }
+ 
++    /**
++     * Structure la plus proche, vraiment generee. Minecraft ne donne que le chunk d'origine, a la hauteur 0 : on lit donc la
++     * structure elle-meme pour viser son entree (forteresses NetheryX) ou le centre de ses pieces, a la bonne hauteur.
++     */
+     @Nullable
+-    private static BlockPos locateStructure(ServerLevel level, BlockPos origin, ResourceLocation id) {
++    private static Destination locateStructure(ServerLevel level, BlockPos origin, ResourceLocation id) {
+         Registry<Structure> registry = level.registryAccess().registryOrThrow(Registries.STRUCTURE);
+         Optional<Holder.Reference<Structure>> structure = registry.getHolder(ResourceKey.create(Registries.STRUCTURE, id));
+         if (structure.isEmpty()) {
+@@ -95,58 +118,124 @@ public class AdminCompassItem extends Item {
+         }
+         Pair<BlockPos, Holder<Structure>> found = level.getChunkSource().getGenerator().findNearestMapStructure(level,
+                 HolderSet.direct(structure.get()), origin, 100, false);
+-        return found == null ? null : found.getFirst();
++        if (found == null) {
++            return null;
++        }
++        ChunkPos chunk = new ChunkPos(found.getFirst());
++        StructureStart start = level.getChunk(chunk.x, chunk.z, ChunkStatus.STRUCTURE_STARTS).getStartForStructure(structure.get().value());
++        if (start == null || !start.isValid()) {
++            return new Destination(new BlockPos(found.getFirst().getX(), 64, found.getFirst().getZ()), found.getFirst());
++        }
++        BlockPos center = NetherFloorStructure.center(start);
++        if (structure.get().value() instanceof NetherFloorStructure ours) {
++            return new Destination(ours.arrival(start), center);
++        }
++        // Structure vanilla ou d'un autre mod : au-dessus de sa piece principale, puis le point sur le plus proche
++        BoundingBox box = start.getPieces().isEmpty() ? start.getBoundingBox() : start.getPieces().get(0).getBoundingBox();
++        return new Destination(new BlockPos(center.getX(), box.maxY() + 1, center.getZ()), center);
+     }
+ 
+     @Nullable
+-    private static BlockPos locateBiome(ServerLevel level, BlockPos origin, ResourceLocation id) {
++    private static Destination locateBiome(ServerLevel level, BlockPos origin, ResourceLocation id) {
+         ResourceKey<Biome> key = ResourceKey.create(Registries.BIOME, id);
+-        Pair<BlockPos, Holder<Biome>> found = level.findClosestBiome3d(holder -> holder.is(key), origin, 6400, 32, 64);
+-        return found == null ? null : found.getFirst();
++        // Dans le Nether, on cherche le biome au niveau des sols praticables (au-dessus de la mer de lave)
++        BlockPos from = level.dimensionType().hasCeiling() ? new BlockPos(origin.getX(), 64, origin.getZ()) : origin;
++        Pair<BlockPos, Holder<Biome>> found = level.findClosestBiome3d(holder -> holder.is(key), from, 6400, 32, 16);
++        return found == null ? null : new Destination(found.getFirst(), found.getFirst());
+     }
+ 
+-    /** Premier emplacement ou l'on tient debout (sol solide, 2 blocs d'air, pas de lave) autour de la cible. */
++    /**
++     * Emplacement sur le plus proche de la cible : sol solide, deux blocs d'air, pas de lave, et assez de place autour
++     * pour ne pas arriver dans une poche de roche. Le plus proche d'abord en hauteur, puis en s'eloignant ; null si rien.
++     */
++    @Nullable
+     private static BlockPos safeSpot(ServerLevel level, BlockPos target) {
+-        boolean ceiling = level.dimensionType().hasCeiling();
+-        for (int radius = 0; radius <= 12; radius += 2) {
+-            for (int dx = -radius; dx <= radius; dx += 2) {
+-                for (int dz = -radius; dz <= radius; dz += 2) {
+-                    if (Math.max(Math.abs(dx), Math.abs(dz)) != radius) {
+-                        continue;
+-                    }
+-                    int x = target.getX() + dx;
+-                    int z = target.getZ() + dz;
+-                    if (!ceiling) {
+-                        BlockPos top = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(x, 0, z));
+-                        if (standable(level, top)) {
+-                            return top;
+-                        }
+-                        continue;
++        if (!level.dimensionType().hasCeiling()) {
++            for (int radius = 0; radius <= 16; radius += 2) {
++                for (BlockPos column : ring(target, radius)) {
++                    BlockPos top = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, column);
++                    if (standable(level, top)) {
++                        return top;
+                     }
+-                    int startY = Math.max(level.getMinBuildHeight() + 1, Math.min(target.getY(), 118));
+-                    for (int dy = 0; dy < 100; dy++) {
+-                        for (int sign : new int[]{1, -1}) {
+-                            BlockPos pos = new BlockPos(x, startY + dy * sign, z);
+-                            if (pos.getY() > level.getMinBuildHeight() && pos.getY() < 120 && standable(level, pos)) {
+-                                return pos;
++                }
++            }
++            return null;
++        }
++        // Nether : jamais sur ou au-dessus du plafond de bedrock, jamais dans la mer de lave
++        int top = Math.min(level.getMinBuildHeight() + level.dimensionType().logicalHeight(), 128) - 9;
++        int bottom = level.getSeaLevel() + 1;
++        int startY = Mth.clamp(target.getY(), bottom, top);
++        for (int pass = 0; pass < 2; pass++) {
++            boolean roomy = pass == 0;
++            for (int radius = 0; radius <= 24; radius += 2) {
++                for (BlockPos column : ring(target, radius)) {
++                    for (int dy = 0; dy <= top - bottom; dy++) {
++                        for (int sign : new int[]{-1, 1}) {
++                            if (dy == 0 && sign == 1) {
++                                continue;
++                            }
++                            int y = startY + dy * sign;
++                            if (y < bottom || y > top) {
++                                continue;
++                            }
++                            BlockPos feet = new BlockPos(column.getX(), y, column.getZ());
++                            if (standable(level, feet) && (!roomy || roomy(level, feet))) {
++                                return feet;
+                             }
+                         }
+                     }
+                 }
+             }
+         }
+-        return level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, target);
++        return null;
++    }
++
++    /** Colonnes a cette distance (carre) de la cible. */
++    private static List<BlockPos> ring(BlockPos center, int radius) {
++        List<BlockPos> columns = new java.util.ArrayList<>();
++        if (radius == 0) {
++            columns.add(center);
++            return columns;
++        }
++        for (int dx = -radius; dx <= radius; dx += 2) {
++            for (int dz = -radius; dz <= radius; dz += 2) {
++                if (Math.max(Math.abs(dx), Math.abs(dz)) == radius) {
++                    columns.add(center.offset(dx, 0, dz));
++                }
++            }
++        }
++        return columns;
+     }
+ 
+     private static boolean standable(ServerLevel level, BlockPos feet) {
+         BlockPos below = feet.below();
+         return level.getBlockState(below).isFaceSturdy(level, below, Direction.UP)
++                && !level.getBlockState(below).is(Blocks.BEDROCK) && !level.getBlockState(below).is(Blocks.MAGMA_BLOCK)
+                 && level.getBlockState(feet).getCollisionShape(level, feet).isEmpty()
+                 && level.getBlockState(feet.above()).getCollisionShape(level, feet.above()).isEmpty()
+                 && level.getFluidState(feet).isEmpty() && level.getFluidState(feet.above()).isEmpty()
+                 && level.getFluidState(below).isEmpty();
+     }
+ 
++    /** Assez de place : un troisieme bloc d'air au-dessus et au moins 5 des 8 cases voisines libres a hauteur des pieds. */
++    private static boolean roomy(ServerLevel level, BlockPos feet) {
++        if (!level.getBlockState(feet.above(2)).getCollisionShape(level, feet.above(2)).isEmpty()) {
++            return false;
++        }
++        int open = 0;
++        for (Direction direction : Direction.Plane.HORIZONTAL) {
++            BlockPos side = feet.relative(direction);
++            if (level.getBlockState(side).getCollisionShape(level, side).isEmpty() && level.getFluidState(side).isEmpty()) {
++                open++;
++            }
++            BlockPos corner = side.relative(direction.getClockWise());
++            if (level.getBlockState(corner).getCollisionShape(level, corner).isEmpty() && level.getFluidState(corner).isEmpty()) {
++                open++;
++            }
++        }
++        return open >= 5;
++    }
++
+     @Override
+     public boolean isFoil(ItemStack stack) {
+         return true;
+diff --git a/src/main/java/com/netheryx/registry/ModFeatures.java b/src/main/java/com/netheryx/registry/ModFeatures.java
+index 8cae4c7..3968fed 100644
+--- a/src/main/java/com/netheryx/registry/ModFeatures.java
++++ b/src/main/java/com/netheryx/registry/ModFeatures.java
+@@ -6,7 +6,6 @@ import com.netheryx.worldgen.feature.BoulderFeature;
+ import com.netheryx.worldgen.feature.CeilingHangFeature;
+ import com.netheryx.worldgen.feature.FallenLogFeature;
+ import com.netheryx.worldgen.feature.HellTreeFeature;
+-import com.netheryx.worldgen.feature.LandmassFeature;
+ import com.netheryx.worldgen.feature.LavaIslandFeature;
+ import com.netheryx.worldgen.feature.ObsidianSpireFeature;
+ import com.netheryx.worldgen.feature.PetrifiedTreeFeature;
+@@ -60,10 +59,6 @@ public final class ModFeatures {
+     public static final RegistryObject<Feature<BiomeDecorFeatures.Config>> GLOW_CLUSTER = FEATURES.register("glow_cluster",
+             () -> new BiomeDecorFeatures.GlowCluster(BiomeDecorFeatures.Config.CODEC));
+ 
+-    /** Terres sur la mer de lave (1.4.2) : plateaux, banquises, recifs. */
+-    public static final RegistryObject<Feature<LandmassFeature.Config>> LANDMASS = FEATURES.register("landmass",
+-            () -> new LandmassFeature(LandmassFeature.Config.CODEC));
+-
+     private ModFeatures() {
+     }
+ }
+diff --git a/src/main/java/com/netheryx/registry/ModPlacements.java b/src/main/java/com/netheryx/registry/ModPlacements.java
+new file mode 100644
+index 0000000..67a8e00
+--- /dev/null
++++ b/src/main/java/com/netheryx/registry/ModPlacements.java
+@@ -0,0 +1,20 @@
++package com.netheryx.registry;
++
++import com.netheryx.NetheryX;
++import com.netheryx.worldgen.placement.OutsideStructuresFilter;
++import net.minecraft.core.registries.Registries;
++import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
++import net.minecraftforge.registries.DeferredRegister;
++import net.minecraftforge.registries.RegistryObject;
++
++/** Modificateurs de placement des decors du mod. */
++public final class ModPlacements {
++    public static final DeferredRegister<PlacementModifierType<?>> PLACEMENT_MODIFIERS =
++            DeferredRegister.create(Registries.PLACEMENT_MODIFIER_TYPE, NetheryX.MOD_ID);
++
++    public static final RegistryObject<PlacementModifierType<OutsideStructuresFilter>> OUTSIDE_STRUCTURES =
++            PLACEMENT_MODIFIERS.register("outside_structures", () -> () -> OutsideStructuresFilter.CODEC);
++
++    private ModPlacements() {
++    }
++}
+diff --git a/src/main/java/com/netheryx/worldgen/NetheryXSurfaceRules.java b/src/main/java/com/netheryx/worldgen/NetheryXSurfaceRules.java
+index bc287b4..f1639ce 100644
+--- a/src/main/java/com/netheryx/worldgen/NetheryXSurfaceRules.java
++++ b/src/main/java/com/netheryx/worldgen/NetheryXSurfaceRules.java
+@@ -19,7 +19,7 @@ public final class NetheryXSurfaceRules {
+ 
+     /** Sol (au-dessus de la mer de lave), sous-sol et voute du biome, puis sa roche dans toute la masse. */
+     private static SurfaceRules.RuleSource skin(ResourceKey<Biome> biome, SurfaceRules.RuleSource floor, Block under, Block ceiling, SurfaceRules.RuleSource stone) {
+-        SurfaceRules.ConditionSource aboveLavaSea = SurfaceRules.yBlockCheck(VerticalAnchor.absolute(21), 0);
++        SurfaceRules.ConditionSource aboveLavaSea = SurfaceRules.yBlockCheck(VerticalAnchor.absolute(31), 0);
+         return SurfaceRules.ifTrue(SurfaceRules.isBiome(biome), SurfaceRules.sequence(
+                 SurfaceRules.ifTrue(aboveLavaSea, SurfaceRules.ifTrue(SurfaceRules.ON_FLOOR, floor)),
+                 SurfaceRules.ifTrue(aboveLavaSea, SurfaceRules.ifTrue(SurfaceRules.UNDER_FLOOR, state(under))),
+diff --git a/src/main/java/com/netheryx/worldgen/feature/LandmassFeature.java b/src/main/java/com/netheryx/worldgen/feature/LandmassFeature.java
+deleted file mode 100644
+index 850db8e..0000000
+--- a/src/main/java/com/netheryx/worldgen/feature/LandmassFeature.java
++++ /dev/null
+@@ -1,96 +0,0 @@
+-package com.netheryx.worldgen.feature;
+-
+-import com.mojang.serialization.Codec;
+-import com.mojang.serialization.codecs.RecordCodecBuilder;
+-import net.minecraft.core.BlockPos;
+-import net.minecraft.core.registries.Registries;
+-import net.minecraft.resources.ResourceKey;
+-import net.minecraft.resources.ResourceLocation;
+-import net.minecraft.world.level.WorldGenLevel;
+-import net.minecraft.world.level.biome.Biome;
+-import net.minecraft.world.level.block.Block;
+-import net.minecraft.world.level.block.Blocks;
+-import net.minecraft.world.level.block.state.BlockState;
+-import net.minecraft.world.level.levelgen.LegacyRandomSource;
+-import net.minecraft.world.level.levelgen.WorldgenRandom;
+-import net.minecraft.world.level.levelgen.feature.Feature;
+-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
+-import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+-import net.minecraft.world.level.levelgen.synth.PerlinSimplexNoise;
+-
+-import java.util.List;
+-
+-/**
+- * Terres sur la mer de lave : selon un bruit continu d'un chunk a l'autre, la lave du biome laisse place a des plateaux en
+- * terrasses (Prairie, Jungle...), des banquises (Gouffre de givre) ou des recifs (Recif de quartz). Le biome a ainsi son propre
+- * relief, au lieu d'un lac de lave plat. La feature passe une fois par chunk et traite chaque colonne de son biome.
+- */
+-public class LandmassFeature extends Feature<LandmassFeature.Config> {
+-    public record Config(ResourceLocation biome, BlockState top, BlockState body, float threshold, int height) implements FeatureConfiguration {
+-        public static final Codec<Config> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+-                ResourceLocation.CODEC.fieldOf("biome").forGetter(Config::biome),
+-                BlockState.CODEC.fieldOf("top").forGetter(Config::top),
+-                BlockState.CODEC.fieldOf("body").forGetter(Config::body),
+-                Codec.floatRange(-2.0F, 2.0F).fieldOf("threshold").forGetter(Config::threshold),
+-                Codec.intRange(0, 24).fieldOf("height").forGetter(Config::height)
+-        ).apply(instance, Config::new));
+-    }
+-
+-    private static final double SCALE = 0.018D;
+-    private static final int STEP = 2;
+-    private static final int BURIED = 4;
+-    private static volatile Noise cached;
+-
+-    private record Noise(long seed, PerlinSimplexNoise noise) {
+-    }
+-
+-    public LandmassFeature(Codec<Config> codec) {
+-        super(codec);
+-    }
+-
+-    private static PerlinSimplexNoise noise(long seed) {
+-        Noise current = cached;
+-        if (current == null || current.seed() != seed) {
+-            current = new Noise(seed, new PerlinSimplexNoise(new WorldgenRandom(new LegacyRandomSource(seed ^ 0x4E455448L)), List.of(0, 1, 2)));
+-            cached = current;
+-        }
+-        return current.noise();
+-    }
+-
+-    @Override
+-    public boolean place(FeaturePlaceContext<Config> context) {
+-        WorldGenLevel level = context.level();
+-        Config config = context.config();
+-        ResourceKey<Biome> biome = ResourceKey.create(Registries.BIOME, config.biome());
+-        PerlinSimplexNoise noise = noise(level.getSeed());
+-        int lavaTop = context.chunkGenerator().getSeaLevel() - 1;
+-        int minX = context.origin().getX() & ~15;
+-        int minZ = context.origin().getZ() & ~15;
+-        boolean changed = false;
+-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+-        for (int x = minX; x < minX + 16; x++) {
+-            for (int z = minZ; z < minZ + 16; z++) {
+-                pos.set(x, lavaTop, z);
+-                if (!level.getBlockState(pos).is(Blocks.LAVA) || !level.getBlockState(pos.above()).isAir() || !level.getBiome(pos).is(biome)) {
+-                    continue;
+-                }
+-                double value = noise.getValue(x * SCALE, z * SCALE, false);
+-                if (value < config.threshold()) {
+-                    continue;
+-                }
+-                // Terrasses : la hauteur monte par paliers, comme des plateaux
+-                double t = Math.min(1.0D, (value - config.threshold()) / 0.9D);
+-                int surface = (int) (t * config.height()) / STEP * STEP;
+-                for (int y = lavaTop - BURIED; y <= lavaTop + surface; y++) {
+-                    pos.set(x, y, z);
+-                    BlockState state = level.getBlockState(pos);
+-                    if (state.isAir() || state.is(Blocks.LAVA)) {
+-                        level.setBlock(pos, y == lavaTop + surface ? config.top() : config.body(), Block.UPDATE_CLIENTS);
+-                    }
+-                }
+-                changed = true;
+-            }
+-        }
+-        return changed;
+-    }
+-}
+diff --git a/src/main/java/com/netheryx/worldgen/placement/OutsideStructuresFilter.java b/src/main/java/com/netheryx/worldgen/placement/OutsideStructuresFilter.java
+new file mode 100644
+index 0000000..356690c
+--- /dev/null
++++ b/src/main/java/com/netheryx/worldgen/placement/OutsideStructuresFilter.java
+@@ -0,0 +1,56 @@
++package com.netheryx.worldgen.placement;
++
++import com.mojang.serialization.Codec;
++import com.netheryx.registry.ModPlacements;
++import net.minecraft.core.BlockPos;
++import net.minecraft.server.level.WorldGenRegion;
++import net.minecraft.util.RandomSource;
++import net.minecraft.world.level.ChunkPos;
++import net.minecraft.world.level.StructureManager;
++import net.minecraft.world.level.levelgen.placement.PlacementContext;
++import net.minecraft.world.level.levelgen.placement.PlacementFilter;
++import net.minecraft.world.level.levelgen.placement.PlacementModifierType;
++import net.minecraft.world.level.levelgen.structure.StructurePiece;
++import net.minecraft.world.level.levelgen.structure.StructureStart;
++
++/**
++ * Filtre de placement : refuse un decor du mod (colonne, fleche, arbre, cristal, buisson...) dont l'origine tombe dans
++ * l'emprise d'une structure, vue du ciel, marge comprise : structures NetheryX, mais aussi forteresses, bastions, portails
++ * en ruine et fossiles vanilla. Les forteresses vanilla sont posees avant les decors, les structures NetheryX apres :
++ * sans ce filtre, les grandes colonnes du sol a la voute traverseraient leurs ponts, leurs murs et leurs cours.
++ */
++public final class OutsideStructuresFilter extends PlacementFilter {
++    public static final OutsideStructuresFilter INSTANCE = new OutsideStructuresFilter();
++    public static final Codec<OutsideStructuresFilter> CODEC = Codec.unit(() -> INSTANCE);
++    /** Marge autour des pieces : un arbre ou une colonne pose juste a cote deborderait encore dedans. */
++    private static final int MARGIN = 5;
++
++    private OutsideStructuresFilter() {
++    }
++
++    @Override
++    protected boolean shouldPlace(PlacementContext context, RandomSource random, BlockPos pos) {
++        if (!(context.getLevel() instanceof WorldGenRegion region)) {
++            return true;
++        }
++        StructureManager structures = region.getLevel().structureManager().forWorldGenRegion(region);
++        for (StructureStart start : structures.startsForStructure(new ChunkPos(pos), structure -> true)) {
++            if (!start.isValid()) {
++                continue;
++            }
++            for (StructurePiece piece : start.getPieces()) {
++                var box = piece.getBoundingBox();
++                if (pos.getX() >= box.minX() - MARGIN && pos.getX() <= box.maxX() + MARGIN
++                        && pos.getZ() >= box.minZ() - MARGIN && pos.getZ() <= box.maxZ() + MARGIN) {
++                    return false;
++                }
++            }
++        }
++        return true;
++    }
++
++    @Override
++    public PlacementModifierType<?> type() {
++        return ModPlacements.OUTSIDE_STRUCTURES.get();
++    }
++}
+diff --git a/src/main/java/com/netheryx/worldgen/structure/NetherFloorStructure.java b/src/main/java/com/netheryx/worldgen/structure/NetherFloorStructure.java
+index 166a2c1..d47e71d 100644
+--- a/src/main/java/com/netheryx/worldgen/structure/NetherFloorStructure.java
++++ b/src/main/java/com/netheryx/worldgen/structure/NetherFloorStructure.java
+@@ -109,6 +109,9 @@ public class NetherFloorStructure extends Structure {
+     public static final List<String> PRIORITY = List.of("onyx_citadel", "infernal_sanctum", "withered_catacombs",
+             "nether_garden", "nomad_caravan", "basalt_forge", "wyvern_nest", "traveler_camp", "scorched_outpost",
+             "bone_shrine", "crystal_hollow", "lava_forge", "hidden_cache");
++    /** Petites structures vanilla du Nether que nos structures evitent aussi. */
++    private static final List<ResourceLocation> VANILLA_SMALL = List.of(new ResourceLocation("minecraft", "ruined_portals"),
++            new ResourceLocation("minecraft", "nether_fossils"));
+     private static final Set<String> LARGE = Set.of("onyx_citadel", "infernal_sanctum", "withered_catacombs");
+     /** Distance maximale (en chunks) entre le chunk d'origine d'une structure et ses pieces. */
+     private static final int LARGE_REACH = 9;
+@@ -249,6 +252,13 @@ public class NetherFloorStructure extends Structure {
+         if (self == null || this.blockedBySet(context, new ResourceLocation("minecraft", "nether_complexes"), box, LARGE_REACH + (box.getXSpan() >> 5))) {
+             return self != null;
+         }
++        // Portails en ruine et fossiles du Nether : poses avant nos structures, ils se melangeraient a elles
++        int smallReach = SMALL_REACH + (Math.max(box.getXSpan(), box.getZSpan()) >> 5) + 1;
++        for (ResourceLocation vanilla : VANILLA_SMALL) {
++            if (this.blockedBySet(context, vanilla, box, smallReach)) {
++                return true;
++            }
++        }
+         for (String name : PRIORITY) {
+             if (name.equals(self.getPath())) {
+                 return false;
+@@ -307,8 +317,10 @@ public class NetherFloorStructure extends Structure {
+                     offsetZ = z - turned.getZ();
+                 }
+                 BlockPos origin = new BlockPos(offsetX, y + 1 - this.sink, offsetZ);
++                // Niveau du sol pour l'adaptation du terrain : au-dessus, le volume est creuse ; dessous (partie souterraine
++                // d'un donjon), la roche reste en place
+                 PoolElementStructurePiece piece = new PoolElementStructurePiece(templates, element, origin,
+-                        element.getGroundLevelDelta(), rotation, element.getBoundingBox(templates, origin, rotation));
++                        Math.max(element.getGroundLevelDelta(), this.sink), rotation, element.getBoundingBox(templates, origin, rotation));
+                 // La hauteur ne change rien ici : deux structures l'une au-dessus de l'autre se couperaient quand meme
+                 if (this.blocked(context, piece.getBoundingBox())) {
+                     return Optional.empty();
+@@ -324,6 +336,33 @@ public class NetherFloorStructure extends Structure {
+         return Optional.empty();
+     }
+ 
++    /**
++     * Point d'arrivee d'une teleportation vers cette structure (boussole du createur) : devant le pont d'entree d'une
++     * forteresse, au milieu du sol d'une petite structure. Hauteur des pieds.
++     */
++    public BlockPos arrival(StructureStart start) {
++        if (start.getPieces().isEmpty() || !(start.getPieces().get(0) instanceof PoolElementStructurePiece main)) {
++            BoundingBox box = start.getBoundingBox();
++            return new BlockPos((box.minX() + box.maxX()) / 2, box.minY() + 1, (box.minZ() + box.maxZ()) / 2);
++        }
++        BlockPos origin = main.getPosition();
++        int feetY = origin.getY() + this.sink;
++        if (this.entranceX >= 0) {
++            BlockPos center = origin.offset(StructureTemplate.transform(new BlockPos(this.entranceX, 0, this.entranceZ), Mirror.NONE,
++                    main.getRotation(), BlockPos.ZERO));
++            BlockPos gate = StructureTemplate.transform(new BlockPos(0, 0, this.gateReach + 3), Mirror.NONE, main.getRotation(), BlockPos.ZERO);
++            return new BlockPos(center.getX() + gate.getX(), feetY, center.getZ() + gate.getZ());
++        }
++        BoundingBox box = main.getBoundingBox();
++        return new BlockPos((box.minX() + box.maxX()) / 2, feetY, (box.minZ() + box.maxZ()) / 2);
++    }
++
++    /** Centre de la piece principale (pour orienter le joueur vers la structure a son arrivee). */
++    public static BlockPos center(StructureStart start) {
++        BoundingBox box = start.getPieces().isEmpty() ? start.getBoundingBox() : start.getPieces().get(0).getBoundingBox();
++        return new BlockPos((box.minX() + box.maxX()) / 2, (box.minY() + box.maxY()) / 2, (box.minZ() + box.maxZ()) / 2);
++    }
++
+     /** Rotation qui amene le bout du pont d'entree sur un sol praticable, en commencant par celle tiree au sort ; null s'il n'y en a pas. */
+     private Rotation gateRotation(GenerationContext context, Rotation drawn, int x, int z, int floorY) {
+         if (this.gateReach == 0) {
+diff --git a/src/main/resources/data/minecraft/worldgen/noise_settings/nether.json b/src/main/resources/data/minecraft/worldgen/noise_settings/nether.json
+index 9577d2d..1757076 100644
+--- a/src/main/resources/data/minecraft/worldgen/noise_settings/nether.json
++++ b/src/main/resources/data/minecraft/worldgen/noise_settings/nether.json
+@@ -3,7 +3,7 @@
+  "ore_veins_enabled": false,
+  "legacy_random_source": true,
+  "spawn_target": [],
+- "sea_level": 22,
++ "sea_level": 32,
+  "disable_mob_generation": false,
+  "default_fluid": {
+   "Properties": {
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_ashen_wastes.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_ashen_wastes.json
+deleted file mode 100644
+index b0418aa..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_ashen_wastes.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:ashen_wastes",
+-  "features": "netheryx:ashen_wastes_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_ember_grove.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_ember_grove.json
+deleted file mode 100644
+index 51f7726..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_ember_grove.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:ember_grove",
+-  "features": "netheryx:ember_grove_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_ember_meadow.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_ember_meadow.json
+deleted file mode 100644
+index bdd458d..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_ember_meadow.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:ember_meadow",
+-  "features": "netheryx:ember_meadow_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_hellwood_jungle.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_hellwood_jungle.json
+deleted file mode 100644
+index aa2526f..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_hellwood_jungle.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:hellwood_jungle",
+-  "features": "netheryx:hellwood_jungle_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_marrow_thicket.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_marrow_thicket.json
+deleted file mode 100644
+index cc79b96..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_marrow_thicket.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:marrow_thicket",
+-  "features": "netheryx:marrow_thicket_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_molten_glass_lake.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_molten_glass_lake.json
+deleted file mode 100644
+index 4ef5e56..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_molten_glass_lake.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:molten_glass_lake",
+-  "features": "netheryx:molten_glass_lake_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_petrified_onyx_forest.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_petrified_onyx_forest.json
+deleted file mode 100644
+index 42f4b2a..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_petrified_onyx_forest.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:petrified_onyx_forest",
+-  "features": "netheryx:petrified_onyx_forest_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_quartz_reef.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_quartz_reef.json
+deleted file mode 100644
+index abe207b..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_quartz_reef.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:quartz_reef",
+-  "features": "netheryx:quartz_reef_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_rimefrost_chasm.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_rimefrost_chasm.json
+deleted file mode 100644
+index 149d0dc..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_rimefrost_chasm.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:rimefrost_chasm",
+-  "features": "netheryx:rimefrost_chasm_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_sulfur_springs.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_sulfur_springs.json
+deleted file mode 100644
+index 3482c32..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_sulfur_springs.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:sulfur_springs",
+-  "features": "netheryx:sulfur_springs_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_wartvine_tangle.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_wartvine_tangle.json
+deleted file mode 100644
+index e253054..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_wartvine_tangle.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:wartvine_tangle",
+-  "features": "netheryx:wartvine_tangle_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_withered_forest.json b/src/main/resources/data/netheryx/forge/biome_modifier/terrain_withered_forest.json
+deleted file mode 100644
+index c5c0233..0000000
+--- a/src/main/resources/data/netheryx/forge/biome_modifier/terrain_withered_forest.json
++++ /dev/null
+@@ -1,6 +0,0 @@
+-{
+-  "type": "forge:add_features",
+-  "biomes": "netheryx:withered_forest",
+-  "features": "netheryx:withered_forest_landmass",
+-  "step": "local_modifications"
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/ashen_wastes_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/ashen_wastes_landmass.json
+deleted file mode 100644
+index 80e2027..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/ashen_wastes_landmass.json
++++ /dev/null
+@@ -1,17 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:ashen_wastes",
+-    "top": {
+-      "Name": "netheryx:ash_block"
+-    },
+-    "body": {
+-      "Name": "minecraft:basalt",
+-      "Properties": {
+-        "axis": "y"
+-      }
+-    },
+-    "threshold": -0.55,
+-    "height": 6
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/ember_grove_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/ember_grove_landmass.json
+deleted file mode 100644
+index 3f1b374..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/ember_grove_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:ember_grove",
+-    "top": {
+-      "Name": "netheryx:ember_nylium"
+-    },
+-    "body": {
+-      "Name": "minecraft:red_terracotta"
+-    },
+-    "threshold": -0.55,
+-    "height": 10
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/ember_meadow_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/ember_meadow_landmass.json
+deleted file mode 100644
+index 2f97947..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/ember_meadow_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:ember_meadow",
+-    "top": {
+-      "Name": "netheryx:nether_grass_block"
+-    },
+-    "body": {
+-      "Name": "minecraft:brown_terracotta"
+-    },
+-    "threshold": -0.65,
+-    "height": 12
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/hellwood_jungle_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/hellwood_jungle_landmass.json
+deleted file mode 100644
+index 8c3d837..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/hellwood_jungle_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:hellwood_jungle",
+-    "top": {
+-      "Name": "netheryx:ember_nylium"
+-    },
+-    "body": {
+-      "Name": "minecraft:brown_terracotta"
+-    },
+-    "threshold": -0.9,
+-    "height": 8
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/marrow_thicket_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/marrow_thicket_landmass.json
+deleted file mode 100644
+index 8216270..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/marrow_thicket_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:marrow_thicket",
+-    "top": {
+-      "Name": "netheryx:ossified_nylium"
+-    },
+-    "body": {
+-      "Name": "minecraft:dripstone_block"
+-    },
+-    "threshold": -0.8,
+-    "height": 10
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/molten_glass_lake_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/molten_glass_lake_landmass.json
+deleted file mode 100644
+index 0016e6c..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/molten_glass_lake_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:molten_glass_lake",
+-    "top": {
+-      "Name": "minecraft:obsidian"
+-    },
+-    "body": {
+-      "Name": "minecraft:blackstone"
+-    },
+-    "threshold": 0.15,
+-    "height": 3
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/petrified_onyx_forest_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/petrified_onyx_forest_landmass.json
+deleted file mode 100644
+index ff00c35..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/petrified_onyx_forest_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:petrified_onyx_forest",
+-    "top": {
+-      "Name": "minecraft:smooth_basalt"
+-    },
+-    "body": {
+-      "Name": "minecraft:blackstone"
+-    },
+-    "threshold": -0.5,
+-    "height": 8
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/quartz_reef_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/quartz_reef_landmass.json
+deleted file mode 100644
+index 55e073d..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/quartz_reef_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:quartz_reef",
+-    "top": {
+-      "Name": "minecraft:quartz_block"
+-    },
+-    "body": {
+-      "Name": "minecraft:calcite"
+-    },
+-    "threshold": -0.3,
+-    "height": 10
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/rimefrost_chasm_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/rimefrost_chasm_landmass.json
+deleted file mode 100644
+index f6e3cea..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/rimefrost_chasm_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:rimefrost_chasm",
+-    "top": {
+-      "Name": "minecraft:packed_ice"
+-    },
+-    "body": {
+-      "Name": "minecraft:packed_ice"
+-    },
+-    "threshold": -1.2,
+-    "height": 0
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/sulfur_springs_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/sulfur_springs_landmass.json
+deleted file mode 100644
+index f5c1f1d..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/sulfur_springs_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:sulfur_springs",
+-    "top": {
+-      "Name": "netheryx:sulfur_block"
+-    },
+-    "body": {
+-      "Name": "netheryx:sulfur_rock"
+-    },
+-    "threshold": -0.15,
+-    "height": 6
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/wartvine_tangle_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/wartvine_tangle_landmass.json
+deleted file mode 100644
+index 328c38c..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/wartvine_tangle_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:wartvine_tangle",
+-    "top": {
+-      "Name": "minecraft:crimson_nylium"
+-    },
+-    "body": {
+-      "Name": "minecraft:nether_wart_block"
+-    },
+-    "threshold": -0.55,
+-    "height": 10
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/configured_feature/withered_forest_landmass.json b/src/main/resources/data/netheryx/worldgen/configured_feature/withered_forest_landmass.json
+deleted file mode 100644
+index 1154094..0000000
+--- a/src/main/resources/data/netheryx/worldgen/configured_feature/withered_forest_landmass.json
++++ /dev/null
+@@ -1,14 +0,0 @@
+-{
+-  "type": "netheryx:landmass",
+-  "config": {
+-    "biome": "netheryx:withered_forest",
+-    "top": {
+-      "Name": "netheryx:withered_soil"
+-    },
+-    "body": {
+-      "Name": "minecraft:deepslate"
+-    },
+-    "threshold": -0.75,
+-    "height": 6
+-  }
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_glow.json
+index 1d17607..da2bd27 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_landmass.json
+deleted file mode 100644
+index 6f97841..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:ashen_wastes_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_pillar.json
+index e3f5d31..21ab8da 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ashen_wastes_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ashen_wastes.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ashen_wastes.json
+index 88eacad..f90f7e4 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ashen_wastes.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ashen_wastes.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ember_grove.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ember_grove.json
+index 67b612d..f340b3f 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ember_grove.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ember_grove.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ember_meadow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ember_meadow.json
+index 45d1f35..6f1d0e5 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ember_meadow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_ember_meadow.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_hellwood_jungle.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_hellwood_jungle.json
+index 92a7eac..8f1f87e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_hellwood_jungle.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_hellwood_jungle.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_magma_rift.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_magma_rift.json
+index a91dca0..8354fb5 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_magma_rift.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_magma_rift.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_marrow_thicket.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_marrow_thicket.json
+index ff0d5ee..7337793 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_marrow_thicket.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_marrow_thicket.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_molten_glass_lake.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_molten_glass_lake.json
+index b846686..5434fc9 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_molten_glass_lake.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_molten_glass_lake.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_onyx_depths.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_onyx_depths.json
+index c1d0593..bbae4f1 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_onyx_depths.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_onyx_depths.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_petrified_onyx_forest.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_petrified_onyx_forest.json
+index 09f0825..0251119 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_petrified_onyx_forest.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_petrified_onyx_forest.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_quartz_reef.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_quartz_reef.json
+index d26fc44..346aa0e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_quartz_reef.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_quartz_reef.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_rimefrost_chasm.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_rimefrost_chasm.json
+index 4f2f511..d9db0ed 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_rimefrost_chasm.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_rimefrost_chasm.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_soulfire_marsh.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_soulfire_marsh.json
+index 3679b02..b1571fa 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_soulfire_marsh.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_soulfire_marsh.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_sulfur_springs.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_sulfur_springs.json
+index be9b850..faaee3a 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_sulfur_springs.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_sulfur_springs.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_wartvine_tangle.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_wartvine_tangle.json
+index 8612451..5f2ff50 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_wartvine_tangle.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_wartvine_tangle.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_withered_forest.json b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_withered_forest.json
+index b85d478..c4fb4b1 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_withered_forest.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/boulder_withered_forest.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ceiling_hang.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ceiling_hang.json
+index 419c3b9..c5ae493 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ceiling_hang.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ceiling_hang.json
+@@ -43,6 +43,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/charred_shrub_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/charred_shrub_patch.json
+index 40d683f..1cbc82a 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/charred_shrub_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/charred_shrub_patch.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_fig_cluster.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_fig_cluster.json
+index 2e99bfc..e88f322 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_fig_cluster.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_fig_cluster.json
+@@ -50,6 +50,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_fungus.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_fungus.json
+index df8efeb..f79d720 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_fungus.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_fungus.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_glow.json
+index 446ba5c..5349f73 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_landmass.json
+deleted file mode 100644
+index a10b09b..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:ember_grove_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_pillar.json
+index 39d2b2c..6d1ddd1 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_grove_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_glow.json
+index eeddb60..488fce6 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_landmass.json
+deleted file mode 100644
+index 9ae730d..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:ember_meadow_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_pillar.json
+index fdf4918..eb5b662 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_meadow_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_vegetation.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_vegetation.json
+index d82ef43..20e850d 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_vegetation.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_vegetation.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_vines_ceiling.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_vines_ceiling.json
+index 5c5ae7c..890ca1f 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ember_vines_ceiling.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ember_vines_ceiling.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_ember_grove.json b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_ember_grove.json
+index 8700e15..0ddb025 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_ember_grove.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_ember_grove.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_hellwood_jungle.json b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_hellwood_jungle.json
+index 28462d2..bbb17ff 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_hellwood_jungle.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_hellwood_jungle.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_marrow_thicket.json b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_marrow_thicket.json
+index a37e624..d0ab1a4 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_marrow_thicket.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_marrow_thicket.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_petrified_onyx_forest.json b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_petrified_onyx_forest.json
+index a1a23c1..a9fd6ae 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_petrified_onyx_forest.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_petrified_onyx_forest.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_soulfire_marsh.json b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_soulfire_marsh.json
+index d5a46b9..dd29d01 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_soulfire_marsh.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_soulfire_marsh.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_wartvine_tangle.json b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_wartvine_tangle.json
+index e0d1829..51bad0f 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_wartvine_tangle.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_wartvine_tangle.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_withered_forest.json b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_withered_forest.json
+index 53daf6e..a467630 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_withered_forest.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/fallen_log_withered_forest.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/fire_berry_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/fire_berry_patch.json
+index 11a88ac..5c83384 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/fire_berry_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/fire_berry_patch.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ashen_wastes_ash_daisy.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ashen_wastes_ash_daisy.json
+index c2ed4b7..a73f9fb 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ashen_wastes_ash_daisy.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ashen_wastes_ash_daisy.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ashen_wastes_charred_shrub.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ashen_wastes_charred_shrub.json
+index 24ae8d5..3d67479 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ashen_wastes_charred_shrub.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ashen_wastes_charred_shrub.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_blazing_grass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_blazing_grass.json
+index cd46d5f..9d413b9 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_blazing_grass.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_blazing_grass.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_ember_bloom.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_ember_bloom.json
+index 5061f4c..0483f33 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_ember_bloom.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_ember_bloom.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_ember_roots.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_ember_roots.json
+index ce5f6fc..35ce42c 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_ember_roots.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_grove_ember_roots.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_ash_daisy.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_ash_daisy.json
+index 17eac5b..f6f85c9 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_ash_daisy.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_ash_daisy.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_blazing_grass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_blazing_grass.json
+index 2e026b2..b74b904 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_blazing_grass.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_blazing_grass.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_crimson_roots.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_crimson_roots.json
+index 40beca4..32cfdbf 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_crimson_roots.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_crimson_roots.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_ember_bloom.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_ember_bloom.json
+index 9e7b419..7f0c3c9 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_ember_bloom.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_ember_meadow_ember_bloom.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_blazing_grass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_blazing_grass.json
+index 283eeab..a472393 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_blazing_grass.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_blazing_grass.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_crimson_bellflower.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_crimson_bellflower.json
+index 45ec50b..22a2e04 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_crimson_bellflower.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_crimson_bellflower.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_ember_roots.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_ember_roots.json
+index f56b19d..a37735e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_ember_roots.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_hellwood_jungle_ember_roots.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_marrow_thicket_glowcap.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_marrow_thicket_glowcap.json
+index 30fa525..032fd7e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_marrow_thicket_glowcap.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_marrow_thicket_glowcap.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_marrow_thicket_marrow_sprouts.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_marrow_thicket_marrow_sprouts.json
+index fcddcf6..fc7e7da 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_marrow_thicket_marrow_sprouts.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_marrow_thicket_marrow_sprouts.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_petrified_onyx_forest_glowcap.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_petrified_onyx_forest_glowcap.json
+index 34393c9..9863506 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_petrified_onyx_forest_glowcap.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_petrified_onyx_forest_glowcap.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_petrified_onyx_forest_soul_lily.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_petrified_onyx_forest_soul_lily.json
+index 85b7bed..26175c4 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_petrified_onyx_forest_soul_lily.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_petrified_onyx_forest_soul_lily.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_quartz_reef_glowcap.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_quartz_reef_glowcap.json
+index 2f0c66a..bc3a6e4 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_quartz_reef_glowcap.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_quartz_reef_glowcap.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_rimefrost_chasm_snow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_rimefrost_chasm_snow.json
+index 1d0f5d5..0d10f28 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_rimefrost_chasm_snow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_rimefrost_chasm_snow.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_sulfur_springs_charred_shrub.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_sulfur_springs_charred_shrub.json
+index 7d4b811..2285059 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_sulfur_springs_charred_shrub.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_sulfur_springs_charred_shrub.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_sulfur_springs_sulfur_tulip.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_sulfur_springs_sulfur_tulip.json
+index c4f6bf9..cc30d6e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_sulfur_springs_sulfur_tulip.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_sulfur_springs_sulfur_tulip.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_bellflower.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_bellflower.json
+index 414d75a..c9209fe 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_bellflower.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_bellflower.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_fungus.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_fungus.json
+index d24b391..1464a64 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_fungus.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_fungus.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_roots.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_roots.json
+index 023bf14..3f0179e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_roots.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_wartvine_tangle_crimson_roots.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_charred_shrub.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_charred_shrub.json
+index b8c0531..808321e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_charred_shrub.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_charred_shrub.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_warped_roots.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_warped_roots.json
+index dfc6f55..c1e6bc9 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_warped_roots.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_warped_roots.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_withered_fungus.json b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_withered_fungus.json
+index 464f0fd..d5f4a80 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_withered_fungus.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/flora_withered_forest_withered_fungus.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/glowcap_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/glowcap_patch.json
+index 5d35b37..77513e0 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/glowcap_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/glowcap_patch.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/hell_tree.json b/src/main/resources/data/netheryx/worldgen/placed_feature/hell_tree.json
+index 1544d60..0021aea 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/hell_tree.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/hell_tree.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/hellfern_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/hellfern_patch.json
+index a84d40b..2a4b61d 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/hellfern_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/hellfern_patch.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_glow.json
+index d7ea26c..0e12227 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_landmass.json
+deleted file mode 100644
+index 4447d73..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:hellwood_jungle_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_pillar.json
+index be01cd3..e56304b 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_jungle_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_vegetation.json b/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_vegetation.json
+index d5b5643..52c0c50 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_vegetation.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/hellwood_vegetation.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/lava_island.json b/src/main/resources/data/netheryx/worldgen/placed_feature/lava_island.json
+index 8be09f7..53021c0 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/lava_island.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/lava_island.json
+@@ -19,6 +19,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/magma_delta.json b/src/main/resources/data/netheryx/worldgen/placed_feature/magma_delta.json
+index 2ddd71c..826945e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/magma_delta.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/magma_delta.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_glow.json
+index cab9b69..e2c198f 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_landmass.json
+deleted file mode 100644
+index 07beb65..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:marrow_thicket_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_pillar.json
+index 3eb8238..96e5e73 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_thicket_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_tree.json b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_tree.json
+index e60c4cc..acb7954 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_tree.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_tree.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_vegetation.json b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_vegetation.json
+index 75f6fd3..9e4913e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_vegetation.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_vegetation.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_vines_ceiling.json b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_vines_ceiling.json
+index ffe6439..9a88289 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_vines_ceiling.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/marrow_vines_ceiling.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/meadow_ember_fungus.json b/src/main/resources/data/netheryx/worldgen/placed_feature/meadow_ember_fungus.json
+index 280d81a..24c3514 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/meadow_ember_fungus.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/meadow_ember_fungus.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/meadow_vegetation.json b/src/main/resources/data/netheryx/worldgen/placed_feature/meadow_vegetation.json
+index 28eb170..0c21d6c 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/meadow_vegetation.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/meadow_vegetation.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_crystal_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/molten_crystal_patch.json
+index 927f91e..1f6108d 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_crystal_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/molten_crystal_patch.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_crystals.json b/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_crystals.json
+index 5c5cded..aff98a2 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_crystals.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_crystals.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_glow.json
+index a4f8b88..1425ad4 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_landmass.json
+deleted file mode 100644
+index eddb10a..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:molten_glass_lake_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_pillar.json
+index 4b36ff2..3cf1b1f 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/molten_glass_lake_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/nether_flora.json b/src/main/resources/data/netheryx/worldgen/placed_feature/nether_flora.json
+index 0322b3b..44895fa 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/nether_flora.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/nether_flora.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/obsidian_delta.json b/src/main/resources/data/netheryx/worldgen/placed_feature/obsidian_delta.json
+index d459151..fd46491 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/obsidian_delta.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/obsidian_delta.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/obsidian_spire.json b/src/main/resources/data/netheryx/worldgen/placed_feature/obsidian_spire.json
+index 1c4f164..f62f77e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/obsidian_spire.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/obsidian_spire.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/onyx_cluster_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/onyx_cluster_patch.json
+index cf0f556..b577594 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/onyx_cluster_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/onyx_cluster_patch.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_onyx.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_onyx.json
+index dddaaf9..f1bdec5 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_onyx.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_onyx.json
+@@ -22,6 +22,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_onyx_rich.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_onyx_rich.json
+index e5c6a7d..65f7b38 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_onyx_rich.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_onyx_rich.json
+@@ -22,6 +22,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_rich_quartz.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_rich_quartz.json
+index 2bf4626..44f7cc7 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_rich_quartz.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_rich_quartz.json
+@@ -22,6 +22,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_rimestone.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_rimestone.json
+index e1d01b5..6b098ad 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_rimestone.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_rimestone.json
+@@ -22,6 +22,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_sulfur.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_sulfur.json
+index 9327f51..0f07788 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_sulfur.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_sulfur.json
+@@ -22,6 +22,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_sulfur_rock.json b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_sulfur_rock.json
+index 5e578c4..71c9e10 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/ore_sulfur_rock.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/ore_sulfur_rock.json
+@@ -22,6 +22,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_crystals.json b/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_crystals.json
+index 60e6495..d6c2c0f 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_crystals.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_crystals.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_glow.json
+index d619e46..dee1a7f 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_landmass.json
+deleted file mode 100644
+index 5ac76ae..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:petrified_onyx_forest_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_pillar.json
+index d4a9090..0fce4c2 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_onyx_forest_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_tree.json b/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_tree.json
+index 475af32..ef09baa 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_tree.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/petrified_tree.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_cluster_ceiling.json b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_cluster_ceiling.json
+index 7f88d29..35eb817 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_cluster_ceiling.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_cluster_ceiling.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_cluster_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_cluster_patch.json
+index a1522df..0cca831 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_cluster_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_cluster_patch.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_crystals.json b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_crystals.json
+index fdc9dd5..987c5da 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_crystals.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_crystals.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_glow.json
+index 546bdb0..dc8b98e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_landmass.json
+deleted file mode 100644
+index 66234bd..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:quartz_reef_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_pillar.json
+index f205c04..e71d31e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_reef_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_spire.json b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_spire.json
+index 2351524..a972872 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_spire.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/quartz_spire.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/rime_crystal_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/rime_crystal_patch.json
+index f9c8170..a8b3d60 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/rime_crystal_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/rime_crystal_patch.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/rime_spike.json b/src/main/resources/data/netheryx/worldgen/placed_feature/rime_spike.json
+index 1127fd2..cd05a39 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/rime_spike.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/rime_spike.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_crystals.json b/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_crystals.json
+index c156beb..dea309b 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_crystals.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_crystals.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_glow.json
+index 7beb35e..db6f47e 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_landmass.json
+deleted file mode 100644
+index 010607c..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:rimefrost_chasm_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_pillar.json
+index 4f7371d..480b687 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/rimefrost_chasm_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/soul_lily_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/soul_lily_patch.json
+index 7428d6f..1451136 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/soul_lily_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/soul_lily_patch.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_cluster_patch.json b/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_cluster_patch.json
+index 27a9aba..e78b878 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_cluster_patch.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_cluster_patch.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_crystals.json b/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_crystals.json
+index 158ebf4..e707349 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_crystals.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_crystals.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_glow.json
+index 38445f8..d19b6c8 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_landmass.json
+deleted file mode 100644
+index f54b5b3..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:sulfur_springs_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_pillar.json
+index 6af8bdf..ac1583d 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/sulfur_springs_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/wart_tree.json b/src/main/resources/data/netheryx/worldgen/placed_feature/wart_tree.json
+index 4f585f1..3c4bf95 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/wart_tree.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/wart_tree.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/wart_vegetation.json b/src/main/resources/data/netheryx/worldgen/placed_feature/wart_vegetation.json
+index 19a0376..1eea135 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/wart_vegetation.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/wart_vegetation.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_ceiling.json b/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_ceiling.json
+index 0eb5a7e..c5636ac 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_ceiling.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_ceiling.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_glow.json
+index 8a52a9f..f9fe8a1 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_landmass.json
+deleted file mode 100644
+index f3c6f6b..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:wartvine_tangle_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_pillar.json
+index 37a345f..374d51a 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/wartvine_tangle_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/wild_blaze_pepper.json b/src/main/resources/data/netheryx/worldgen/placed_feature/wild_blaze_pepper.json
+index a8f8307..1363447 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/wild_blaze_pepper.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/wild_blaze_pepper.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/wild_cinder_wheat.json b/src/main/resources/data/netheryx/worldgen/placed_feature/wild_cinder_wheat.json
+index 1841458..0297661 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/wild_cinder_wheat.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/wild_cinder_wheat.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/wild_soul_tuber.json b/src/main/resources/data/netheryx/worldgen/placed_feature/wild_soul_tuber.json
+index 4d7487d..8e164c8 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/wild_soul_tuber.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/wild_soul_tuber.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_glow.json b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_glow.json
+index 8b6458d..2feae22 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_glow.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_glow.json
+@@ -39,6 +39,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_landmass.json b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_landmass.json
+deleted file mode 100644
+index b1eaa2b..0000000
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_landmass.json
++++ /dev/null
+@@ -1,8 +0,0 @@
+-{
+-  "feature": "netheryx:withered_forest_landmass",
+-  "placement": [
+-    {
+-      "type": "minecraft:biome"
+-    }
+-  ]
+-}
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_pillar.json b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_pillar.json
+index 33b850e..d92df19 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_pillar.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_forest_pillar.json
+@@ -11,6 +11,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_fungus.json b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_fungus.json
+index 876a180..f980a21 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_fungus.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_fungus.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_plum_cluster.json b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_plum_cluster.json
+index c1a78ca..53687de 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_plum_cluster.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_plum_cluster.json
+@@ -50,6 +50,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_vegetation.json b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_vegetation.json
+index f75a03c..f87db96 100644
+--- a/src/main/resources/data/netheryx/worldgen/placed_feature/withered_vegetation.json
++++ b/src/main/resources/data/netheryx/worldgen/placed_feature/withered_vegetation.json
+@@ -7,6 +7,9 @@
+     },
+     {
+       "type": "minecraft:biome"
++    },
++    {
++      "type": "netheryx:outside_structures"
+     }
+   ]
+ }
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/basalt_forge.json b/src/main/resources/data/netheryx/worldgen/structure/basalt_forge.json
+index 3aee93a..49a2d45 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/basalt_forge.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/basalt_forge.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/basalt_forge",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "beard_thin",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:basalt_forge/start",
+   "size": 1,
+   "max_y": 100,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/bone_shrine.json b/src/main/resources/data/netheryx/worldgen/structure/bone_shrine.json
+index e120697..162b163 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/bone_shrine.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/bone_shrine.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/bone_shrine",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "beard_thin",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:bone_shrine/start",
+   "size": 1,
+   "max_y": 100,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/crystal_hollow.json b/src/main/resources/data/netheryx/worldgen/structure/crystal_hollow.json
+index c7641ec..9c2410e 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/crystal_hollow.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/crystal_hollow.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/crystal_hollow",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "beard_thin",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:crystal_hollow/start",
+   "size": 1,
+   "max_y": 100,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/infernal_sanctum.json b/src/main/resources/data/netheryx/worldgen/structure/infernal_sanctum.json
+index 98ffdb8..495f320 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/infernal_sanctum.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/infernal_sanctum.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/infernal_sanctum",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "none",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:infernal_sanctum/start",
+   "size": 1,
+   "max_y": 84,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/lava_forge.json b/src/main/resources/data/netheryx/worldgen/structure/lava_forge.json
+index 98d8d8d..bd45c99 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/lava_forge.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/lava_forge.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/lava_forge",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "beard_thin",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:lava_forge/start",
+   "size": 1,
+   "max_y": 100,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/nether_garden.json b/src/main/resources/data/netheryx/worldgen/structure/nether_garden.json
+index 81f6f46..d689a04 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/nether_garden.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/nether_garden.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/nether_garden",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "beard_thin",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:nether_garden/start",
+   "size": 1,
+   "max_y": 100,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/nomad_caravan.json b/src/main/resources/data/netheryx/worldgen/structure/nomad_caravan.json
+index ab5a8a2..ed03e04 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/nomad_caravan.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/nomad_caravan.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/nomad_caravan",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "beard_thin",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:nomad_caravan/start",
+   "size": 1,
+   "max_y": 100,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/onyx_citadel.json b/src/main/resources/data/netheryx/worldgen/structure/onyx_citadel.json
+index 4d66e23..618f790 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/onyx_citadel.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/onyx_citadel.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/onyx_citadel",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "none",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:onyx_citadel/start",
+   "size": 1,
+   "max_y": 74,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/scorched_outpost.json b/src/main/resources/data/netheryx/worldgen/structure/scorched_outpost.json
+index cf9c6a2..0603f5e 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/scorched_outpost.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/scorched_outpost.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/scorched_outpost",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "beard_thin",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:scorched_outpost/start",
+   "size": 1,
+   "max_y": 100,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/traveler_camp.json b/src/main/resources/data/netheryx/worldgen/structure/traveler_camp.json
+index 82c14be..4f9cd3c 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/traveler_camp.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/traveler_camp.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/traveler_camp",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "beard_thin",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:traveler_camp/start",
+   "size": 1,
+   "max_y": 100,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/withered_catacombs.json b/src/main/resources/data/netheryx/worldgen/structure/withered_catacombs.json
+index 73068a5..5aff5c4 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/withered_catacombs.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/withered_catacombs.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/withered_catacombs",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "none",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:withered_catacombs/start",
+   "size": 1,
+   "max_y": 90,
+diff --git a/src/main/resources/data/netheryx/worldgen/structure/wyvern_nest.json b/src/main/resources/data/netheryx/worldgen/structure/wyvern_nest.json
+index 69ebd41..0bfbb6e 100644
+--- a/src/main/resources/data/netheryx/worldgen/structure/wyvern_nest.json
++++ b/src/main/resources/data/netheryx/worldgen/structure/wyvern_nest.json
+@@ -3,7 +3,7 @@
+   "biomes": "#netheryx:has_structure/wyvern_nest",
+   "step": "top_layer_modification",
+   "spawn_overrides": {},
+-  "terrain_adaptation": "beard_thin",
++  "terrain_adaptation": "beard_box",
+   "start_pool": "netheryx:wyvern_nest/start",
+   "size": 1,
+   "max_y": 100,
+diff --git a/tools/check_resources.py b/tools/check_resources.py
+index cb1bd7b..c573824 100644
+--- a/tools/check_resources.py
++++ b/tools/check_resources.py
+@@ -25,7 +25,7 @@ particles = names_in("registry/ModParticles.java")
+ reg -= particles
+ # Enregistrements sans objet (entites, enchantements, effets, potions, features, recettes, butins...)
+ entities = names_in("registry/ModEntities.java")
+-technical = names_in("registry/ModFeatures.java", "registry/ModRecipes.java", "registry/ModLootModifiers.java") | {"netheryx", "nether_floor"}
++technical = names_in("registry/ModFeatures.java", "registry/ModPlacements.java", "registry/ModRecipes.java", "registry/ModLootModifiers.java") | {"netheryx", "nether_floor"}
+ effects = names_in("registry/ModEffects.java", "registry/ModEnchantments.java")
+ block_only = set(re.findall(r'BLOCKS\.register\("([a-z_]+)"', java))
+ item_registered = set(re.findall(r'ITEMS\.register\(', java))
+diff --git a/tools/netheryx_gen/data_v142.py b/tools/netheryx_gen/data_v142.py
+index bcc2026..52abb11 100644
+--- a/tools/netheryx_gen/data_v142.py
++++ b/tools/netheryx_gen/data_v142.py
+@@ -1,25 +1,9 @@
+-"""Donnees 1.4.2 : relief sur la lave, flore des biomes, animaux, equipement des boss, Atlas du Nether, nouvelles creatures."""
++"""Donnees 1.4.2 : flore des biomes, animaux, equipement des boss, Atlas du Nether, nouvelles creatures."""
+ import json
+ 
+ from .common import MOD_ID, data_path, mid, write_json
+ from .data import count, entity_table, item, m, tag, LOOTING
+-from .worldgen import BIOME_FILTER, biome_modifier, configured, patch, placed, spawner, state
+-
+-# biome : (dessus, masse, seuil (plus bas = plus de terre), hauteur des plateaux)
+-LANDMASS = {
+-    "ember_meadow": ("nether_grass_block", "minecraft:brown_terracotta", -0.65, 12),
+-    "ember_grove": ("ember_nylium", "minecraft:red_terracotta", -0.55, 10),
+-    "hellwood_jungle": ("ember_nylium", "minecraft:brown_terracotta", -0.9, 8),
+-    "wartvine_tangle": ("minecraft:crimson_nylium", "minecraft:nether_wart_block", -0.55, 10),
+-    "sulfur_springs": ("sulfur_block", "sulfur_rock", -0.15, 6),  # des sources de lave restent visibles
+-    "quartz_reef": ("minecraft:quartz_block", "minecraft:calcite", -0.3, 10),  # recif en terrasses, autour de bassins
+-    "marrow_thicket": ("ossified_nylium", "minecraft:dripstone_block", -0.8, 10),
+-    "rimefrost_chasm": ("minecraft:packed_ice", "minecraft:packed_ice", -1.2, 0),  # lacs geles : une banquise plate
+-    "withered_forest": ("withered_soil", "minecraft:deepslate", -0.75, 6),
+-    "petrified_onyx_forest": ("minecraft:smooth_basalt", "minecraft:blackstone", -0.5, 8),
+-    "ashen_wastes": ("ash_block", "minecraft:basalt", -0.55, 6),
+-    "molten_glass_lake": ("minecraft:obsidian", "minecraft:blackstone", 0.15, 3),  # ce biome garde ses lacs de lave
+-}
++from .worldgen import biome_modifier, patch, spawner, state
+ 
+ # Flore dense, comme les grands packs de biomes : (bloc, essais, etalement, tirages par etage)
+ FLORA = {
+@@ -68,19 +52,6 @@ BOSS_GEAR = {
+ }
+ 
+ 
+-def plain_state(name):
+-    return state(name, axis="y") if name == "minecraft:basalt" else state(name)
+-
+-
+-def generate_landmass():
+-    for biome_name, (top, body, threshold, height) in LANDMASS.items():
+-        name = f"{biome_name}_landmass"
+-        configured(name, mid("landmass"), {"biome": mid(biome_name), "top": plain_state(top), "body": plain_state(body), "threshold": threshold, "height": height})
+-        # Une passe par chunk, a sa propre origine : elle traite elle-meme chaque colonne de son biome
+-        placed(name, name, [BIOME_FILTER])
+-        biome_modifier(f"terrain_{biome_name}", {"type": "forge:add_features", "biomes": mid(biome_name), "features": mid(name), "step": "local_modifications"})
+-
+-
+ def generate_flora():
+     tag("blocks", MOD_ID, "nether_plant_soil", ["minecraft:calcite", "minecraft:smooth_basalt", "minecraft:quartz_block", mid("sulfur_block"), mid("sulfur_rock"),
+                                                 mid("withered_soil"), "minecraft:packed_ice", "minecraft:snow_block", "minecraft:brown_terracotta"])
+@@ -151,7 +122,6 @@ def generate_structure_biomes():
+ 
+ def generate():
+     generate_structure_biomes()
+-    generate_landmass()
+     generate_flora()
+     generate_animals()
+     generate_boss_gear()
+diff --git a/tools/netheryx_gen/worldgen.py b/tools/netheryx_gen/worldgen.py
+index a647b3e..ae0d763 100644
+--- a/tools/netheryx_gen/worldgen.py
++++ b/tools/netheryx_gen/worldgen.py
+@@ -27,8 +27,12 @@ def configured(name, feature_type, config):
+     write_json(data_path("worldgen", "configured_feature", f"{name}.json"), {"type": feature_type, "config": config})
+ 
+ 
++# Aucun decor (colonne, arbre, cristal...) ne pousse dans l'emprise d'une structure NetheryX : il la traverserait.
++OUTSIDE_STRUCTURES = {"type": mid("outside_structures")}
++
++
+ def placed(name, feature, placement):
+-    write_json(data_path("worldgen", "placed_feature", f"{name}.json"), {"feature": mid(feature), "placement": placement})
++    write_json(data_path("worldgen", "placed_feature", f"{name}.json"), {"feature": mid(feature), "placement": [*placement, OUTSIDE_STRUCTURES]})
+ 
+ 
+ BIOME_FILTER = {"type": "minecraft:biome"}
+@@ -555,6 +559,11 @@ PROCESSORS = {
+ 
+ def generate_structures():
+     for name, (spacing, separation, salt, air, min_y, sink, footprint, adaptation) in STRUCTURES.items():
++        # Le terrain s'adapte sous la structure : il est creuse dans tout son volume (plus de paroi ni de roche qui la
++        # traverse) et comble sous elle. Seule la cache, enterree expres, garde le terrain tel quel.
++        adapts = adaptation != "none"
++        if adapts:
++            adaptation = "beard_box"
+         processors = "minecraft:empty"
+         if name in PROCESSORS:
+             processors = mid(f"{name}_decay")
+@@ -584,7 +593,8 @@ def generate_structures():
+                              for kind, weight in (("ruin", 3), ("remains", 2), ("signpost", 2))]})
+             approach = {"approach_pool": mid(f"{name}_approach/start"), "approach_count": 5,
+                         "entrance_x": ENTRANCE[0], "entrance_z": ENTRANCE[1], "gate_reach": GATE_REACH, "floor_tolerance": 14}
+-            sink, footprint, adaptation, min_y = GROUND, ENTRANCE_FOOTPRINT, "none", 40
++            # Donjon : le volume au-dessus du sol est degage, la partie souterraine reste dans la roche (voir NetherFloorStructure)
++            sink, footprint, adaptation, adapts, min_y = GROUND, ENTRANCE_FOOTPRINT, "beard_box", False, 40
+         write_json(data_path("worldgen", "structure", f"{name}.json"), {
+             "type": mid("nether_floor"),
+             "biomes": f"#{MOD_ID}:has_structure/{name}",
+@@ -603,7 +613,7 @@ def generate_structures():
+             "max_distance_from_center": 80,
+             **approach,
+             # Le terrain s'adapte sous ces structures : elles acceptent un sol plus irregulier
+-            **({"floor_tolerance": 7} if adaptation == "beard_thin" else {}),
++            **({"floor_tolerance": 7} if adapts else {}),
+         })
+         write_json(data_path("worldgen", "structure_set", f"{name}.json"), {
+             "structures": [{"structure": mid(name), "weight": 1}],
